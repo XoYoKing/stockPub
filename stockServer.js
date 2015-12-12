@@ -1,11 +1,13 @@
 var log4js = require('log4js');
+var path = require('path');
+
 log4js.configure({
         appenders: [{
             type: 'console'
         }, {
             type: 'dateFile',
             absolute: true,
-            filename: './stockHandle_',
+            filename: path.join(process.env.HOME, 'stocklogs/stockHandle_'),
             maxLogSize: 1024 * 1024,
             backups: 4,
             pattern: "yyyy-MM-dd.log",
