@@ -1,0 +1,23 @@
+{
+  "name": "stockpub",
+  "version": "1.0.0",
+  "description": "股票爬虫",
+  "main": "databaseOperation.js",
+  "dependencies": {
+    "log4js": "^0.6.29"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamCode/stockPub.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JamCode/stockPub/issues"
+  },
+  "homepage": "https://github.com/JamCode/stockPub#readme"
+}
