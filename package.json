@@ -4,6 +4,7 @@
   "description": "股票爬虫",
   "main": "databaseOperation.js",
   "dependencies": {
+    "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "log4js": "^0.6.29"
   },
