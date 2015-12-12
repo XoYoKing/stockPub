@@ -1,0 +1,1 @@
+mysql -h rdsruiaj3v2uaiv.mysql.rds.aliyuncs.com -u wanghan -p<./recommandStock.sql>>/home/wanghan/dev/stocklogs/recommandStock.log
