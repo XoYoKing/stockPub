@@ -5,7 +5,7 @@ log4js.configure({
         }, {
             type: 'dateFile',
             absolute: true,
-            filename: '/home/wanghan/dev/stocklogs/stockHandle_',
+            filename: './stockHandle_',
             maxLogSize: 1024 * 1024,
             backups: 4,
             pattern: "yyyy-MM-dd.log",
@@ -45,7 +45,7 @@ if (cluster.isMaster) {
 		}
   	});
 
-	cluster.on('listening', function(worker, address) {  
+	cluster.on('listening', function(worker, address) {
 		logger.debug("A server worker with pid#"+worker.process.pid+" is now listening to:" + address.port);
  	});
 
