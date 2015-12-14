@@ -26,7 +26,7 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var cluster = require('cluster');
-var port = 80;
+var port = 8088;
 var stockHandle = require('./stockHandle');
 var stockCrawl = require('./stockCrawl');
 
