@@ -17,6 +17,11 @@ router.get('/stockTest', function(req, res) {
 });
 
 
+router.get('/test', function(req, res){
+	logger.debug('get test');
+	res.send('test');
+});
+
 //wechat connect test
 router.get('/checkwechat', function(req, res) {
 	logger.debug("enter wechat to check signature");
@@ -79,7 +84,7 @@ router.get('/insertRecommandStock', function(req, res){
 		}
 	});
 
-	
+
 	res.send('insertRecommandStock start');
 });
 
@@ -111,7 +116,7 @@ router.get('/validatePredict', function(req, res){
 						}else{
 							logger.error(result);
 						}
-					});					
+					});
 				}
 			});
 		}else{
@@ -148,7 +153,7 @@ function checkDigit(str){
 		if(letters.indexOf (str[i])==-1){
 			return false;
 		}
-		
+
 	}
 	return true ;
 }
@@ -266,7 +271,7 @@ function getWord(volume){
 
 function analyzeMessage(msg, req, res) {
 	logger.info(msg);
-	
+
 	if(msg==null){
 		feedbackToWechat(req, res, wechatFeedbackStr);
 		return;
@@ -283,7 +288,7 @@ function analyzeMessage(msg, req, res) {
 	}else if (msgStr.indexOf('+')!=-1){
 		var missedStockCode = msgStr.substr(1, msgStr.length - 1);
 		logger.info('add missed stockCode '+missedStockCode);
-		
+
 		databaseOperation.addMissedStockCode(missedStockCode, function(flag, result){
 			if (flag) {
 
@@ -308,7 +313,7 @@ function analyzeMessage(msg, req, res) {
 							+(100*(elementStr.last_price - elementStr.price)/elementStr.price).toFixed(2)
 							+"%"+"\n"+elementStr.industry+"\n");
 						}
-						
+
 					});
 					feedbackToWechat(req, res, feedbackStr);
 				}else{
@@ -319,7 +324,7 @@ function analyzeMessage(msg, req, res) {
 				feedbackToWechat(req, res, '数据库错误，无法获取');
 			}
 		});
-		
+
 	}else if(msgStr == 'tjnow1'){
 		if (conn.isMarketOpenTime()) {
 			logger.info('enter tjnow');
@@ -452,7 +457,8 @@ function feedbackToWechat(req, res, content) {
 	var timestamp = parseInt(Date.now() / 1000);
 	var msgType = "text";
 	//logger.info("Longitude:"+ req.body.xml.Longitude);
-	var textTpl = "<xml>" + "<ToUserName><![CDATA[" + req.body.xml.FromUserName + "]]></ToUserName>" + "<FromUserName><![CDATA[" + req.body.xml.ToUserName + "]]></FromUserName>" + "<CreateTime>" + timestamp + "</CreateTime>" + "<MsgType><![CDATA[" + msgType + "]]></MsgType>" + "<Content><![CDATA[" + content + "]]></Content>" + "<FuncFlag>0</FuncFlag>" + "</xml>";
+	var textTpl = "<xml>" + "<ToUserName><![CDATA[" + req.body.xml.FromUserName + "]]></ToUserName>" + "<FromUserName><![CDATA[" + req.body.xml.ToUserName + "]]></FromUserName>" + "<CreateTime>" + timestamp + "</CreateTime>" + "<MsgType><![CDATA[" + msgType + "]]></MsgType>" + "<Content><![CDATA[" + content +
+	"]]></Content>" + "<FuncFlag>0</FuncFlag>" + "</xml>";
 	res.send(textTpl);
 }
 
