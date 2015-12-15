@@ -9,7 +9,7 @@ var stockDay3AmountHash = "stockday3hash";
 
 
 redisClient.on("error", function (err) {
-	logger.error(err);
+	logger.error(err, logger.getFileNameAndLineNum(__filename));
 });
 
 
@@ -103,16 +103,16 @@ function insertToDatabase(htmlData, isnow) {
 						//logger.warn('stockCode is undefined');
 					return;
 				}
-				
+
 				if (isnow === true) {
 
 					redisClient.get(stockCode+"_3day", function(err, data){
 						if (!err) {
 							if (data) {
 								var day4 = parseInt(data)+volume*conn.getPlusMinus(price - openPrice);
-								databaseOperation.insertStockNow(stockCode, amount, date, time, 
-											price, 
-											yesterday_price, 
+								databaseOperation.insertStockNow(stockCode, amount, date, time,
+											price,
+											yesterday_price,
 											fluctuate,
 											priceearning,
 											marketValue,
@@ -136,7 +136,7 @@ function insertToDatabase(htmlData, isnow) {
 										var day4 = 0;
 										if (result.length<=0) {
 											redisClient.set(stockCode+"_3day", 0);
-											day4 = volume*conn.getPlusMinus(price - openPrice);											
+											day4 = volume*conn.getPlusMinus(price - openPrice);
 										}else{
 											if (result[0].day3==null) {
 												result[0].day3 = 0;
@@ -149,10 +149,10 @@ function insertToDatabase(htmlData, isnow) {
 											day4 = result[0].day3+volume*conn.getPlusMinus(price - openPrice);
 										}
 
-										
-										databaseOperation.insertStockNow(stockCode, amount, date, time, 
-											price, 
-											yesterday_price, 
+
+										databaseOperation.insertStockNow(stockCode, amount, date, time,
+											price,
+											yesterday_price,
 											fluctuate,
 											priceearning,
 											marketValue,
@@ -170,7 +170,7 @@ function insertToDatabase(htmlData, isnow) {
 												}else{
 													//logger.info('insertStockNow ok');
 
-													
+
 
 												}
 											});
@@ -185,16 +185,16 @@ function insertToDatabase(htmlData, isnow) {
 					});
 
 				} else {
-					
-					databaseOperation.insertStockAmount(stockCode, 
-						amount, 
-						date, 
-						time, 
+
+					databaseOperation.insertStockAmount(stockCode,
+						amount,
+						date,
+						time,
 						price,
 						fluctuate,
 						priceearning,
 						marketValue,
-						flowMarketValue, 
+						flowMarketValue,
 						volume,
 						pb,
 						openPrice,
@@ -256,7 +256,7 @@ function getMinPrice(result){
 			min = result[i].low_price;
 		}
 	}
-	
+
 	return min;
 }
 
@@ -276,7 +276,7 @@ function updateStockAvPrice(stockCode, date){
 				if (result[0].price!=0&&result[4].open_price!=0) {
 					var min = getMinPrice(result);
 					var max = getMaxPrice(result);
-					
+
 					day_fluctuate = ((max - min)/min).toFixed(2);
 				}
 				databaseOperation.update5AvPrice(stockCode, av_price, date, day_fluctuate, function(flag, result){
@@ -435,7 +435,7 @@ exports.startGetAllStockInfo = function(){
 	// if(day == 6||day == 7){
 	// 	return;
 	// }
-	
+
 	// var hour = now.getHours();
 	// if(hour<15){
 	// 	return;
