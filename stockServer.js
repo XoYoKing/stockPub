@@ -1,6 +1,6 @@
 var path = require('path');
 
-var log = require('./utility/log');
+var log = require('./log.js');
 log.SetLogFileName(path.join(process.env.HOME, 'stocklogs/stockHandle_'));
 global.logger = log; // 设置全局
 
