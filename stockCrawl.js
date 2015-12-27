@@ -2,7 +2,7 @@ var databaseOperation = require('./databaseOperation');
 var logger = global.logger;
 var http = require('http');
 var redis = require("redis");
-var redisClient = redis.createClient();
+var redisClient = redis.createClient({auth_pass:'here_dev'});
 
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
