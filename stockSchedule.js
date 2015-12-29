@@ -19,3 +19,8 @@ schedule.scheduleJob('5 15 * * 1-5', function(){
     log.info("stock crawl day start", log.getFileNameAndLineNum(__filename));
     crawl.startGetAllStockInfo();
 });
+
+process.on('uncaughtException', function(err) {
+    log.error('schedule process Caught exception: ' +
+        err.stack);
+});
