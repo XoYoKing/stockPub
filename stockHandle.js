@@ -33,12 +33,12 @@ router.get('/checkwechat', function(req, res) {
 	}
 });
 
-router.get('/crawlday', function(req, res){
-	logger.info('crawl day job start');
-	crawl.startGetAllStockInfo();
-
-	res.send('crawl day job start');
-});
+// router.get('/crawlday', function(req, res){
+// 	logger.info('crawl day job start');
+// 	crawl.startGetAllStockInfo();
+//
+// 	res.send('crawl day job start');
+// });
 
 router.get('/removekeys', function(req, res){
 	logger.debug('enter removekeys');
@@ -47,12 +47,12 @@ router.get('/removekeys', function(req, res){
 });
 
 
-router.get('/crawlnow', function(req, res){
-	logger.info('crawl now job start');
-	crawl.startCrawlStockNow();
-
-	res.send('crawl now job start');
-});
+// router.get('/crawlnow', function(req, res){
+// 	logger.info('crawl now job start');
+// 	crawl.startCrawlStockNow();
+//
+// 	res.send('crawl now job start');
+// });
 
 
 router.get('/insertRecommandStock', function(req, res){
