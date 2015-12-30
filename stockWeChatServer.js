@@ -1,12 +1,12 @@
 var path = require('path');
 var log = require('./log.js');
-log.SetLogFileName(path.join(process.env.HOME, 'stocklogs/stockServer_'));
+log.SetLogFileName(path.join(process.env.HOME, 'stocklogs/stockWechatServer_'));
 global.logger = log; // 设置全局
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var cluster = require('cluster');
-var port = 18000;
+var port = 80;
 var stockHandle = require('./stockHandle');
 var stockCrawl = require('./stockCrawl');
 var email = require('./utility/emailTool');
@@ -15,7 +15,7 @@ var email = require('./utility/emailTool');
 process.on('uncaughtException', function(err) {
 	logger.error('worker exception: ' + err.stack);
 	email.sendMail('Caught exception: ' + err.stack,
-		'stockServer process failed');
+		'stockWechatServer process failed');
 });
 
 global.app = express(); //创建express实例
@@ -37,4 +37,4 @@ global.app.use(express.static(__dirname + '/images'));
 
 global.app.use('/', stockHandle);
 global.app.listen(port); //设置监听http请求的端口号
-logger.info("stockServer started on port " + port);
+logger.info("stockWechatServer started on port " + port);
