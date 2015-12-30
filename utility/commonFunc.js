@@ -52,8 +52,8 @@ exports.analyzeMessage = function(htmlData){
 					element.time === undefined ||
 					element.price === undefined ||
 					element.openPrice === undefined||
-					amount == 0||
-					price == 0) {
+					element.amount == 0||
+					element.price == 0) {
 						//logger.warn('stockCode is undefined');
 					return;
 				}
