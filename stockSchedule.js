@@ -5,6 +5,8 @@ global.logger = log; // 设置全局
 
 var schedule = require("node-schedule");
 var crawl = require('./stockCrawl.js');
+var email = require('./utility/emailTool');
+
 
 log.info("run schedule", log.getFileNameAndLineNum(__filename));
 
@@ -23,4 +25,7 @@ schedule.scheduleJob('5 15 * * 1-5', function(){
 process.on('uncaughtException', function(err) {
     log.error('schedule process Caught exception: ' +
         err.stack);
+
+    email.sendMail('Caught exception: ' + err.stack,
+    			'stockSchedule process failed');
 });
