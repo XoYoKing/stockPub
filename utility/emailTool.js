@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer');
 
-var log = global.log;
+var log = global.logger;
 
 var smtpTrans = nodemailer.createTransport(
 {
