@@ -7,9 +7,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cluster = require('cluster');
 var port = 18000;
-var stockHandle = require('./stockHandle');
-var stockCrawl = require('./stockCrawl');
 var email = require('./utility/emailTool');
+var stockRouter = require('./router/stockRouter.js');
 
 
 process.on('uncaughtException', function(err) {
@@ -35,6 +34,7 @@ global.app.use(express.static(__dirname + '/css'));
 global.app.use(express.static(__dirname + '/js'));
 global.app.use(express.static(__dirname + '/images'));
 
-global.app.use('/', stockHandle);
+global.app.use('/stock', stockRouter);
+
 global.app.listen(port); //设置监听http请求的端口号
 logger.info("stockServer started on port " + port);

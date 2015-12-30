@@ -7,8 +7,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cluster = require('cluster');
 var port = 80;
-var stockHandle = require('./stockHandle');
-var stockCrawl = require('./stockCrawl');
+var wechatHandle = require('./wechatHandle.js');
 var email = require('./utility/emailTool');
 
 
@@ -35,6 +34,6 @@ global.app.use(express.static(__dirname + '/css'));
 global.app.use(express.static(__dirname + '/js'));
 global.app.use(express.static(__dirname + '/images'));
 
-global.app.use('/', stockHandle);
+global.app.use('/', wechatHandle);
 global.app.listen(port); //设置监听http请求的端口号
 logger.info("stockWechatServer started on port " + port);
