@@ -46,13 +46,12 @@ exports.analyzeMessage = function(htmlData){
 				element.low_price = dataArr[34];
                 element.market = getMarketDesc(element.stock_code);
 
-				if (stockCode === undefined ||
-					amount === undefined ||
-					date === undefined ||
-					time === undefined ||
-					price === undefined ||
-					openPrice === undefined||
-					yesterday_price === undefined||
+				if (element.stock_code === undefined ||
+					element.amount === undefined ||
+					element.date === undefined ||
+					element.time === undefined ||
+					element.price === undefined ||
+					element.openPrice === undefined||
 					amount == 0||
 					price == 0) {
 						//logger.warn('stockCode is undefined');
