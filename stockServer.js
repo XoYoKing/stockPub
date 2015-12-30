@@ -37,4 +37,4 @@ global.app.use(express.static(__dirname + '/images'));
 
 global.app.use('/', stockHandle);
 global.app.listen(port); //设置监听http请求的端口号
-logger.info("Express started on port " + port);
+logger.info("stockServer started on port " + port);
