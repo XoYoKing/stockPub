@@ -1,5 +1,4 @@
 var log = global.logger;
-var constant = require('constant.js');
 
 
 exports.feedBack = function(code, result, res, sq) {
