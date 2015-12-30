@@ -85,9 +85,15 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
 		// }
 
         //callback(true, data);
-        console.log(headers);
-        console.log(status);
-        console.log(data);
+        if(status == 200){
+            callback(true, data);
+        }else{
+            callback(false, data);
+        }
+
+        // console.log(headers);
+        // console.log(status);
+        // console.log(data);
 
 	}, 'gbk').on('error', function(e) {
 		logger.error("Got error: " + e.message);
