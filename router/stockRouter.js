@@ -3,7 +3,7 @@ var router = express.Router();
 var logger = global.logger;
 var databaseOper = require('../databaseOperation.js');
 var constant = require('../utility/constant.js');
-var routerFunc = require('../utility/routerFunc.js');
+var routerFunc = require('../utility/routeFunc.js');
 var config = require('../config');
 var common = require('../utility/commonFunc.js');
 
