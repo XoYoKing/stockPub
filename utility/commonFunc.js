@@ -72,7 +72,7 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
 	var stockAPI = config.stockDataInterface.url + mrkDesc + stock_code;
 	logger.debug(stockAPI);
 
-	gs.get(stockAPI, function(data) {
+	gs.get(stockAPI, function(data, status, headers) {
 		// if (res.statusCode == 200) {
 		// 	var htmlData = "";
 		// 	res.on('data', function(data) {
@@ -83,9 +83,13 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
 		// 		callback(true, htmlData);
 		// 	});
 		// }
+
+        //callback(true, data);
+        console.log(headers);
+        console.log(status);
         console.log(data);
 
-	}, 'utf8').on('error', function(e) {
+	}, 'gbk').on('error', function(e) {
 		logger.error("Got error: " + e.message);
         callback(false, e.message);
 	});
