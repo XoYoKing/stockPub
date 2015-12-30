@@ -26,7 +26,7 @@ exports.analyzeMessage = function(htmlData){
 				}
 
                 var element = {};
-
+                element.stock_name = dataArr[1];
 				element.stock_code = dataArr[2];
 				element.amount = dataArr[6];
 				var date = dataArr[30];
