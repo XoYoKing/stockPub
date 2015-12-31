@@ -57,6 +57,6 @@ exports.stockDataInterface = {
 };
 
 exports.stockServerInfo = {
-    url: 'http://112.74.102.178',
+    url: '112.74.102.178',
     port: 18000
 };
