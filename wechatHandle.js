@@ -182,7 +182,7 @@ function getStockInfoFromAPI(stockCode, callback) {
 			body += d;
 		}).on('end', function() {
 			console.log(body);
-			callback(true, body);
+			callback(true, JSON.parse(body));
 		});
 	}).on('error', function(e) {
 		logger.error(e, logger.getFileNameAndLineNum(__filename));
