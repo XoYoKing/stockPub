@@ -181,8 +181,8 @@ function getStockInfoFromAPI(stockCode, callback) {
 		res.on('data', function(d) {
 			body += d;
 		}).on('end', function() {
-			console.log(data);
-			callback(true, data);
+			console.log(body);
+			callback(true, body);
 		});
 	}).on('error', function(e) {
 		logger.error(e, logger.getFileNameAndLineNum(__filename));
