@@ -18,7 +18,7 @@ router.get('/test', function(req, res) {
 //获取股票当前行情
 router.post('/now', function(req, res){
 
-    logger.debug(req.body, logger.getFileNameAndLineNum(__filename));
+    logger.debug(JSON.stringify(req.body), logger.getFileNameAndLineNum(__filename));
 
     databaseOper.getStockNowByCode(req.body.stock_code, function(flag, result){
         if(flag){
