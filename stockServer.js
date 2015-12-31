@@ -11,6 +11,7 @@ var stockRouter = require('./router/stockRouter.js');
 var config = require('./config');
 var port = config.stockServerInfo.port;
 var morgan = require('morgan');
+var fileStreamRotator = require('file-stream-rotator');
 
 
 process.on('uncaughtException', function(err) {
