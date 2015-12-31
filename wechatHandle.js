@@ -6,7 +6,7 @@ var conn = require('./utility');
 var xml2js = require('xml2js');
 var databaseOperation = require('./databaseOperation');
 var gs = require('nodegrass');
-
+var constant = require('./utility/constant');
 
 var wechatFeedbackStr =
 	"回复股票代码，查看成交量变化;回复tj查看最近推荐股票;回复jg查看最近一次推荐后验证结果;股市有风险，入市须谨慎";
@@ -159,138 +159,47 @@ function checkDigit(str) {
 function getStockInfoFromAPI(stockCode, callback){
 	var url = config.stockServerInfo.url+":"+config.stockServerInfo.port+"/stock"+"/now";
 	logger.debug(url);
-	// gs.post(url, function(data, status, headers){
-	//
-	// })
+	gs.post(url, function(data, status, headers){
+		if(status!=200){
+			logger.error(data, logger.getFileNameAndLineNum(__filename));
+			callback(false, data);
+		}else{
+			callback(true, data);
+		}
+
+	}, null, {stock_code:stockCode}, 'utf8').on('error', function(e){
+		logger.error(e, logger.getFileNameAndLineNum(__filename));
+		callback(false, e);
+	});
 }
 
 function handleStock(stockCode, req, res) {
 	var feedbackStr = "";
-
-
 	getStockInfoFromAPI(stockCode, function(flag, result){
 		if(flag){
-			var nowElement = result;
-			feedbackStr = "实时数据\n";
-			feedbackStr += nowElement.date + " " + nowElement.time + "\n";
-			feedbackStr += (nowElement.stock_name + "(" + nowElement.stock_code +
-				")\n" + nowElement.price + "(" + nowElement.fluctuate + "%)\n" +
-				"成交量 " + (nowElement.amount / 10000.0).toFixed(2) + "万手\n" + "市盈率 " +
-				nowElement.priceearning + "\n" + "总市值 " + nowElement.marketValue +
-				"亿\n" + "流通市值 " + nowElement.flowMarketValue + "亿\n" + "成交金额 " + (
-					nowElement.volume / 10000.0).toFixed(2) + "亿\n");
-			feedbackToWechat(req, res, feedbackStr);
+			if(result.code == constant.returnCode.SUCCESS){
+				var nowElement = result.data;
+				feedbackStr = "实时数据\n";
+				feedbackStr += nowElement.date + " " + nowElement.time + "\n";
+				feedbackStr += (nowElement.stock_name + "(" + nowElement.stock_code +
+					")\n" + nowElement.price + "(" + nowElement.fluctuate + "%)\n" +
+					"成交量 " + (nowElement.amount / 10000.0).toFixed(2) + "万手\n" + "市盈率 " +
+					nowElement.priceearning + "\n" + "总市值 " + nowElement.marketValue +
+					"亿\n" + "流通市值 " + nowElement.flowMarketValue + "亿\n" + "成交金额 " + (
+						nowElement.volume / 10000.0).toFixed(2) + "亿\n");
+				feedbackToWechat(req, res, feedbackStr);
+
+			}else if(result.code == constant.returnCode.STOCK_NOT_EXIST){
+				feedbackToWechat(req, res, "无此股票代码");
+			}else{
+				feedbackToWechat(req, res, "异常错误");
+			}
+
 		}else{
 			logger.error(result, logger.getFileNameAndLineNum(__filename));
-			feedbackToWechat(req, res, "数据库错误");
+			feedbackToWechat(req, res, "异常错误");
 		}
 	});
-
-
-	// if (conn.isMarketOpenTime()) {
-	// 	//开市时间
-	// 	databaseOperation.getStockNowByCode(stockCode, function(flag, result) {
-	// 		if (flag) {
-	// 			if (result.length > 0) {
-	// 				var nowElement = result[0];
-	// 				feedbackStr = "实时数据\n";
-	// 				feedbackStr += nowElement.date + " " + nowElement.time + "\n";
-	// 				feedbackStr += (nowElement.stock_name + "(" + nowElement.stock_code +
-	// 					")\n" + nowElement.price + "(" + nowElement.fluctuate + "%)\n" +
-	// 					"成交量 " + (nowElement.amount / 10000.0).toFixed(2) + "万手\n" + "市盈率 " +
-	// 					nowElement.priceearning + "\n" + "总市值 " + nowElement.marketValue +
-	// 					"亿\n" + "流通市值 " + nowElement.flowMarketValue + "亿\n" + "成交金额 " + (
-	// 						nowElement.volume / 10000.0).toFixed(2) + "亿\n");
-	//
-	// 				databaseOperation.getStockByCode(stockCode, function(flag, result) {
-	// 					if (flag) {
-	// 						if (result.length >= 4) {
-	// 							var element0 = result[0];
-	// 							var element1 = result[1];
-	// 							var element2 = result[2];
-	// 							//var element3 = result[3];
-	// 							var day2 = element0.volume * conn.getPlusMinus(element0.price -
-	// 								element0.open_price) + nowElement.volume * conn.getPlusMinus(
-	// 								nowElement.price - nowElement.open_price);
-	// 							var day3 = element0.volume * conn.getPlusMinus(element0.price -
-	// 								element0.open_price) + element1.volume * conn.getPlusMinus(
-	// 								element1.price - element1.open_price) + nowElement.volume * conn.getPlusMinus(
-	// 								nowElement.price - nowElement.open_price);
-	// 							var day4 = element0.volume * conn.getPlusMinus(element0.price -
-	// 								element0.open_price) + element1.volume * conn.getPlusMinus(
-	// 								element1.price - element1.open_price) + element2.volume * conn.getPlusMinus(
-	// 								element2.price - element2.open_price) + nowElement.volume * conn.getPlusMinus(
-	// 								nowElement.price - nowElement.open_price);
-	//
-	// 							feedbackStr += ("最近两日资金" + getWord((day2 / 10000.0).toFixed(2)) +
-	// 								", 占比" + ((100 * Math.abs(day2 / 10000.0) / nowElement.flowMarketValue))
-	// 								.toFixed(2) + "%\n" + "最近三日资金" + getWord((day3 / 10000.0).toFixed(
-	// 									2)) + ", 占比" + ((100 * Math.abs(day3 / 10000.0) / nowElement.flowMarketValue))
-	// 								.toFixed(2) + "%\n" + "最近四日资金" + getWord((day4 / 10000.0).toFixed(
-	// 									2)) + ", 占比" + ((100 * Math.abs(day4 / 10000.0) / nowElement.flowMarketValue))
-	// 								.toFixed(2) + "%\n");
-	// 						}
-	// 						feedbackToWechat(req, res, feedbackStr);
-	//
-	// 					} else {
-	// 						logger.error(result);
-	// 						feedbackToWechat(req, res, "数据库错误");
-	// 					}
-	// 				});
-	//
-	// 			} else {
-	// 				feedbackToWechat(req, res, stockCode + " 未找到记录, 我们会尽快添加此股票信息");
-	// 				databaseOperation.addMissedStockCode(stockCode, function(flag, result) {
-	// 					if (!flag) {
-	// 						logger.error(result);
-	// 					}
-	// 				});
-	// 			}
-	//
-	// 		} else {
-	// 			logger.error(result);
-	// 			feedbackToWechat(req, res, "数据库错误");
-	// 		}
-	// 	});
-	//
-	// 	//feedbackToWechat(req, res, "开市时间");
-	//
-	// } else {
-	// 	//闭市时间
-	// 	databaseOperation.getStockByCode(stockCode, function(flag, result) {
-	// 		if (flag) {
-	// 			if (result.length > 0) {
-	// 				logger.debug(stockCode + " 获得记录");
-	// 				var element = result[0];
-	// 				feedbackStr = element.stock_name + "(" + element.stock_code + ")\n" +
-	// 					element.price + "(" + element.fluctuate + "%)\n" + "成交量 " + (element.amount /
-	// 						10000).toFixed(2) + "万手\n" + "成交金额 " + (element.volume / 10000.0).toFixed(
-	// 						2) + "亿\n" + "市盈率 " + element.priceearning + "\n" + "净资产收益率 " + (
-	// 						element.pb * 100 / element.priceearning).toFixed(2) + "%\n" + "总市值 " +
-	// 					element.marketValue + "亿\n" + "流通市值 " + element.flowMarketValue + "亿\n" +
-	// 					"最近两日资金" + getWord((element.day2 / 10000.0).toFixed(2)) + ", 占比" + (100 *
-	// 						Math.abs(element.day2 / 10000.0) / element.flowMarketValue).toFixed(2) +
-	// 					"%\n" + "最近四日资金" + getWord((element.day3 / 10000.0).toFixed(2)) +
-	// 					", 占比" + (100 * Math.abs(element.day3 / 10000.0) / element.flowMarketValue)
-	// 					.toFixed(2) + "%\n" + "最近五日资金" + getWord((element.day4 / 10000.0).toFixed(
-	// 						2)) + ", 占比" + (100 * Math.abs(element.day4 / 10000.0) / element.flowMarketValue)
-	// 					.toFixed(2) + "%\n" + element.date + " " + element.time + "\n";
-	// 				feedbackToWechat(req, res, feedbackStr);
-	// 			} else {
-	// 				logger.warn(stockCode + " 未找到记录");
-	// 				feedbackToWechat(req, res, stockCode + " 未找到记录, 我们会尽快添加此股票信息");
-	// 				databaseOperation.addMissedStockCode(stockCode, function(flag, result) {
-	// 					if (!flag) {
-	// 						logger.error(result);
-	// 					}
-	// 				});
-	// 			}
-	// 		} else {
-	// 			logger.error(result);
-	// 			feedbackToWechat(req, res, "数据库错误");
-	// 		}
-	// 	});
-	// }
 }
 
 function getWord(volume) {
