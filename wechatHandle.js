@@ -168,7 +168,7 @@ function getStockInfoFromAPI(stockCode, callback){
 			callback(true, data);
 		}
 
-	}, null, {stock_code:stockCode}, 'utf8').on('error', function(e){
+	}, {stock_code:stockCode}, 'utf8').on('error', function(e){
 		logger.error(e, logger.getFileNameAndLineNum(__filename));
 		callback(false, e);
 	});
