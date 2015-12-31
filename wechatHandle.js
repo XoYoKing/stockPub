@@ -173,6 +173,7 @@ function getStockInfoFromAPI(stockCode, callback) {
 
 	var req = http.request(opt, function(res) {
 		console.log("Got response: " + res.statusCode);
+		var body = '';
 		if(res.statusCode!=200){
 			logger.error(data, logger.getFileNameAndLineNum(__filename));
 			callback(false, data);
@@ -180,7 +181,7 @@ function getStockInfoFromAPI(stockCode, callback) {
 		res.on('data', function(d) {
 			body += d;
 		}).on('end', function() {
-			callback(true, data);
+			callback(true, JSON.parse(data));
 		});
 	}).on('error', function(e) {
 		logger.error(e, logger.getFileNameAndLineNum(__filename));
