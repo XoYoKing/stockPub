@@ -6,10 +6,10 @@ global.logger = log; // 设置全局
 var express = require('express');
 var bodyParser = require('body-parser');
 var cluster = require('cluster');
-var port = 18000;
 var email = require('./utility/emailTool');
 var stockRouter = require('./router/stockRouter.js');
-
+var config = require('./config');
+var port = config.stockServerInfo.port;
 
 process.on('uncaughtException', function(err) {
 	logger.error('worker exception: ' + err.stack);

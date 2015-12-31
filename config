@@ -55,3 +55,8 @@ exports.wechat = {
 exports.stockDataInterface = {
     url: 'http://qt.gtimg.cn/q='
 };
+
+exports.stockServerInfo = {
+    url: 'http://112.74.102.178',
+    port: 18000
+};

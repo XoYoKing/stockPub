@@ -73,18 +73,6 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
 	logger.debug(stockAPI);
 
 	gs.get(stockAPI, function(data, status, headers) {
-		// if (res.statusCode == 200) {
-		// 	var htmlData = "";
-		// 	res.on('data', function(data) {
-		// 		htmlData += data;
-		// 	});
-        //
-		// 	res.on('end', function() {
-		// 		callback(true, htmlData);
-		// 	});
-		// }
-
-        //callback(true, data);
         if(status == 200){
             callback(true, data);
         }else{
@@ -95,7 +83,7 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
         // console.log(status);
         // console.log(data);
 
-	}, 'gbk').on('error', function(e) {
+	}, null, 'utf8').on('error', function(e) {
 		logger.error("Got error: " + e.message);
         callback(false, e.message);
 	});
