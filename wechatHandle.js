@@ -9,7 +9,7 @@ var gs = require('nodegrass');
 var constant = require('./utility/constant');
 var http = require('http');
 var wechatFeedbackStr =
-	"回复股票代码，查看成交量变化;回复tj查看最近推荐股票;回复jg查看最近一次推荐后验证结果;股市有风险，入市须谨慎";
+	"回复股票代码，查看基本行情;";
 
 
 var crawl = require('./stockCrawl.js');
