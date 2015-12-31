@@ -28,11 +28,17 @@ exports.updateStockBaseInfo = function(stockCode, priceearning, marketValue, flo
 	conn.executeSql(sql, [priceearning, marketValue, flowMarketValue, pb, roe, price, stockCode], callback);
 }
 
+exports.insertStockBaseInfo = function(stockInfo, callback){
+	var sql = "insert into stock_base_info(stock_code, stock_name, market) values(?, ?, ?)";
+	conn.executeSql(sql, [stockInfo.stock_code, stockInfo.stock_name, stockInfo.market], callback);
+};
+
+
 exports.getStockByCode = function(stock_code, callback){
-	
+
 	var sql = "select a.*, b.stock_name from stock_amount_info a,stock_base_info b where a.stock_code = ? "
 	+ "and a.stock_code=b.stock_code and a.amount<>0 and a.price<>0 and a.volume<>0 order by date DESC limit 15";
-	
+
 	conn.executeSql(sql, [stock_code], callback);
 }
 
@@ -42,7 +48,7 @@ exports.getStockNowByCode = function(stock_code, callback){
 	conn.executeSql(sql, [stock_code], callback);
 }
 
-exports.insertStockNow = function(stockCode, amount, date, time, price, yesterday_price, fluctuate, 
+exports.insertStockNow = function(stockCode, amount, date, time, price, yesterday_price, fluctuate,
 	priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, day4, callback){
 	var timestamp = Date.now()/1000;
 	var sql = "insert into stock_now_info (stock_code, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, day4) "
@@ -53,7 +59,7 @@ exports.insertStockNow = function(stockCode, amount, date, time, price, yesterda
 	conn.executeSql(sql, [price, date+" "+time, stockCode], null);
 }
 
-exports.insertStockAmount = function(stock_code, amount, date, time, price, fluctuate, priceearning, 
+exports.insertStockAmount = function(stock_code, amount, date, time, price, fluctuate, priceearning,
 	marketValue, flowMarketValue, volume, pb, openPrice, high_price, low_price, callback){
 	var timestamp = Date.now()/1000;
 	var sql = "insert into stock_amount_info (stock_code, amount, price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, low_price) "
@@ -122,7 +128,7 @@ exports.insertFeedback = function(msgStr, callback){
 
 
 exports.insertRecommandStock = function(stock_code_pre, callback){
-	
+
 	var sql = " insert into stock_predict_info(stock_code, date, price) "
 			+" select xxx.stock_code, xxx.date, xxx.price from ( "
 			+" (select aa.stock_code, bb.stock_name, aa.price, aa.date, aa.fluctuate, aa.priceearning, aa.marketValue, "
@@ -158,7 +164,7 @@ exports.insertRecommandStock = function(stock_code_pre, callback){
 }
 
 exports.getTodayRecommandNow = function(stock_code_pre, callback){
-	
+
 	var sql = "select xxx.*, bb.stock_name, bb.industry from stock_now_info xxx, "
 			+"(select max(timestamp) as timestamp, stock_code from stock_now_info xxx group by stock_code) as yyy,"
 			+"(select mm.* from stock_amount_info mm, "
@@ -257,6 +263,3 @@ exports.updatePredict = function(stockCode, date, high_price, fluctuate, callbac
 	conn.executeSql(sql, [high_price, fluctuate, stockCode, date], callback);
 
 }
-
-
-
