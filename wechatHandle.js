@@ -7,7 +7,7 @@ var xml2js = require('xml2js');
 var databaseOperation = require('./databaseOperation');
 var gs = require('nodegrass');
 var constant = require('./utility/constant');
-
+var http = require('http');
 var wechatFeedbackStr =
 	"回复股票代码，查看成交量变化;回复tj查看最近推荐股票;回复jg查看最近一次推荐后验证结果;股市有风险，入市须谨慎";
 
@@ -42,8 +42,6 @@ router.get('/removekeys', function(req, res) {
 	crawl.removeKeys();
 	res.send('remove keys');
 });
-
-
 
 
 
@@ -156,29 +154,46 @@ function checkDigit(str) {
 
 
 
-function getStockInfoFromAPI(stockCode, callback){
-	var url = config.stockServerInfo.url+":"+config.stockServerInfo.port+"/stock"+"/now";
-	logger.debug(url);
-	logger.debug(stockCode);
-	gs.post(url, function(data, status, headers){
-		if(status!=200){
+function getStockInfoFromAPI(stockCode, callback) {
+
+	var data = {
+		stock_code: stockCode
+	};
+	data = require('querystring').stringify(data);
+	var opt = {
+		method: "POST",
+		host: config.stockServerInfo.url,
+		port: config.stockServerInfo.port,
+		path: "/stock/now",
+		headers: {
+			"Content-Type": 'application/x-www-form-urlencoded',
+			"Content-Length": data.length
+		}
+	};
+
+	var req = http.request(opt, function(res) {
+		console.log("Got response: " + res.statusCode);
+		if(res.statusCode!=200){
 			logger.error(data, logger.getFileNameAndLineNum(__filename));
 			callback(false, data);
-		}else{
-			callback(true, data);
 		}
-
-	}, {stock_code:stockCode}, 'utf8').on('error', function(e){
+		res.on('data', function(d) {
+			body += d;
+		}).on('end', function() {
+			callback(true, data);
+		});
+	}).on('error', function(e) {
 		logger.error(e, logger.getFileNameAndLineNum(__filename));
 		callback(false, e);
 	});
+	req.end();
 }
 
 function handleStock(stockCode, req, res) {
 	var feedbackStr = "";
-	getStockInfoFromAPI(stockCode, function(flag, result){
-		if(flag){
-			if(result.code == constant.returnCode.SUCCESS){
+	getStockInfoFromAPI(stockCode, function(flag, result) {
+		if (flag) {
+			if (result.code == constant.returnCode.SUCCESS) {
 				var nowElement = result.data;
 				feedbackStr = "实时数据\n";
 				feedbackStr += nowElement.date + " " + nowElement.time + "\n";
@@ -190,13 +205,13 @@ function handleStock(stockCode, req, res) {
 						nowElement.volume / 10000.0).toFixed(2) + "亿\n");
 				feedbackToWechat(req, res, feedbackStr);
 
-			}else if(result.code == constant.returnCode.STOCK_NOT_EXIST){
+			} else if (result.code == constant.returnCode.STOCK_NOT_EXIST) {
 				feedbackToWechat(req, res, "无此股票代码");
-			}else{
+			} else {
 				feedbackToWechat(req, res, "异常错误");
 			}
 
-		}else{
+		} else {
 			logger.error(result, logger.getFileNameAndLineNum(__filename));
 			feedbackToWechat(req, res, "异常错误");
 		}
