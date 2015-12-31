@@ -159,6 +159,7 @@ function checkDigit(str) {
 function getStockInfoFromAPI(stockCode, callback){
 	var url = config.stockServerInfo.url+":"+config.stockServerInfo.port+"/stock"+"/now";
 	logger.debug(url);
+	logger.debug(stockCode);
 	gs.post(url, function(data, status, headers){
 		if(status!=200){
 			logger.error(data, logger.getFileNameAndLineNum(__filename));
