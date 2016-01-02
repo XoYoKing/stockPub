@@ -15,14 +15,11 @@ router.post('/cancelFollowUser', function(req, res){
 	userMgmt.cancelFollowUser(req.body, function(flag, result){
 		var returnData = {};
 		if(flag){
-			returnData.code = constant.returnCode.SUCCESS;
-			//routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
-			returnData.code = constant.returnCode.ERROR;
-			//routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
-		res.send(returnData);
 	});
 });
 

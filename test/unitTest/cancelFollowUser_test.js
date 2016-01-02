@@ -13,7 +13,7 @@ describe('cancelFollowUser', function(){
         runner.runTest(Json, Json.childpath, function(err, body){
             should.not.exist(err);
             //console.log(JSON.stringify(body));
-            body.code.should.be.equalOneOf(constant.returnCode.SUCCESS);
+            body.code.should.be.equal(constant.returnCode.SUCCESS);
             done();
         });
     })
