@@ -1,3 +1,5 @@
+require('mocha');
+
 var http = require('http');
 
 var hostname = '112.74.102.178';

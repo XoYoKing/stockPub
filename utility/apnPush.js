@@ -1,6 +1,7 @@
 
 var domain = require('domain');
 var domainObj = domain.create();
+var log = global.logger;
 
 exports.pushMsgToUsers = function (userToken, msg) {
 	if (userToken === undefined || userToken === '') {
