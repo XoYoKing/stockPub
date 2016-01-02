@@ -131,3 +131,58 @@ router.post('/register', function(req, res) {
 		}
 	});
 });
+
+
+// get the verifying code from phone number
+router.post('/confirmPhone', function(req, res) {
+	// log.logPrint(contant.logLevel.INFO, JSON.stringify(req.body));
+
+	userMgmt.checkPhoneNum(req.body.user_phone, function(flag, result) {
+		var statusCode;
+		var returnData = {
+			'user_phone': req.body.user_phone,
+			'code': 0
+		};
+
+		if (flag && result.length) {
+			log.debug(req.body.user_phone + ' PHONE_EXIST', log.getFileNameAndLineNum(
+				__filename));
+			statusCode = contant.returnCode.PHONE_EXIST;
+			returnData.code = statusCode;
+			res.send(returnData);
+		} else if (flag) {
+
+			var certificateCode = (Math.random() * 10000).toFixed(
+				0);
+			var timestamp = new Date().getTime();
+			userMgmt.certificateCode(req.body.user_phone, certificateCode, timestamp,
+				function(flag, result) {
+
+					if (flag && result) {
+						statusCode = contant.returnCode.CERTIFICATE_CODE_SEND;
+						var weimi = require('../utility/weimi');
+						weimi.sendMessage(req.body.user_phone, certificateCode, function(
+							result) {
+							log.debug(result, log.getFileNameAndLineNum(__filename));
+							returnData.code = statusCode;
+							res.send(returnData);
+						});
+					} else if (flag) {
+						statusCode = contant.returnCode.CERTIFICATE_CODE_SENDED;
+						returnData.code = statusCode;
+						res.send(returnData);
+					} else {
+						log.error(result, log.getFileNameAndLineNum(__filename));
+						statusCode = contant.returnCode.ERROR;
+						returnData.code = statusCode;
+						res.send(returnData);
+					}
+				});
+		} else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			statusCode = contant.returnCode.ERROR;
+			returnData.code = statusCode;
+			res.send(returnData);
+		}
+	});
+});

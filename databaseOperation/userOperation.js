@@ -4,7 +4,7 @@ var conn = require('../utility.js');
 var logger = global.logger;
 
 exports.followUser = function(reqbody, callback){
-	var follow_timestamp = Date.now() / 1000;
+	var follow_timestamp = Date.now();
 	var sql = "insert into user_follow_base_info(user_id, followed_user_id, follow_timestamp) " +
 	" values(?,?,?)";
 	conn.executeSql(sql, [reqbody.user_id, reqbody.followed_user_id, follow_timestamp], callback);
@@ -50,4 +50,43 @@ exports.getfollowUser = function(reqbody, callback){
 exports.getUserTokenInfo = function(user_id, callback) {
 	var sql = 'select *from user_base_info where user_id = ?';
 	conn.executeSql(sql, [user_id], callback);
+};
+
+exports.getCertificateCode = function(userPhone, callback) {
+	var sql =
+		'select *from confirm_phone where user_phone = ? order by time_stamp desc limit 1';
+	conn.executeSql(sql, [userPhone], callback);
+};
+
+exports.checkPhoneNum = function(userPhone, callback) {
+	var sql = 'select user_phone from user_base_info where user_phone = ?';
+	conn.executeSql(sql, [userPhone], callback);
+};
+
+exports.getCertificateCode = function(userPhone, callback) {
+
+	var sql = 'select *from confirm_phone where user_phone = ? order by time_stamp desc limit 1';
+	conn.executeSql(sql, [userPhone], callback);
+};
+
+exports.certificateCode = function(userPhone, certificateCode, timeStamp,
+	callback) {
+	var sql = 'select time_stamp from confirm_phone where user_phone = ? order by time_stamp desc limit 1';
+	conn.executeSql(sql, [userPhone], function(flag, result) {
+		if (flag) {
+			if (result.length) {
+				if (timeStamp - result[0].time_stamp > 180000) {
+					sql = 'insert into confirm_phone values(?,?,?)';
+					conn.executeSql(sql, [userPhone, certificateCode, timeStamp], callback);
+				} else {
+					callback(true);
+				}
+			} else {
+				sql = 'insert into confirm_phone values(?,?,?)';
+				conn.executeSql(sql, [userPhone, certificateCode, timeStamp], callback);
+			}
+		} else {
+			callback(false);
+		}
+	});
 };
