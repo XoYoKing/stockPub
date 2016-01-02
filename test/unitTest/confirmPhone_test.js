@@ -4,4 +4,6 @@ var Json = {
 };
 
 var runner = require('./unitTestRunner.js');
-runner.runTest(Json, Json.childpath);
+runner.runTest(Json, Json.childpath, function(err, body){
+    
+});
