@@ -97,3 +97,31 @@ exports.login = function(userPhone, password, callback) {
 		'select * from user_base_info where user_phone = ? and user_password = ?';
 	conn.executeSql(sql, [userPhone, password], callback);
 };
+
+
+// exports.register = function(userInfo, callback) {
+// 	var sqlArray = [];
+// 	var paraArray = [];
+//
+// 	log.debug(JSON.stringify(userInfo));
+//
+// 	sqlArray.push(
+// 		'insert into user_base_info (user_id, user_phone, user_name, user_password, user_facethumbnail, user_face_image, user_gender, certificate_id, user_fans_count, user_follow_count, user_birth_day) values (?,?,?,?,?,?,?,?,?,?,?)'
+// 	);
+// 	sqlArray.push('insert into user_location_info (user_id) values (?)');
+// 	paraArray.push([userInfo.id,
+// 		userInfo.user_phone,
+// 		userInfo.name,
+// 		userInfo.password,
+// 		userInfo.facethumbnail,
+// 		userInfo.user_face_image,
+// 		userInfo.user_gender,
+// 		userInfo.certificate_id,
+// 		userInfo.fans_count,
+// 		userInfo.follow_count,
+// 		userInfo.user_birth_day
+// 	]);
+// 	paraArray.push([userInfo.id]);
+//
+// 	conn.executeTwoStepTransaction(sqlArray, paraArray, callback);
+// };

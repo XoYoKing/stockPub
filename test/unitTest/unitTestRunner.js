@@ -8,6 +8,7 @@ exports.runTest = function(jsonObject, childpath, callback){
         hostname: hostname,
         method: 'POST',
         path: childpath,
+        timeout: 3000,
         headers: {
             'Content-Type': 'application/json; encoding=utf-8',
             'Accept': 'application/json',

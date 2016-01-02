@@ -4,7 +4,7 @@ var constant = require('../../utility/constant.js');
 var Json = {
     childpath: '/user/register',
     user_phone: '18516053712',
-    user_certificate_code: '12345'
+    user_certificate_code: '1808'
 };
 
 var runner = require('./unitTestRunner.js');
