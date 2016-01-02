@@ -36,6 +36,10 @@ exports.runTest = function(jsonObject, childpath, callback){
         callback(e, e.message);
     });
 
+    req.setTimeout(3000, function(){
+        callback('timeout', 'timeout');
+    });
+
     req.write(JSON.stringify(jsonObject));
     req.end();
 };
