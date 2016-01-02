@@ -108,10 +108,11 @@ router.post('/register', function(req, res) {
 						};
 					} else {
 						log.error(result, log.getFileNameAndLineNum(__filename));
-						returnData = {
-							'user_phone': fields.user_phone,
-							'code': constant.returnCode.REGISTER_FAIL
-						};
+						if(result.code === 'ER_DUP_ENTRY'){
+							returnData.code = constant.returnCode.PHONE_EXIST;
+						}else{
+							returnData.code = constant.returnCode.ERROR;
+						}
 					}
 					res.send(returnData);
 				});
