@@ -11,12 +11,12 @@ exports.pushMsgToUsers = function (userToken, msg) {
 	var pemName = null;
 	var pemkeyName = null;
 
-	if (process.env.ENV === 'stock_dev') {
+	if (process.env.STOCK_ENV === 'dev') {
 		//pemName = 'heretest.pem';
 		//pemkeyName = 'heretestkey.pem';
 	}
 
-	if (process.env.ENV === 'stock_pro') {
+	if (process.env.STOCK_ENV === 'pro') {
 		//pemName = 'herepro.pem';
 		//pemkeyName = 'hereprokey.pem';
 	}
