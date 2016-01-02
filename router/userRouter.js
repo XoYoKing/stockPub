@@ -11,6 +11,31 @@ var apn = require('../utility/apnPush.js');
 module.exports = router;
 
 
+
+router.post('/cancelFollowUser', function(req, res){
+	userMgmt.cancelFollowUser(req.body, function(flag, result){
+		routeFunc.feedBack(flag, result, res);
+	});
+});
+
+router.post('/getfollowUser', function(req, res){
+	userMgmt.getfollowUser(req.body, function(flag, result){
+		routeFunc.feedBack(flag, result, res, req.body.sq);
+	});
+});
+
+router.post('/getFansUser', function(req, res){
+	userMgmt.getFansUser(req.body, function(flag, result){
+		routeFunc.feedBack(flag, result, res, req.body.sq);
+	});
+});
+
+router.post('/getfollowInfo', function(req, res){
+	userMgmt.getfollowInfo(req.body, function(flag, result){
+		routeFunc.feedBack(flag, result, res, req.body.sq);
+	});
+});
+
 router.post('/followUser', function(req, res){
 	userMgmt.followUser(req.body, function(flag, result){
 		var returnData = {};
