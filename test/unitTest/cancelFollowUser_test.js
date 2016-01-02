@@ -12,8 +12,7 @@ describe('cancelFollowUser', function(){
     it('cancelFollowUser', function(done){
         runner.runTest(Json, Json.childpath, function(err, body){
             should.not.exist(err);
-            body.code.should.be.equalOneOf(constant.returnCode.CERTIFICATE_CODE_SEND,
-                constant.returnCode.CERTIFICATE_CODE_SENDED, constant.returnCode.PHONE_EXIST);
+            body.code.should.be.equalOneOf(constant.returnCode.SUCCESS);
             done();
         });
     })
