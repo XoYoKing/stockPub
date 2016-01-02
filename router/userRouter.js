@@ -107,10 +107,10 @@ router.post('/register', function(req, res) {
 							'code': constant.returnCode.REGISTER_SUCCESS
 						};
 					} else {
-						log.error(result, log.getFileNameAndLineNum(__filename));
 						if(result.code === 'ER_DUP_ENTRY'){
 							returnData.code = constant.returnCode.PHONE_EXIST;
 						}else{
+							log.error(result, log.getFileNameAndLineNum(__filename));
 							returnData.code = constant.returnCode.ERROR;
 						}
 					}
