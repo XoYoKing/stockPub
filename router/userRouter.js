@@ -4,7 +4,6 @@ var log = global.logger;
 var userMgmt = require('../databaseOperation/userOperation.js');
 var constant = require('../utility/constant.js');
 var routerFunc = require('../utility/routeFunc.js');
-var config = require('../config');
 var common = require('../utility/commonFunc.js');
 var apn = require('../utility/apnPush.js');
 
@@ -56,7 +55,7 @@ router.post('/followUser', function(req, res){
 						var pushMsg = {
 							content: req.body.user_name + '关注了你',
 							msgtype: 'msg',
-							badge: result[0].count
+							badge: 1
 						};
 						// apn to user
 						apn.pushMsgToUsers(result[0].device_token, pushMsg);
@@ -71,5 +70,64 @@ router.post('/followUser', function(req, res){
 
 		}
 		res.send(returnData);
+	});
+});
+
+// register
+router.post('/register', function(req, res) {
+	var returnData = {};
+	var fields = req.body;
+	userMgmt.getCertificateCode(fields.user_phone, function(flag, result) {
+		if (flag) {
+			if (result.length === 0) {
+				log.debug('no certificateCode for phone:' + fields.user_phone, log.getFileNameAndLineNum(
+					__filename));
+				returnData.code = contant.returnCode.CERTIFICATE_CODE_NOT_MATCH;
+				res.send(returnData);
+				return;
+			}
+
+			var certificateInfo = result[0];
+
+			if (certificateInfo.certificate_code === fields.user_certificate_code) {
+				var user_info = {};
+				var md5 = require('MD5');
+				user_info.id = md5(fields.user_phone);
+				user_info.user_phone = fields.user_phone;
+				user_info.name = fields.user_name;
+				user_info.password = fields.user_password;
+
+				userMgmt.register(user_info, function(flag, result) {
+					if (flag) {
+						log.debug('REGISTER_SUCCESS', log.getFileNameAndLineNum(__filename));
+						returnData = {
+							'user_phone': user_info.user_phone,
+							'user_id': user_info.id,
+							'user_name': user_info.name,
+							'code': contant.returnCode.REGISTER_SUCCESS
+						};
+					} else {
+						log.error(result, log.getFileNameAndLineNum(__filename));
+						returnData = {
+							'user_phone': fields.user_phone,
+							'code': contant.returnCode.REGISTER_FAIL
+						};
+					}
+					res.send(returnData);
+				});
+
+			} else {
+				log.debug(fields.user_certificate_code + ' not equal to ' +
+					certificateInfo.certificate_code, log.getFileNameAndLineNum(
+						__filename));
+				returnData.code = contant.returnCode.CERTIFICATE_CODE_NOT_MATCH;
+				res.send(returnData);
+			}
+
+		} else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = contant.returnCode.ERROR;
+			res.send(returnData);
+		}
 	});
 });

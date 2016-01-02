@@ -48,6 +48,6 @@ exports.getfollowUser = function(reqbody, callback){
 };
 
 exports.getUserTokenInfo = function(user_id, callback) {
-	var sql = 'select *from user_token_v where user_id = ?';
+	var sql = 'select *from user_base_info where user_id = ?';
 	conn.executeSql(sql, [user_id], callback);
 };
