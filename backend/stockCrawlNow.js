@@ -1,11 +1,13 @@
 var log4js = require('log4js');
+var path = require('path');
+
 log4js.configure({
         appenders: [{
             type: 'console'
         }, {
             type: 'dateFile',
             absolute: true,
-            filename: '/home/wanghan/dev/stocklogs/stockNow_',
+            filename: path.join(process.env.HOME, 'stocklogs/stockNow_'),
             maxLogSize: 1024 * 1024,
             backups: 4,
             pattern: "yyyy-MM-dd.log",
@@ -22,7 +24,7 @@ global.logger = logger;
 var stockCrawl = require('./stockCrawl');
 
 // var databaseOper = require('./databaseOperation.js');
-// databaseOper.insertStockNow('111111', 123, '2015-04-12', '12:14:00', 12.2, 12.1, 1.0, 
+// databaseOper.insertStockNow('111111', 123, '2015-04-12', '12:14:00', 12.2, 12.1, 1.0,
 //     123, 123, 123, 123, function(flag, result){
 //         logger.info('insertStockNow');
 //     });
