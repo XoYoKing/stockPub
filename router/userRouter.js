@@ -13,7 +13,12 @@ module.exports = router;
 
 router.post('/cancelFollowUser', function(req, res){
 	userMgmt.cancelFollowUser(req.body, function(flag, result){
-		routeFunc.feedBack(flag, result, res);
+		if(flag){
+			routeFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routeFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
 	});
 });
 
