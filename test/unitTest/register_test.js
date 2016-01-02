@@ -11,6 +11,5 @@ var runner = require('./unitTestRunner.js');
 runner.runTest(Json, Json.childpath, function(err, body){
     should.not.exist(err);
     body.code.should.be.equalOneOf(constant.returnCode.CERTIFICATE_CODE_NOT_MATCH,
-        constant.returnCode.REGISTER_SUCCESS, constant.returnCode.PHONE_EXIST,
-        constant.returnCode.ERROR);
+        constant.returnCode.REGISTER_SUCCESS, constant.returnCode.PHONE_EXIST);
 });
