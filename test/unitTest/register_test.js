@@ -4,6 +4,8 @@ var constant = require('../../utility/constant.js');
 var Json = {
     childpath: '/user/register',
     user_phone: '18516053712',
+    user_name: 'jam',
+    user_password: '123456',
     user_certificate_code: '1808'
 };
 
