@@ -27,7 +27,7 @@ exports.runTest = function(jsonObject, childpath, callback){
         }).on('end', function() {
             console.log(res.headers);
             console.log(body);
-            callback(null, body);
+            callback(null, JSON.parse(body));
         });
 
     }).on('error', function(e) {
