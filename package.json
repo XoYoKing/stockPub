@@ -4,7 +4,9 @@
   "description": "股票爬虫",
   "main": "databaseOperation.js",
   "dependencies": {
+    "apn": "^1.7.5",
     "body-parser": "^1.14.1",
+    "domain": "0.0.1",
     "express": "^4.13.3",
     "file-stream-rotator": "0.0.6",
     "log4js": "^0.6.29",
