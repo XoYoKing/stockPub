@@ -92,18 +92,18 @@ router.post('/register', function(req, res) {
 			if (certificateInfo.certificate_code === fields.user_certificate_code) {
 				var user_info = {};
 				var md5 = require('MD5');
-				user_info.id = md5(fields.user_phone);
+				user_info.user_id = md5(fields.user_phone);
 				user_info.user_phone = fields.user_phone;
-				user_info.name = fields.user_name;
-				user_info.password = fields.user_password;
+				user_info.user_name = fields.user_name;
+				user_info.user_password = fields.user_password;
 
 				userMgmt.register(user_info, function(flag, result) {
 					if (flag) {
 						log.debug('REGISTER_SUCCESS', log.getFileNameAndLineNum(__filename));
 						returnData = {
 							'user_phone': user_info.user_phone,
-							'user_id': user_info.id,
-							'user_name': user_info.name,
+							'user_id': user_info.user_id,
+							'user_name': user_info.user_name,
 							'code': constant.returnCode.REGISTER_SUCCESS
 						};
 					} else {
