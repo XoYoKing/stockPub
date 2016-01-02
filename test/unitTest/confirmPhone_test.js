@@ -8,5 +8,5 @@ var Json = {
 var runner = require('./unitTestRunner.js');
 runner.runTest(Json, Json.childpath, function(err, body){
     should.not.exist(err);
-    body.code.should.equal(1040);
+    body.should.have.property('code', 1040);
 });
