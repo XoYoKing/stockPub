@@ -4,7 +4,10 @@
   "description": "股票爬虫",
   "main": "databaseOperation.js",
   "dependencies": {
+    "MD5": "^1.3.0",
+    "apn": "^1.7.5",
     "body-parser": "^1.14.1",
+    "domain": "0.0.1",
     "express": "^4.13.3",
     "file-stream-rotator": "0.0.6",
     "log4js": "^0.6.29",
@@ -17,7 +20,10 @@
     "redis": "^2.4.2",
     "xml2js": "^0.4.15"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^2.3.4",
+    "should": "^8.0.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
