@@ -82,7 +82,7 @@ router.post('/register', function(req, res) {
 			if (result.length === 0) {
 				log.debug('no certificateCode for phone:' + fields.user_phone, log.getFileNameAndLineNum(
 					__filename));
-				returnData.code = contant.returnCode.CERTIFICATE_CODE_NOT_MATCH;
+				returnData.code = constant.returnCode.CERTIFICATE_CODE_NOT_MATCH;
 				res.send(returnData);
 				return;
 			}
@@ -104,13 +104,13 @@ router.post('/register', function(req, res) {
 							'user_phone': user_info.user_phone,
 							'user_id': user_info.id,
 							'user_name': user_info.name,
-							'code': contant.returnCode.REGISTER_SUCCESS
+							'code': constant.returnCode.REGISTER_SUCCESS
 						};
 					} else {
 						log.error(result, log.getFileNameAndLineNum(__filename));
 						returnData = {
 							'user_phone': fields.user_phone,
-							'code': contant.returnCode.REGISTER_FAIL
+							'code': constant.returnCode.REGISTER_FAIL
 						};
 					}
 					res.send(returnData);
@@ -120,13 +120,13 @@ router.post('/register', function(req, res) {
 				log.debug(fields.user_certificate_code + ' not equal to ' +
 					certificateInfo.certificate_code, log.getFileNameAndLineNum(
 						__filename));
-				returnData.code = contant.returnCode.CERTIFICATE_CODE_NOT_MATCH;
+				returnData.code = constant.returnCode.CERTIFICATE_CODE_NOT_MATCH;
 				res.send(returnData);
 			}
 
 		} else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
-			returnData.code = contant.returnCode.ERROR;
+			returnData.code = constant.returnCode.ERROR;
 			res.send(returnData);
 		}
 	});
@@ -135,7 +135,7 @@ router.post('/register', function(req, res) {
 
 // get the verifying code from phone number
 router.post('/confirmPhone', function(req, res) {
-	// log.logPrint(contant.logLevel.INFO, JSON.stringify(req.body));
+	// log.logPrint(constant.logLevel.INFO, JSON.stringify(req.body));
 
 	userMgmt.checkPhoneNum(req.body.user_phone, function(flag, result) {
 		var statusCode;
@@ -147,7 +147,7 @@ router.post('/confirmPhone', function(req, res) {
 		if (flag && result.length) {
 			log.debug(req.body.user_phone + ' PHONE_EXIST', log.getFileNameAndLineNum(
 				__filename));
-			statusCode = contant.returnCode.PHONE_EXIST;
+			statusCode = constant.returnCode.PHONE_EXIST;
 			returnData.code = statusCode;
 			res.send(returnData);
 		} else if (flag) {
@@ -159,7 +159,7 @@ router.post('/confirmPhone', function(req, res) {
 				function(flag, result) {
 
 					if (flag && result) {
-						statusCode = contant.returnCode.CERTIFICATE_CODE_SEND;
+						statusCode = constant.returnCode.CERTIFICATE_CODE_SEND;
 						var weimi = require('../utility/weimi');
 						weimi.sendMessage(req.body.user_phone, certificateCode, function(
 							result) {
@@ -168,19 +168,19 @@ router.post('/confirmPhone', function(req, res) {
 							res.send(returnData);
 						});
 					} else if (flag) {
-						statusCode = contant.returnCode.CERTIFICATE_CODE_SENDED;
+						statusCode = constant.returnCode.CERTIFICATE_CODE_SENDED;
 						returnData.code = statusCode;
 						res.send(returnData);
 					} else {
 						log.error(result, log.getFileNameAndLineNum(__filename));
-						statusCode = contant.returnCode.ERROR;
+						statusCode = constant.returnCode.ERROR;
 						returnData.code = statusCode;
 						res.send(returnData);
 					}
 				});
 		} else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
-			statusCode = contant.returnCode.ERROR;
+			statusCode = constant.returnCode.ERROR;
 			returnData.code = statusCode;
 			res.send(returnData);
 		}
