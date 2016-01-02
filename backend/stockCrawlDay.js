@@ -1,11 +1,13 @@
 var log4js = require('log4js');
+var path = require('path');
+
 log4js.configure({
         appenders: [{
             type: 'console'
         }, {
             type: 'dateFile',
             absolute: true,
-            filename: '/home/wanghan/dev/stocklogs/stockDay_',
+            filename: path.join(process.env.HOME, 'stocklogs/stockDay_'),
             maxLogSize: 1024 * 1024,
             backups: 4,
             pattern: "yyyy-MM-dd.log",
@@ -28,8 +30,3 @@ stockCrawl.startGetAllStockInfo();
 process.on('uncaughtException', function(err) {
     logger.error(err);
 });
-
-
-
-
-
