@@ -191,7 +191,7 @@ router.post('/confirmPhone', function(req, res) {
 
 // login
 router.post('/login', function(req, res) {
-	userMgmt.login(req.body.user_phone, req.body.password, function(flag, result) {
+	userMgmt.login(req.body.user_phone, req.body.user_password, function(flag, result) {
 		var statusCode;
 		var returnData = {};
 		if (flag) {
@@ -201,12 +201,12 @@ router.post('/login', function(req, res) {
 				returnData = {
 					'user_phone': result[0].user_phone,
 					'user_id': result[0].user_id,
-					'password': result[0].user_password,
+					'user_password': result[0].user_password,
 					'user_name': result[0].user_name,
 					'user_facethumbnail': result[0].user_facethumbnail,
 					'user_face_image': result[0].user_face_image,
 					'fans_count': result[0].user_fans_count,
-					'follow_count': result[0].user_follow_count,
+					'user_follow_count': result[0].user_follow_count,
 					'code': statusCode
 				};
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));
