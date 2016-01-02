@@ -90,3 +90,10 @@ exports.certificateCode = function(userPhone, certificateCode, timeStamp,
 		}
 	});
 };
+
+
+exports.login = function(userPhone, password, callback) {
+	var sql =
+		'select * from user_base_info where user_phone = ? and user_password = ?';
+	conn.executeSql(sql, [userPhone, password], callback);
+};
