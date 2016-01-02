@@ -25,19 +25,36 @@ router.post('/cancelFollowUser', function(req, res){
 
 router.post('/getfollowUser', function(req, res){
 	userMgmt.getfollowUser(req.body, function(flag, result){
-		routerFunc.feedBack(flag, result, res, req.body.sq);
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
 	});
 });
 
 router.post('/getFansUser', function(req, res){
 	userMgmt.getFansUser(req.body, function(flag, result){
-		routerFunc.feedBack(flag, result, res, req.body.sq);
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
 	});
 });
 
 router.post('/getfollowInfo', function(req, res){
 	userMgmt.getfollowInfo(req.body, function(flag, result){
-		routerFunc.feedBack(flag, result, res, req.body.sq);
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
 	});
 });
 
