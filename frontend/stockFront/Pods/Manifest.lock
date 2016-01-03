@@ -1,0 +1,47 @@
+PODS:
+  - ASIHTTPRequest (1.8.2):
+    - ASIHTTPRequest/ASIWebPageRequest
+    - ASIHTTPRequest/CloudFiles
+    - ASIHTTPRequest/Core
+    - ASIHTTPRequest/S3
+  - ASIHTTPRequest/ASIWebPageRequest (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/CloudFiles (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/Core (1.8.2):
+    - Reachability
+  - ASIHTTPRequest/S3 (1.8.2):
+    - ASIHTTPRequest/Core
+  - EGOTableViewPullRefresh (0.1.0)
+  - LBBlurredImage (0.2.2)
+  - Masonry (0.6.3)
+  - MBProgressHUD (0.9.1)
+  - Reachability (3.2)
+  - SDWebImage (3.7.3):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.7.3)
+  - SocketRocket (0.4.2)
+  - YYModel (0.9.5)
+
+DEPENDENCIES:
+  - ASIHTTPRequest
+  - EGOTableViewPullRefresh
+  - LBBlurredImage
+  - Masonry
+  - MBProgressHUD
+  - SDWebImage (~> 3.7)
+  - SocketRocket
+  - YYModel
+
+SPEC CHECKSUMS:
+  ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
+  EGOTableViewPullRefresh: d4c15be51914f4168d6fd7529b6ad3a4ab01e5f4
+  LBBlurredImage: 700634c17922bc2d22343118e7deb6a3ca12db43
+  Masonry: ff105a956abcd19a618b2028b121cb638d7a8e2f
+  MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
+  SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
+  YYModel: dd2bdc9097f8a90c53512a87d55d28340ade1371
+
+COCOAPODS: 0.34.4
