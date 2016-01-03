@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "startViewCtrl.h"
 
 @interface AppDelegate ()
 
@@ -15,8 +16,35 @@
 @implementation AppDelegate
 
 
+- (void)startView
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    
+    UINavigationController* rootNav = [[UINavigationController alloc] initWithRootViewController:[[startViewCtrl alloc] init]];
+    
+    //rootNav.navigationBar.translucent = NO;
+    rootNav.navigationBar.barTintColor = [UIColor whiteColor];
+    rootNav.navigationBar.tintColor = [UIColor blackColor];
+    
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];//状态栏白色
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    
+    //去掉nav返回字
+    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -60)
+                                                         forBarMetrics:UIBarMetricsDefault];
+    
+    self.window.rootViewController = rootNav;
+    
+    [self.window makeKeyAndVisible];
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    _myInfo = [[UserInfoModel alloc] init];
+    
+    [self startView];
     return YES;
 }
 

@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  loginViewCtrl.h
 //  stockFront
 //
 //  Created by wang jam on 1/3/16.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface loginViewCtrl : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
 @end
-
