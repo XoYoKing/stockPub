@@ -1,1 +1,1 @@
-forever stop $HOME/stockPub/stockSchedule.js
+forever stop $HOME/stockPub/backend/stockSchedule.js
