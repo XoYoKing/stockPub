@@ -46,6 +46,11 @@ exports.getFileNameAndLineNum = function(fullfilename) {
 };
 
 exports.info = function(info, fileNameLineNum, sq) {
+
+    if(fileNameLineNum == null){
+        fileNameLineNum = '';
+    }
+
     if (sq != null) {
         logger.info('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
@@ -54,6 +59,10 @@ exports.info = function(info, fileNameLineNum, sq) {
 };
 
 exports.debug = function(info, fileNameLineNum, sq) {
+    if(fileNameLineNum == null){
+        fileNameLineNum = '';
+    }
+
     if (sq != null) {
         logger.debug('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
@@ -62,6 +71,10 @@ exports.debug = function(info, fileNameLineNum, sq) {
 };
 
 exports.error = function(info, fileNameLineNum, sq) {
+    if(fileNameLineNum == null){
+        fileNameLineNum = '';
+    }
+
     if (sq != null) {
         logger.error('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
@@ -70,6 +83,9 @@ exports.error = function(info, fileNameLineNum, sq) {
 };
 
 exports.warn = function(info, fileNameLineNum, sq) {
+    if(fileNameLineNum == null){
+        fileNameLineNum = '';
+    }
     if (sq != null) {
         logger.warn('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
