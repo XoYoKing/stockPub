@@ -11,6 +11,12 @@
 
 
 #define fontName @"HelveticaNeue-Thin"
+#define bigFont 32
+#define middleFont 24
+#define minFont 16
+#define microFont 12
+
+
 #define minSpace 8
 
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width

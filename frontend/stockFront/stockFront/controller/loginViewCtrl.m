@@ -38,7 +38,7 @@
     
     loginButton = [[UIButton alloc] init];
     [loginButton setTitle:[[NSString alloc] initWithFormat:@"登录"] forState:UIControlStateNormal];
-    loginButton.titleLabel.font = [UIFont fontWithName:fontName size:32];
+    loginButton.titleLabel.font = [UIFont fontWithName:fontName size:bigFont];
     
     [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
@@ -96,7 +96,7 @@
         
         UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 230, 6*minSpace)];
         textField.textAlignment = NSTextAlignmentLeft;
-        textField.font = [UIFont fontWithName:fontName size:16];
+        textField.font = [UIFont fontWithName:fontName size:minFont];
         cell.accessoryView = textField;
         
         if (indexPath.row==0) {

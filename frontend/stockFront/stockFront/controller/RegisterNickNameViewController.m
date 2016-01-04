@@ -47,7 +47,7 @@
     
     UILabel *navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
     [navTitle setTextColor:[UIColor blackColor]];
-    navTitle.font = [UIFont fontWithName:fontName size:20];
+    navTitle.font = [UIFont fontWithName:fontName size:middleFont];
     [navTitle setText:@"输入名称"];
     navTitle.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = navTitle;
@@ -117,7 +117,7 @@
         
         UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 230, 6*minSpace)];
         textField.textAlignment = NSTextAlignmentLeft;
-        textField.font = [UIFont fontWithName:fontName size:16];
+        textField.font = [UIFont fontWithName:fontName size:minFont];
         cell.accessoryView = textField;
         
         if (indexPath.row==0) {

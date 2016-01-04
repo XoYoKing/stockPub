@@ -22,7 +22,7 @@
 - (void)viewDidLoad
 {
     appNamelabel = [[UILabel alloc] init];
-    appNamelabel.font = [UIFont fontWithName:fontName size:32];
+    appNamelabel.font = [UIFont fontWithName:fontName size:bigFont];
     appNamelabel.textColor = [UIColor blackColor];
     appNamelabel.textAlignment = NSTextAlignmentCenter;
 //    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
@@ -35,14 +35,14 @@
     registerButton = [[UIButton alloc] init];
     [registerButton setTitle:@"注册" forState:UIControlStateNormal];
     [registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    registerButton.titleLabel.font = [UIFont fontWithName:fontName size:18];
+    registerButton.titleLabel.font = [UIFont fontWithName:fontName size:middleFont];
     [registerButton addTarget:self action:@selector(registerButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:registerButton];
     
     
     loginButton = [[UIButton alloc] init];
     [loginButton setTitle:@"登录" forState:UIControlStateNormal];
-    loginButton.titleLabel.font = [UIFont fontWithName:fontName size:18];
+    loginButton.titleLabel.font = [UIFont fontWithName:fontName size:middleFont];
     [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(loginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
