@@ -212,6 +212,28 @@ router.post('/confirmPhone', function(req, res) {
 });
 
 
+router.post('/checkNameExist', function(req, res) {
+	userMgmt.checkUserNameExist(req.body, function(flag, result) {
+		var returnData = {};
+		if (flag) {
+			if (result.length > 0) {
+				log.debug(req.body.user_name + ' USER_EXIST', log.getFileNameAndLineNum(
+					__filename));
+				returnData.code = config.returnCode.USER_EXIST;
+			} else {
+				log.debug(req.body.user_name + ' USER_NOT_EXIST', log.getFileNameAndLineNum(
+					__filename));
+				returnData.code = config.returnCode.USER_NOT_EXIST;
+			}
+		} else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = config.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
+
 // login
 router.post('/login', function(req, res) {
 	userMgmt.login(req.body.user_phone, req.body.user_password, function(flag, result) {

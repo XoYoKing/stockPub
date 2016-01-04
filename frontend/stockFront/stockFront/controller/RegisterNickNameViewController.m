@@ -19,6 +19,9 @@
 //#import "RegisterPhoneNumViewController.h"
 #import <Masonry.h>
 #import "NetworkAPI.h"
+#import "Tools.h"
+#import "returnCode.h"
+#import "AppDelegate.h"
 
 @interface RegisterNickNameViewController ()
 {
@@ -147,31 +150,46 @@
 
 - (void)nextStep:(id)sender
 {
-//    textField.text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//    
-//    if (textField.text.length==0||textField.text==nil) {
-//        
-//        [Tools AlertBigMsg:@"名字不能为空"];
-//        return;
-//    }
-//    
-//    [textField resignFirstResponder];
-//    
-//    //验证名字
-//    MBProgressHUD* loadingView = [[MBProgressHUD alloc] initWithView:self.view];
-//    [self.view addSubview:loadingView];
-//    [loadingView show:YES];
-//    
-//    NetWork* netWork = [[NetWork alloc] init];
-//    NSDictionary* message = [[NSDictionary alloc] initWithObjects:@[textField.text, @"/checkNameExist"] forKeys:@[@"user_name", @"childpath"]];
-//    
-//    
-//    NSDictionary* feedbackcall = [[NSDictionary alloc] initWithObjects:@[[NSValue valueWithBytes:&@selector(userNameExist:) objCType:@encode(SEL)],[NSValue valueWithBytes:&@selector(userNameNotExist:) objCType:@encode(SEL)]] forKeys:@[[[NSNumber alloc] initWithInt:USER_EXIST],[[NSNumber alloc] initWithInt:USER_NOT_EXIST]]];
-//    
-//    [netWork message:message images:nil feedbackcall:feedbackcall complete:^{
-//        [loadingView hide:YES];
-//        [loadingView removeFromSuperview];
-//    } callObject:self];
+    nickNameTextField.text = [nickNameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (nickNameTextField.text.length==0||nickNameTextField.text==nil) {
+        
+        alertMsg(@"名字不能为空");
+        return;
+    }
+
+    [nickNameTextField resignFirstResponder];
+    
+    //验证名字是否已存在
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
+    NSDictionary* message = [[NSDictionary alloc] initWithObjects:@[nickNameTextField.text] forKeys:@[@"user_name"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/checkNameExist" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == USER_NOT_EXIST){
+            
+            UserInfoModel* myinfo = [AppDelegate getMyUserInfo];
+            myinfo.user_name = nickNameTextField.text;
+            
+            
+            
+            
+        }else if(code == USER_EXIST){
+            alertMsg(@"用户名已存在");
+        }else{
+            alertMsg(@"未知错误");
+        }
+
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
 }
 
 - (void)userNameNotExist:(id)sender

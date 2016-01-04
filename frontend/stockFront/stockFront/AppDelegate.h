@@ -20,7 +20,7 @@
 
 @property UserInfoModel* myInfo;
 
-
++ (UserInfoModel*)getMyUserInfo;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 

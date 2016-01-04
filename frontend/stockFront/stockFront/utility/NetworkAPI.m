@@ -21,16 +21,8 @@
     NSLog(@"%@", urlStr);
     
     [session POST:urlStr parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSError* jsonError = nil;
-        NSDictionary* responseDic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&jsonError];
-        
-        if(jsonError){
-            failedBlock(jsonError);
-        }else{
-            successedBlock(responseDic);
-        }
-        
+
+        successedBlock((NSDictionary*)responseObject);
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         failedBlock(error);

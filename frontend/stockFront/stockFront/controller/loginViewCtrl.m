@@ -98,9 +98,9 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    app.myInfo.phoneNum = phoneNumTextField.text;
+    app.myInfo.user_phone = phoneNumTextField.text;
     
-    app.myInfo.password = [Tools encodePassword:passwordTextField.text];
+    app.myInfo.user_password = [Tools encodePassword:passwordTextField.text];
     
     
     
@@ -109,12 +109,12 @@
     
     //发送登录消息
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[app.myInfo.phoneNum,
-                                               app.myInfo.password]
+                             initWithObjects:@[app.myInfo.user_phone,
+                                               app.myInfo.user_password]
                              forKeys:@[@"user_phone", @"password"]];
     
     [NetworkAPI callApiWithParam:message childpath:@"/user/login" successed:^(NSDictionary *response) {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         
         NSInteger code = [[response objectForKey:@"code"] integerValue];
@@ -124,8 +124,8 @@
             app.myInfo = [UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
             //用户登录信息持久化
             NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
-            [mySettingData setObject:app.myInfo.phoneNum forKey:@"phone"];
-            [mySettingData setObject:app.myInfo.password forKey:@"password"];
+            [mySettingData setObject:app.myInfo.user_phone forKey:@"phone"];
+            [mySettingData setObject:app.myInfo.user_password forKey:@"password"];
             [mySettingData synchronize];
             
             
@@ -138,7 +138,7 @@
         
         
     } failed:^(NSError *error) {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         alertMsg(@"网络问题");
     }];
     
