@@ -18,7 +18,7 @@ var fileStreamRotator = require('file-stream-rotator');
 process.on('uncaughtException', function(err) {
     logger.error('worker exception: ' + err.stack);
     email.sendMail('Caught exception: ' + err.stack,
-        'stockServer process failed');
+        'stockServer process Caught exception');
 });
 
 global.app = express(); //创建express实例

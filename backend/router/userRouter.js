@@ -219,15 +219,15 @@ router.post('/checkNameExist', function(req, res) {
 			if (result.length > 0) {
 				log.debug(req.body.user_name + ' USER_EXIST', log.getFileNameAndLineNum(
 					__filename));
-				returnData.code = config.returnCode.USER_EXIST;
+				returnData.code = constant.returnCode.USER_EXIST;
 			} else {
 				log.debug(req.body.user_name + ' USER_NOT_EXIST', log.getFileNameAndLineNum(
 					__filename));
-				returnData.code = config.returnCode.USER_NOT_EXIST;
+				returnData.code = constant.returnCode.USER_NOT_EXIST;
 			}
 		} else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
-			returnData.code = config.returnCode.ERROR;
+			returnData.code = constant.returnCode.ERROR;
 		}
 		res.send(returnData);
 	});
