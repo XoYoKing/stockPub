@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AFNetworking.h>
 
 @interface NetworkAPI : NSObject
 
-+ (void)callApiWithParam:(NSDictionary*)param successed:(void(^)(NSDictionary *response))successedBlock failed:(void(^)(NSError* error))failedBlock;
++ (void)callApiWithParam:(NSDictionary*)param childpath:(NSString*)childpath successed:(void(^)(NSDictionary *response))successedBlock failed:(void(^)(NSError* error))failedBlock;
 
 @end

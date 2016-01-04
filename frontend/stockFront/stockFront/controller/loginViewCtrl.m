@@ -110,11 +110,10 @@
     //发送登录消息
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[app.myInfo.phoneNum,
-                                               app.myInfo.password,
-                                               @"/user/login"]
-                             forKeys:@[@"user_phone", @"password", @"childpath"]];
+                                               app.myInfo.password]
+                             forKeys:@[@"user_phone", @"password"]];
     
-    [NetworkAPI callApiWithParam:message successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParam:message childpath:@"/user/login" successed:^(NSDictionary *response) {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
         
@@ -122,7 +121,14 @@
         
         if(code == LOGIN_SUCCESS){
             
-            app.myInfo = [UserInfoModel yy_modelWithDictionary:response];
+            app.myInfo = [UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
+            //用户登录信息持久化
+            NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
+            [mySettingData setObject:app.myInfo.phoneNum forKey:@"phone"];
+            [mySettingData setObject:app.myInfo.password forKey:@"password"];
+            [mySettingData synchronize];
+            
+            
             
         }else if(code == LOGIN_FAIL){
             alertMsg(@"用户或密码错误");

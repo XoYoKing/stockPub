@@ -27,6 +27,8 @@
 		B2C944311C395D0D00D06B61 /* nickname64px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C944301C395D0D00D06B61 /* nickname64px.png */; };
 		B2C944341C3A565E00D06B61 /* NetworkAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944331C3A565E00D06B61 /* NetworkAPI.m */; };
 		B2C944371C3A5F3400D06B61 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944361C3A5F3400D06B61 /* Tools.m */; };
+		B2C9443C1C3A9E7500D06B61 /* config.geojson in Resources */ = {isa = PBXBuildFile; fileRef = B2C944391C3A9E7500D06B61 /* config.geojson */; };
+		B2C9443D1C3A9E7500D06B61 /* ConfigAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9443B1C3A9E7500D06B61 /* ConfigAccess.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +87,9 @@
 		B2C944351C3A5F3400D06B61 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tools.h; sourceTree = "<group>"; };
 		B2C944361C3A5F3400D06B61 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tools.m; sourceTree = "<group>"; };
 		B2C944381C3A6CEA00D06B61 /* returnCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = returnCode.h; sourceTree = "<group>"; };
+		B2C944391C3A9E7500D06B61 /* config.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.geojson; sourceTree = "<group>"; };
+		B2C9443A1C3A9E7500D06B61 /* ConfigAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigAccess.h; sourceTree = "<group>"; };
+		B2C9443B1C3A9E7500D06B61 /* ConfigAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigAccess.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +208,9 @@
 			isa = PBXGroup;
 			children = (
 				B2C944161C39243E00D06B61 /* macro.h */,
+				B2C944391C3A9E7500D06B61 /* config.geojson */,
+				B2C9443A1C3A9E7500D06B61 /* ConfigAccess.h */,
+				B2C9443B1C3A9E7500D06B61 /* ConfigAccess.m */,
 				B2C944381C3A6CEA00D06B61 /* returnCode.h */,
 				B2C944351C3A5F3400D06B61 /* Tools.h */,
 				B2C944361C3A5F3400D06B61 /* Tools.m */,
@@ -366,6 +374,7 @@
 				B2C944281C39492100D06B61 /* cellphone64px.png in Resources */,
 				B2C943EC1C38C60A00D06B61 /* Assets.xcassets in Resources */,
 				B2C943E71C38C60A00D06B61 /* Main.storyboard in Resources */,
+				B2C9443C1C3A9E7500D06B61 /* config.geojson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +439,7 @@
 				B2C9441E1C39344D00D06B61 /* loginViewCtrl.m in Sources */,
 				B2C943E11C38C60A00D06B61 /* AppDelegate.m in Sources */,
 				B2C944191C3924CC00D06B61 /* startViewCtrl.m in Sources */,
+				B2C9443D1C3A9E7500D06B61 /* ConfigAccess.m in Sources */,
 				B2C9442F1C395C2000D06B61 /* UserInfoModel.m in Sources */,
 				B2C943DE1C38C60A00D06B61 /* main.m in Sources */,
 				B2C944341C3A565E00D06B61 /* NetworkAPI.m in Sources */,
