@@ -15,6 +15,8 @@
 #import "AppDelegate.h"
 #import "Tools.h"
 #import "returnCode.h"
+#import <YYModel.h>
+
 
 @interface loginViewCtrl ()
 {
@@ -101,6 +103,8 @@
     app.myInfo.password = [Tools encodePassword:passwordTextField.text];
     
     
+    
+    
     //[self sendLoginMessage:app.myInfo];
     
     //发送登录消息
@@ -114,15 +118,22 @@
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
         
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
         
-        if([[response objectForKey:@"code"] integerValue] == LOGIN_SUCCESS){
+        if(code == LOGIN_SUCCESS){
             
+            app.myInfo = [UserInfoModel yy_modelWithDictionary:response];
+            
+        }else if(code == LOGIN_FAIL){
+            alertMsg(@"用户或密码错误");
+        }else{
+            alertMsg(@"未知错误");
         }
         
         
     } failed:^(NSError *error) {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        alertMsg(@"未知错误");
+        alertMsg(@"网络问题");
     }];
     
     
