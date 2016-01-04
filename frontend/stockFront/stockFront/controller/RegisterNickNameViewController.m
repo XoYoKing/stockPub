@@ -18,6 +18,7 @@
 #import "RegisterCellViewTableViewCell.h"
 //#import "RegisterPhoneNumViewController.h"
 #import <Masonry.h>
+#import "NetworkAPI.h"
 
 @interface RegisterNickNameViewController ()
 {
@@ -89,8 +90,15 @@
         make.top.mas_equalTo(self.view.mas_top).offset(4*minSpace);
         make.size.mas_equalTo(CGSizeMake(ScreenWidth, 3*[RegisterCellViewTableViewCell cellHeight]));
     }];
+    
+    //[nickNameTextField becomeFirstResponder];
 }
 
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [nickNameTextField resignFirstResponder];
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -131,6 +139,11 @@
     return cell;
 }
 
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [nickNameTextField becomeFirstResponder];
+}
 
 - (void)nextStep:(id)sender
 {

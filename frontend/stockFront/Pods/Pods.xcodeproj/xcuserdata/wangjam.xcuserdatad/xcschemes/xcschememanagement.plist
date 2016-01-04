@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-CocoaSecurity.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-EGOTableViewPullRefresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,52 +62,57 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>086414D68C51B2664CC379FA</key>
+		<key>3A1A84D3FB5907120E528243</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1C124137F1C5327EE8750F31</key>
+		<key>4967BF00DBA2F1B1EAB6A3BF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>248B6AD8765370ABCD987FA3</key>
+		<key>548D33F725E899CBB718BC99</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>29F066B98B3FD4A81F2A0395</key>
+		<key>589620741354970A9C21225F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5DDB1821D8090F86F78F2066</key>
+		<key>61ED5BE1F759DAD58779CBC5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>66E5CB2D517494FFA8F71E39</key>
+		<key>88E11BE216579661C7E2066E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9A271D2ED1B774540F5781AC</key>
+		<key>9EED90886F4DC4B172436658</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BBA322372DCECD4EE6405916</key>
+		<key>A6DE90524F77AF92DD146B1A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F53A66CC5F885A66AB2765EA</key>
+		<key>BD3E4E2B5F9FB57972FB7161</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FD46649E16AA78E097B4A6E4</key>
+		<key>EF15E3DE1CF5EA195622E64A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F8C21BED4A1977291873A058</key>
 		<dict>
 			<key>primary</key>
 			<true/>

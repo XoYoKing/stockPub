@@ -12,6 +12,7 @@ PODS:
     - Reachability
   - ASIHTTPRequest/S3 (1.8.2):
     - ASIHTTPRequest/Core
+  - CocoaSecurity (1.2.4)
   - EGOTableViewPullRefresh (0.1.0)
   - LBBlurredImage (0.2.2)
   - Masonry (0.6.3)
@@ -25,6 +26,7 @@ PODS:
 
 DEPENDENCIES:
   - ASIHTTPRequest
+  - CocoaSecurity
   - EGOTableViewPullRefresh
   - LBBlurredImage
   - Masonry
@@ -35,6 +37,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
+  CocoaSecurity: d288a6f87e0f363823d2cb83e753814a6944f71a
   EGOTableViewPullRefresh: d4c15be51914f4168d6fd7529b6ad3a4ab01e5f4
   LBBlurredImage: 700634c17922bc2d22343118e7deb6a3ca12db43
   Masonry: ff105a956abcd19a618b2028b121cb638d7a8e2f

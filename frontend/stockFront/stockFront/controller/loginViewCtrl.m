@@ -10,6 +10,11 @@
 #import <Masonry.h>
 #import "macro.h"
 #import "RegisterCellViewTableViewCell.h"
+#import "NetworkAPI.h"
+#import <MBProgressHUD.h>
+#import "AppDelegate.h"
+#import "Tools.h"
+#import "returnCode.h"
 
 @interface loginViewCtrl ()
 {
@@ -63,11 +68,67 @@
         make.centerX.mas_equalTo(tableview.mas_centerX);
         make.size.mas_equalTo(CGSizeMake(8*minSpace, 6*minSpace));
     }];
+    
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [phoneNumTextField becomeFirstResponder];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [phoneNumTextField resignFirstResponder];
+    [passwordTextField resignFirstResponder];
 }
 
 - (void)nextStep:(id)sender
 {
+    [phoneNumTextField resignFirstResponder];
+    [passwordTextField resignFirstResponder];
     
+    if ([phoneNumTextField.text isEqualToString:@""]||[passwordTextField.text  isEqualToString:@""]) {
+        alertMsg(@"用户名或密码不能为空");
+        return;
+    }
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    app.myInfo.phoneNum = phoneNumTextField.text;
+    
+    app.myInfo.password = [Tools encodePassword:passwordTextField.text];
+    
+    
+    //[self sendLoginMessage:app.myInfo];
+    
+    //发送登录消息
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[app.myInfo.phoneNum,
+                                               app.myInfo.password,
+                                               @"/user/login"]
+                             forKeys:@[@"user_phone", @"password", @"childpath"]];
+    
+    [NetworkAPI callApiWithParam:message successed:^(NSDictionary *response) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        
+        
+        
+        if([[response objectForKey:@"code"] integerValue] == LOGIN_SUCCESS){
+            
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        alertMsg(@"未知错误");
+    }];
+    
+    
+    
+    NSLog(@"loginButtonAction");
+
 }
 
 

@@ -25,6 +25,8 @@
 		B2C9442C1C395BAB00D06B61 /* RegisterNickNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9442B1C395BAB00D06B61 /* RegisterNickNameViewController.m */; };
 		B2C9442F1C395C2000D06B61 /* UserInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9442E1C395C2000D06B61 /* UserInfoModel.m */; };
 		B2C944311C395D0D00D06B61 /* nickname64px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C944301C395D0D00D06B61 /* nickname64px.png */; };
+		B2C944341C3A565E00D06B61 /* NetworkAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944331C3A565E00D06B61 /* NetworkAPI.m */; };
+		B2C944371C3A5F3400D06B61 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944361C3A5F3400D06B61 /* Tools.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,11 @@
 		B2C9442D1C395C2000D06B61 /* UserInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfoModel.h; sourceTree = "<group>"; };
 		B2C9442E1C395C2000D06B61 /* UserInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfoModel.m; sourceTree = "<group>"; };
 		B2C944301C395D0D00D06B61 /* nickname64px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nickname64px.png; sourceTree = "<group>"; };
+		B2C944321C3A565E00D06B61 /* NetworkAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkAPI.h; sourceTree = "<group>"; };
+		B2C944331C3A565E00D06B61 /* NetworkAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkAPI.m; sourceTree = "<group>"; };
+		B2C944351C3A5F3400D06B61 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tools.h; sourceTree = "<group>"; };
+		B2C944361C3A5F3400D06B61 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tools.m; sourceTree = "<group>"; };
+		B2C944381C3A6CEA00D06B61 /* returnCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = returnCode.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +203,11 @@
 			isa = PBXGroup;
 			children = (
 				B2C944161C39243E00D06B61 /* macro.h */,
+				B2C944381C3A6CEA00D06B61 /* returnCode.h */,
+				B2C944351C3A5F3400D06B61 /* Tools.h */,
+				B2C944361C3A5F3400D06B61 /* Tools.m */,
+				B2C944321C3A565E00D06B61 /* NetworkAPI.h */,
+				B2C944331C3A565E00D06B61 /* NetworkAPI.m */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -412,6 +424,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2C943EA1C38C60A00D06B61 /* stockFront.xcdatamodeld in Sources */,
+				B2C944371C3A5F3400D06B61 /* Tools.m in Sources */,
 				B2C944251C3947A900D06B61 /* RegisterCellViewTableViewCell.m in Sources */,
 				B2C9442C1C395BAB00D06B61 /* RegisterNickNameViewController.m in Sources */,
 				B2C9441E1C39344D00D06B61 /* loginViewCtrl.m in Sources */,
@@ -419,6 +432,7 @@
 				B2C944191C3924CC00D06B61 /* startViewCtrl.m in Sources */,
 				B2C9442F1C395C2000D06B61 /* UserInfoModel.m in Sources */,
 				B2C943DE1C38C60A00D06B61 /* main.m in Sources */,
+				B2C944341C3A565E00D06B61 /* NetworkAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,4 +23,8 @@
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
 
 
+
+#define alertMsg(x) MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];hud.mode = MBProgressHUDModeText;hud.labelText = x;hud.removeFromSuperViewOnHide = YES;[hud hide:YES afterDelay:2];
+
+
 #endif /* macro_h */

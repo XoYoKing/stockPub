@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "548D33F725E899CBB718BC99"
-               BuildableName = "libPods-LBBlurredImage.a"
-               BlueprintName = "Pods-LBBlurredImage"
+               BlueprintIdentifier = "3A1A84D3FB5907120E528243"
+               BuildableName = "libPods-CocoaSecurity.a"
+               BlueprintName = "Pods-CocoaSecurity"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
