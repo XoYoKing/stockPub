@@ -18,7 +18,7 @@ router.get('/test', function(req, res) {
 
 
 //看多空股票
-router.post('/look', function(req, res){
+router.post('/addlook', function(req, res){
 	var returnData = {};
 
 
