@@ -52,6 +52,13 @@ exports.getfollowUser = function(reqbody, callback){
 	conn.executeSql(sql, [reqbody.user_id, reqbody.follow_timestamp], callback);
 };
 
+exports.getfollowUserAll = function(reqbody, callback){
+	var sql = "select a.follow_timestamp, b.* from user_follow_base_info a, user_base_info b " +
+	" where a.followed_user_id = b.user_id and a.user_id = ?";
+	conn.executeSql(sql, [reqbody.user_id], callback);
+};
+
+
 exports.getUserTokenInfo = function(user_id, callback) {
 	var sql = 'select *from user_base_info where user_id = ?';
 	conn.executeSql(sql, [user_id], callback);

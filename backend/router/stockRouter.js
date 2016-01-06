@@ -7,6 +7,8 @@ var routerFunc = require('../utility/routeFunc.js');
 var config = require('../config');
 var common = require('../utility/commonFunc.js');
 var stockOperation = require('../databaseOperation/stockOperation.js');
+var userOperation = require('../databaseOperation/userOperation.js');
+var apn = require('../utility/apnPush.js');
 
 module.exports = router;
 
@@ -16,15 +18,44 @@ router.get('/test', function(req, res) {
 	res.send('stock test');
 });
 
+//取消看多股票
+router.post('/dellook', function(req, res){
+	var returnData = {};
+	stockOperation.dellookStock(req.body, function(flag, result){
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+		}else{
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
 
 //看多空股票
 router.post('/addlook', function(req, res){
 	var returnData = {};
-
-
 	stockOperation.addlookStock(req.body, function(flag, result){
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
+
+			//推送到关注者
+			userOperation.getfollowUserAll(req.body, function(flag, result){
+				if(flag){
+					result.forEach(function(element){
+						var msg = '';
+						if(req.body.look_direct == 1){
+							msg = req.body.user_name+"看多"+req.body.stock_name+"("+
+							req.body.stock_code+")";
+						}
+						apn.pushMsg(element.user_id, msg);
+					});
+
+				}else{
+					logger.error(result, logger.getFileNameAndLineNum(__filename));
+				}
+			});
+
 		}else{
 			if(result.code == 'ER_DUP_ENTRY'){
 				returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
