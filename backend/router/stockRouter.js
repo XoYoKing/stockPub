@@ -18,14 +18,31 @@ router.get('/test', function(req, res) {
 	res.send('stock test');
 });
 
+
+
+
 //取消看多股票
 router.post('/dellook', function(req, res){
 	var returnData = {};
 	stockOperation.dellookStock(req.body, function(flag, result){
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
+			userOperation.getfollowUserAll(req.body, function(flag, result){
+				if(flag){
+					result.forEach(function(element){
+						var msg = '';
+						msg = req.body.user_name+"取消看多"+req.body.stock_name+"("+
+							req.body.stock_code+")";
+						apn.pushMsg(element.user_id, msg);
+					});
+				}else{
+					logger.error(result, logger.getFileNameAndLineNum(__filename));
+				}
+			});
+
 		}else{
 			returnData.code = constant.returnCode.ERROR;
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
 		}
 		res.send(returnData);
 	});
