@@ -50,4 +50,7 @@ exports.returnCode = {
 	FOLLOW_USER_EXIST: 1701,
 
     STOCK_NOT_EXIST: 1801,
+
+	LOOK_STOCK_EXIST: 1901
+
 };

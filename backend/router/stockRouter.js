@@ -6,6 +6,7 @@ var constant = require('../utility/constant.js');
 var routerFunc = require('../utility/routeFunc.js');
 var config = require('../config');
 var common = require('../utility/commonFunc.js');
+var stockOperation = require('../databaseOperation/stockOperation.js');
 
 module.exports = router;
 
@@ -14,6 +15,29 @@ router.get('/test', function(req, res) {
 	logger.debug('get test');
 	res.send('stock test');
 });
+
+
+//看多空股票
+router.post('/look', function(req, res){
+	var returnData = {};
+
+
+	stockOperation.addlookStock(req.body, function(flag, result){
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+		}else{
+			if(result.code == 'ER_DUP_ENTRY'){
+				returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
+			}else{
+				returnData.code = constant.returnCode.ERROR;
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		}
+		res.send(returnData);
+	});
+});
+
+
 
 //获取股票当前行情
 router.post('/now', function(req, res){
