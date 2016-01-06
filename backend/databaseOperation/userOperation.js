@@ -28,6 +28,11 @@ exports.cancelFollowUser = function(reqbody, callback){
 	conn.executeSql(sql, [reqbody.followed_user_id], null);
 };
 
+exports.checkUserNameExist = function(reqBody, callback) {
+	var sql = 'select *from user_base_info where user_name = ?';
+	conn.executeSql(sql, [reqBody.user_name], callback);
+};
+
 exports.getfollowInfo = function(reqbody, callback){
 	var sql = "select *From user_follow_base_info where user_id = ?";
 	conn.executeSql(sql, [reqbody.user_id], callback);

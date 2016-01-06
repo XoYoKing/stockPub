@@ -212,16 +212,40 @@ router.post('/confirmPhone', function(req, res) {
 });
 
 
+router.post('/checkNameExist', function(req, res) {
+	userMgmt.checkUserNameExist(req.body, function(flag, result) {
+		var returnData = {};
+		if (flag) {
+			if (result.length > 0) {
+				log.debug(req.body.user_name + ' USER_EXIST', log.getFileNameAndLineNum(
+					__filename));
+				returnData.code = constant.returnCode.USER_EXIST;
+			} else {
+				log.debug(req.body.user_name + ' USER_NOT_EXIST', log.getFileNameAndLineNum(
+					__filename));
+				returnData.code = constant.returnCode.USER_NOT_EXIST;
+			}
+		} else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
+
 // login
 router.post('/login', function(req, res) {
 	userMgmt.login(req.body.user_phone, req.body.user_password, function(flag, result) {
 		var statusCode;
-		var returnData = {};
+		var returnData = {
+			data:'',
+			code:''
+		};
 		if (flag) {
 			if (result.length) {
 				statusCode = constant.returnCode.LOGIN_SUCCESS;
-
-				returnData = {
+				var data = {
 					'user_phone': result[0].user_phone,
 					'user_id': result[0].user_id,
 					'user_password': result[0].user_password,
@@ -230,26 +254,27 @@ router.post('/login', function(req, res) {
 					'user_face_image': result[0].user_face_image,
 					'fans_count': result[0].user_fans_count,
 					'user_follow_count': result[0].user_follow_count,
-					'code': statusCode
 				};
+
+				returnData.data = data;
+				returnData.code = statusCode;
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));
 				res.send(returnData);
 
 			} else {
 				statusCode = constant.returnCode.LOGIN_FAIL;
-				returnData = {
+				var data = {
 					'user_phone': req.body.user_phone,
-					'code': statusCode
 				};
+				returnData.code = statusCode;
+				returnData.data = data;
+
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));
 				res.send(returnData);
 			}
 		} else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
-			statusCode = constant.returnCode.ERROR;
-			returnData = {
-				'code': statusCode
-			};
+			returnData.code = constant.returnCode.ERROR;
 			res.send(returnData);
 		}
 	});
