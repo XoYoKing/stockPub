@@ -16,6 +16,7 @@
 #import "Tools.h"
 #import "returnCode.h"
 #import <YYModel.h>
+#import "TabBarViewController.h"
 
 
 @interface loginViewCtrl ()
@@ -85,33 +86,16 @@
     [passwordTextField resignFirstResponder];
 }
 
-- (void)nextStep:(id)sender
+
+- (void)sendLoginMessage:(UserInfoModel*)userInfo
 {
-    [phoneNumTextField resignFirstResponder];
-    [passwordTextField resignFirstResponder];
-    
-    if ([phoneNumTextField.text isEqualToString:@""]||[passwordTextField.text  isEqualToString:@""]) {
-        alertMsg(@"用户名或密码不能为空");
-        return;
-    }
-    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
-    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    app.myInfo.user_phone = phoneNumTextField.text;
-    
-    app.myInfo.user_password = [Tools encodePassword:passwordTextField.text];
-    
-    
-    
-    
-    //[self sendLoginMessage:app.myInfo];
     
     //发送登录消息
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[app.myInfo.user_phone,
-                                               app.myInfo.user_password]
-                             forKeys:@[@"user_phone", @"password"]];
+                             initWithObjects:@[userInfo.user_phone,
+                                               userInfo.user_password]
+                             forKeys:@[@"user_phone", @"user_password"]];
     
     [NetworkAPI callApiWithParam:message childpath:@"/user/login" successed:^(NSDictionary *response) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -121,14 +105,17 @@
         
         if(code == LOGIN_SUCCESS){
             
-            app.myInfo = [UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
+            UserInfoModel* myInfo = [AppDelegate getMyUserInfo];
+            
+            myInfo = [UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
             //用户登录信息持久化
             NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
-            [mySettingData setObject:app.myInfo.user_phone forKey:@"phone"];
-            [mySettingData setObject:app.myInfo.user_password forKey:@"password"];
+            [mySettingData setObject:myInfo.user_phone forKey:@"phone"];
+            [mySettingData setObject:myInfo.user_password forKey:@"password"];
             [mySettingData synchronize];
             
-            
+            TabBarViewController* tabbarView = [[TabBarViewController alloc] init];
+            [self presentViewController:tabbarView animated:YES completion:nil];
             
         }else if(code == LOGIN_FAIL){
             alertMsg(@"用户或密码错误");
@@ -141,7 +128,26 @@
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         alertMsg(@"网络问题");
     }];
+
+}
+
+- (void)nextStep:(id)sender
+{
+    [phoneNumTextField resignFirstResponder];
+    [passwordTextField resignFirstResponder];
     
+    if ([phoneNumTextField.text isEqualToString:@""]||[passwordTextField.text  isEqualToString:@""]) {
+        alertMsg(@"用户名或密码不能为空");
+        return;
+    }
+    
+    
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    app.myInfo.user_phone = phoneNumTextField.text;
+    
+    app.myInfo.user_password = [Tools encodePassword:passwordTextField.text];
+    
+    [self sendLoginMessage:app.myInfo];
     
     
     NSLog(@"loginButtonAction");

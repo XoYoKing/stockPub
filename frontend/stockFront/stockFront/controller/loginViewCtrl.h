@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserInfoModel.h"
 
 @interface loginViewCtrl : UIViewController<UITableViewDataSource, UITableViewDelegate>
+- (void)sendLoginMessage:(UserInfoModel*)userInfo;
 
 @end

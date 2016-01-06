@@ -22,6 +22,7 @@
 #import "Tools.h"
 #import "returnCode.h"
 #import "AppDelegate.h"
+#import "RegisterPhoneNumViewController.h"
 
 @interface RegisterNickNameViewController ()
 {
@@ -175,7 +176,7 @@
             UserInfoModel* myinfo = [AppDelegate getMyUserInfo];
             myinfo.user_name = nickNameTextField.text;
             
-            
+            [self.navigationController pushViewController:[[RegisterPhoneNumViewController alloc] init] animated:YES];
             
             
         }else if(code == USER_EXIST){

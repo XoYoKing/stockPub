@@ -29,6 +29,15 @@
 		B2C944371C3A5F3400D06B61 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944361C3A5F3400D06B61 /* Tools.m */; };
 		B2C9443C1C3A9E7500D06B61 /* config.geojson in Resources */ = {isa = PBXBuildFile; fileRef = B2C944391C3A9E7500D06B61 /* config.geojson */; };
 		B2C9443D1C3A9E7500D06B61 /* ConfigAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9443B1C3A9E7500D06B61 /* ConfigAccess.m */; };
+		B2C944401C3AAAA000D06B61 /* RegisterPhoneNumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9443F1C3AAAA000D06B61 /* RegisterPhoneNumViewController.m */; };
+		B2C944431C3AB74C00D06B61 /* RegisterConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944421C3AB74C00D06B61 /* RegisterConfirmViewController.m */; };
+		B2C944451C3AC2A700D06B61 /* earth64px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C944441C3AC2A700D06B61 /* earth64px.png */; };
+		B2C944481C3B67E400D06B61 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944471C3B67E400D06B61 /* TabBarViewController.m */; };
+		B2C9444B1C3B69C300D06B61 /* ComTableViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9444A1C3B69C300D06B61 /* ComTableViewCtrl.m */; };
+		B2C9444E1C3B6A6F00D06B61 /* FollowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9444D1C3B6A6F00D06B61 /* FollowAction.m */; };
+		B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944501C3B6B9000D06B61 /* RankAction.m */; };
+		B2C944541C3B6BC200D06B61 /* stockAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944531C3B6BC200D06B61 /* stockAction.m */; };
+		B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +99,23 @@
 		B2C944391C3A9E7500D06B61 /* config.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.geojson; sourceTree = "<group>"; };
 		B2C9443A1C3A9E7500D06B61 /* ConfigAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigAccess.h; sourceTree = "<group>"; };
 		B2C9443B1C3A9E7500D06B61 /* ConfigAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigAccess.m; sourceTree = "<group>"; };
+		B2C9443E1C3AAAA000D06B61 /* RegisterPhoneNumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterPhoneNumViewController.h; sourceTree = "<group>"; };
+		B2C9443F1C3AAAA000D06B61 /* RegisterPhoneNumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterPhoneNumViewController.m; sourceTree = "<group>"; };
+		B2C944411C3AB74C00D06B61 /* RegisterConfirmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterConfirmViewController.h; sourceTree = "<group>"; };
+		B2C944421C3AB74C00D06B61 /* RegisterConfirmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterConfirmViewController.m; sourceTree = "<group>"; };
+		B2C944441C3AC2A700D06B61 /* earth64px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth64px.png; sourceTree = "<group>"; };
+		B2C944461C3B67E400D06B61 /* TabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarViewController.h; sourceTree = "<group>"; };
+		B2C944471C3B67E400D06B61 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
+		B2C944491C3B69C300D06B61 /* ComTableViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComTableViewCtrl.h; sourceTree = "<group>"; };
+		B2C9444A1C3B69C300D06B61 /* ComTableViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComTableViewCtrl.m; sourceTree = "<group>"; };
+		B2C9444C1C3B6A6F00D06B61 /* FollowAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowAction.h; sourceTree = "<group>"; };
+		B2C9444D1C3B6A6F00D06B61 /* FollowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowAction.m; sourceTree = "<group>"; };
+		B2C9444F1C3B6B9000D06B61 /* RankAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankAction.h; sourceTree = "<group>"; };
+		B2C944501C3B6B9000D06B61 /* RankAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankAction.m; sourceTree = "<group>"; };
+		B2C944521C3B6BC200D06B61 /* stockAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stockAction.h; sourceTree = "<group>"; };
+		B2C944531C3B6BC200D06B61 /* stockAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stockAction.m; sourceTree = "<group>"; };
+		B2C944581C3B6C6E00D06B61 /* SettingCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingCtrl.h; sourceTree = "<group>"; };
+		B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingCtrl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,10 +267,26 @@
 		B2C944151C3923F800D06B61 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				B2C944581C3B6C6E00D06B61 /* SettingCtrl.h */,
+				B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */,
+				B2C944521C3B6BC200D06B61 /* stockAction.h */,
+				B2C944531C3B6BC200D06B61 /* stockAction.m */,
+				B2C9444F1C3B6B9000D06B61 /* RankAction.h */,
+				B2C944501C3B6B9000D06B61 /* RankAction.m */,
+				B2C9444C1C3B6A6F00D06B61 /* FollowAction.h */,
+				B2C9444D1C3B6A6F00D06B61 /* FollowAction.m */,
+				B2C944461C3B67E400D06B61 /* TabBarViewController.h */,
+				B2C944471C3B67E400D06B61 /* TabBarViewController.m */,
+				B2C944491C3B69C300D06B61 /* ComTableViewCtrl.h */,
+				B2C9444A1C3B69C300D06B61 /* ComTableViewCtrl.m */,
 				B2C9442A1C395BAB00D06B61 /* RegisterNickNameViewController.h */,
 				B2C9442B1C395BAB00D06B61 /* RegisterNickNameViewController.m */,
+				B2C9443E1C3AAAA000D06B61 /* RegisterPhoneNumViewController.h */,
+				B2C9443F1C3AAAA000D06B61 /* RegisterPhoneNumViewController.m */,
 				B2C9441C1C39344D00D06B61 /* loginViewCtrl.h */,
 				B2C9441D1C39344D00D06B61 /* loginViewCtrl.m */,
+				B2C944411C3AB74C00D06B61 /* RegisterConfirmViewController.h */,
+				B2C944421C3AB74C00D06B61 /* RegisterConfirmViewController.m */,
 				B2C944171C3924CC00D06B61 /* startViewCtrl.h */,
 				B2C944181C3924CC00D06B61 /* startViewCtrl.m */,
 			);
@@ -255,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				B2C944261C39492100D06B61 /* cellphone64px.png */,
+				B2C944441C3AC2A700D06B61 /* earth64px.png */,
 				B2C944301C395D0D00D06B61 /* nickname64px.png */,
 				B2C944271C39492100D06B61 /* password64px.png */,
 			);
@@ -374,6 +417,7 @@
 				B2C944281C39492100D06B61 /* cellphone64px.png in Resources */,
 				B2C943EC1C38C60A00D06B61 /* Assets.xcassets in Resources */,
 				B2C943E71C38C60A00D06B61 /* Main.storyboard in Resources */,
+				B2C944451C3AC2A700D06B61 /* earth64px.png in Resources */,
 				B2C9443C1C3A9E7500D06B61 /* config.geojson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,12 +476,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2C944541C3B6BC200D06B61 /* stockAction.m in Sources */,
 				B2C943EA1C38C60A00D06B61 /* stockFront.xcdatamodeld in Sources */,
 				B2C944371C3A5F3400D06B61 /* Tools.m in Sources */,
+				B2C944481C3B67E400D06B61 /* TabBarViewController.m in Sources */,
+				B2C944401C3AAAA000D06B61 /* RegisterPhoneNumViewController.m in Sources */,
+				B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */,
 				B2C944251C3947A900D06B61 /* RegisterCellViewTableViewCell.m in Sources */,
 				B2C9442C1C395BAB00D06B61 /* RegisterNickNameViewController.m in Sources */,
 				B2C9441E1C39344D00D06B61 /* loginViewCtrl.m in Sources */,
 				B2C943E11C38C60A00D06B61 /* AppDelegate.m in Sources */,
+				B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */,
+				B2C944431C3AB74C00D06B61 /* RegisterConfirmViewController.m in Sources */,
+				B2C9444B1C3B69C300D06B61 /* ComTableViewCtrl.m in Sources */,
+				B2C9444E1C3B6A6F00D06B61 /* FollowAction.m in Sources */,
 				B2C944191C3924CC00D06B61 /* startViewCtrl.m in Sources */,
 				B2C9443D1C3A9E7500D06B61 /* ConfigAccess.m in Sources */,
 				B2C9442F1C395C2000D06B61 /* UserInfoModel.m in Sources */,

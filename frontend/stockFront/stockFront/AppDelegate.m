@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "startViewCtrl.h"
+#import "loginViewCtrl.h"
 
 @interface AppDelegate ()
 
@@ -44,7 +45,31 @@
     // Override point for customization after application launch.
     _myInfo = [[UserInfoModel alloc] init];
     
-    [self startView];
+    _myInfo.user_phone = (NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
+    _myInfo.user_password = (NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"password"];
+    if (_myInfo.user_phone == nil||_myInfo.user_password == nil
+        ||_myInfo.user_phone.length == 0||_myInfo.user_password.length == 0) {
+        [self startView];
+    }else{
+        
+        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        
+        startViewCtrl* startView = [[startViewCtrl alloc] init];
+        loginViewCtrl* signInView = [[loginViewCtrl alloc] init];
+        UINavigationController* rootNav = [[UINavigationController alloc] initWithRootViewController:startView];
+        [rootNav pushViewController:signInView animated:NO];
+        
+        rootNav.navigationBar.barTintColor = [UIColor whiteColor];
+        rootNav.navigationBar.tintColor = [UIColor blackColor];
+        
+        self.window.rootViewController = rootNav;
+        
+        //signInView.view.hidden = YES;
+        //rootNav.navigationController.view.backgroundColor = [UIColor whiteColor];
+        [signInView sendLoginMessage:_myInfo];
+        [self.window makeKeyAndVisible];
+
+    }
     return YES;
 }
 

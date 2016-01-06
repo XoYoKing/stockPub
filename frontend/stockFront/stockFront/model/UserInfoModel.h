@@ -25,6 +25,7 @@
 
 @property NSString* device_token;
 
+@property NSString* user_certificate_code;
 
 @property NSString* user_phone;
 
