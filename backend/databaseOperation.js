@@ -49,11 +49,11 @@ exports.getStockNowByCode = function(stock_code, callback){
 }
 
 exports.insertStockNow = function(stockCode, amount, date, time, price, yesterday_price, fluctuate,
-	priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, day4, callback){
+	priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, callback){
 	var timestamp = Date.now()/1000;
-	var sql = "insert into stock_now_info (stock_code, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, day4) "
-	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	conn.executeSql(sql, [stockCode, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, day4], callback);
+	var sql = "insert into stock_now_info (stock_code, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price) "
+	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	conn.executeSql(sql, [stockCode, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price], callback);
 
 	sql = "update stock_predict_info set last_price = ?, last_date_time = ? where stock_code = ?";
 	conn.executeSql(sql, [price, date+" "+time, stockCode], null);

@@ -6,6 +6,7 @@ var redisClient = redis.createClient({auth_pass:'here_dev'});
 
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
+var stockOperation = require('./databaseOperation/stockOperation.js');
 
 
 redisClient.on("error", function (err) {
@@ -105,87 +106,34 @@ function insertToDatabase(htmlData, isnow) {
 				}
 
 				if (isnow === true) {
-
-					redisClient.get(stockCode+"_3day", function(err, data){
-						if (!err) {
-							if (data) {
-								var day4 = parseInt(data)+volume*conn.getPlusMinus(price - openPrice);
-								databaseOperation.insertStockNow(stockCode, amount, date, time,
-											price,
-											yesterday_price,
-											fluctuate,
-											priceearning,
-											marketValue,
-											flowMarketValue,
-											volume,
-											pb,
-											openPrice,
-											high_price,
-											day4,
-											function(flag, result) {
-												//logger.debug(stockCode+" now insert");
-												if (!flag) {
-													logger.error("insertStockNow err code "+result.errno);
-												}else{
-													//logger.info('insertStockNow ok');
-												}
-											});
-							}else{
-								databaseOperation.getDaysPrice(stockCode, 1, function(flag, result){
-									if (flag) {
-										var day4 = 0;
-										if (result.length<=0) {
-											redisClient.set(stockCode+"_3day", 0);
-											day4 = volume*conn.getPlusMinus(price - openPrice);
-										}else{
-											if (result[0].day3==null) {
-												result[0].day3 = 0;
-											}
-											if (conn.compareDay(result[0].date, date) >= 0) {
-												return;
-											}
-
-											redisClient.set(stockCode+"_3day", result[0].day3);
-											day4 = result[0].day3+volume*conn.getPlusMinus(price - openPrice);
-										}
-
-
-										databaseOperation.insertStockNow(stockCode, amount, date, time,
-											price,
-											yesterday_price,
-											fluctuate,
-											priceearning,
-											marketValue,
-											flowMarketValue,
-											volume,
-											pb,
-											openPrice,
-											high_price,
-											day4,
-											function(flag, result) {
-												//logger.debug(stockCode+" now insert");
-												if (!flag) {
-													logger.error("insertStockNow err code "+result.errno);
-
-												}else{
-													//logger.info('insertStockNow ok');
-
-
-
-												}
-											});
+					databaseOperation.insertStockNow(stockCode, amount, date, time,
+								price,
+								yesterday_price,
+								fluctuate,
+								priceearning,
+								marketValue,
+								flowMarketValue,
+								volume,
+								pb,
+								openPrice,
+								high_price,
+								function(flag, result) {
+									//logger.debug(stockCode+" now insert");
+									if (!flag) {
+										logger.error("insertStockNow err code "+result.errno);
 									}else{
-										logger.error(result);
+										//logger.info('insertStockNow ok');
 									}
 								});
-							}
+					stockOperation.updateLookYield(stockCode, price, function(flag, result){
+						if(flag){
+
 						}else{
-							logger.error(err);
+							logger.error(result, logger.getFileNameAndLineNum(__filename));
 						}
 					});
 
 				} else {
-
 					databaseOperation.insertStockAmount(stockCode,
 						amount,
 						date,
@@ -210,8 +158,6 @@ function insertToDatabase(htmlData, isnow) {
 							}else{
 								logger.debug(stockCode+" day info insert");
 								updateStockBaseInfo(stockCode, priceearning, marketValue, flowMarketValue, pb, price);
-								caculateVolumeProportion(stockCode);
-								updateStockAvPrice(stockCode, date);
 							}
 						}
 					);
@@ -486,13 +432,6 @@ function formatDate(now){
 
 
 exports.startCrawlStockNow = function(){
-	// if (!isMarketOpenTime()) {
-	// 	logger.debug("not market time");
-	// 	return;
-	// }
-
-	//setTimeout(exitProgram, 1000*60*2);
-
 
 	logger.info("enter getAllStockInfoNow");
 	databaseOperation.getAllStockCode(function(flag, result) {
