@@ -13,7 +13,7 @@ describe('dellook', function(){
     it('dellook', function(done){
         runner.runTest(Json, Json.childpath, function(err, body){
             should.not.exist(err);
-            body.code.should.be.equalOneOf(constant.returnCode.SUCCESS);
+            body.code.should.be.equal(constant.returnCode.SUCCESS);
             done();
         });
     });
