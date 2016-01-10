@@ -11,7 +11,7 @@ var email = require('./utility/emailTool');
 log.info("run schedule", log.getFileNameAndLineNum(__filename));
 
 //实时行情
-schedule.scheduleJob('*/3 9-14 * * 1-5', function(){
+schedule.scheduleJob('*/1 9-14 * * 1-5', function(){
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
     crawl.startCrawlStockNow();
 });
