@@ -86,6 +86,48 @@ router.post('/addlook', function(req, res){
 });
 
 
+//获取股票信息
+router.post('/getStock', function(req, res){
+	stockOperation.getStockInfo(req, function(flag, result){
+		var returnData = {};
+		if(flag){
+
+			if(result.length >= 1){
+				returnData.data = result[0];
+				returnData.code = constant.returnCode.SUCCESS;
+				res.send(returnData);
+			}else{
+				//表中未找到记录
+				common.getStockInfoFromAPI(req.body.stock_code, function(flag, htmlData){
+					if(flag){
+						var stockInfoArr = common.analyzeMessage(htmlData);
+						if(stockInfoArr == false||stockInfoArr.length == 0){
+							routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
+						}else{
+							routerFunc.feedBack(constant.returnCode.SUCCESS, stockInfoArr[0], res);
+							//insert to stock base info
+							databaseOper.insertStockBaseInfo(stockInfoArr[0], function(flag, result){
+								if(!flag){
+									logger.error(result, logger.getFileNameAndLineNum(__filename));
+								}
+							});
+						}
+
+					}else{
+						returnData.code = constant.returnCode.ERROR;
+						res.send(returnData);
+					}
+				});
+			}
+
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+			res.send(returnData);
+		}
+	});
+});
+
 
 //获取股票当前行情
 router.post('/now', function(req, res){

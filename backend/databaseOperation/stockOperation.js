@@ -31,3 +31,8 @@ exports.updateLookYield = function(stock_code, price, callback){
     var sql = 'update stock_look_info set stock_yield = look_direct*100*(? - look_stock_price)/look_stock_price where stock_code = ?';
     conn.executeSql(sql, [price, stock_code], callback);
 }
+
+exports.getStockInfo = function(reqbody, callback){
+	var sql = "select *from stock_base_info a where a.stock_code = ?";
+	conn.executeSql(sql, [reqbody.stock_code], callback);
+}
