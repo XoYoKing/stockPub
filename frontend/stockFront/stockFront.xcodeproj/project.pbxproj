@@ -38,6 +38,7 @@
 		B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944501C3B6B9000D06B61 /* RankAction.m */; };
 		B2C944541C3B6BC200D06B61 /* stockAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944531C3B6BC200D06B61 /* stockAction.m */; };
 		B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */; };
+		B2C944621C4379D500D06B61 /* StockSearchTableViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +117,8 @@
 		B2C944531C3B6BC200D06B61 /* stockAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stockAction.m; sourceTree = "<group>"; };
 		B2C944581C3B6C6E00D06B61 /* SettingCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingCtrl.h; sourceTree = "<group>"; };
 		B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingCtrl.m; sourceTree = "<group>"; };
+		B2C944601C4379D500D06B61 /* StockSearchTableViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockSearchTableViewCtrl.h; sourceTree = "<group>"; };
+		B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockSearchTableViewCtrl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +270,8 @@
 		B2C944151C3923F800D06B61 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				B2C944601C4379D500D06B61 /* StockSearchTableViewCtrl.h */,
+				B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */,
 				B2C944581C3B6C6E00D06B61 /* SettingCtrl.h */,
 				B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */,
 				B2C944521C3B6BC200D06B61 /* stockAction.h */,
@@ -491,6 +496,7 @@
 				B2C9444B1C3B69C300D06B61 /* ComTableViewCtrl.m in Sources */,
 				B2C9444E1C3B6A6F00D06B61 /* FollowAction.m in Sources */,
 				B2C944191C3924CC00D06B61 /* startViewCtrl.m in Sources */,
+				B2C944621C4379D500D06B61 /* StockSearchTableViewCtrl.m in Sources */,
 				B2C9443D1C3A9E7500D06B61 /* ConfigAccess.m in Sources */,
 				B2C9442F1C395C2000D06B61 /* UserInfoModel.m in Sources */,
 				B2C943DE1C38C60A00D06B61 /* main.m in Sources */,

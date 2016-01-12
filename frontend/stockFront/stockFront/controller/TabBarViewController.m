@@ -44,10 +44,10 @@
     nav.navigationBar.tintColor = [UIColor blackColor];
     nav.navigationController.navigationBar.translucent = NO;
     
-    UIView *bgView = [[UIView alloc] initWithFrame:nav.navigationBar.bounds];
-    bgView.backgroundColor = [UIColor whiteColor];
-    [nav.navigationBar insertSubview:bgView atIndex:0];
-    nav.navigationBar.opaque = YES;
+//    UIView *bgView = [[UIView alloc] initWithFrame:nav.navigationBar.bounds];
+//    bgView.backgroundColor = [UIColor whiteColor];
+//    [nav.navigationBar insertSubview:bgView atIndex:0];
+//    nav.navigationBar.opaque = YES;
     
     
     

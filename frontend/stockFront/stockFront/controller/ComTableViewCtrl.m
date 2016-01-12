@@ -38,8 +38,8 @@ static int bottomActiveHeight = 30;
         initLoading = loading;
         if([[[UIDevice currentDevice]systemVersion]floatValue]>=7.0)
         {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-            self.automaticallyAdjustsScrollViewInsets = NO;
+            //self.edgesForExtendedLayout = UIRectEdgeNone;
+            //self.automaticallyAdjustsScrollViewInsets = YES;
         }
     }
     return self;
