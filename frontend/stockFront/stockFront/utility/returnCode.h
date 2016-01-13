@@ -82,6 +82,8 @@
 #define SENDED_FAILED 2
 #define SENDING 3
 
+#define STOCK_NOT_EXIST 1801
+
 
 
 #endif /* returnCode_h */

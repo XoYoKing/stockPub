@@ -22,6 +22,12 @@ schedule.scheduleJob('5 15 * * 1-5', function(){
     crawl.startGetAllStockInfo();
 });
 
+//开市前删除now表中数据
+schedule.scheduleJob('15 9 * * 1-5', function(){
+    log.info("delete stock now data", log.getFileNameAndLineNum(__filename));
+    crawl.emptyStockNowInfo();
+});
+
 process.on('uncaughtException', function(err) {
     log.error('schedule process Caught exception: ' +
         err.stack);

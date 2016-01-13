@@ -374,6 +374,17 @@ function exitProgram(){
 	});
 }
 
+exports.emptyStockNowInfo = function(){
+	//delete the stock_now_info
+	databaseOperation.emptyStockNowInfo(function(flag, result){
+		if (!flag) {
+			logger.error(result);
+		}
+	});
+};
+
+
+
 exports.startGetAllStockInfo = function(){
 
 	// var now = new Date();
@@ -389,12 +400,7 @@ exports.startGetAllStockInfo = function(){
 
 	//setTimeout(exitProgram, 1000*60*2);
 
-	//delete the stock_now_info
-	databaseOperation.emptyStockNowInfo(function(flag, result){
-		if (!flag) {
-			logger.error(result);
-		}
-	});
+
 
 
 	databaseOperation.getAllStockCode(function(flag, result) {

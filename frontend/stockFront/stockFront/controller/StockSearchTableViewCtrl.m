@@ -9,6 +9,10 @@
 #import "StockSearchTableViewCtrl.h"
 #import "macro.h"
 #import "NetworkAPI.h"
+#import "returnCode.h"
+#import "Tools.h"
+#import "StockInfoModel.h"
+#import <YYModel.h>
 
 @implementation StockSearchTableViewCtrl
 {
@@ -24,6 +28,17 @@
     navTitle.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = navTitle;
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    stockSearchTextField = [[UITextField alloc] init];
+    stockSearchTextField.frame = CGRectMake(0, 0, ScreenWidth - 4*minSpace, 6*minSpace);
+    stockSearchTextField.textAlignment = NSTextAlignmentLeft;
+    stockSearchTextField.font = [UIFont fontWithName:fontName size:minFont];
+    stockSearchTextField.placeholder = @"请输入股票代码";
+    stockSearchTextField.keyboardType = UIKeyboardTypeNumberPad;
+    stockSearchTextField.delegate = self;
+    [stockSearchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+    
     
     stockList = [[NSMutableArray alloc] init];
     self.tableView.delegate = self;
@@ -43,6 +58,20 @@
     [stockSearchTextField becomeFirstResponder];
 }
 
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 0){
+        return 6*minSpace;
+    }
+    
+    if(indexPath.section == 1){
+        return 8*minSpace;
+    }
+    
+    return 0;
+}
+
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -57,16 +86,8 @@
             NSLog(@"new cell");
         }
         
-        UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth - 4*minSpace, 6*minSpace)];
-        textField.textAlignment = NSTextAlignmentLeft;
-        textField.font = [UIFont fontWithName:fontName size:minFont];
-        textField.placeholder = @"请输入股票代码";
-        textField.keyboardType = UIKeyboardTypeNumberPad;
-        stockSearchTextField = textField;
-        cell.accessoryView = textField;
-        stockSearchTextField.delegate = self;
-        [stockSearchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-
+        cell.accessoryView = stockSearchTextField;
+        
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = [UIColor whiteColor];
@@ -74,10 +95,44 @@
     }
     
     
+    if(indexPath.section == 1){
+        static NSString* cellIdentifier = @"stockcell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell==nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
+        
+        cell.textLabel.font = [UIFont fontWithName:fontName size:middleFont];
+        cell.textLabel.text = stockInfo.stock_name;
+        cell.detailTextLabel.text = stockInfo.stock_code;
+        cell.detailTextLabel.font = [UIFont fontWithName:fontName size:minFont];
+        cell.backgroundColor = [UIColor whiteColor];
+        return cell;
+    }
+    
     return nil;
 
 }
 
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1) {
+        
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"添加到自选" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
 
 - (void)textFieldDidChange:(UITextField*)textField
 {
@@ -86,10 +141,44 @@
         NSString* stockCode = textField.text;
         
         
+        //发送搜索消息
+        NSDictionary* message = [[NSDictionary alloc]
+                                 initWithObjects:@[stockCode]
+                                 forKeys:@[@"stock_code"]];
+        
+        [NetworkAPI callApiWithParam:message childpath:@"/stock/getStock" successed:^(NSDictionary *response) {
+            
+            NSInteger code = [[response objectForKey:@"code"] integerValue];
+            
+            if(code == SUCCESS){
+                
+                [self loadStockInfo:[response objectForKey:@"data"]];
+                
+            }else if(code == STOCK_NOT_EXIST){
+                [stockList removeAllObjects];
+                [self.tableView reloadData];
+                
+            }else{
+                alertMsg(@"未知错误");
+            }
+            
+            
+        } failed:^(NSError *error) {
+            alertMsg(@"网络问题");
+        }];
+
         
     }
 }
 
+
+- (void)loadStockInfo:(NSDictionary*)data
+{
+    StockInfoModel* stockInfo = [StockInfoModel yy_modelWithDictionary:data];
+    [stockList removeAllObjects];
+    [stockList addObject:stockInfo];
+    [self.tableView reloadData];
+}
 
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {

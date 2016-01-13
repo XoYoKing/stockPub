@@ -39,6 +39,7 @@
 		B2C944541C3B6BC200D06B61 /* stockAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944531C3B6BC200D06B61 /* stockAction.m */; };
 		B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */; };
 		B2C944621C4379D500D06B61 /* StockSearchTableViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */; };
+		B2C944651C4542E700D06B61 /* StockInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944641C4542E700D06B61 /* StockInfoModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +120,8 @@
 		B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingCtrl.m; sourceTree = "<group>"; };
 		B2C944601C4379D500D06B61 /* StockSearchTableViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockSearchTableViewCtrl.h; sourceTree = "<group>"; };
 		B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockSearchTableViewCtrl.m; sourceTree = "<group>"; };
+		B2C944631C4542E700D06B61 /* StockInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockInfoModel.h; sourceTree = "<group>"; };
+		B2C944641C4542E700D06B61 /* StockInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockInfoModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +255,8 @@
 		B2C944131C3923F800D06B61 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				B2C944631C4542E700D06B61 /* StockInfoModel.h */,
+				B2C944641C4542E700D06B61 /* StockInfoModel.m */,
 				B2C9442D1C395C2000D06B61 /* UserInfoModel.h */,
 				B2C9442E1C395C2000D06B61 /* UserInfoModel.m */,
 			);
@@ -489,6 +494,7 @@
 				B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */,
 				B2C944251C3947A900D06B61 /* RegisterCellViewTableViewCell.m in Sources */,
 				B2C9442C1C395BAB00D06B61 /* RegisterNickNameViewController.m in Sources */,
+				B2C944651C4542E700D06B61 /* StockInfoModel.m in Sources */,
 				B2C9441E1C39344D00D06B61 /* loginViewCtrl.m in Sources */,
 				B2C943E11C38C60A00D06B61 /* AppDelegate.m in Sources */,
 				B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */,

@@ -9,6 +9,8 @@
 #ifndef macro_h
 #define macro_h
 
+#import <MBProgressHUD.h>
+
 
 #define fontName @"HelveticaNeue-Thin"
 #define bigFont 32
