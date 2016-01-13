@@ -88,7 +88,7 @@ router.post('/addlook', function(req, res){
 
 //获取股票信息
 router.post('/getStock', function(req, res){
-	stockOperation.getStockInfo(req, function(flag, result){
+	stockOperation.getStockInfo(req.body, function(flag, result){
 		var returnData = {};
 		if(flag){
 
