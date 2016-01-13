@@ -33,6 +33,7 @@ exports.updateLookYield = function(stock_code, price, callback){
 }
 
 exports.getStockInfo = function(reqbody, callback){
-	var sql = "select *from stock_base_info a where a.stock_code = ?";
+	var sql = "select a.stock_code, a.stock_name, b.price, b.fluctuate, b.date, b.time from stock_base_info a, stock_now_info b where a.stock_code = ? " +
+    " and a.stock_code = b.stock_code order by timestamp desc limit 1";
 	conn.executeSql(sql, [reqbody.stock_code], callback);
 }

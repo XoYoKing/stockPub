@@ -12,6 +12,9 @@
 
 @property NSString* stock_code;
 @property NSString* stock_name;
-
+@property CGFloat price;
+@property CGFloat fluctuate;
+@property NSString* date;
+@property NSString* time;
 
 @end

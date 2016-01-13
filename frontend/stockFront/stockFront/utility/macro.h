@@ -12,11 +12,18 @@
 #import <MBProgressHUD.h>
 
 
+
 #define fontName @"HelveticaNeue-Thin"
 #define bigFont 32
 #define middleFont 24
 #define minFont 16
 #define microFont 12
+
+
+#define mygreen [UIColor colorWithRed:48/255.0 green:128/255.0 blue:20/255.0 alpha:1.0]
+
+
+#define myred [UIColor colorWithRed:176/255.0 green:23/255.0 blue:31/255.0 alpha:1.0]
 
 
 #define minSpace 8
