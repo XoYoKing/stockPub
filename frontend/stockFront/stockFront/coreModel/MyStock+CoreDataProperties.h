@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MyStock (CoreDataProperties)
 
 @property (nullable, nonatomic, retain) NSString *stock_code;
-@property (nullable, nonatomic, retain) NSInteger timestamp;
+@property NSInteger timestamp;
 
 
 @end

@@ -91,7 +91,7 @@ router.post('/getStock', function(req, res){
 	stockOperation.getStockInfo(req.body, function(flag, result){
 		var returnData = {};
 		if(flag){
-
+			logger.debug(result, logger.getFileNameAndLineNum(__filename));
 			if(result.length >= 1){
 				returnData.data = result[0];
 				returnData.code = constant.returnCode.SUCCESS;
@@ -114,6 +114,7 @@ router.post('/getStock', function(req, res){
 						}
 
 					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
 						returnData.code = constant.returnCode.ERROR;
 						res.send(returnData);
 					}
