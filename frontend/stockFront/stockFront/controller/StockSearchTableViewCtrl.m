@@ -14,11 +14,15 @@
 #import "StockInfoModel.h"
 #import <YYModel.h>
 #import <Masonry.h>
+#import "LocDatabase.h"
+#import "UserInfoModel.h"
+#import "AppDelegate.h"
 
 @implementation StockSearchTableViewCtrl
 {
     NSMutableArray* stockList;
     UITextField* stockSearchTextField;
+    LocDatabase* locDatabase;
 }
 
 - (void)viewDidLoad
@@ -39,6 +43,16 @@
     stockSearchTextField.delegate = self;
     [stockSearchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
+    
+    
+    UserInfoModel* myInfo = [AppDelegate getMyUserInfo];
+    locDatabase = [[LocDatabase alloc] init];
+    if(![locDatabase connectToDatabase:myInfo.user_id]){
+        alertMsg(@"本地数据问题");
+        return;
+    }
+
+    
     
     
     stockList = [[NSMutableArray alloc] init];
@@ -157,6 +171,12 @@
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"add stock to coredata");
             
+            StockInfoModel* stockModel = [stockList objectAtIndex:indexPath.row];
+            if(![locDatabase addStock:stockModel]){
+                alertMsg(@"添加自选失败");
+            }else{
+                alertMsg(@"已添加");
+            }
         }];
         
         

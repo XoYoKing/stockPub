@@ -9,6 +9,7 @@ var common = require('../utility/commonFunc.js');
 var stockOperation = require('../databaseOperation/stockOperation.js');
 var userOperation = require('../databaseOperation/userOperation.js');
 var apn = require('../utility/apnPush.js');
+var asyncClient = require('async');
 
 module.exports = router;
 
@@ -84,6 +85,12 @@ router.post('/addlook', function(req, res){
 		res.send(returnData);
 	});
 });
+
+//获取股票列表信息
+router.post('/getStockListInfo', function(req, res){
+
+});
+
 
 
 //获取股票信息

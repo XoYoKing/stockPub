@@ -105,14 +105,15 @@
         
         if(code == LOGIN_SUCCESS){
             
-            UserInfoModel* myInfo = [AppDelegate getMyUserInfo];
-            
-            myInfo = [UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
+            AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            app.myInfo = [UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
             //用户登录信息持久化
             NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
-            [mySettingData setObject:myInfo.user_phone forKey:@"phone"];
-            [mySettingData setObject:myInfo.user_password forKey:@"password"];
+            [mySettingData setObject:app.myInfo.user_phone forKey:@"phone"];
+            [mySettingData setObject:app.myInfo.user_password forKey:@"password"];
             [mySettingData synchronize];
+            
+            
             
             TabBarViewController* tabbarView = [[TabBarViewController alloc] init];
             [self presentViewController:tabbarView animated:YES completion:nil];

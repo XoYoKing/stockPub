@@ -8,7 +8,7 @@
 
 #import "Tools.h"
 #import <CocoaSecurity.h>
-
+#import <MBProgressHUD.h>
 
 @implementation Tools
 
@@ -17,4 +17,36 @@
     CocoaSecurityResult* encodePassword = [CocoaSecurity md5:password];
     return encodePassword.hexLower;
 }
+
++ (UIViewController *)appRootViewController
+{
+    UIViewController *appRootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *topVC = appRootVC;
+    while (topVC.presentedViewController) {
+        topVC = topVC.presentedViewController;
+    }
+    return topVC;
+}
+
++ (void)AlertMsg:(NSString*)msg
+{
+    UIViewController* viewCtrl = [Tools appRootViewController];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:viewCtrl.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.detailsLabelText = msg;
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:2];
+}
+
++ (void)AlertBigMsg:(NSString*)msg
+{
+    UIViewController* viewCtrl = [Tools appRootViewController];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:viewCtrl.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = msg;
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:2];
+}
+
+
 @end

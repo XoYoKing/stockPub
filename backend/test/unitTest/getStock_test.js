@@ -4,7 +4,7 @@ var runner = require('./unitTestRunner.js');
 
 var Json = {
     childpath: '/stock/getStock',
-    stock_code: '300492'
+    stock_code: '002601'
 };
 
 describe('getStock', function(){

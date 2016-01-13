@@ -12,5 +12,7 @@
 
 
 + (NSString*)encodePassword:(NSString*)password;
++ (void)AlertMsg:(NSString*)msg;
++ (void)AlertBigMsg:(NSString*)msg;
 
 @end
