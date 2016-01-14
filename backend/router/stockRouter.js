@@ -90,7 +90,9 @@ router.post('/addlook', function(req, res){
 router.post('/getStockListInfo', function(req, res){
 	var stockInfo = {};
 	asyncClient.eachSeries(req.body.stocklist, function iterator(item, callback){
-		stockOperation.getStockInfo(item, function(flag, result){
+		var reqbody = {};
+		reqbody.stock_code = item;
+		stockOperation.getStockInfo(reqbody, function(flag, result){
 			logger.debug(item+' '+result, logger.getFileNameAndLineNum(__filename));
 			if(flag){
 				if(result.length>=1){
