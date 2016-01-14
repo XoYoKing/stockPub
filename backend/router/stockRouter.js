@@ -98,11 +98,26 @@ router.post('/getStockListInfo', function(req, res){
 			if(flag){
 				if(result.length>=1){
 					stockInfo[item] = result[0];
+					callback();
+				}else{
+					common.getStockInfoFromAPI(reqbody.stock_code, function(flag, htmlData){
+						if(flag){
+							var stockInfoArr = common.analyzeMessage(htmlData);
+							if(stockInfoArr == false||stockInfoArr.length == 0){
+
+							}else{
+								stockInfo[item] = stockInfoArr[0];
+							}
+						}else{
+							logger.error(result, logger.getFileNameAndLineNum(__filename));
+						}
+						callback();
+					});
 				}
 			}else{
 				logger.error(result, logger.getFileNameAndLineNum(__filename));
+				callback();
 			}
-			callback();
 		});
 
 	}, function done (){

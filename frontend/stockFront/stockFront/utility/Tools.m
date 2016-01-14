@@ -48,5 +48,11 @@
     [hud hide:YES afterDelay:2];
 }
 
++ (CGSize)getTextArrange:(NSString*)text maxRect:(CGSize)maxRect fontSize:(int)fontSize
+{
+    CGRect size = [text boundingRectWithSize:maxRect options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:fontSize]} context:nil];
+    return CGSizeMake(size.size.width, size.size.height);
+}
+
 
 @end

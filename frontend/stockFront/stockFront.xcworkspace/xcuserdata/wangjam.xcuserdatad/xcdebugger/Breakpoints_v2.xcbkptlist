@@ -324,11 +324,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/StockSearchTableViewCtrl.m"
-            timestampString = "474369315.389848"
+            timestampString = "474450842.521708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
             landmarkName = "-textFieldDidChange:"
             landmarkType = "5">
          </BreakpointContent>
@@ -356,11 +356,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/StockSearchTableViewCtrl.m"
-            timestampString = "474369315.389848"
+            timestampString = "474450842.521708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -452,11 +452,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474447282.147877"
+            timestampString = "474450714.210362"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
          </BreakpointContent>
@@ -468,11 +468,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474447681.393811"
+            timestampString = "474450714.210362"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
             <Locations>
@@ -516,11 +516,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474448289.533104"
+            timestampString = "474450714.210362"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
             <Locations>
@@ -560,15 +560,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474448289.533104"
+            timestampString = "474450714.210362"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
          </BreakpointContent>
@@ -576,16 +576,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474448289.533104"
+            timestampString = "474450714.210362"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "-refreshStockInfo"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "stockFront/controller/ComTableViewCtrl.m"
+            timestampString = "474449509.038862"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

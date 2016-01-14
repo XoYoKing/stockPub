@@ -123,8 +123,9 @@
         cell.textLabel.font = [UIFont fontWithName:fontName size:middleFont];
         cell.textLabel.text = stockInfo.stock_name;
         cell.detailTextLabel.text = stockInfo.stock_code;
-        UILabel* priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(ScreenWidth - ScreenWidth/2, 0, ScreenWidth/2, 8*minSpace)];
+        UILabel* priceLabel = [[UILabel alloc] init];
         priceLabel.font = [UIFont fontWithName:fontName size:middleFont];
+        
         if (stockInfo.fluctuate>0) {
             priceLabel.textColor = myred;
             priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(+%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
@@ -139,6 +140,10 @@
             priceLabel.textColor = [UIColor blackColor];
             priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
         }
+        
+        CGSize labelSize = [Tools getTextArrange:priceLabel.text maxRect:CGSizeMake(ScreenWidth, 8*minSpace) fontSize:middleFont];
+        
+        priceLabel.frame = CGRectMake(ScreenWidth - labelSize.width, 0, labelSize.width, labelSize.height);
         
         
         cell.accessoryView = priceLabel;
