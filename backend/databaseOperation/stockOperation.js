@@ -28,7 +28,7 @@ exports.dellookStock = function(reqbody, callback){
 }
 
 exports.getFollowLookInfo = function(reqbody, callback){
-    var sql = 'select b.*, c.user_name, c.facethumbnail, d.stock_name from user_follow_base_info a, stock_look_info b, user_base_info c, stock_base_info d' +
+    var sql = 'select b.*, c.user_name, c.user_facethumbnail, d.stock_name from user_follow_base_info a, stock_look_info b, user_base_info c, stock_base_info d' +
     ' where a.user_id = ? and a.followed_user_id = b.user_id ' +
     ' and a.followed_user_id = c.user_id ' +
     ' and b.stock_code = d.stock_code and b.look_timestamp<? order by b.look_timestamp desc limit 10';
