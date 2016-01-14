@@ -464,47 +464,95 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474447282.147877"
+            timestampString = "474447681.393811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
             <Locations>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "-[stockAction refreshStockInfo]"
                   moduleName = "stockFront"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/wangjam/Documents/develop/stockPub/frontend/stockFront/stockFront/controller/stockAction.m"
-                  timestampString = "474447282.575367"
+                  timestampString = "474447990.222286"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "122"
-                  endingLineNumber = "122"
-                  offsetFromSymbolStart = "720">
+                  startingLineNumber = "125"
+                  endingLineNumber = "125"
+                  offsetFromSymbolStart = "904">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "__31-[stockAction refreshStockInfo]_block_invoke"
                   moduleName = "stockFront"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/wangjam/Documents/develop/stockPub/frontend/stockFront/stockFront/controller/stockAction.m"
-                  timestampString = "474447282.580382"
+                  timestampString = "474447990.227704"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "122"
-                  endingLineNumber = "122"
+                  startingLineNumber = "125"
+                  endingLineNumber = "125"
                   offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "stockFront/controller/stockAction.m"
+            timestampString = "474448289.533104"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "-refreshStockInfo"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__31-[stockAction refreshStockInfo]_block_invoke"
+                  moduleName = "stockFront"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wangjam/Documents/develop/stockPub/frontend/stockFront/stockFront/controller/stockAction.m"
+                  timestampString = "474447681.908503"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "135"
+                  endingLineNumber = "135"
+                  offsetFromSymbolStart = "364">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__31-[stockAction refreshStockInfo]_block_invoke"
+                  moduleName = "stockFront"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wangjam/Documents/develop/stockPub/frontend/stockFront/stockFront/controller/stockAction.m"
+                  timestampString = "474447681.909165"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "135"
+                  endingLineNumber = "135"
+                  offsetFromSymbolStart = "388">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -516,45 +564,29 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474447282.147877"
+            timestampString = "474448289.533104"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__31-[stockAction refreshStockInfo]_block_invoke"
-                  moduleName = "stockFront"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/wangjam/Documents/develop/stockPub/frontend/stockFront/stockFront/controller/stockAction.m"
-                  timestampString = "474447282.681529"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132"
-                  offsetFromSymbolStart = "364">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__31-[stockAction refreshStockInfo]_block_invoke"
-                  moduleName = "stockFront"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/wangjam/Documents/develop/stockPub/frontend/stockFront/stockFront/controller/stockAction.m"
-                  timestampString = "474447282.686751"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132"
-                  offsetFromSymbolStart = "388">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "stockFront/controller/stockAction.m"
+            timestampString = "474448289.533104"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "-refreshStockInfo"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -105,21 +105,24 @@
     
     //获取股票详情
     
-    NSMutableArray* stocklist = [[NSMutableArray alloc] init];
+    NSMutableArray* stockCodeArray = [[NSMutableArray alloc] init];
     for (StockInfoModel* element in stockList) {
-        [stocklist addObject:element.stock_code];
+        [stockCodeArray addObject:element.stock_code];
     }
     
-    if([stocklist count] == 0){
+    if([stockCodeArray count] == 0){
         return;
     }
     
     
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[stockCodeArray]
+                             forKeys:@[@"stocklist"]];
     
-    NSDictionary* json = [stocklist yy_modelToJSONObject];
+    
 
     
-    [NetworkAPI callApiWithParam:json childpath:@"/stock/getStockListInfo" successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getStockListInfo" successed:^(NSDictionary *response) {
         
         completed();
         
@@ -127,15 +130,22 @@
         
         if(code == SUCCESS){
             
-            NSDictionary* stockData = (NSDictionary*)[UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
+            NSDictionary* stockData = (NSDictionary*)[response objectForKey:@"data"];
             
-            for (StockInfoModel* element in stockList) {
-                if([stockData objectForKey:element.stock_code]){
-                    element.price = [[stockData objectForKey:element.stock_code] floatValue];
+            
+            NSArray* keys = [stockData allKeys];
+            
+            
+            
+            if(stockData!=nil){
+                for (StockInfoModel* element in stockList) {
+                    if([stockData objectForKey:element.stock_code]){
+                        element.price = [[stockData objectForKey:element.stock_code] floatValue];
+                    }
                 }
+                
+                [comTable.tableView reloadData];
             }
-            
-            [comTable.tableView reloadData];
             
         }else{
             [Tools AlertBigMsg:@"未知错误"];

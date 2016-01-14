@@ -92,6 +92,7 @@ router.post('/getStockListInfo', function(req, res){
 	asyncClient.eachSeries(req.body['stocklist[]'], function iterator(item, callback){
 		var reqbody = {};
 		reqbody.stock_code = item;
+		logger.debug(reqbody, logger.getFileNameAndLineNum(__filename));
 		stockOperation.getStockInfo(reqbody, function(flag, result){
 			logger.debug(item+' '+result, logger.getFileNameAndLineNum(__filename));
 			if(flag){
