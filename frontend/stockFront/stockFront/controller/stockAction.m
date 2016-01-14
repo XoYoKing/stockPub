@@ -13,6 +13,9 @@
 #import "UserInfoModel.h"
 #import "AppDelegate.h"
 #import "Tools.h"
+#import "NetworkAPI.h"
+#import "returnCode.h"
+#import <YYModel.h>
 
 @implementation stockAction
 {
@@ -92,13 +95,64 @@
 }
 
 
+
+- (void)refreshStockInfo
+{
+    stockList = [locDatabase getStocklist];
+    
+    
+    //[self getFollowList:[[NSDate date] timeIntervalSince1970] handleAction:@selector(getFollowListSuccess:)];
+    
+    //获取股票详情
+    
+    NSMutableArray* stocklist = [[NSMutableArray alloc] init];
+    for (StockInfoModel* element in stockList) {
+        [stocklist addObject:element.stock_code];
+    }
+    
+    if([stocklist count] == 0){
+        return;
+    }
+    
+    
+    
+    NSDictionary* json = [stocklist yy_modelToJSONObject];
+
+    
+    [NetworkAPI callApiWithParam:json childpath:@"/stock/getStockListInfo" successed:^(NSDictionary *response) {
+        
+        completed();
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            NSDictionary* stockData = (NSDictionary*)[UserInfoModel yy_modelWithDictionary:[response objectForKey:@"data"]];
+            
+            for (StockInfoModel* element in stockList) {
+                if([stockData objectForKey:element.stock_code]){
+                    element.price = [[stockData objectForKey:element.stock_code] floatValue];
+                }
+            }
+            
+            [comTable.tableView reloadData];
+            
+        }else{
+            [Tools AlertBigMsg:@"未知错误"];
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+        completed();
+    }];
+
+}
+
 - (void)pullDownAction:(pullCompleted)completedBlock //下拉响应函数
 {
     completed = completedBlock;
-    stockList = [locDatabase getStocklist];
-
-    
-    //[self getFollowList:[[NSDate date] timeIntervalSince1970] handleAction:@selector(getFollowListSuccess:)];
+    [self refreshStockInfo];
 }
 
 
