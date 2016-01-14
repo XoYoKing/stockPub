@@ -27,6 +27,14 @@ exports.dellookStock = function(reqbody, callback){
     conn.executeSql(sql, [look_finish_timestamp, reqbody.user_id, reqbody.stock_code], callback);
 }
 
+exports.getFollowLookInfo = function(reqbody, callback){
+    var sql = 'select b.*, c.user_name, c.facethumbnail, d.stock_name from user_follow_base_info a, stock_look_info b, user_base_info c, stock_base_info d' +
+    ' where a.user_id = ? and a.followed_user_id = b.user_id ' +
+    ' and a.followed_user_id = c.user_id ' +
+    ' and b.stock_code = d.stock_code and b.look_timestamp<? order by b.look_timestamp desc limit 10';
+}
+
+
 exports.updateLookYield = function(stock_code, price, callback){
     var sql = 'update stock_look_info set stock_yield = look_direct*100*(? - look_stock_price)/look_stock_price where stock_code = ?';
     conn.executeSql(sql, [price, stock_code], callback);

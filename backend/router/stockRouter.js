@@ -50,7 +50,7 @@ router.post('/dellook', function(req, res){
 });
 
 
-//看多空股票
+//看多股票
 router.post('/addlook', function(req, res){
 	var returnData = {};
 	stockOperation.addlookStock(req.body, function(flag, result){
@@ -85,6 +85,20 @@ router.post('/addlook', function(req, res){
 		res.send(returnData);
 	});
 });
+
+
+//获取关注的人的看多信息
+router.post('/getFollowLookInfo', function(req, res){
+	stockOperation.getFollowLookInfo(req.body, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+});
+
 
 //获取股票列表信息
 router.post('/getStockListInfo', function(req, res){
