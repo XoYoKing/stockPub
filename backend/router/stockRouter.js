@@ -109,7 +109,7 @@ router.post('/getStockListInfo', function(req, res){
 		var returnData = {};
 		returnData.code = constant.returnCode.SUCCESS;
 		returnData.data = stockInfo;
-		logger.debug(returnData.data);
+		logger.debug(JSON.stringify(returnData.data));
 		res.send(returnData);
 	});
 });
