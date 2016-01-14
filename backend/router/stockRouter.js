@@ -97,6 +97,7 @@ router.post('/getStockListInfo', function(req, res){
 			}else{
 				logger.error(result, logger.getFileNameAndLineNum(__filename));
 			}
+			callback();
 		});
 
 	}, function done (){
