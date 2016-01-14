@@ -4,7 +4,7 @@ var runner = require('./unitTestRunner.js');
 
 var Json = {
     childpath: '/stock/getStockListInfo',
-    stocklist: ['002601']
+    stocklist: ['002601', '002276', '600050', '000776']
 };
 
 describe('getStockListInfo', function(){
