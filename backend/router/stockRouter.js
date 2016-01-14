@@ -88,7 +88,22 @@ router.post('/addlook', function(req, res){
 
 //获取股票列表信息
 router.post('/getStockListInfo', function(req, res){
+	var stockInfo = {};
+	asyncClient.eachSeries(req.body.stocklist, function iterator(item, callback){
+		stockOperation.getStockInfo(item, function(flag, result){
+			if(flag){
+				stockInfo[item] = result[0];
+			}else{
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		});
 
+	}, function done (){
+		var returnData = {};
+		returnData.code = constant.returnCode.SUCCESS;
+		returnData.data = stockInfo;
+		res.send(returnData);
+	});
 });
 
 
