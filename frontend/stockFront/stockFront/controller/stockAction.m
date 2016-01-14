@@ -38,7 +38,6 @@
     comTable = comTableViewCtrl;
     
     
-    
     UserInfoModel* myInfo = [AppDelegate getMyUserInfo];
     locDatabase = [[LocDatabase alloc] init];
     if(![locDatabase connectToDatabase:myInfo.user_id]){
@@ -47,14 +46,16 @@
     }
     
     stockList = [locDatabase getStocklist];
+    
+    [comTable.tableView setDelegate:self];
+    [comTable.tableView setDataSource:self];
 }
 
 
-
-- (UITableViewCell*)generateCell:(UITableView*)tableview indexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* cellIdentifier = @"stockcell";
-    UITableViewCell *cell = [tableview dequeueReusableCellWithIdentifier:cellIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell==nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         NSLog(@"new cell");
@@ -62,7 +63,7 @@
     
     StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
     
-    cell.textLabel.font = [UIFont fontWithName:fontName size:middleFont];
+    cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     cell.textLabel.text = stockInfo.stock_name;
     cell.detailTextLabel.text = stockInfo.stock_code;
     
@@ -104,6 +105,16 @@
 }
 
 
+- (void)tableViewDidAppear:(ComTableViewCtrl *)comTableViewCtrl
+{
+    
+}
+
+- (void)tableViewWillDisappear:(ComTableViewCtrl *)comTableViewCtrl
+{
+    
+}
+
 
 - (void)refreshStockInfo
 {
@@ -142,14 +153,16 @@
             NSDictionary* stockData = (NSDictionary*)[response objectForKey:@"data"];
             
             
-            NSArray* keys = [stockData allKeys];
-            
-            
             
             if(stockData!=nil){
                 for (StockInfoModel* element in stockList) {
                     if([stockData objectForKey:element.stock_code]){
-                        element.price = [[stockData objectForKey:element.stock_code] floatValue];
+                        
+                        StockInfoModel* temp = [StockInfoModel yy_modelWithDictionary:[stockData objectForKey:element.stock_code]];
+                        
+                        element.price = temp.price;
+                        element.fluctuate = temp.fluctuate;
+                        element.stock_name = temp.stock_name;
                     }
                 }
                 
@@ -191,14 +204,14 @@
 
 
 
-- (NSInteger)rowNum
-{
-    return [stockList count];
-}
-
-- (NSInteger)sectionNum
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [stockList count];
 }
 
 

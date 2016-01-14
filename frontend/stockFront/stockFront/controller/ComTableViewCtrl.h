@@ -23,6 +23,10 @@ typedef void(^pullCompleted)();
 - (CGFloat)cellHeight:(UITableView*)tableView indexPath:(NSIndexPath *)indexPath;
 - (void)tableViewWillAppear:(ComTableViewCtrl*)comTableViewCtrl;
 - (void)tableViewWillDisappear:(ComTableViewCtrl*)comTableViewCtrl;
+
+- (void)tableViewDidAppear:(ComTableViewCtrl*)comTableViewCtrl;
+- (void)tableViewDidDisappear:(ComTableViewCtrl*)comTableViewCtrl;
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
 @required
 - (UITableViewCell*)generateCell:(UITableView*)tableview indexPath:(NSIndexPath *)indexPath;

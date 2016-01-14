@@ -16,6 +16,7 @@
 #define fontName @"HelveticaNeue-Thin"
 #define bigFont 32
 #define middleFont 24
+#define minMiddleFont 20
 #define minFont 16
 #define microFont 12
 

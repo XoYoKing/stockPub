@@ -89,7 +89,10 @@ router.post('/addlook', function(req, res){
 //获取股票列表信息
 router.post('/getStockListInfo', function(req, res){
 	var stockInfo = {};
-	asyncClient.eachSeries(req.body['stocklist[]'], function iterator(item, callback){
+	var stocklist = new Array();
+	stocklist = req.body['stocklist[]'].slice(0);
+
+	asyncClient.eachSeries(stocklist, function iterator(item, callback){
 		var reqbody = {};
 		reqbody.stock_code = item;
 		logger.debug(reqbody.stock_code, logger.getFileNameAndLineNum(__filename));
