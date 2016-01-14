@@ -4,9 +4,9 @@ var runner = require('./unitTestRunner.js');
 
 var Json = {
     childpath: '/stock/addlook',
-    user_id: '66666666',
-    user_name: 'wanghan',
-    stock_code: '60001',
+    user_id: 'c186c03ba298bc3cc20490684010a353',
+    user_name: 'jam112',
+    stock_code: '600000',
     look_direct: 1,
     look_stock_price: 20
 };
