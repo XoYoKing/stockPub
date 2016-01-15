@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserInfoModel.h"
 
 @interface SettingCtrl : UITableViewController
+
+- (id)init:(UserInfoModel*)userInfo;
 
 @end

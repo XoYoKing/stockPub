@@ -1,0 +1,108 @@
+//
+//  FaceCellViewTableViewCell.m
+//  stockFront
+//
+//  Created by wang jam on 1/15/16.
+//  Copyright © 2016 jam wang. All rights reserved.
+//
+
+#import "FaceCellViewTableViewCell.h"
+#import "macro.h"
+#import "returnCode.h"
+#import <Masonry.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+
+@implementation FaceCellViewTableViewCell
+{
+    UIImageView* faceImageView;
+    UILabel* userNameLabel;
+    UILabel* userYieldLabel;
+    
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]){
+        faceImageView = [[UIImageView alloc] init];
+        userNameLabel = [[UILabel alloc] init];
+        userYieldLabel = [[UILabel alloc] init];
+        
+        [self addSubview:faceImageView];
+        [self addSubview:userNameLabel];
+        [self addSubview:userYieldLabel];
+    }
+    return self;
+}
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+
+- (void)configureCell:(UserInfoModel*)userInfo
+{
+    
+    if(userInfo.user_facethumbnail == nil){
+        faceImageView.image = [UIImage imageNamed:@"man-noname.png"];
+    }else{
+        [faceImageView sd_setImageWithURL:[[NSURL alloc] initWithString:userInfo.user_facethumbnail]];
+    }
+    faceImageView.layer.cornerRadius = faceImageView.frame.size.height/2;
+    faceImageView.layer.masksToBounds = YES;
+    
+    
+    
+    userNameLabel.text = userInfo.user_name;
+    userNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
+    
+    
+    userYieldLabel.font = [UIFont fontWithName:fontName size:minFont];
+    if(userInfo.user_look_yield>0){
+        userYieldLabel.text = [[NSString alloc] initWithFormat:@"%@+%.2f%%", @"总收益", userInfo.user_look_yield];
+        userYieldLabel.textColor = myred;
+    }else{
+        userYieldLabel.text = [[NSString alloc] initWithFormat:@"%@%.2f%%", @"总收益", userInfo.user_look_yield];
+        userYieldLabel.textColor = mygreen;
+    }
+    
+    
+    
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [faceImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.mas_left).offset(2*minSpace);
+        make.centerY.mas_equalTo(self.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(6*minSpace, 6*minSpace));
+    }];
+    
+    [userNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(faceImageView.mas_right).offset(2*minSpace);
+        make.top.mas_equalTo(faceImageView.mas_top);
+        make.size.mas_equalTo(CGSizeMake(180, 3*minSpace));
+    }];
+    
+    [userYieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(faceImageView.mas_right).offset(2*minSpace);
+        make.top.mas_equalTo(userNameLabel.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(180, 3*minSpace));
+    }];
+    
+}
+
+
++ (CGFloat)cellHeight
+{
+    return 10*minSpace;
+}
+
+@end

@@ -5,6 +5,7 @@ var runner = require('./unitTestRunner.js');
 var Json = {
     childpath: '/stock/dellook',
     user_id: '66666666',
+    user_name: 'jam',
     stock_code: '60001',
     stock_name: 'wwww'
 };

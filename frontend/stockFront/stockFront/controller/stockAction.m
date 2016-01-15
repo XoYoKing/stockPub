@@ -134,16 +134,40 @@
          okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
              
              //delete from lookinfo
-             //看空股票，发送消息到后台
+             
+             [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
              
              
+             UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+             NSDictionary* message = [[NSDictionary alloc]
+                                      initWithObjects:@[userInfo.user_id,
+                                                        userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name]
+                                      forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name"]];
              
-            if(![locDatabase deleteLookStock:stockinfo]){
-                alertMsg(@"操作失败");
-            }else{
-                alertMsg(@"已取消");
-                [tableView reloadData];
-            }
+             [NetworkAPI callApiWithParam:message childpath:@"/stock/dellook" successed:^(NSDictionary *response) {
+                 [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+                 
+                 
+                 NSInteger code = [[response objectForKey:@"code"] integerValue];
+                 
+                 if(code == SUCCESS){
+                     
+                     if(![locDatabase deleteLookStock:stockinfo]){
+                         alertMsg(@"操作失败");
+                     }else{
+                         //alertMsg(@"已删除");
+                     }
+                     
+                     [tableView reloadData];
+                 }else{
+                     alertMsg(@"未知错误");
+                 }
+                 
+                 
+             } failed:^(NSError *error) {
+                 [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+                 alertMsg(@"网络问题");
+             }];
         }];
 
         
@@ -158,15 +182,43 @@
             NSLog(@"add stock to coredata");
             
             //看多股票，发送消息到后台
+            [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
             
             
+            UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+            NSDictionary* message = [[NSDictionary alloc]
+                                     initWithObjects:@[userInfo.user_id,
+                                                       userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name,
+                                                       [[NSNumber alloc] initWithInteger:1]]
+                                     forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name", @"look_direct"]];
             
-            if(![locDatabase addLookStock:stockinfo]){
-                alertMsg(@"操作失败");
-            }else{
-                alertMsg(@"已添加");
-                [tableView reloadData];
-            }
+            [NetworkAPI callApiWithParam:message childpath:@"/stock/addlook" successed:^(NSDictionary *response) {
+                [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+                
+                
+                NSInteger code = [[response objectForKey:@"code"] integerValue];
+                
+                if(code == SUCCESS){
+                    
+                    if(![locDatabase addLookStock:stockinfo]){
+                        alertMsg(@"操作失败");
+                    }else{
+                        //alertMsg(@"已添加");
+                    }
+                    
+                    [tableView reloadData];
+                }else if(code == LOOK_STOCK_EXIST){
+                    alertMsg(@"不能重复添加");
+                }else{
+                    alertMsg(@"未知错误");
+                }
+                
+                
+            } failed:^(NSError *error) {
+                [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+                alertMsg(@"网络问题");
+            }];
+
         }];
     }
     
@@ -184,11 +236,7 @@
     
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    NSLog(@"viewDidAppear");
-    [self refreshStockInfo];
-}
+
 
 - (void)viewDidDisappear:(BOOL)animated
 {

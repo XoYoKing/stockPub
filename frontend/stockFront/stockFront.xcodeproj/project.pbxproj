@@ -46,6 +46,9 @@
 		B2C944781C462C3D00D06B61 /* LocDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944771C462C3D00D06B61 /* LocDatabase.m */; };
 		B2C9447D1C47A07A00D06B61 /* LookStock+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */; };
 		B2C9447E1C47A07A00D06B61 /* LookStock.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447C1C47A07A00D06B61 /* LookStock.m */; };
+		B2C944811C48D1E600D06B61 /* StockLookInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944801C48D1E500D06B61 /* StockLookInfoModel.m */; };
+		B2C944841C48DCAE00D06B61 /* FaceCellViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944831C48DCAD00D06B61 /* FaceCellViewTableViewCell.m */; };
+		B2C944861C48F31200D06B61 /* man-noname.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C944851C48F31200D06B61 /* man-noname.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +142,11 @@
 		B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LookStock+CoreDataProperties.m"; sourceTree = "<group>"; };
 		B2C9447B1C47A07A00D06B61 /* LookStock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookStock.h; sourceTree = "<group>"; };
 		B2C9447C1C47A07A00D06B61 /* LookStock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookStock.m; sourceTree = "<group>"; };
+		B2C9447F1C48D1E500D06B61 /* StockLookInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockLookInfoModel.h; sourceTree = "<group>"; };
+		B2C944801C48D1E500D06B61 /* StockLookInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockLookInfoModel.m; sourceTree = "<group>"; };
+		B2C944821C48DCAD00D06B61 /* FaceCellViewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceCellViewTableViewCell.h; sourceTree = "<group>"; };
+		B2C944831C48DCAD00D06B61 /* FaceCellViewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceCellViewTableViewCell.m; sourceTree = "<group>"; };
+		B2C944851C48F31200D06B61 /* man-noname.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "man-noname.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +284,8 @@
 		B2C944131C3923F800D06B61 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				B2C9447F1C48D1E500D06B61 /* StockLookInfoModel.h */,
+				B2C944801C48D1E500D06B61 /* StockLookInfoModel.m */,
 				B2C944631C4542E700D06B61 /* StockInfoModel.h */,
 				B2C944641C4542E700D06B61 /* StockInfoModel.m */,
 				B2C9442D1C395C2000D06B61 /* UserInfoModel.h */,
@@ -287,6 +297,8 @@
 		B2C944141C3923F800D06B61 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				B2C944821C48DCAD00D06B61 /* FaceCellViewTableViewCell.h */,
+				B2C944831C48DCAD00D06B61 /* FaceCellViewTableViewCell.m */,
 				B2C944231C3947A900D06B61 /* RegisterCellViewTableViewCell.h */,
 				B2C944241C3947A900D06B61 /* RegisterCellViewTableViewCell.m */,
 			);
@@ -328,6 +340,7 @@
 			isa = PBXGroup;
 			children = (
 				B2C944261C39492100D06B61 /* cellphone64px.png */,
+				B2C944851C48F31200D06B61 /* man-noname.png */,
 				B2C944441C3AC2A700D06B61 /* earth64px.png */,
 				B2C944301C395D0D00D06B61 /* nickname64px.png */,
 				B2C944271C39492100D06B61 /* password64px.png */,
@@ -464,6 +477,7 @@
 				B2C943EC1C38C60A00D06B61 /* Assets.xcassets in Resources */,
 				B2C943E71C38C60A00D06B61 /* Main.storyboard in Resources */,
 				B2C944451C3AC2A700D06B61 /* earth64px.png in Resources */,
+				B2C944861C48F31200D06B61 /* man-noname.png in Resources */,
 				B2C9443C1C3A9E7500D06B61 /* config.geojson in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,8 +547,10 @@
 				B2C944751C462B9400D06B61 /* MyStock.m in Sources */,
 				B2C944251C3947A900D06B61 /* RegisterCellViewTableViewCell.m in Sources */,
 				B2C9442C1C395BAB00D06B61 /* RegisterNickNameViewController.m in Sources */,
+				B2C944841C48DCAE00D06B61 /* FaceCellViewTableViewCell.m in Sources */,
 				B2C944651C4542E700D06B61 /* StockInfoModel.m in Sources */,
 				B2C944681C462A5500D06B61 /* Model.xcdatamodeld in Sources */,
+				B2C944811C48D1E600D06B61 /* StockLookInfoModel.m in Sources */,
 				B2C9441E1C39344D00D06B61 /* loginViewCtrl.m in Sources */,
 				B2C943E11C38C60A00D06B61 /* AppDelegate.m in Sources */,
 				B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */,

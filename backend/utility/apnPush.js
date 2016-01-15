@@ -15,7 +15,8 @@ exports.pushMsg = function(user_id, msg){
 					badge: 1
 				};
 				// apn to user
-				pushMsgToUsers(result[0].device_token, pushMsg);
+				var apnpush = require('./apnPush.js');
+				apnpush.pushMsgToUsers(result[0].device_token, pushMsg);
 			} else {
 				log.warn(req.body.followed_user_id + ' has no device token', log.getFileNameAndLineNum(
 					__filename));
@@ -33,8 +34,8 @@ exports.pushMsgToUsers = function (userToken, msg) {
 		return;
 	}
 
-	var pemName = null;
-	var pemkeyName = null;
+	var pemName = '';
+	var pemkeyName = '';
 
 	if (process.env.STOCK_ENV === 'dev') {
 		//pemName = 'heretest.pem';
