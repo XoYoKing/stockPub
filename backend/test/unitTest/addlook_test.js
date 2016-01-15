@@ -16,7 +16,7 @@ describe('addlook', function(){
         runner.runTest(Json, Json.childpath, function(err, body){
             should.not.exist(err);
             body.code.should.be.equalOneOf(constant.returnCode.LOOK_STOCK_EXIST,
-                constant.returnCode.SUCCESS);
+                constant.returnCode.SUCCESS, constant.returnCode.STOCK_NOT_EXIST);
             done();
         });
     });
