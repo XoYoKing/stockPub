@@ -29,7 +29,7 @@ schedule.scheduleJob('5 15 * * 1-5', function(){
 });
 
 //开市前删除now表中数据
-schedule.scheduleJob('15 9 * * 1-5', function(){
+schedule.scheduleJob('29 9 * * 1-5', function(){
     log.info("delete stock now data", log.getFileNameAndLineNum(__filename));
     crawl.emptyStockNowInfo();
 });

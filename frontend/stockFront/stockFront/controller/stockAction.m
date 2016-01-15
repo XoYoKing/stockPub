@@ -152,10 +152,10 @@
                  
                  if(code == SUCCESS){
                      
-                     if(![locDatabase addLookStock:stockinfo]){
+                     if(![locDatabase deleteLookStock:stockinfo]){
                          alertMsg(@"操作失败");
                      }else{
-                         alertMsg(@"已删除");
+                         //alertMsg(@"已删除");
                      }
                      
                      [tableView reloadData];
@@ -203,7 +203,7 @@
                     if(![locDatabase addLookStock:stockinfo]){
                         alertMsg(@"操作失败");
                     }else{
-                        alertMsg(@"已添加");
+                        //alertMsg(@"已添加");
                     }
                     
                     [tableView reloadData];
