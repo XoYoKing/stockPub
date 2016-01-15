@@ -83,7 +83,7 @@
 #define SENDING 3
 
 #define STOCK_NOT_EXIST 1801
-
+#define LOOK_STOCK_EXIST 1901
 
 
 #endif /* returnCode_h */
