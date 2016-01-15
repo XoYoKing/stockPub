@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "ComTableViewCtrl.h"
 
-@interface stockAction : NSObject<ComTableViewDelegate>
+@interface stockAction : NSObject<ComTableViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @end

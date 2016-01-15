@@ -44,10 +44,10 @@
     nav.navigationBar.tintColor = [UIColor blackColor];
     nav.navigationController.navigationBar.translucent = NO;
     
-    UIView *bgView = [[UIView alloc] initWithFrame:nav.navigationBar.bounds];
-    bgView.backgroundColor = [UIColor whiteColor];
-    [nav.navigationBar insertSubview:bgView atIndex:0];
-    nav.navigationBar.opaque = YES;
+//    UIView *bgView = [[UIView alloc] initWithFrame:nav.navigationBar.bounds];
+//    bgView.backgroundColor = [UIColor whiteColor];
+//    [nav.navigationBar insertSubview:bgView atIndex:0];
+//    nav.navigationBar.opaque = YES;
     
     
     
@@ -82,19 +82,17 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-    if((self.selectedIndex == 0&&item.tag == 0)
-       ||(self.selectedIndex == 1&&item.tag == 1)){
-        //double click to refresh
-        NSLog(@"%ld", item.tag);
-        UINavigationController* nav = [self.viewControllers objectAtIndex:self.selectedIndex];
-        
-        if([nav.topViewController isKindOfClass:[ComTableViewCtrl class]]){
-            ComTableViewCtrl* comTable = (ComTableViewCtrl*)nav.topViewController;
+
+    //double click to refresh
+    NSLog(@"%ld", item.tag);
+    UINavigationController* nav = [self.viewControllers objectAtIndex:self.selectedIndex];
+    
+    if([nav.topViewController isKindOfClass:[ComTableViewCtrl class]]){
+        ComTableViewCtrl* comTable = (ComTableViewCtrl*)nav.topViewController;
             
             
             //[comTable pullDown];
-            [comTable refreshNew];
-        }
+        [comTable refreshNew];
     }
 }
 

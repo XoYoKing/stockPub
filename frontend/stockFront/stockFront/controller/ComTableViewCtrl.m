@@ -38,8 +38,8 @@ static int bottomActiveHeight = 30;
         initLoading = loading;
         if([[[UIDevice currentDevice]systemVersion]floatValue]>=7.0)
         {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-            self.automaticallyAdjustsScrollViewInsets = NO;
+            //self.edgesForExtendedLayout = UIRectEdgeNone;
+            //self.automaticallyAdjustsScrollViewInsets = YES;
         }
     }
     return self;
@@ -71,6 +71,25 @@ static int bottomActiveHeight = 30;
         ;
     }
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:YES];
+    
+    if ([comTableDelegate respondsToSelector:@selector(tableViewDidAppear:)]) {
+        [comTableDelegate tableViewDidAppear:self];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:YES];
+    
+    if ([comTableDelegate respondsToSelector:@selector(tableViewDidDisappear:)]) {
+        [comTableDelegate tableViewDidDisappear:self];
+    }
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {

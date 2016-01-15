@@ -38,6 +38,14 @@
 		B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944501C3B6B9000D06B61 /* RankAction.m */; };
 		B2C944541C3B6BC200D06B61 /* stockAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944531C3B6BC200D06B61 /* stockAction.m */; };
 		B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */; };
+		B2C944621C4379D500D06B61 /* StockSearchTableViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */; };
+		B2C944651C4542E700D06B61 /* StockInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944641C4542E700D06B61 /* StockInfoModel.m */; };
+		B2C944681C462A5500D06B61 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B2C944661C462A5500D06B61 /* Model.xcdatamodeld */; };
+		B2C944741C462B9400D06B61 /* MyStock+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944711C462B9400D06B61 /* MyStock+CoreDataProperties.m */; };
+		B2C944751C462B9400D06B61 /* MyStock.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944731C462B9400D06B61 /* MyStock.m */; };
+		B2C944781C462C3D00D06B61 /* LocDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944771C462C3D00D06B61 /* LocDatabase.m */; };
+		B2C9447D1C47A07A00D06B61 /* LookStock+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */; };
+		B2C9447E1C47A07A00D06B61 /* LookStock.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447C1C47A07A00D06B61 /* LookStock.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +124,21 @@
 		B2C944531C3B6BC200D06B61 /* stockAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stockAction.m; sourceTree = "<group>"; };
 		B2C944581C3B6C6E00D06B61 /* SettingCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingCtrl.h; sourceTree = "<group>"; };
 		B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingCtrl.m; sourceTree = "<group>"; };
+		B2C944601C4379D500D06B61 /* StockSearchTableViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockSearchTableViewCtrl.h; sourceTree = "<group>"; };
+		B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockSearchTableViewCtrl.m; sourceTree = "<group>"; };
+		B2C944631C4542E700D06B61 /* StockInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockInfoModel.h; sourceTree = "<group>"; };
+		B2C944641C4542E700D06B61 /* StockInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockInfoModel.m; sourceTree = "<group>"; };
+		B2C944671C462A5500D06B61 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		B2C944701C462B9400D06B61 /* MyStock+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MyStock+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B2C944711C462B9400D06B61 /* MyStock+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MyStock+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B2C944721C462B9400D06B61 /* MyStock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyStock.h; sourceTree = "<group>"; };
+		B2C944731C462B9400D06B61 /* MyStock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyStock.m; sourceTree = "<group>"; };
+		B2C944761C462C3D00D06B61 /* LocDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocDatabase.h; sourceTree = "<group>"; };
+		B2C944771C462C3D00D06B61 /* LocDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocDatabase.m; sourceTree = "<group>"; };
+		B2C944791C47A07A00D06B61 /* LookStock+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LookStock+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LookStock+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B2C9447B1C47A07A00D06B61 /* LookStock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookStock.h; sourceTree = "<group>"; };
+		B2C9447C1C47A07A00D06B61 /* LookStock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookStock.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +209,8 @@
 		B2C943DB1C38C60A00D06B61 /* stockFront */ = {
 			isa = PBXGroup;
 			children = (
+				B2C9446F1C462B7900D06B61 /* coreModel */,
+				B2C944661C462A5500D06B61 /* Model.xcdatamodeld */,
 				B2C944221C39411000D06B61 /* icon */,
 				B2C944121C3923F800D06B61 /* utility */,
 				B2C944131C3923F800D06B61 /* model */,
@@ -235,6 +260,8 @@
 			children = (
 				B2C944161C39243E00D06B61 /* macro.h */,
 				B2C944391C3A9E7500D06B61 /* config.geojson */,
+				B2C944761C462C3D00D06B61 /* LocDatabase.h */,
+				B2C944771C462C3D00D06B61 /* LocDatabase.m */,
 				B2C9443A1C3A9E7500D06B61 /* ConfigAccess.h */,
 				B2C9443B1C3A9E7500D06B61 /* ConfigAccess.m */,
 				B2C944381C3A6CEA00D06B61 /* returnCode.h */,
@@ -249,6 +276,8 @@
 		B2C944131C3923F800D06B61 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				B2C944631C4542E700D06B61 /* StockInfoModel.h */,
+				B2C944641C4542E700D06B61 /* StockInfoModel.m */,
 				B2C9442D1C395C2000D06B61 /* UserInfoModel.h */,
 				B2C9442E1C395C2000D06B61 /* UserInfoModel.m */,
 			);
@@ -267,6 +296,8 @@
 		B2C944151C3923F800D06B61 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				B2C944601C4379D500D06B61 /* StockSearchTableViewCtrl.h */,
+				B2C944611C4379D500D06B61 /* StockSearchTableViewCtrl.m */,
 				B2C944581C3B6C6E00D06B61 /* SettingCtrl.h */,
 				B2C944591C3B6C6E00D06B61 /* SettingCtrl.m */,
 				B2C944521C3B6BC200D06B61 /* stockAction.h */,
@@ -303,6 +334,21 @@
 			);
 			name = icon;
 			path = utility/icon;
+			sourceTree = "<group>";
+		};
+		B2C9446F1C462B7900D06B61 /* coreModel */ = {
+			isa = PBXGroup;
+			children = (
+				B2C944791C47A07A00D06B61 /* LookStock+CoreDataProperties.h */,
+				B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */,
+				B2C9447B1C47A07A00D06B61 /* LookStock.h */,
+				B2C9447C1C47A07A00D06B61 /* LookStock.m */,
+				B2C944701C462B9400D06B61 /* MyStock+CoreDataProperties.h */,
+				B2C944711C462B9400D06B61 /* MyStock+CoreDataProperties.m */,
+				B2C944721C462B9400D06B61 /* MyStock.h */,
+				B2C944731C462B9400D06B61 /* MyStock.m */,
+			);
+			path = coreModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -478,20 +524,28 @@
 			files = (
 				B2C944541C3B6BC200D06B61 /* stockAction.m in Sources */,
 				B2C943EA1C38C60A00D06B61 /* stockFront.xcdatamodeld in Sources */,
+				B2C944781C462C3D00D06B61 /* LocDatabase.m in Sources */,
 				B2C944371C3A5F3400D06B61 /* Tools.m in Sources */,
 				B2C944481C3B67E400D06B61 /* TabBarViewController.m in Sources */,
 				B2C944401C3AAAA000D06B61 /* RegisterPhoneNumViewController.m in Sources */,
+				B2C9447E1C47A07A00D06B61 /* LookStock.m in Sources */,
 				B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */,
+				B2C944751C462B9400D06B61 /* MyStock.m in Sources */,
 				B2C944251C3947A900D06B61 /* RegisterCellViewTableViewCell.m in Sources */,
 				B2C9442C1C395BAB00D06B61 /* RegisterNickNameViewController.m in Sources */,
+				B2C944651C4542E700D06B61 /* StockInfoModel.m in Sources */,
+				B2C944681C462A5500D06B61 /* Model.xcdatamodeld in Sources */,
 				B2C9441E1C39344D00D06B61 /* loginViewCtrl.m in Sources */,
 				B2C943E11C38C60A00D06B61 /* AppDelegate.m in Sources */,
 				B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */,
 				B2C944431C3AB74C00D06B61 /* RegisterConfirmViewController.m in Sources */,
 				B2C9444B1C3B69C300D06B61 /* ComTableViewCtrl.m in Sources */,
+				B2C9447D1C47A07A00D06B61 /* LookStock+CoreDataProperties.m in Sources */,
 				B2C9444E1C3B6A6F00D06B61 /* FollowAction.m in Sources */,
 				B2C944191C3924CC00D06B61 /* startViewCtrl.m in Sources */,
+				B2C944621C4379D500D06B61 /* StockSearchTableViewCtrl.m in Sources */,
 				B2C9443D1C3A9E7500D06B61 /* ConfigAccess.m in Sources */,
+				B2C944741C462B9400D06B61 /* MyStock+CoreDataProperties.m in Sources */,
 				B2C9442F1C395C2000D06B61 /* UserInfoModel.m in Sources */,
 				B2C943DE1C38C60A00D06B61 /* main.m in Sources */,
 				B2C944341C3A565E00D06B61 /* NetworkAPI.m in Sources */,
@@ -750,6 +804,16 @@
 			);
 			currentVersion = B2C943E91C38C60A00D06B61 /* stockFront.xcdatamodel */;
 			path = stockFront.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		B2C944661C462A5500D06B61 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B2C944671C462A5500D06B61 /* Model.xcdatamodel */,
+			);
+			currentVersion = B2C944671C462A5500D06B61 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

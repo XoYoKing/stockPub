@@ -2,6 +2,30 @@
 var domain = require('domain');
 var domainObj = domain.create();
 var log = global.logger;
+var userMgmt = require('../databaseOperation/userOperation.js');
+var path = require('path');
+
+exports.pushMsg = function(user_id, msg){
+	userMgmt.getUserTokenInfo(user_id, function(flag, result) {
+		if (flag) {
+			if (result.length > 0) {
+				var pushMsg = {
+					content: msg,
+					msgtype: 'msg',
+					badge: 1
+				};
+				// apn to user
+				pushMsgToUsers(result[0].device_token, pushMsg);
+			} else {
+				log.warn(req.body.followed_user_id + ' has no device token', log.getFileNameAndLineNum(
+					__filename));
+			}
+		} else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
 
 exports.pushMsgToUsers = function (userToken, msg) {
 	if (userToken === undefined || userToken === '') {
