@@ -236,11 +236,7 @@
     
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    NSLog(@"viewDidAppear");
-    [self refreshStockInfo];
-}
+
 
 - (void)viewDidDisappear:(BOOL)animated
 {

@@ -84,15 +84,19 @@
 {
 
     //double click to refresh
-    NSLog(@"%ld", item.tag);
-    UINavigationController* nav = [self.viewControllers objectAtIndex:self.selectedIndex];
     
-    if([nav.topViewController isKindOfClass:[ComTableViewCtrl class]]){
-        ComTableViewCtrl* comTable = (ComTableViewCtrl*)nav.topViewController;
+    if(self.selectedIndex == 2&&item.tag == 2){
+        NSLog(@"%ld", item.tag);
+        UINavigationController* nav = [self.viewControllers objectAtIndex:self.selectedIndex];
+        
+        if([nav.topViewController isKindOfClass:[ComTableViewCtrl class]]){
+            ComTableViewCtrl* comTable = (ComTableViewCtrl*)nav.topViewController;
             
             
             //[comTable pullDown];
-        [comTable refreshNew];
+            [comTable refreshNew];
+        }
+
     }
 }
 

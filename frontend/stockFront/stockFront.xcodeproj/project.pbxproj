@@ -46,6 +46,7 @@
 		B2C944781C462C3D00D06B61 /* LocDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944771C462C3D00D06B61 /* LocDatabase.m */; };
 		B2C9447D1C47A07A00D06B61 /* LookStock+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */; };
 		B2C9447E1C47A07A00D06B61 /* LookStock.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447C1C47A07A00D06B61 /* LookStock.m */; };
+		B2C944811C48D1E600D06B61 /* StockLookInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944801C48D1E500D06B61 /* StockLookInfoModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,8 @@
 		B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LookStock+CoreDataProperties.m"; sourceTree = "<group>"; };
 		B2C9447B1C47A07A00D06B61 /* LookStock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookStock.h; sourceTree = "<group>"; };
 		B2C9447C1C47A07A00D06B61 /* LookStock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookStock.m; sourceTree = "<group>"; };
+		B2C9447F1C48D1E500D06B61 /* StockLookInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockLookInfoModel.h; sourceTree = "<group>"; };
+		B2C944801C48D1E500D06B61 /* StockLookInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockLookInfoModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +279,8 @@
 		B2C944131C3923F800D06B61 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				B2C9447F1C48D1E500D06B61 /* StockLookInfoModel.h */,
+				B2C944801C48D1E500D06B61 /* StockLookInfoModel.m */,
 				B2C944631C4542E700D06B61 /* StockInfoModel.h */,
 				B2C944641C4542E700D06B61 /* StockInfoModel.m */,
 				B2C9442D1C395C2000D06B61 /* UserInfoModel.h */,
@@ -535,6 +540,7 @@
 				B2C9442C1C395BAB00D06B61 /* RegisterNickNameViewController.m in Sources */,
 				B2C944651C4542E700D06B61 /* StockInfoModel.m in Sources */,
 				B2C944681C462A5500D06B61 /* Model.xcdatamodeld in Sources */,
+				B2C944811C48D1E600D06B61 /* StockLookInfoModel.m in Sources */,
 				B2C9441E1C39344D00D06B61 /* loginViewCtrl.m in Sources */,
 				B2C943E11C38C60A00D06B61 /* AppDelegate.m in Sources */,
 				B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */,
