@@ -177,12 +177,20 @@
 }
 
 
-- (void)tableViewDidAppear:(ComTableViewCtrl *)comTableViewCtrl
+- (void)tableViewDidAppear:(ComTableViewCtrl*)comTableViewCtrl;
 {
+    NSLog(@"viewDidAppear");
+    [self refreshStockInfo];
     
 }
 
-- (void)tableViewWillDisappear:(ComTableViewCtrl *)comTableViewCtrl
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"viewDidAppear");
+    [self refreshStockInfo];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
 {
     
 }
