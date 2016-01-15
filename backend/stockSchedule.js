@@ -10,14 +10,14 @@ var email = require('./utility/emailTool');
 
 log.info("run schedule", log.getFileNameAndLineNum(__filename));
 
-//实时行情-上午
-schedule.scheduleJob('*/1 9-11 * * 1-5', function(){
+//实时行情-上午-每20秒
+schedule.scheduleJob('*/20 * 9-11 * * 1-5', function(){
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
     crawl.startCrawlStockNow();
 });
 
-//实时行情-下午
-schedule.scheduleJob('*/1 13-14 * * 1-5', function(){
+//实时行情-下午-每20秒
+schedule.scheduleJob('*/20 * 13-14 * * 1-5', function(){
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
     crawl.startCrawlStockNow();
 });
