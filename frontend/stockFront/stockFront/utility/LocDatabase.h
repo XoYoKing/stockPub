@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "StockInfoModel.h"
 #import "MyStock.h"
+#import "LookStock.h"
 
 @interface LocDatabase : NSObject
 
@@ -23,5 +24,10 @@
 
 - (NSMutableArray*)getStocklist;
 
+- (BOOL)addLookStock:(StockInfoModel*)model;
+
+- (BOOL)deleteLookStock:(StockInfoModel*)model;
+
+- (BOOL)isLookStock:(StockInfoModel*)model;
 
 @end

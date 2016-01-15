@@ -436,11 +436,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474454429.608754"
+            timestampString = "474458327.253776"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
          </BreakpointContent>
@@ -452,11 +452,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474454429.608754"
+            timestampString = "474458327.253776"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
             <Locations>
@@ -500,11 +500,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474454429.608754"
+            timestampString = "474458327.253776"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
+            startingLineNumber = "263"
+            endingLineNumber = "263"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
             <Locations>
@@ -548,11 +548,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474454429.608754"
+            timestampString = "474458327.253776"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
          </BreakpointContent>
@@ -564,11 +564,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474454429.608754"
+            timestampString = "474458327.253776"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
          </BreakpointContent>
@@ -596,11 +596,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "stockFront/controller/stockAction.m"
-            timestampString = "474454429.608754"
+            timestampString = "474458327.253776"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "-refreshStockInfo"
             landmarkType = "5">
          </BreakpointContent>

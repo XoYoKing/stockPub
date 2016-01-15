@@ -10,7 +10,7 @@
 #define macro_h
 
 #import <MBProgressHUD.h>
-
+#import "Tools.h"
 
 
 #define fontName @"HelveticaNeue-Thin"
@@ -34,7 +34,7 @@
 
 
 
-#define alertMsg(x) MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];hud.mode = MBProgressHUDModeText;hud.labelText = x;hud.removeFromSuperViewOnHide = YES;[hud hide:YES afterDelay:2];
+#define alertMsg(x) [Tools AlertBigMsg:x];;
 
 
 #endif /* macro_h */

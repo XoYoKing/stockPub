@@ -44,6 +44,8 @@
 		B2C944741C462B9400D06B61 /* MyStock+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944711C462B9400D06B61 /* MyStock+CoreDataProperties.m */; };
 		B2C944751C462B9400D06B61 /* MyStock.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944731C462B9400D06B61 /* MyStock.m */; };
 		B2C944781C462C3D00D06B61 /* LocDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C944771C462C3D00D06B61 /* LocDatabase.m */; };
+		B2C9447D1C47A07A00D06B61 /* LookStock+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */; };
+		B2C9447E1C47A07A00D06B61 /* LookStock.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9447C1C47A07A00D06B61 /* LookStock.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +135,10 @@
 		B2C944731C462B9400D06B61 /* MyStock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyStock.m; sourceTree = "<group>"; };
 		B2C944761C462C3D00D06B61 /* LocDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocDatabase.h; sourceTree = "<group>"; };
 		B2C944771C462C3D00D06B61 /* LocDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocDatabase.m; sourceTree = "<group>"; };
+		B2C944791C47A07A00D06B61 /* LookStock+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LookStock+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LookStock+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B2C9447B1C47A07A00D06B61 /* LookStock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookStock.h; sourceTree = "<group>"; };
+		B2C9447C1C47A07A00D06B61 /* LookStock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookStock.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -333,6 +339,10 @@
 		B2C9446F1C462B7900D06B61 /* coreModel */ = {
 			isa = PBXGroup;
 			children = (
+				B2C944791C47A07A00D06B61 /* LookStock+CoreDataProperties.h */,
+				B2C9447A1C47A07A00D06B61 /* LookStock+CoreDataProperties.m */,
+				B2C9447B1C47A07A00D06B61 /* LookStock.h */,
+				B2C9447C1C47A07A00D06B61 /* LookStock.m */,
 				B2C944701C462B9400D06B61 /* MyStock+CoreDataProperties.h */,
 				B2C944711C462B9400D06B61 /* MyStock+CoreDataProperties.m */,
 				B2C944721C462B9400D06B61 /* MyStock.h */,
@@ -518,6 +528,7 @@
 				B2C944371C3A5F3400D06B61 /* Tools.m in Sources */,
 				B2C944481C3B67E400D06B61 /* TabBarViewController.m in Sources */,
 				B2C944401C3AAAA000D06B61 /* RegisterPhoneNumViewController.m in Sources */,
+				B2C9447E1C47A07A00D06B61 /* LookStock.m in Sources */,
 				B2C9445A1C3B6C6E00D06B61 /* SettingCtrl.m in Sources */,
 				B2C944751C462B9400D06B61 /* MyStock.m in Sources */,
 				B2C944251C3947A900D06B61 /* RegisterCellViewTableViewCell.m in Sources */,
@@ -529,6 +540,7 @@
 				B2C944511C3B6B9000D06B61 /* RankAction.m in Sources */,
 				B2C944431C3AB74C00D06B61 /* RegisterConfirmViewController.m in Sources */,
 				B2C9444B1C3B69C300D06B61 /* ComTableViewCtrl.m in Sources */,
+				B2C9447D1C47A07A00D06B61 /* LookStock+CoreDataProperties.m in Sources */,
 				B2C9444E1C3B6A6F00D06B61 /* FollowAction.m in Sources */,
 				B2C944191C3924CC00D06B61 /* startViewCtrl.m in Sources */,
 				B2C944621C4379D500D06B61 /* StockSearchTableViewCtrl.m in Sources */,

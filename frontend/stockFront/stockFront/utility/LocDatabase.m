@@ -131,4 +131,84 @@
 }
 
 
+- (BOOL)addLookStock:(StockInfoModel*)stockmodel
+{
+    NSLog(@"addStock");
+    
+    if(![self deleteLookStock:stockmodel]){
+        return false;
+    }
+    
+    NSError* error;
+    LookStock* msg = [NSEntityDescription insertNewObjectForEntityForName:@"LookStock" inManagedObjectContext:context];
+    msg.stock_code = stockmodel.stock_code;
+    
+    
+    if (![context save:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
+- (BOOL)deleteLookStock:(StockInfoModel*)stockmodel
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"LookStock" inManagedObjectContext:context]];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"stock_code = '%@'",stockmodel.stock_code]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor* sortDesc = [[NSSortDescriptor alloc] initWithKey:@"stock_code" ascending:NO];
+    NSArray* desc = [NSArray arrayWithObject:sortDesc];
+    [fetchRequest setSortDescriptors:desc];
+    
+    NSFetchedResultsController* fetchController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:@"Root"];
+    
+    NSError* error;
+    if (![fetchController performFetch:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    
+    for (LookStock* msg in fetchController.fetchedObjects) {
+        [context deleteObject:msg];
+    }
+    
+    if (![context save:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    return true;
+}
+
+- (BOOL)isLookStock:(StockInfoModel*)stockmodel
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"LookStock" inManagedObjectContext:context]];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"stock_code = '%@'",stockmodel.stock_code]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor* sortDesc = [[NSSortDescriptor alloc] initWithKey:@"stock_code" ascending:NO];
+    NSArray* desc = [NSArray arrayWithObject:sortDesc];
+    [fetchRequest setSortDescriptors:desc];
+    
+    NSFetchedResultsController* fetchController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:@"Root"];
+    
+    NSError* error;
+    if (![fetchController performFetch:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    
+    if([fetchController.fetchedObjects count]>0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
 @end

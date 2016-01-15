@@ -65,8 +65,13 @@
     
     cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     cell.textLabel.text = stockInfo.stock_name;
-    cell.detailTextLabel.text = stockInfo.stock_code;
     
+    if([locDatabase isLookStock:stockInfo]){
+        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%@ %@",stockInfo.stock_code, @"看多"];
+    }else{
+        cell.detailTextLabel.text = stockInfo.stock_code;
+    }
+    cell.detailTextLabel.textColor = [UIColor grayColor];
     
     
     UILabel* priceLabel = [[UILabel alloc] init];
@@ -105,6 +110,73 @@
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
+    StockInfoModel* stockinfo = [stockList objectAtIndex:indexPath.row];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        ;
+    }];
+    
+    UIAlertAction *okAction = nil;
+    UIAlertController *alertController = nil;
+    
+    if([locDatabase isLookStock:stockinfo]){
+        
+        
+        NSString* title = [[NSString alloc] initWithFormat:@"取消看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
+        
+        alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
+        
+         okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+             
+             //delete from lookinfo
+             //看空股票，发送消息到后台
+             
+             
+             
+            if(![locDatabase deleteLookStock:stockinfo]){
+                alertMsg(@"操作失败");
+            }else{
+                alertMsg(@"已取消");
+                [tableView reloadData];
+            }
+        }];
+
+        
+    }else{
+        
+        NSString* title = [[NSString alloc] initWithFormat:@"看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
+
+        alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
+        
+        
+        okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"add stock to coredata");
+            
+            //看多股票，发送消息到后台
+            
+            
+            
+            if(![locDatabase addLookStock:stockinfo]){
+                alertMsg(@"操作失败");
+            }else{
+                alertMsg(@"已添加");
+                [tableView reloadData];
+            }
+        }];
+    }
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [comTable presentViewController:alertController animated:YES completion:nil];
+    
+}
+
+
 - (void)tableViewDidAppear:(ComTableViewCtrl *)comTableViewCtrl
 {
     
@@ -113,6 +185,29 @@
 - (void)tableViewWillDisappear:(ComTableViewCtrl *)comTableViewCtrl
 {
     
+}
+
+
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        
+        
+        StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
+        if ([locDatabase deleteStock:stockInfo]) {
+            [stockList removeObjectAtIndex:indexPath.row];
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }else{
+            [Tools AlertBigMsg:@"删除失败"];
+        }
+        
+        
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }
 }
 
 
@@ -134,6 +229,10 @@
         return;
     }
     
+    if([stockCodeArray  count] == 1){
+        [stockCodeArray addObject:@"0"];
+        //单条后台asyn each 不支持
+    }
     
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[stockCodeArray]
@@ -188,10 +287,9 @@
 }
 
 
-- (CGFloat)cellHeight:(UITableView*)tableView indexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 8*minSpace;
-
 }
 
 
