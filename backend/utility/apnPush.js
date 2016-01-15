@@ -34,8 +34,8 @@ exports.pushMsgToUsers = function (userToken, msg) {
 		return;
 	}
 
-	var pemName = null;
-	var pemkeyName = null;
+	var pemName = '';
+	var pemkeyName = '';
 
 	if (process.env.STOCK_ENV === 'dev') {
 		//pemName = 'heretest.pem';
