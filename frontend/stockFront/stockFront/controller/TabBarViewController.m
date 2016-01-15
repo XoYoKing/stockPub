@@ -120,7 +120,7 @@
     
     
     
-    SettingCtrl* setting = [[SettingCtrl alloc] init];
+    SettingCtrl* setting = [[SettingCtrl alloc] init:[AppDelegate getMyUserInfo]];
     
     [self initChildView:controllers viewController:followContentTableCtrl title:@"关注"];
     [self initChildView:controllers viewController:rankTableCtrl title:@"排行"];
