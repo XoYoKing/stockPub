@@ -86,9 +86,7 @@
             
             NSDictionary* data = [response objectForKey:@"data"];
             NSString* fileName = [data objectForKey:@"fileName"];
-            [self dismissViewControllerAnimated:YES completion:nil];
-            usrInfo.user_facethumbnail = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/image/?name=", fileName];
-            
+            [self dismissViewControllerAnimated:YES completion:nil];            
         }
         
         if(code == ERROR){

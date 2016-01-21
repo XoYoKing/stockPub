@@ -10,11 +10,12 @@
 #import "macro.h"
 #import "returnCode.h"
 #import <Masonry.h>
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "FaceImageViewController.h"
 #import "Tools.h"
 #import "SettingCtrl.h"
-
+#import "ConfigAccess.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "YYWebImage.h"
 
 @implementation FaceCellViewTableViewCell
 {
@@ -31,6 +32,7 @@
         faceImageView = [[UIImageView alloc] init];
         faceImageView.userInteractionEnabled = YES;
         [faceImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(faceImageViewPress:)]];
+
         
         userNameLabel = [[UILabel alloc] init];
         userYieldLabel = [[UILabel alloc] init];
@@ -66,10 +68,15 @@
     if(userInfo.user_facethumbnail == nil){
         faceImageView.image = [UIImage imageNamed:@"man-noname.png"];
     }else{
-        [faceImageView sd_setImageWithURL:[[NSURL alloc] initWithString:userInfo.user_facethumbnail]];
+        
+        NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/image/?name=", userInfo.user_facethumbnail];
+        
+        
+        
+        [faceImageView sd_setImageWithURL:[[NSURL alloc] initWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        }];
     }
-    faceImageView.layer.cornerRadius = faceImageView.frame.size.height/2;
-    faceImageView.layer.masksToBounds = YES;
+
     
     
     
@@ -97,8 +104,10 @@
     [faceImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.mas_left).offset(2*minSpace);
         make.centerY.mas_equalTo(self.mas_centerY);
-        make.size.mas_equalTo(CGSizeMake(6*minSpace, 6*minSpace));
+        make.size.mas_equalTo(CGSizeMake(8*minSpace, 8*minSpace));
     }];
+    faceImageView.layer.cornerRadius = faceImageView.frame.size.height/2;
+    faceImageView.layer.masksToBounds = YES;
     
     [userNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(faceImageView.mas_right).offset(2*minSpace);
