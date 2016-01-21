@@ -13,7 +13,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "NetworkAPI.h"
 
-
+#import "returnCode.h"
 @interface FaceImageViewController ()
 {
     UserInfoModel* usrInfo;
@@ -73,6 +73,28 @@
     
     
     imageView.image = aImage;
+    
+    NSDictionary* images = [[NSDictionary alloc] initWithObjects:@[aImage] forKeys:@[@"user_image"]];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
+    [NetworkAPI callApiWithParamForImage:nil imageDatas:images childpath:@"/changeFace" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        if(code == SUCCESS){
+            alertMsg(@"上传成功");
+        }
+        
+        if(code == ERROR){
+            alertMsg(@"上传失败");
+        }
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        
+        
+    }];
     
 //    //update image
 //    //addImageView.image = aImage;

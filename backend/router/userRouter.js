@@ -235,7 +235,7 @@ router.post('/checkNameExist', function(req, res) {
 });
 
 //change face
-router.post('changeFace', function(req, res){
+router.post('/changeFace', function(req, res){
 
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files) {
