@@ -251,7 +251,7 @@ router.post('/changeFace', function(req, res){
 		}
 
 		var fileName = files.user_image.path + Date.now();
-		var encrypt = require('encrypt.js');
+		var encrypt = require('../utility/encrypt.js');
 		fileName = encrypt.sha1Cryp(fileName);
 		var fs = require('fs');
 		fs.rename(files.user_image.path, path.join(process.env.HOME,
