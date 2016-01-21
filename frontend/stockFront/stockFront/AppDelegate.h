@@ -19,6 +19,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property UserInfoModel* myInfo;
+@property UITabBarController* tabBarViewController;
 
 + (UserInfoModel*)getMyUserInfo;
 - (void)saveContext;

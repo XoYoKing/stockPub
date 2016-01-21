@@ -116,6 +116,8 @@
             
             
             TabBarViewController* tabbarView = [[TabBarViewController alloc] init];
+            app.tabBarViewController = tabbarView;
+            
             [self presentViewController:tabbarView animated:YES completion:nil];
             
         }else if(code == LOGIN_FAIL){
