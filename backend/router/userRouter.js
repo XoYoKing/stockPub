@@ -262,6 +262,7 @@ router.post('/changeFace', function(req, res){
 				returnData.code = constant.returnCode.ERROR;
 				res.send(returnData);
 			} else {
+				log.debug(fields.user_id+" "+fileName, log.getFileNameAndLineNum(__filename));
 				userMgmt.updateUserFace(fields.user_id, fileName,
 					function(flag, result) {
 						if (flag) {

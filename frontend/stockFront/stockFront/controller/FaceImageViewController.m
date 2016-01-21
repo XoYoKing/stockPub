@@ -75,10 +75,11 @@
     imageView.image = aImage;
     
     NSDictionary* images = [[NSDictionary alloc] initWithObjects:@[aImage] forKeys:@[@"user_image"]];
+    NSDictionary* param = [[NSDictionary alloc] initWithObjects:@[usrInfo.user_id] forKeys:@[@"user_id"]];
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 
-    [NetworkAPI callApiWithParamForImage:nil imageDatas:images childpath:@"/user/changeFace" successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParamForImage:param imageDatas:images childpath:@"/user/changeFace" successed:^(NSDictionary *response) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         if(code == SUCCESS){
