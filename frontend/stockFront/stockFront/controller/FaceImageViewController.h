@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "UserInfoModel.h"
 
-@interface FaceImageViewController : UIViewController
+@interface FaceImageViewController : UIViewController<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 - (id)init:(UserInfoModel*)userinfo;
 @end

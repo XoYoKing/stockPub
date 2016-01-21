@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "UserInfoModel.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "NetworkAPI.h"
 
 
 @interface FaceImageViewController ()
@@ -64,9 +65,47 @@
 }
 
 
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)aImage editingInfo:(NSDictionary *)editingInfo
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    
+    
+    imageView.image = aImage;
+    
+//    //update image
+//    //addImageView.image = aImage;
+//    
+//    NetWork* netWork = [[NetWork alloc] init];
+//    
+//    
+//    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+//    
+//    NSDictionary* message = [[NSDictionary alloc] initWithObjects:@[app.myInfo.userID, @"/changeFace"] forKeys:@[@"user_id", @"childpath"]];
+//    
+//    NSDictionary* images = [[NSDictionary alloc] initWithObjects:@[aImage] forKeys:@[@"user_image"]];
+//    
+//    
+//    NSDictionary* feedbackcall = [[NSDictionary alloc] initWithObjects:@[[NSValue valueWithBytes:&@selector(changeUserFaceSuccess:) objCType:@encode(SEL)], [NSValue valueWithBytes:&@selector(changeUserFaceError:) objCType:@encode(SEL)], [NSValue valueWithBytes:&@selector(changeUserFaceException:) objCType:@encode(SEL)]] forKeys:@[[[NSNumber alloc] initWithInt:SUCCESS], [[NSNumber alloc] initWithInt:ERROR], [[NSNumber alloc] initWithInt:EXCEPTION]]];
+//    
+//    [netWork message:message images:images feedbackcall:feedbackcall complete:^{
+//        [loadingView hide:YES];
+//        loadingView = nil;
+//    } callObject:self];
+//    
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];//状态栏白色
+    
+    
+}
+
+
 - (void)changeButton:(id)sender
 {
-    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (id)init:(UserInfoModel*)userinfo

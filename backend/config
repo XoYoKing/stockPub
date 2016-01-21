@@ -48,6 +48,10 @@ exports.certificateStatus = {
 
 };
 
+exports.stockPubFaceDir = {
+    dir: 'stockPubFaces'
+};
+
 exports.wechat = {
 	TOKEN: 'wanghan'
 };

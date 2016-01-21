@@ -16,6 +16,11 @@ exports.followUser = function(reqbody, callback){
 	conn.executeSql(sql, [reqbody.followed_user_id], null);
 };
 
+exports.updateUserFace = function(user_id, fileName, callback){
+	var sql = "update user_base_info set user_facethumbnail = ? where user_id = ?";
+	conn.executeSql(sql, [user_id, fileName], callback);
+}
+
 exports.cancelFollowUser = function(reqbody, callback){
 
 	var sql = "delete from user_follow_base_info where user_id = ? and followed_user_id = ?";

@@ -6,6 +6,7 @@ var constant = require('../utility/constant.js');
 var routerFunc = require('../utility/routeFunc.js');
 var common = require('../utility/commonFunc.js');
 var apn = require('../utility/apnPush.js');
+var config = require('../config');
 
 module.exports = router;
 
@@ -230,6 +231,48 @@ router.post('/checkNameExist', function(req, res) {
 			returnData.code = constant.returnCode.ERROR;
 		}
 		res.send(returnData);
+	});
+});
+
+//change face
+router.post('changeFace', function(req, res){
+
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		var returnData = {};
+
+		if (err) {
+			log.error('form.parse error', log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+			res.send(returnData);
+			return;
+		}
+
+		var fileName = files.user_image.path + Date.now();
+		var encrypt = require('encrypt.js');
+		fileName = encrypt.sha1Cryp(fileName);
+		var fs = require('fs');
+		fs.rename(files.user_image.path, path.join(process.env.HOME,
+			config.stockPubFaceDir.dir, fileName), function(err) {
+			if (err) {
+				log.error('fs.rename error ' + err, log.getFileNameAndLineNum(__filename));
+				returnData.code = constant.returnCode.ERROR;
+				res.send(returnData);
+			} else {
+				userMgmt.updateUserFace(fields.user_id, fileName,
+					function(flag, result) {
+						if (flag) {
+							returnData.code = constant.returnCode.SUCCESS;
+							returnData.user_image_url = url;
+						} else {
+							log.error('insertUserImageInfo error ' +
+								result, log.getFileNameAndLineNum(__filename));
+							returnData.code = constant.returnCode.ERROR;
+						}
+						res.send(returnData);
+					});
+			}
+		});
 	});
 });
 
