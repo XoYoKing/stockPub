@@ -17,6 +17,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "YYWebImage.h"
 
+
 @implementation FaceCellViewTableViewCell
 {
     UIImageView* faceImageView;
@@ -72,9 +73,12 @@
         NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/image/?name=", userInfo.user_facethumbnail];
         
         
-        
         [faceImageView sd_setImageWithURL:[[NSURL alloc] initWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+            image = [Tools scaleToSize:image size:CGSizeMake(8*minSpace, 8*minSpace)];
+            faceImageView.image = image;
         }];
+        
     }
 
     
@@ -84,7 +88,7 @@
     userNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     
     
-    userYieldLabel.font = [UIFont fontWithName:fontName size:minFont];
+    userYieldLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     if(userInfo.user_look_yield>0){
         userYieldLabel.text = [[NSString alloc] initWithFormat:@"%@+%.2f%%", @"总收益", userInfo.user_look_yield];
         userYieldLabel.textColor = myred;
@@ -118,7 +122,7 @@
     [userYieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(faceImageView.mas_right).offset(2*minSpace);
         make.top.mas_equalTo(userNameLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(180, 3*minSpace));
+        make.size.mas_equalTo(CGSizeMake(180, 4*minSpace));
     }];
     
 }

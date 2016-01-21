@@ -59,7 +59,9 @@
     if(usrInfo.user_facethumbnail == nil){
         imageView.image = [UIImage imageNamed:@"man-noname.png"];
     }else{
-        [imageView sd_setImageWithURL:[[NSURL alloc] initWithString:usrInfo.user_facethumbnail]];
+        
+        NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/image/?name=", usrInfo.user_facethumbnail];
+        [imageView sd_setImageWithURL:[[NSURL alloc] initWithString:urlStr]];
     }
     [self.view addSubview:imageView];
 }
@@ -86,6 +88,8 @@
             
             NSDictionary* data = [response objectForKey:@"data"];
             NSString* fileName = [data objectForKey:@"fileName"];
+            usrInfo.user_facethumbnail = fileName;
+            
             [self dismissViewControllerAnimated:YES completion:nil];            
         }
         
