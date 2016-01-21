@@ -50,6 +50,8 @@
     
     [comTable.tableView setDelegate:self];
     [comTable.tableView setDataSource:self];
+    
+    //comTable.edgesForExtendedLayout=UIRectEdgeNone;
 }
 
 

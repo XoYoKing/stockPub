@@ -9,6 +9,8 @@ var cluster = require('cluster');
 var email = require('./utility/emailTool');
 var stockRouter = require('./router/stockRouter.js');
 var userRouter = require('./router/userRouter.js');
+var imageRouter = require('./router/image.js');
+
 var config = require('./config');
 var port = config.stockServerInfo.port;
 var morgan = require('morgan');
@@ -63,6 +65,7 @@ global.app.use(function(req, res, next) {
 
 global.app.use('/stock', stockRouter);
 global.app.use('/user', userRouter);
+global.app.use('/image', imageRouter);
 
 global.app.listen(port); //设置监听http请求的端口号
 logger.info("stockServer started on port " + port);
