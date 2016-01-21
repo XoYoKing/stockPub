@@ -11,25 +11,19 @@
 #import "returnCode.h"
 #import <Masonry.h>
 #import <SDWebImage/UIImageView+WebCache.h>
-#import "FaceImageViewController.h"
-#import "Tools.h"
-#import "SettingCtrl.h"
 
 @implementation FaceCellViewTableViewCell
 {
     UIImageView* faceImageView;
     UILabel* userNameLabel;
     UILabel* userYieldLabel;
-    UserInfoModel* myInfo;
+    
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]){
         faceImageView = [[UIImageView alloc] init];
-        faceImageView.userInteractionEnabled = YES;
-        [faceImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(faceImageViewPress:)]];
-        
         userNameLabel = [[UILabel alloc] init];
         userYieldLabel = [[UILabel alloc] init];
         
@@ -44,12 +38,6 @@
     // Initialization code
 }
 
-- (void)faceImageViewPress:(id)sender
-{
-    NSLog(@"faceImageViewPress");
-    [[Tools curNavigator] presentViewController:[[FaceImageViewController alloc] init:myInfo] animated:YES completion:NULL];
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
@@ -60,7 +48,6 @@
 - (void)configureCell:(UserInfoModel*)userInfo
 {
     
-    myInfo = userInfo;
     if(userInfo.user_facethumbnail == nil){
         faceImageView.image = [UIImage imageNamed:@"man-noname.png"];
     }else{
@@ -68,7 +55,6 @@
     }
     faceImageView.layer.cornerRadius = faceImageView.frame.size.height/2;
     faceImageView.layer.masksToBounds = YES;
-    
     
     
     

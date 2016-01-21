@@ -113,11 +113,15 @@
             [mySettingData setObject:app.myInfo.user_password forKey:@"password"];
             [mySettingData synchronize];
             
-            
+            //本地库连接
+            NSLog(@"%@", app.myInfo.user_id);
+            app.locDatabase = [[LocDatabase alloc] init];
+            if(![app.locDatabase connectToDatabase:app.myInfo.user_id]){
+                alertMsg(@"本地数据库问题");
+                return;
+            }
             
             TabBarViewController* tabbarView = [[TabBarViewController alloc] init];
-            app.tabBarViewController = tabbarView;
-            
             [self presentViewController:tabbarView animated:YES completion:nil];
             
         }else if(code == LOGIN_FAIL){
