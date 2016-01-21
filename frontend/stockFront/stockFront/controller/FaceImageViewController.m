@@ -12,7 +12,7 @@
 #import "UserInfoModel.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "NetworkAPI.h"
-
+#import "ConfigAccess.h"
 #import "returnCode.h"
 @interface FaceImageViewController ()
 {
@@ -84,7 +84,10 @@
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         if(code == SUCCESS){
             
+            NSDictionary* data = [response objectForKey:@"data"];
+            NSString* fileName = [data objectForKey:@"fileName"];
             [self dismissViewControllerAnimated:YES completion:nil];
+            usrInfo.user_facethumbnail = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/image/?name=", fileName];
             
         }
         

@@ -267,6 +267,9 @@ router.post('/changeFace', function(req, res){
 					function(flag, result) {
 						if (flag) {
 							returnData.code = constant.returnCode.SUCCESS;
+							returnData.data = {
+								'fileName':fileName
+							};
 						} else {
 							log.error('insertUserImageInfo error ' +
 								result, log.getFileNameAndLineNum(__filename));
