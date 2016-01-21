@@ -282,6 +282,8 @@
     [mySettingData synchronize];
     
     TabBarViewController* tabbarView = [[TabBarViewController alloc] init];
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    app.tabBarViewController = tabbarView;
     [self presentViewController:tabbarView animated:YES completion:nil];
 }
 

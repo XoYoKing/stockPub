@@ -21,6 +21,7 @@
 
 @property UserInfoModel* myInfo;
 @property LocDatabase* locDatabase;
+@property UITabBarController* tabBarViewController;
 
 
 + (UserInfoModel*)getMyUserInfo;

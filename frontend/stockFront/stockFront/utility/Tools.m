@@ -9,6 +9,7 @@
 #import "Tools.h"
 #import <CocoaSecurity.h>
 #import <MBProgressHUD.h>
+#import "AppDelegate.h"
 
 @implementation Tools
 
@@ -36,6 +37,13 @@
     hud.detailsLabelText = msg;
     hud.removeFromSuperViewOnHide = YES;
     [hud hide:YES afterDelay:2];
+}
+
++ (UINavigationController*)curNavigator
+{
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    return (UINavigationController*)app.tabBarViewController.selectedViewController;
+    
 }
 
 + (void)AlertBigMsg:(NSString*)msg
