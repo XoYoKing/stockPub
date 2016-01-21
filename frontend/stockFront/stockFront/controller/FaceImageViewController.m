@@ -78,11 +78,11 @@
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 
-    [NetworkAPI callApiWithParamForImage:nil imageDatas:images childpath:@"/changeFace" successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParamForImage:nil imageDatas:images childpath:@"/user/changeFace" successed:^(NSDictionary *response) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         if(code == SUCCESS){
-            alertMsg(@"上传成功");
+            
         }
         
         if(code == ERROR){
@@ -90,10 +90,9 @@
         }
         
     } failed:^(NSError *error) {
+        alertMsg(@"网络失败");
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
-        
-        
+
     }];
     
 //    //update image

@@ -7,6 +7,7 @@ var routerFunc = require('../utility/routeFunc.js');
 var common = require('../utility/commonFunc.js');
 var apn = require('../utility/apnPush.js');
 var config = require('../config');
+var formidable = require('formidable');
 
 module.exports = router;
 
@@ -237,7 +238,7 @@ router.post('/checkNameExist', function(req, res) {
 //change face
 router.post('/changeFace', function(req, res){
 	log.debug('enter changeFace', log.getFileNameAndLineNum(__filename));
-	
+
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files) {
 		var returnData = {};
