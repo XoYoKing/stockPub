@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		7BA8CEA10F27AE30BD4E40CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4426FD11AA4B7261C55CA34E /* libPods.a */; };
 		B230C5C41C50BD1600D7D028 /* FaceImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B230C5C31C50BD1600D7D028 /* FaceImageViewController.m */; };
+
+		B230C5C11C50832F00D7D028 /* StockActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B230C5C01C50832F00D7D028 /* StockActionTableViewCell.m */; };
 		B2C943DE1C38C60A00D06B61 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C943DD1C38C60A00D06B61 /* main.m */; };
 		B2C943E11C38C60A00D06B61 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C943E01C38C60A00D06B61 /* AppDelegate.m */; };
 		B2C943E71C38C60A00D06B61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2C943E51C38C60A00D06B61 /* Main.storyboard */; };
@@ -73,8 +75,13 @@
 		30A7EB2A82030C6A51FE207F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4426FD11AA4B7261C55CA34E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		940EDF59D7445434D26F86C4 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		B230C5C21C50BD1600D7D028 /* FaceImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceImageViewController.h; sourceTree = "<group>"; };
 		B230C5C31C50BD1600D7D028 /* FaceImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceImageViewController.m; sourceTree = "<group>"; };
+=======
+		B230C5BF1C50832F00D7D028 /* StockActionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockActionTableViewCell.h; sourceTree = "<group>"; };
+		B230C5C01C50832F00D7D028 /* StockActionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockActionTableViewCell.m; sourceTree = "<group>"; };
+>>>>>>> dev
 		B2C943D91C38C60A00D06B61 /* stockFront.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stockFront.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2C943DD1C38C60A00D06B61 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B2C943DF1C38C60A00D06B61 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -300,6 +307,8 @@
 		B2C944141C3923F800D06B61 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				B230C5BF1C50832F00D7D028 /* StockActionTableViewCell.h */,
+				B230C5C01C50832F00D7D028 /* StockActionTableViewCell.m */,
 				B2C944821C48DCAD00D06B61 /* FaceCellViewTableViewCell.h */,
 				B2C944831C48DCAD00D06B61 /* FaceCellViewTableViewCell.m */,
 				B2C944231C3947A900D06B61 /* RegisterCellViewTableViewCell.h */,
@@ -546,6 +555,7 @@
 				B2C944781C462C3D00D06B61 /* LocDatabase.m in Sources */,
 				B230C5C41C50BD1600D7D028 /* FaceImageViewController.m in Sources */,
 				B2C944371C3A5F3400D06B61 /* Tools.m in Sources */,
+				B230C5C11C50832F00D7D028 /* StockActionTableViewCell.m in Sources */,
 				B2C944481C3B67E400D06B61 /* TabBarViewController.m in Sources */,
 				B2C944401C3AAAA000D06B61 /* RegisterPhoneNumViewController.m in Sources */,
 				B2C9447E1C47A07A00D06B61 /* LookStock.m in Sources */,
