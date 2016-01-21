@@ -15,5 +15,6 @@
 + (void)AlertMsg:(NSString*)msg;
 + (void)AlertBigMsg:(NSString*)msg;
 + (CGSize)getTextArrange:(NSString*)text maxRect:(CGSize)maxRect fontSize:(int)fontSize;
++ (UINavigationController*)curNavigator;
 
 @end
