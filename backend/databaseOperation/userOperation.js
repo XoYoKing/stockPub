@@ -18,6 +18,7 @@ exports.followUser = function(reqbody, callback){
 
 exports.updateUserFace = function(user_id, fileName, callback){
 	var sql = "update user_base_info set user_facethumbnail = ? where user_id = ?";
+	logger.debug(sql, logger.getFileNameAndLineNum(__filename));
 	conn.executeSql(sql, [user_id, fileName], callback);
 }
 

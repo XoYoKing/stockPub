@@ -84,15 +84,27 @@
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         if(code == SUCCESS){
             
+            [self dismissViewControllerAnimated:YES completion:nil];
+            
         }
         
         if(code == ERROR){
-            alertMsg(@"上传失败");
+            
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"上传失败";
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:2];
         }
         
     } failed:^(NSError *error) {
-        alertMsg(@"网络失败");
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"网络问题";
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:2];
 
     }];
     
