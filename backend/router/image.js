@@ -1,5 +1,5 @@
 var express = require('express');
-var log = global.log;
+var log = global.logger;
 var config = require('../config');
 var fs = require('fs');
 var router = express.Router();
