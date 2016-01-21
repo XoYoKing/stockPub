@@ -16,3 +16,9 @@ frontend/stockFront/stockFront.xcworkspace/xcuserdata/wangjam.xcuserdatad/UserIn
 *.xcuserstate
 
 *.xcbkptlist
+
+*.pbxproj
+
+*.xcscheme
+
+frontend/stockFront/Pods/Pods.xcodeproj/xcuserdata/wangjam.xcuserdatad/xcschemes/xcschememanagement.plist
