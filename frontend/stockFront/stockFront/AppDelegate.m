@@ -73,6 +73,12 @@
     return YES;
 }
 
++ (LocDatabase*)getLocDatabase
+{
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    return app.locDatabase;
+}
+
 + (UserInfoModel*)getMyUserInfo
 {
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];

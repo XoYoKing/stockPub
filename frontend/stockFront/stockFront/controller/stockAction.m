@@ -16,6 +16,7 @@
 #import "NetworkAPI.h"
 #import "returnCode.h"
 #import <YYModel.h>
+#import "StockActionTableViewCell.h"
 
 @implementation stockAction
 {
@@ -55,56 +56,15 @@
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* cellIdentifier = @"stockcell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell==nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         NSLog(@"new cell");
     }
     
     StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
+    [cell configureCell:stockInfo];
     
-    cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
-    cell.textLabel.text = stockInfo.stock_name;
-    
-    if([locDatabase isLookStock:stockInfo]){
-        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%@ %@",stockInfo.stock_code, @"看多"];
-    }else{
-        cell.detailTextLabel.text = stockInfo.stock_code;
-    }
-    cell.detailTextLabel.textColor = [UIColor grayColor];
-    
-    
-    UILabel* priceLabel = [[UILabel alloc] init];
-    priceLabel.font = [UIFont fontWithName:fontName size:middleFont];
-    
-    
-    
-    if (stockInfo.fluctuate>0) {
-        priceLabel.textColor = myred;
-        priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(+%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
-    }
-    
-    if(stockInfo.fluctuate<0){
-        priceLabel.textColor = mygreen;
-        priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
-    }
-    
-    if(stockInfo.fluctuate == 0){
-        priceLabel.textColor = [UIColor blackColor];
-        priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
-    }
-    
-    CGSize labelSize = [Tools getTextArrange:priceLabel.text maxRect:CGSizeMake(ScreenWidth, 8*minSpace) fontSize:middleFont];
-    
-    priceLabel.frame = CGRectMake(ScreenWidth - labelSize.width, 0, labelSize.width, labelSize.height);
-    
-    cell.accessoryView = priceLabel;
-    
-    
-    
-    
-    cell.detailTextLabel.font = [UIFont fontWithName:fontName size:minFont];
-    cell.backgroundColor = [UIColor whiteColor];
     return cell;
 
 }
@@ -345,7 +305,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 8*minSpace;
+    return [StockActionTableViewCell cellHeight];
 }
 
 
