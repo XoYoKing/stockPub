@@ -8,6 +8,7 @@ var common = require('../utility/commonFunc.js');
 var apn = require('../utility/apnPush.js');
 var config = require('../config');
 var formidable = require('formidable');
+var path = require('path');
 
 module.exports = router;
 
