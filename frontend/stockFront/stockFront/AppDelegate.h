@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "UserInfoModel.h"
+#import "LocDatabase.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -19,10 +20,13 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property UserInfoModel* myInfo;
+@property LocDatabase* locDatabase;
+
 
 + (UserInfoModel*)getMyUserInfo;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
++ (LocDatabase*) getLocDatabase;
 
 
 @end
