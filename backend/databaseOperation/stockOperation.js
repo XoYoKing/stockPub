@@ -37,6 +37,11 @@ exports.getFollowLookInfo = function(reqbody, callback){
 
 }
 
+exports.getLookInfoByUser = function(reqbody, callback){
+    var sql = 'select a.*, b.* from stock_look_info a, stock_base_info b ' +
+    ' where a.user_id = ? and a.look_status = 1 and a.stock_code = b.stock_code';
+    conn.executeSql(sql, [reqbody.user_id], callback);
+}
 
 exports.updateLookYield = function(stock_code, price, callback){
     var sql = 'update stock_look_info set stock_yield = look_direct*100*(? - look_stock_price)/look_stock_price where stock_code = ?';

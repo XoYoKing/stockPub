@@ -98,12 +98,27 @@ router.post('/addlook', function(req, res){
 			}
 		}else{
 			logger.error(result, logger.getFileNameAndLineNum(__filename));
-			returnData.code.constant.returnCode.ERROR;
+			returnData.code = constant.returnCode.ERROR;
 			res.send(returnData);
 		}
 	});
 });
 
+
+//获取特定人的当前看多和部分历史看多
+router.post('/getLookInfoByUser', function(req, res){
+	var returnData = {};
+	stockOperation.getLookInfoByUser(req.body, function(flag, result){
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			returnData.data = result;
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
 
 //获取关注的人的看多信息
 router.post('/getFollowLookInfo', function(req, res){
