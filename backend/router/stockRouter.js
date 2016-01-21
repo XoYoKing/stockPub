@@ -108,7 +108,7 @@ router.post('/addlook', function(req, res){
 //获取特定人的当前看多和部分历史看多
 router.post('/getLookInfoByUser', function(req, res){
 	var returnData = {};
-	stockOperation.getLookInfoByUser(req.body, function(flag, result){
+	stockOperation.getLookInfoByUser(req.body.user_id, function(flag, result){
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
 			returnData.data = result;
