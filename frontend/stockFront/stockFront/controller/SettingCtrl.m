@@ -13,6 +13,8 @@
 #import "macro.h"
 #import "returnCode.h"
 #import "FaceCellViewTableViewCell.h"
+#import "NetworkAPI.h"
+#import "AppDelegate.h"
 
 @implementation SettingCtrl
 {
@@ -54,11 +56,41 @@
     self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
     
     
+    stockLookList = [[NSMutableArray alloc] init];
+    
+    [self pullDownAction];
+    
 }
 
 - (void)pullDownAction
 {
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[myInfo.user_id]
+                             forKeys:@[@"user_id"]];
     
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getLookInfoByUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+
+    }];
 }
 
 - (void)searchAction:(id)sender

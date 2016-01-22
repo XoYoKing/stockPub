@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "StockInfoModel.h"
 
 @interface StockLookInfoModel : NSObject
+
+@property StockInfoModel* stockInfo;
+
 
 @end
