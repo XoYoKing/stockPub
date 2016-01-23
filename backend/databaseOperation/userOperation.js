@@ -124,7 +124,7 @@ exports.register = function(userInfo, callback) {
 	conn.executeSql(sql, [userInfo.user_id, userInfo.user_phone, userInfo.user_name, userInfo.user_password], callback);
 };
 
-exports.getLookStockCountByUser(user_id, callback){
+exports.getLookStockCountByUser = function(user_id, callback){
 	var sql = 'select count(*) as stock_look_count from stock_look_info where user_id = ? ' +
 	' and look_status = 1';
 	conn.executeSql(sql, [user_id], callback);
