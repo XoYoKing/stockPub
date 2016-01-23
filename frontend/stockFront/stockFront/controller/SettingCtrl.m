@@ -15,6 +15,7 @@
 #import "FaceCellViewTableViewCell.h"
 #import "NetworkAPI.h"
 #import "AppDelegate.h"
+#import <YYModel.h>
 
 @implementation SettingCtrl
 {
@@ -74,7 +75,15 @@
         
         if(code == SUCCESS){
             
+            [stockLookList removeAllObjects];
             
+            NSArray* stockLookInfoArray = (NSArray*)[response objectForKey:@"data"];
+            if(stockLookInfoArray!=nil){
+                for (NSDictionary* element in stockLookInfoArray) {
+                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
+                    [stockLookList addObject:temp];
+                }
+            }
             
         }else{
             alertMsg(@"未知错误");

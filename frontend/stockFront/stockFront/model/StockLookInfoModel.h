@@ -11,7 +11,12 @@
 
 @interface StockLookInfoModel : NSObject
 
-@property StockInfoModel* stockInfo;
-
+@property NSString* stock_code;
+@property NSString* stock_name;
+@property CGFloat look_stock_price;
+@property NSInteger look_timestamp;
+@property CGFloat stock_yield;
+@property NSInteger look_status;
+@property NSInteger look_finish_timestamp;
 
 @end
