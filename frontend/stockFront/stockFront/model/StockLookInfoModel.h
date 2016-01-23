@@ -18,5 +18,7 @@
 @property CGFloat stock_yield;
 @property NSInteger look_status;
 @property NSInteger look_finish_timestamp;
+@property CGFloat look_cur_price;
+@property NSInteger look_update_timestamp;
 
 @end

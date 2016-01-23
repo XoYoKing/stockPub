@@ -16,6 +16,8 @@
 #import "NetworkAPI.h"
 #import "AppDelegate.h"
 #import <YYModel.h>
+#import <Masonry.h>
+#import "StockLookTableViewCell.h"
 
 @implementation SettingCtrl
 {
@@ -27,7 +29,7 @@
 
 - (id)init:(UserInfoModel*)userInfo
 {
-    if(self = [super initWithStyle:UITableViewStyleGrouped]){
+    if(self = [super initWithStyle:UITableViewStylePlain]){
         myInfo = userInfo;
     }
     return self;
@@ -61,6 +63,80 @@
     
     [self pullDownAction];
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(section == 2){
+        return 6*minSpace;
+    }else{
+        return 0;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if(section == 2){
+        return [self getStockSectionView];
+    }else{
+        return NULL;
+    }
+}
+
+- (UIView*)getStockSectionView
+{
+    //当前看多
+    UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+    sectionView.backgroundColor = [UIColor whiteColor];
+    
+    //股票名称
+    UILabel* stockNameLabel = [[UILabel alloc] init];
+    stockNameLabel.font = [UIFont fontWithName:fontName size:minFont];
+    stockNameLabel.textColor = [UIColor grayColor];
+    stockNameLabel.text = @"股票名称";
+    stockNameLabel.textAlignment = NSTextAlignmentCenter;
+    
+    //现价成本
+    UILabel* priceLabel = [[UILabel alloc] init];
+    priceLabel.font = [UIFont fontWithName:fontName size:minFont];
+    priceLabel.textColor = [UIColor grayColor];
+    priceLabel.text = @"现价/成本";
+    priceLabel.textAlignment = NSTextAlignmentCenter;
+
+    
+    //浮动盈亏
+    UILabel* yieldLabel = [[UILabel alloc] init];
+    yieldLabel.font = [UIFont fontWithName:fontName size:minFont];
+    yieldLabel.textColor = [UIColor grayColor];
+    yieldLabel.text = @"浮动盈亏";
+    yieldLabel.textAlignment = NSTextAlignmentCenter;
+
+    
+    [sectionView addSubview:stockNameLabel];
+    [sectionView addSubview:priceLabel];
+    [sectionView addSubview:yieldLabel];
+    
+    
+    [stockNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sectionView.mas_left);
+        make.centerY.mas_equalTo(sectionView.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+    }];
+    
+    [priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(stockNameLabel.mas_right);
+        make.centerY.mas_equalTo(sectionView.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+    }];
+    
+    [yieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(priceLabel.mas_right);
+        make.centerY.mas_equalTo(sectionView.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+    }];
+    
+    return sectionView;
+
 }
 
 - (void)pullDownAction
@@ -157,19 +233,23 @@
     }
     
     if(indexPath.section == 2){
+        
+        //当前看多股票收益
         static NSString* cellIdentifier = @"stockLook";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        StockLookTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell==nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            cell = [[StockLookTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
             NSLog(@"new cell");
         }
+        [cell configureCell:[stockLookList objectAtIndex:indexPath.row]];
         cell.backgroundColor = [UIColor whiteColor];
-        cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
         return cell;
     }
     
     
     if(indexPath.section == 3){
+        
+        //历史记录
         static NSString* cellIdentifier = @"hisStockLook";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell==nil) {
@@ -180,6 +260,7 @@
         cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
         return cell;
     }
+    
     return nil;
 }
 
