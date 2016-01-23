@@ -123,3 +123,15 @@ exports.register = function(userInfo, callback) {
 	" values (?,?,?,?) ";
 	conn.executeSql(sql, [userInfo.user_id, userInfo.user_phone, userInfo.user_name, userInfo.user_password], callback);
 };
+
+
+exports.updateAllUserTotalYield = function(callback){
+	var sql = 'UPDATE `user_base_info` a SET a.`user_look_yield` = ' +
+	' (SELECT SUM(b.stock_yield) FROM `stock_look_info` b WHERE b.`user_id` = a.`user_id`)';
+	conn.executeSql(sql, [], callback);
+};
+
+exports.getAllUser = function(callback){
+	var sql = 'select *from user_base_info';
+	conn.executeSql(sql, [], callback);
+};
