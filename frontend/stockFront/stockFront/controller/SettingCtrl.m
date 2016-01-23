@@ -141,6 +141,8 @@
 
 - (void)pullDownAction
 {
+    
+    //获取当前看多股票详情
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[myInfo.user_id]
                              forKeys:@[@"user_id"]];
@@ -176,6 +178,10 @@
         [self.tableView reloadData];
 
     }];
+    
+    //获取用户基本信息
+    
+    
 }
 
 - (void)searchAction:(id)sender
