@@ -51,7 +51,7 @@ router.post('/dellook', function(req, res){
 
 
 //看多股票
-router.post('/addlook', function(req, res){
+router.post('/addlook', function(req, res, next){
 	//检查是否已看多
 	var returnData = {};
 	userOperation.isLook(req.body.user_id, req.body.stock_code, function(flag, result){
