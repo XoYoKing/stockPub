@@ -55,7 +55,7 @@ router.post('/addlook', function(req, res){
 	var returnData = {};
 	userOperation.getLookStockCountByUser(req.body.user_id, function(flag, result){
 		if(flag){
-			if(result.stock_look_count>=5){
+			if(result.length>=1&&result[0].stock_look_count>=5){
 				//当前看多股票不能多于5支
 				logger.info(req.body.user_id+ ' 当前看多股票不能多于5支', logger.getFileNameAndLineNum(__filename));
 				returnData.code = constant.returnCode.LOOK_STOCK_COUNT_OVER;
