@@ -18,12 +18,14 @@
 #import <YYModel.h>
 #import <Masonry.h>
 #import "StockLookTableViewCell.h"
+#import "LocDatabase.h"
 
 @implementation SettingCtrl
 {
     NSMutableArray* stockLookList;
     NSMutableArray* hisStockLookList;
     UserInfoModel* myInfo;
+    LocDatabase* locDatabase;
 }
 
 
@@ -60,6 +62,8 @@
     
     
     stockLookList = [[NSMutableArray alloc] init];
+    
+    locDatabase = [AppDelegate getLocDatabase];
     
     [self pullDownAction];
     
@@ -160,6 +164,9 @@
                 for (NSDictionary* element in stockLookInfoArray) {
                     StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
                     [stockLookList addObject:temp];
+                    StockInfoModel* stockInfoModel = [[StockInfoModel alloc] init];
+                    stockInfoModel.stock_code = temp.stock_code;
+                    [locDatabase addLookStock:stockInfoModel];
                 }
             }
             

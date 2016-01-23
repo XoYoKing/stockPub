@@ -14,11 +14,6 @@ exports.addlookStock = function(reqbody, callback){
 };
 
 exports.dellookStock = function(reqbody, callback){
-
-    var sql = 'update user_base_info set user_look_yield = user_look_yield+(select stock_yield from stock_look_info where user_id = ? and stock_code = ?)';
-    conn.executeSql(sql, [reqbody.user_id, reqbody.stock_code], null);
-
-
     var look_finish_timestamp = Date.now();
 
     sql = 'update stock_look_info set look_finish_timestamp = ?, look_finish_time = NOW(), look_status = 2  ' +
