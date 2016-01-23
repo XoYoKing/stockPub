@@ -52,6 +52,25 @@ router.post('/dellook', function(req, res){
 
 //看多股票
 router.post('/addlook', function(req, res){
+	//检查是否已看多
+	var returnData = {};
+	userOperation.isLook(req.body.user_id, req.body.stock_code, function(flag, result){
+		if(flag){
+			if(result.length>0){
+				logger.info(req.body.user_id + 'already look ' + req.body.stock_code, logger.getFileNameAndLineNum(__filename));
+				returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
+				res.send(returnData);
+			}else{
+				next();
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+			res.send(returnData);
+		}
+	});
+});
+router.post('/addlook', function(req, res){
 	var returnData = {};
 	userOperation.getLookStockCountByUser(req.body.user_id, function(flag, result){
 		if(flag){

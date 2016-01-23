@@ -136,6 +136,11 @@ exports.updateAllUserTotalYield = function(callback){
 	conn.executeSql(sql, [], callback);
 };
 
+exports.isLook = function(user_id, stock_code, callback){
+	var sql = 'select * from stock_look_info where user_id = ? and stock_code = ? and look_status = 1';
+	conn.executeSql(sql, [user_id, stock_code], callback);
+}
+
 exports.getAllUser = function(callback){
 	var sql = 'select *from user_base_info';
 	conn.executeSql(sql, [], callback);
