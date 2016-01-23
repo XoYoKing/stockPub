@@ -53,47 +53,61 @@ router.post('/dellook', function(req, res){
 //看多股票
 router.post('/addlook', function(req, res){
 	var returnData = {};
-
-	common.getStockInfoFromAPI(req.body.stock_code, function(flag, htmlData){
+	userOperation.getLookStockCountByUser(req.body.user_id, function(flag, result){
 		if(flag){
-			var stockInfoArr = common.analyzeMessage(htmlData);
-			if(stockInfoArr == false||stockInfoArr.length == 0){
-				returnData.code = constant.returnCode.STOCK_NOT_EXIST;
+			if(result.stock_look_count>=5){
+				//当前看多股票不能多于5支
+				logger.info(req.body.user_id+ ' 当前看多股票不能多于5支', logger.getFileNameAndLineNum(__filename));
+				returnData.code = constant.returnCode.LOOK_STOCK_COUNT_OVER;
 				res.send(returnData);
 			}else{
-				req.body.look_stock_price = stockInfoArr[0].price;
-				logger.debug(JSON.stringify(req.body), logger.getFileNameAndLineNum(__filename));
-
-				stockOperation.addlookStock(req.body, function(flag, result){
+				common.getStockInfoFromAPI(req.body.stock_code, function(flag, htmlData){
 					if(flag){
-						returnData.code = constant.returnCode.SUCCESS;
-
-						//推送到关注者
-						userOperation.getfollowUserAll(req.body, function(flag, result){
-							if(flag){
-								result.forEach(function(element){
-									var msg = '';
-									if(req.body.look_direct == 1){
-										msg = req.body.user_name+"看多"+req.body.stock_name+"("+
-										req.body.stock_code+")";
-									}
-									apn.pushMsg(element.user_id, msg);
-								});
-
-							}else{
-								logger.error(result, logger.getFileNameAndLineNum(__filename));
-							}
-						});
-
-					}else{
-						if(result.code == 'ER_DUP_ENTRY'){
-							returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
+						var stockInfoArr = common.analyzeMessage(htmlData);
+						if(stockInfoArr == false||stockInfoArr.length == 0){
+							returnData.code = constant.returnCode.STOCK_NOT_EXIST;
+							res.send(returnData);
 						}else{
-							returnData.code = constant.returnCode.ERROR;
-							logger.error(result, logger.getFileNameAndLineNum(__filename));
+							req.body.look_stock_price = stockInfoArr[0].price;
+							logger.debug(JSON.stringify(req.body), logger.getFileNameAndLineNum(__filename));
+
+							stockOperation.addlookStock(req.body, function(flag, result){
+								if(flag){
+									returnData.code = constant.returnCode.SUCCESS;
+
+									//推送到关注者
+									userOperation.getfollowUserAll(req.body, function(flag, result){
+										if(flag){
+											result.forEach(function(element){
+												var msg = '';
+												if(req.body.look_direct == 1){
+													msg = req.body.user_name+"看多"+req.body.stock_name+"("+
+													req.body.stock_code+")";
+												}
+												apn.pushMsg(element.user_id, msg);
+											});
+
+										}else{
+											logger.error(result, logger.getFileNameAndLineNum(__filename));
+										}
+									});
+
+								}else{
+									if(result.code == 'ER_DUP_ENTRY'){
+										returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
+									}else{
+										returnData.code = constant.returnCode.ERROR;
+										logger.error(result, logger.getFileNameAndLineNum(__filename));
+									}
+								}
+								res.send(returnData);
+							});
 						}
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						returnData.code = constant.returnCode.ERROR;
+						res.send(returnData);
 					}
-					res.send(returnData);
 				});
 			}
 		}else{
