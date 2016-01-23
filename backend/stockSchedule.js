@@ -6,7 +6,7 @@ global.logger = log; // 设置全局
 var schedule = require("node-schedule");
 var crawl = require('./stockCrawl.js');
 var email = require('./utility/emailTool');
-var caculate = require('../utility/caculate');
+var caculate = require('./utility/caculate');
 
 log.info("run schedule", log.getFileNameAndLineNum(__filename));
 
