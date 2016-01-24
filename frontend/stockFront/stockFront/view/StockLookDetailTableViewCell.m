@@ -11,6 +11,7 @@
 #import <Masonry.h>
 #import "ConfigAccess.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "Tools.h"
 
 @implementation StockLookDetailTableViewCell
 {
@@ -96,6 +97,43 @@
         userTotalYield.textColor = mygreen;
     }
     
+    
+    lookTimeLabel.font = [UIFont fontWithName:fontName size:minFont];
+    lookTimeLabel.text = [Tools showTime:stockLookInfoModel.look_timestamp/1000];
+    
+    stockNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
+    stockNameLabel.text = [[NSString alloc] initWithFormat:@"%@ %@(%@)", @"股票", stockLookInfoModel.stock_name, stockLookInfoModel.stock_code];
+    
+    
+    priceLabel.font = stockNameLabel.font;
+    priceLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf/%.2lf", @"现价/成本", stockLookInfoModel.look_cur_price, stockLookInfoModel.look_stock_price];
+    
+    
+    yieldLabel.font = stockNameLabel.font;
+    if(stockLookInfoModel.stock_yield>0){
+        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ +%.2lf", @"浮动盈亏", stockLookInfoModel.stock_yield];
+        yieldLabel.textColor = myred;
+    }else if(stockLookInfoModel.stock_yield == 0){
+        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf", @"浮动盈亏", stockLookInfoModel.stock_yield];
+        yieldLabel.textColor = [UIColor grayColor];
+    }else{
+        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf", @"浮动盈亏", stockLookInfoModel.stock_yield];
+        yieldLabel.textColor = mygreen;
+    }
+    
+    
+    lookStatusLabel.font = [UIFont fontWithName:fontName size:minFont];
+    if(stockLookInfoModel.look_status == 1){
+        //有效
+        lookStatusLabel.textColor = myred;
+        lookStatusLabel.text = @"持续看多";
+    }
+    if(stockLookInfoModel.look_status == 2){
+        //无效
+        lookStatusLabel.textColor = [UIColor grayColor];
+        lookStatusLabel.text = @"已取消看多";
+    }
+    
 }
 
 - (void)layoutSubviews
@@ -111,23 +149,55 @@
     faceImageView.layer.masksToBounds = YES;
     
     [userNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(faceImageView.mas_right).offset(2*minSpace);
+        make.left.mas_equalTo(faceImageView.mas_right).offset(minSpace);
         make.top.mas_equalTo(faceImageView.mas_top);
         make.size.mas_equalTo(CGSizeMake(180, 3*minSpace));
     }];
     
     [userTotalYield mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(faceImageView.mas_right).offset(2*minSpace);
+        make.left.mas_equalTo(faceImageView.mas_right).offset(minSpace);
         make.top.mas_equalTo(userNameLabel.mas_bottom);
         make.size.mas_equalTo(CGSizeMake(180, 3*minSpace));
     }];
     
     
+    [lookTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.mas_right).offset(-minSpace);
+        make.top.mas_equalTo(faceImageView.mas_top);
+        make.size.mas_equalTo(CGSizeMake(10*minSpace, 3*minSpace));
+    }];
+    
+    
+    [stockNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(faceImageView.mas_left);
+        make.top.mas_equalTo(faceImageView.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
+    }];
+    
+    
+    [priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(faceImageView.mas_left);
+        make.top.mas_equalTo(stockNameLabel.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
+    }];
+    
+    
+    [yieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(faceImageView.mas_left);
+        make.top.mas_equalTo(priceLabel.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
+    }];
+    
+    [lookStatusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(yieldLabel.mas_left);
+        make.top.mas_equalTo(yieldLabel.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
+    }];
 }
 
 + (CGFloat)cellHeight
 {
-    return 15*minSpace;
+    return 30*minSpace;
 }
 
 @end

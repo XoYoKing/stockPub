@@ -38,6 +38,37 @@
     return scaledImage;
 }
 
+
++ (NSString*)showTime:(long)timeStamp
+{
+    long nowTimeStamp = [[NSDate date] timeIntervalSince1970];
+    int intervals = abs((int)timeStamp - (int)nowTimeStamp);
+    int mins;
+    int hours;
+    int days;
+    NSString* showTimeStr;
+    
+    if (intervals<3600) {
+        mins = intervals/60;
+        showTimeStr = [[NSString alloc] initWithFormat:@"%d分钟前", mins];
+    }
+    else if (intervals<3600*24) {
+        hours = intervals/3600;
+        showTimeStr = [[NSString alloc] initWithFormat:@"%d小时前", hours];
+    }
+    else{
+        days = intervals/(3600*24);
+        if (days>7) {
+            showTimeStr = [[NSString alloc] initWithFormat:@"%d周前", days/7];
+        }else{
+            showTimeStr = [[NSString alloc] initWithFormat:@"%d天前", days];
+        }
+    }
+    return showTimeStr;
+}
+
+
+
 + (NSString*)encodePassword:(NSString*)password
 {
     CocoaSecurityResult* encodePassword = [CocoaSecurity md5:password];
