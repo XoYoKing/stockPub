@@ -44,6 +44,17 @@ typedef enum {
     return self;
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+    if ([self isViewLoaded] && [self.view window] == nil) {
+        NSLog(@"com table view delloc");
+        
+        self.view = nil;
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     //[self.tableView reloadData];
@@ -402,7 +413,7 @@ typedef enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 5;
 }
 
 
