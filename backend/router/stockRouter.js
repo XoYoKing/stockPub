@@ -156,7 +156,23 @@ router.post('/getLookInfoByUser', function(req, res){
 });
 
 //获取特定人的历史看多
-
+router.post('/getHisLookInfoByUser', function(req, res){
+	var returnData = {};
+	stockOperation.getLookInfoByUser(req.body.user_id, 2, function(flag, result){
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			if(req.body.limit != null){
+				returnData.data = result.slice(0, req.body.limit);
+			}else{
+				returnData.data = result;
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
 
 //获取关注的人的看多信息
 router.post('/getFollowLookInfo', function(req, res){

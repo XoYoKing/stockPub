@@ -69,7 +69,7 @@ typedef enum {
     
     
     stockLookList = [[NSMutableArray alloc] init];
-    
+    hisStockLookList = [[NSMutableArray alloc] init];
     locDatabase = [AppDelegate getLocDatabase];
     
     [self pullDownAction];
@@ -215,8 +215,42 @@ typedef enum {
 
     }];
     
-    //获取用户基本信息
+    //获取历史
+    message = [[NSDictionary alloc]
+                             initWithObjects:@[myInfo.user_id,[[NSNumber alloc] initWithInteger:5]]
+                             forKeys:@[@"user_id", @"limit"]];
     
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getHisLookInfoByUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [hisStockLookList removeAllObjects];
+            
+            NSArray* stockLookInfoArray = (NSArray*)[response objectForKey:@"data"];
+            if(stockLookInfoArray!=nil){
+                for (NSDictionary* element in stockLookInfoArray) {
+                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
+                    [hisStockLookList addObject:temp];
+                }
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    }];
     
 }
 
@@ -293,13 +327,14 @@ typedef enum {
         
         //历史记录
         static NSString* cellIdentifier = @"hisStockLook";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        StockLookTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell==nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            cell = [[StockLookTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
             NSLog(@"new cell");
         }
+        
+        [cell configureCell:[hisStockLookList objectAtIndex:indexPath.row]];
         cell.backgroundColor = [UIColor whiteColor];
-        cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
         return cell;
     }
     
