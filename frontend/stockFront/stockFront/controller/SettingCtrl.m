@@ -29,6 +29,13 @@
 }
 
 
+typedef enum {
+    faceSection,
+    followSection,
+    lookInfoSection,
+    hisLookInfoSection
+} section;
+
 - (id)init:(UserInfoModel*)userInfo
 {
     if(self = [super initWithStyle:UITableViewStylePlain]){
@@ -71,7 +78,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if(section == 2){
+    if(section == lookInfoSection||section == hisLookInfoSection){
         return 6*minSpace;
     }else{
         return 0;
@@ -80,11 +87,33 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if(section == 2){
+    if(section == lookInfoSection){
         return [self getStockSectionView];
-    }else{
-        return NULL;
     }
+
+    if(section == hisLookInfoSection){
+        //当前看多
+        UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+        sectionView.backgroundColor = [UIColor whiteColor];
+        
+        //股票名称
+        UILabel* label = [[UILabel alloc] init];
+        label.font = [UIFont fontWithName:fontName size:minFont];
+        label.textColor = [UIColor grayColor];
+        label.text = @"历史记录";
+        label.textAlignment = NSTextAlignmentCenter;
+        [sectionView addSubview:label];
+        
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(sectionView.mas_left);
+            make.centerY.mas_equalTo(sectionView.mas_centerY);
+            make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+        }];
+        
+        return sectionView;
+    }
+    
+    return nil;
 }
 
 - (UIView*)getStockSectionView
@@ -200,7 +229,7 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == faceSection) {
         
         static NSString* cellIdentifier = @"facecell";
         FaceCellViewTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -219,7 +248,7 @@
     }
     
     
-    if(indexPath.section == 1){
+    if(indexPath.section == followSection){
         static NSString* cellIdentifier = @"followcell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell==nil) {
@@ -245,7 +274,7 @@
         return cell;
     }
     
-    if(indexPath.section == 2){
+    if(indexPath.section == lookInfoSection){
         
         //当前看多股票收益
         static NSString* cellIdentifier = @"stockLook";
@@ -260,7 +289,7 @@
     }
     
     
-    if(indexPath.section == 3){
+    if(indexPath.section == hisLookInfoSection){
         
         //历史记录
         static NSString* cellIdentifier = @"hisStockLook";
@@ -281,11 +310,11 @@
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     
-    if (section == 2) {
+    if (section == lookInfoSection) {
         return @"当前看多";
     }
     
-    if (section == 3){
+    if (section == hisLookInfoSection){
         return @"历史记录";
     }
     
@@ -295,15 +324,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == 0){
+    if(indexPath.section == faceSection){
         return [FaceCellViewTableViewCell cellHeight];
     }
     
-    if(indexPath.section == 1){
+    if(indexPath.section == followSection){
         return 6*minSpace;
     }
     
-    if(indexPath.section == 2||indexPath.section == 3){
+    if(indexPath.section == lookInfoSection||indexPath.section == hisLookInfoSection){
         return 8*minSpace;
     }
     
@@ -314,19 +343,19 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
+    if (section == faceSection) {
         return 1;
     }
     
-    if (section == 1) {
+    if (section == followSection) {
         return 2;
     }
     
-    if(section == 2){
+    if(section == lookInfoSection){
         return [stockLookList count];
     }
     
-    if(section == 3){
+    if(section == hisLookInfoSection){
         return [hisStockLookList count];
     }
     

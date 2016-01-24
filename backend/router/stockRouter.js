@@ -140,10 +140,10 @@ router.post('/addlook', function(req, res){
 });
 
 
-//获取特定人的当前看多和部分历史看多
+//获取特定人的当前看多
 router.post('/getLookInfoByUser', function(req, res){
 	var returnData = {};
-	stockOperation.getLookInfoByUser(req.body.user_id, function(flag, result){
+	stockOperation.getLookInfoByUser(req.body.user_id, 1, function(flag, result){
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
 			returnData.data = result;
@@ -154,6 +154,9 @@ router.post('/getLookInfoByUser', function(req, res){
 		res.send(returnData);
 	});
 });
+
+//获取特定人的历史看多
+
 
 //获取关注的人的看多信息
 router.post('/getFollowLookInfo', function(req, res){

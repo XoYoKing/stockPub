@@ -32,10 +32,10 @@ exports.getFollowLookInfo = function(reqbody, callback){
 
 }
 
-exports.getLookInfoByUser = function(user_id, callback){
+exports.getLookInfoByUser = function(user_id, look_status, callback){
     var sql = 'select a.*, b.* from stock_look_info a, stock_base_info b ' +
-    ' where a.user_id = ? and a.look_status = 1 and a.stock_code = b.stock_code';
-    conn.executeSql(sql, [user_id], callback);
+    ' where a.user_id = ? and a.look_status = ? and a.stock_code = b.stock_code order by look_timestamp desc';
+    conn.executeSql(sql, [user_id, look_status], callback);
 }
 
 exports.updateLookYield = function(stock_code, price, callback){

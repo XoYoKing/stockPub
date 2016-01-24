@@ -244,6 +244,7 @@
     }
     
     if([stockCodeArray count] == 0){
+        completed();
         return;
     }
     
