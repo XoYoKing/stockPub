@@ -11,6 +11,10 @@
 
 @interface StockLookInfoModel : NSObject
 
+@property NSString* user_id;
+@property NSString* user_facethumbnail;
+@property CGFloat user_look_yield;
+@property NSString* user_name;
 @property NSString* stock_code;
 @property NSString* stock_name;
 @property CGFloat look_stock_price;

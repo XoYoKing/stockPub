@@ -19,6 +19,7 @@
 #import <Masonry.h>
 #import "StockLookTableViewCell.h"
 #import "LocDatabase.h"
+#import "StockLookDetailTableViewController.h"
 
 @implementation SettingCtrl
 {
@@ -85,6 +86,25 @@ typedef enum {
     
     [self pullDownAction];
     
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == lookInfoSection){
+        StockLookInfoModel* model = [stockLookList objectAtIndex:indexPath.row];
+        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
+        tableviewCtrl.stockLookInfoModel = model;
+        tableviewCtrl.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:tableviewCtrl animated:YES];
+    }
+    
+    if (indexPath.section == hisLookInfoSection) {
+        StockLookInfoModel* model = [hisStockLookList objectAtIndex:indexPath.row];
+        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
+        tableviewCtrl.stockLookInfoModel = model;
+        tableviewCtrl.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:tableviewCtrl animated:YES];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

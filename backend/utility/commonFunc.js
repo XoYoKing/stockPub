@@ -90,6 +90,7 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
 }
 
 
+
 function getMarketDesc(stock_code) {
 	if (stock_code.indexOf("3") == 0 || stock_code.indexOf("0") == 0) {
 		return "sz";
