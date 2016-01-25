@@ -17,7 +17,7 @@ schedule.scheduleJob('*/20 * 9-11 * * 1-5', function(){
 });
 
 //实时行情-下午-每20秒
-schedule.scheduleJob('*/20 * 13-14 * * 1-5', function(){
+schedule.scheduleJob('*/20 * 13-18 * * 1-5', function(){
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
     crawl.startCrawlStockNow();
 });
