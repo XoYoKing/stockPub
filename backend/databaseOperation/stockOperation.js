@@ -42,8 +42,8 @@ exports.updateLookYield = function(stock_code, price, callback){
     var look_update_timestamp = Date.now();
     var sql = 'update stock_look_info ' +
     ' set stock_yield = look_direct*100*(? - look_stock_price)/look_stock_price, ' +
-    ' look_cur_price = ? ' +
-    ' look_cur_price_timestamp = ?'
+    ' look_cur_price = ?, ' +
+    ' look_cur_price_timestamp = ? '
     ' where stock_code = ? and look_status = 1';
     conn.executeSql(sql, [price, price, look_update_timestamp, stock_code], callback);
 }
