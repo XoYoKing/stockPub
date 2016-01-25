@@ -39,6 +39,18 @@
 }
 
 
++ (NSString*)showTimeFormat:(long)timeStamp
+{
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:MM:ss"];
+    
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeStamp];
+    
+    return [formatter stringFromDate:date];
+}
+
 + (NSString*)showTime:(long)timeStamp
 {
     long nowTimeStamp = [[NSDate date] timeIntervalSince1970];

@@ -13,7 +13,7 @@
 #import "Tools.h"
 
 
-#define fontName @"HelveticaNeue-Thin"
+#define fontName @"HelveticaNeue-Light"
 #define bigFont 32
 #define middleFont 24
 #define minMiddleFont 20

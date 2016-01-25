@@ -16,7 +16,7 @@
 @implementation StockLookDetailTableViewCell
 {
     UIImageView* faceImageView;
-    UILabel* lookTimeLabel;
+    UILabel* updateTimeLabel;
     UILabel* userNameLabel;
     UILabel* userTotalYield;
     UILabel* lookStatusLabel;
@@ -24,6 +24,9 @@
     UILabel* stockNameLabel;
     UILabel* yieldLabel;
     UILabel* priceLabel;
+    
+    UILabel* lookTimeDateLabel;
+    UILabel* finishTimeDateLabel;
     
     
 }
@@ -33,7 +36,7 @@
 {
     if(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]){
         faceImageView = [[UIImageView alloc] init];
-        lookTimeLabel = [[UILabel alloc] init];
+        updateTimeLabel = [[UILabel alloc] init];
         userNameLabel = [[UILabel alloc] init];
         lookStatusLabel = [[UILabel alloc] init];
         userTotalYield = [[UILabel alloc] init];
@@ -42,9 +45,11 @@
         yieldLabel = [[UILabel alloc] init];
         priceLabel = [[UILabel alloc] init];
         
+        lookTimeDateLabel = [[UILabel alloc] init];
+        finishTimeDateLabel = [[UILabel alloc] init];
         
         [self addSubview:faceImageView];
-        [self addSubview:lookTimeLabel];
+        [self addSubview:updateTimeLabel];
         [self addSubview:userNameLabel];
         [self addSubview:lookStatusLabel];
         [self addSubview:stockNameLabel];
@@ -52,6 +57,8 @@
         [self addSubview:priceLabel];
         [self addSubview:userTotalYield];
         
+        [self addSubview:lookTimeDateLabel];
+        [self addSubview:finishTimeDateLabel];
     }
     return self;
 }
@@ -98,15 +105,20 @@
     }
     
     
-    lookTimeLabel.font = [UIFont fontWithName:fontName size:minFont];
-    lookTimeLabel.text = [Tools showTime:stockLookInfoModel.look_timestamp/1000];
+    updateTimeLabel.font = [UIFont fontWithName:fontName size:minFont];
+    updateTimeLabel.text = [Tools showTime:stockLookInfoModel.look_update_timestamp/1000];
     
     stockNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     stockNameLabel.text = [[NSString alloc] initWithFormat:@"%@ %@(%@)", @"股票", stockLookInfoModel.stock_name, stockLookInfoModel.stock_code];
     
     
     priceLabel.font = stockNameLabel.font;
-    priceLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf/%.2lf", @"现价/成本", stockLookInfoModel.look_cur_price, stockLookInfoModel.look_stock_price];
+    
+    if(stockLookInfoModel.look_status == 1){
+        priceLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf/%.2lf", @"现价/成本", stockLookInfoModel.look_cur_price, stockLookInfoModel.look_stock_price];
+    }else{
+        priceLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf/%.2lf", @"卖价/成本", stockLookInfoModel.look_cur_price, stockLookInfoModel.look_stock_price];
+    }
     
     
     yieldLabel.font = stockNameLabel.font;
@@ -122,18 +134,22 @@
     }
     
     
-    lookStatusLabel.font = [UIFont fontWithName:fontName size:minFont];
-    if(stockLookInfoModel.look_status == 1){
-        //有效
-        lookStatusLabel.textColor = myred;
-        lookStatusLabel.text = @"持续看多";
-    }
-    if(stockLookInfoModel.look_status == 2){
-        //无效
-        lookStatusLabel.textColor = [UIColor grayColor];
-        lookStatusLabel.text = @"已取消看多";
-    }
     
+    lookTimeDateLabel.font = [UIFont fontWithName:fontName size:minFont];
+    lookTimeDateLabel.textColor = [UIColor grayColor];
+    lookTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@",[Tools showTimeFormat:stockLookInfoModel.look_timestamp/1000], @"看多"];
+    
+    
+    
+    finishTimeDateLabel.font = lookTimeDateLabel.font;
+    
+    if(stockLookInfoModel.look_status == 2){
+        finishTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", [Tools showTimeFormat:stockLookInfoModel.look_finish_timestamp/1000], @"取消看多"];
+        finishTimeDateLabel.textColor = [UIColor grayColor];
+    }else{
+        finishTimeDateLabel.text = @"持续看多";
+        finishTimeDateLabel.textColor = myred;
+    }
 }
 
 - (void)layoutSubviews
@@ -161,10 +177,10 @@
     }];
     
     
-    [lookTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.mas_right).offset(-minSpace);
+    [updateTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.mas_right);
         make.top.mas_equalTo(faceImageView.mas_top);
-        make.size.mas_equalTo(CGSizeMake(10*minSpace, 3*minSpace));
+        make.size.mas_equalTo(CGSizeMake(8*minSpace, 3*minSpace));
     }];
     
     
@@ -188,16 +204,30 @@
         make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
     }];
     
-    [lookStatusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [lookTimeDateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(yieldLabel.mas_left);
         make.top.mas_equalTo(yieldLabel.mas_bottom).offset(minSpace);
         make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
     }];
+    
+    [lookStatusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(updateTimeLabel.mas_left);
+        make.top.mas_equalTo(userTotalYield.mas_top);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
+    }];
+    
+    [finishTimeDateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(lookTimeDateLabel.mas_left);
+        make.top.mas_equalTo(lookTimeDateLabel.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
+    }];
+
+    
 }
 
 + (CGFloat)cellHeight
 {
-    return 30*minSpace;
+    return 34*minSpace;
 }
 
 @end
