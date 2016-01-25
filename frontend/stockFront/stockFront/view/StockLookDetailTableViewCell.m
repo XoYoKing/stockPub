@@ -123,13 +123,13 @@
     
     yieldLabel.font = stockNameLabel.font;
     if(stockLookInfoModel.stock_yield>0){
-        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ +%.2lf", @"浮动盈亏", stockLookInfoModel.stock_yield];
+        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ +%.2lf%%", @"浮动盈亏", stockLookInfoModel.stock_yield];
         yieldLabel.textColor = myred;
     }else if(stockLookInfoModel.stock_yield == 0){
-        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf", @"浮动盈亏", stockLookInfoModel.stock_yield];
+        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf%%", @"浮动盈亏", stockLookInfoModel.stock_yield];
         yieldLabel.textColor = [UIColor grayColor];
     }else{
-        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf", @"浮动盈亏", stockLookInfoModel.stock_yield];
+        yieldLabel.text = [[NSString alloc] initWithFormat:@"%@ %.2lf%%", @"浮动盈亏", stockLookInfoModel.stock_yield];
         yieldLabel.textColor = mygreen;
     }
     

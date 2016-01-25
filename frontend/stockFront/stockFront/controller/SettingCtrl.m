@@ -24,7 +24,7 @@
 @implementation SettingCtrl
 {
     NSMutableArray* stockLookList;
-    NSMutableArray* hisStockLookList;
+    //NSMutableArray* hisStockLookList;
     UserInfoModel* myInfo;
     LocDatabase* locDatabase;
 }
@@ -81,7 +81,7 @@ typedef enum {
     
     
     stockLookList = [[NSMutableArray alloc] init];
-    hisStockLookList = [[NSMutableArray alloc] init];
+    //hisStockLookList = [[NSMutableArray alloc] init];
     locDatabase = [AppDelegate getLocDatabase];
     
     [self pullDownAction];
@@ -99,11 +99,11 @@ typedef enum {
     }
     
     if (indexPath.section == hisLookInfoSection) {
-        StockLookInfoModel* model = [hisStockLookList objectAtIndex:indexPath.row];
-        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
-        tableviewCtrl.stockLookInfoModel = model;
-        tableviewCtrl.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:tableviewCtrl animated:YES];
+//        StockLookInfoModel* model = [hisStockLookList objectAtIndex:indexPath.row];
+//        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
+//        tableviewCtrl.stockLookInfoModel = model;
+//        tableviewCtrl.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:tableviewCtrl animated:YES];
     }
 }
 
@@ -246,42 +246,42 @@ typedef enum {
 
     }];
     
-    //获取历史
-    message = [[NSDictionary alloc]
-                             initWithObjects:@[myInfo.user_id,[[NSNumber alloc] initWithInteger:5]]
-                             forKeys:@[@"user_id", @"limit"]];
-    
-    [NetworkAPI callApiWithParam:message childpath:@"/stock/getHisLookInfoByUser" successed:^(NSDictionary *response) {
-        
-        NSInteger code = [[response objectForKey:@"code"] integerValue];
-        
-        if(code == SUCCESS){
-            
-            [hisStockLookList removeAllObjects];
-            
-            NSArray* stockLookInfoArray = (NSArray*)[response objectForKey:@"data"];
-            if(stockLookInfoArray!=nil){
-                for (NSDictionary* element in stockLookInfoArray) {
-                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
-                    [hisStockLookList addObject:temp];
-                }
-            }
-            
-        }else{
-            alertMsg(@"未知错误");
-        }
-        
-        [self.refreshControl endRefreshing];
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-        [self.tableView reloadData];
-        
-    } failed:^(NSError *error) {
-        alertMsg(@"网络问题");
-        [self.refreshControl endRefreshing];
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-        [self.tableView reloadData];
-        
-    }];
+//    //获取历史
+//    message = [[NSDictionary alloc]
+//                             initWithObjects:@[myInfo.user_id,[[NSNumber alloc] initWithInteger:5]]
+//                             forKeys:@[@"user_id", @"limit"]];
+//    
+//    [NetworkAPI callApiWithParam:message childpath:@"/stock/getHisLookInfoByUser" successed:^(NSDictionary *response) {
+//        
+//        NSInteger code = [[response objectForKey:@"code"] integerValue];
+//        
+//        if(code == SUCCESS){
+//            
+//            [hisStockLookList removeAllObjects];
+//            
+//            NSArray* stockLookInfoArray = (NSArray*)[response objectForKey:@"data"];
+//            if(stockLookInfoArray!=nil){
+//                for (NSDictionary* element in stockLookInfoArray) {
+//                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
+//                    [hisStockLookList addObject:temp];
+//                }
+//            }
+//            
+//        }else{
+//            alertMsg(@"未知错误");
+//        }
+//        
+//        [self.refreshControl endRefreshing];
+//        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+//        [self.tableView reloadData];
+//        
+//    } failed:^(NSError *error) {
+//        alertMsg(@"网络问题");
+//        [self.refreshControl endRefreshing];
+//        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+//        [self.tableView reloadData];
+//        
+//    }];
     
 }
 
@@ -358,13 +358,15 @@ typedef enum {
         
         //历史记录
         static NSString* cellIdentifier = @"hisStockLook";
-        StockLookTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell==nil) {
-            cell = [[StockLookTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
             NSLog(@"new cell");
         }
         
-        [cell configureCell:[hisStockLookList objectAtIndex:indexPath.row]];
+        cell.textLabel.text = @"更多历史记录";
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.backgroundColor = [UIColor whiteColor];
         return cell;
     }
@@ -422,7 +424,7 @@ typedef enum {
     }
     
     if(section == hisLookInfoSection){
-        return [hisStockLookList count];
+        return 1;
     }
     
     return 0;
