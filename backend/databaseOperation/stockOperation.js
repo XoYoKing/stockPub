@@ -7,24 +7,19 @@ exports.addlookStock = function(reqbody, callback){
 
     var look_timestamp = Date.now();
 
-    var sql = 'insert into stock_look_info(user_id, stock_code, look_direct, look_stock_price, look_time, look_timestamp) ' +
-    'values(?, ?, ?, ?, NOW(), ?)';
+    var sql = 'insert into stock_look_info(user_id, stock_code, look_direct, look_stock_price, look_time, look_timestamp, look_update_timestamp) ' +
+    'values(?, ?, ?, ?, NOW(), ?, ?)';
     conn.executeSql(sql, [reqbody.user_id, reqbody.stock_code,
-        reqbody.look_direct, reqbody.look_stock_price, look_timestamp], callback);
+        reqbody.look_direct, reqbody.look_stock_price, look_timestamp, look_timestamp], callback);
 };
 
 exports.dellookStock = function(reqbody, callback){
-
-    var sql = 'update user_base_info set user_look_yield = user_look_yield+(select stock_yield from stock_look_info where user_id = ? and stock_code = ?)';
-    conn.executeSql(sql, [reqbody.user_id, reqbody.stock_code], null);
-
-
     var look_finish_timestamp = Date.now();
 
-    sql = 'update stock_look_info set look_finish_timestamp = ?, look_finish_time = NOW(), look_status = 2  ' +
+    sql = 'update stock_look_info set look_finish_timestamp = ?, look_update_timestamp = ?,  look_finish_time = NOW(), look_status = 2  ' +
     ' where user_id = ? and stock_code = ? and look_status = 1';
 
-    conn.executeSql(sql, [look_finish_timestamp, reqbody.user_id, reqbody.stock_code], callback);
+    conn.executeSql(sql, [look_finish_timestamp, look_finish_timestamp, reqbody.user_id, reqbody.stock_code], callback);
 }
 
 exports.getFollowLookInfo = function(reqbody, callback){
@@ -32,20 +27,25 @@ exports.getFollowLookInfo = function(reqbody, callback){
     ' where a.user_id = ? and a.followed_user_id = b.user_id ' +
     ' and a.followed_user_id = c.user_id ' +
     ' and b.look_status = 1 ' +
-    ' and b.stock_code = d.stock_code and b.look_timestamp<? order by b.look_timestamp desc limit 10';
+    ' and b.stock_code = d.stock_code and b.look_update_timestamp<? order by b.look_update_timestamp desc limit 10';
     conn.executeSql(sql, [reqbody.user_id, reqbody.look_timestamp], callback);
 
 }
 
-exports.getLookInfoByUser = function(user_id, callback){
-    var sql = 'select a.*, b.* from stock_look_info a, stock_base_info b ' +
-    ' where a.user_id = ? and a.look_status = 1 and a.stock_code = b.stock_code';
-    conn.executeSql(sql, [user_id], callback);
+exports.getLookInfoByUser = function(user_id, look_status, callback){
+    var sql = 'select a.*, b.*, c.user_facethumbnail, c.user_look_yield, c.user_name from stock_look_info a, stock_base_info b, user_base_info c ' +
+    ' where a.user_id = ?  and c.user_id = a.user_id and a.look_status = ? and a.stock_code = b.stock_code order by look_update_timestamp desc';
+    conn.executeSql(sql, [user_id, look_status], callback);
 }
 
 exports.updateLookYield = function(stock_code, price, callback){
-    var sql = 'update stock_look_info set stock_yield = look_direct*100*(? - look_stock_price)/look_stock_price where stock_code = ?';
-    conn.executeSql(sql, [price, stock_code], callback);
+    var look_update_timestamp = Date.now();
+    var sql = 'update stock_look_info ' +
+    ' set stock_yield = look_direct*100*(? - look_stock_price)/look_stock_price, ' +
+    ' look_cur_price = ?, ' +
+    ' look_cur_price_timestamp = ? ' +
+    ' where stock_code = ? and look_status = 1';
+    conn.executeSql(sql, [price, price, look_update_timestamp, stock_code], callback);
 }
 
 exports.getStockInfo = function(reqbody, callback){

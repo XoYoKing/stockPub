@@ -123,3 +123,25 @@ exports.register = function(userInfo, callback) {
 	" values (?,?,?,?) ";
 	conn.executeSql(sql, [userInfo.user_id, userInfo.user_phone, userInfo.user_name, userInfo.user_password], callback);
 };
+
+exports.getLookStockCountByUser = function(user_id, callback){
+	var sql = 'select count(*) as stock_look_count from stock_look_info where user_id = ? ' +
+	' and look_status = 1';
+	conn.executeSql(sql, [user_id], callback);
+}
+
+exports.updateAllUserTotalYield = function(callback){
+	var sql = 'UPDATE `user_base_info` a SET a.`user_look_yield` = ' +
+	' (SELECT SUM(b.stock_yield) FROM `stock_look_info` b WHERE b.`user_id` = a.`user_id`)';
+	conn.executeSql(sql, [], callback);
+};
+
+exports.isLook = function(user_id, stock_code, callback){
+	var sql = 'select * from stock_look_info where user_id = ? and stock_code = ? and look_status = 1';
+	conn.executeSql(sql, [user_id, stock_code], callback);
+}
+
+exports.getAllUser = function(callback){
+	var sql = 'select *from user_base_info';
+	conn.executeSql(sql, [], callback);
+};

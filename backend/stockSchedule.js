@@ -6,7 +6,7 @@ global.logger = log; // 设置全局
 var schedule = require("node-schedule");
 var crawl = require('./stockCrawl.js');
 var email = require('./utility/emailTool');
-
+var caculate = require('./utility/caculate');
 
 log.info("run schedule", log.getFileNameAndLineNum(__filename));
 
@@ -32,6 +32,12 @@ schedule.scheduleJob('5 15 * * 1-5', function(){
 schedule.scheduleJob('29 9 * * 1-5', function(){
     log.info("delete stock now data", log.getFileNameAndLineNum(__filename));
     crawl.emptyStockNowInfo();
+});
+
+//日终计算用户总收益率
+schedule.scheduleJob('50 23 * * *', function(){
+    log.info('caculate yield for all user', log.getFileNameAndLineNum(__filename));
+    caculate.caculateAllUserYield();
 });
 
 process.on('uncaughtException', function(err) {

@@ -17,4 +17,9 @@
 + (CGSize)getTextArrange:(NSString*)text maxRect:(CGSize)maxRect fontSize:(int)fontSize;
 + (UINavigationController*)curNavigator;
 + (UIImage *)scaleToSize:(UIImage *)img size:(CGSize)newsize;
++ (NSString*)showTime:(long)timeStamp;
++ (NSString*)showTimeFormat:(long)timeStamp;
+
+
 @end
+

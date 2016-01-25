@@ -171,11 +171,11 @@
                     [tableView reloadData];
                 }else if(code == LOOK_STOCK_EXIST){
                     alertMsg(@"不能重复添加");
+                }else if(code == LOOK_STOCK_COUNT_OVER){
+                    alertMsg(@"当前看多股票不能超过5支");
                 }else{
                     alertMsg(@"未知错误");
                 }
-                
-                
             } failed:^(NSError *error) {
                 [MBProgressHUD hideHUDForView:comTable.view animated:YES];
                 alertMsg(@"网络问题");
@@ -244,6 +244,7 @@
     }
     
     if([stockCodeArray count] == 0){
+        completed();
         return;
     }
     

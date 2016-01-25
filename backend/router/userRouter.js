@@ -294,17 +294,7 @@ router.post('/login', function(req, res) {
 		if (flag) {
 			if (result.length) {
 				statusCode = constant.returnCode.LOGIN_SUCCESS;
-				var data = {
-					'user_phone': result[0].user_phone,
-					'user_id': result[0].user_id,
-					'user_password': result[0].user_password,
-					'user_name': result[0].user_name,
-					'user_facethumbnail': result[0].user_facethumbnail,
-					'user_face_image': result[0].user_face_image,
-					'fans_count': result[0].user_fans_count,
-					'user_follow_count': result[0].user_follow_count,
-				};
-
+				var data = result[0];
 				returnData.data = data;
 				returnData.code = statusCode;
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));

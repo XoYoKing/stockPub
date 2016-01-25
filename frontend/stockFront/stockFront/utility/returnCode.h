@@ -84,6 +84,6 @@
 
 #define STOCK_NOT_EXIST 1801
 #define LOOK_STOCK_EXIST 1901
-
+#define LOOK_STOCK_COUNT_OVER 1902
 
 #endif /* returnCode_h */
