@@ -53,3 +53,9 @@ exports.getStockInfo = function(reqbody, callback){
     " and a.stock_code = b.stock_code order by timestamp desc limit 1";
 	conn.executeSql(sql, [reqbody.stock_code], callback);
 }
+
+
+exports.getAllMarketIndexInfo = function(callback){
+    var sql = 'select *from market_index_base_info';
+    conn.executeSql(sql, [], callback);
+}

@@ -7,7 +7,7 @@ var redisClient = redis.createClient({auth_pass:'here_dev'});
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
-
+var config = require('./config');
 
 redisClient.on("error", function (err) {
 	logger.error(err, logger.getFileNameAndLineNum(__filename));
@@ -384,6 +384,10 @@ exports.emptyStockNowInfo = function(){
 };
 
 
+exports.emptyMarketIndexNowInfo = function(){
+
+}
+
 
 exports.startGetAllStockInfo = function(){
 
@@ -434,8 +438,46 @@ function formatDate(now){
 	return year+"-"+month+"-"+date;
 }
 
+function insertMarketIndexNowToDataBase(htmlData, market_code){
+	
+}
 
+function getMarketIndexFromAPI(urlChild, market_code, insertAction){
+	var stockAPI = config.stockDataInterface+urlChild;
+	http.get(stockAPI, function(res) {
+		if (res.statusCode == 200) {
+			var htmlData = "";
+			res.on('data', function(data) {
+				htmlData += data;
+			});
+			res.on('end', function() {
+				insertAction(htmlData, market_code);
+			});
+		}
+	}).on('error', function(e) {
+		logger.error("Got error: " + e.message);
+	});
+}
 
+exports.startCrawlMarket = function(){
+	logger.info('enter startCrawlMarket');
+	stockOperation.getAllMarketIndexInfo(function(flag, result){
+		if(flag){
+
+			for (var i = 0; i < result.length; ++i) {
+				var urlChild = "";
+				urlChild = urlChild + "," + result[i].market_code;
+				getMarketIndexFromAPI(urlChild, result[i].market_code, insertMarketIndexNowToDataBase);
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
+exports.startCrawlMarketDay = function(){
+
+}
 
 exports.startCrawlStockNow = function(){
 

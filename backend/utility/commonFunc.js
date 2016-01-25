@@ -4,6 +4,55 @@ var http = require('http');
 var gs = require('nodegrass');
 
 
+exports.analyzeMarketMessage = function(htmlData, market_code){
+
+    var beginIndex = htmlData.indexOf("\"");
+    var endIndex = htmlData.lastIndexOf("\"");
+    var element = {};
+
+    if (beginIndex!=-1&&endIndex!=-1) {
+        var data = htmlData.substr(beginIndex + 1, endIndex - beginIndex - 1);
+        if (data != null) {
+            var dataArr = data.split("~");
+            if(dataArr.length<48){
+                logger.warn('elementArr is empty');
+                return;
+            }
+
+            element.market_code = market_code;
+            element.amount = dataArr[6];
+            var date = dataArr[30];
+            element.date = date.substr(0, 4)+"-"+date.substr(4, 2)+"-"+date.substr(6, 2);
+
+            var time = dataArr[30];
+            element.time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
+            element.market_index_date = date+' '+time;
+            element.market_index_value_now   = dataArr[3];
+            element.market_index_fluctuate = dataArr[32];
+            element.market_index_trade_volume = dataArr[37];
+
+            element.openPrice = dataArr[5];
+            element.high_price = dataArr[33];
+            element.low_price = dataArr[34];
+            element.market = getMarketDesc(element.stock_code);
+
+            if (element.stock_code === undefined ||
+                element.amount === undefined ||
+                element.date === undefined ||
+                element.time === undefined ||
+                element.price === undefined ||
+                element.openPrice === undefined||
+                element.amount == 0||
+                element.price == 0) {
+                    //logger.warn('stockCode is undefined');
+                return null;
+            }
+        }
+    }
+
+    return element;
+}
+
 exports.analyzeMessage = function(htmlData){
 
     var elementArr = htmlData.split(";");
