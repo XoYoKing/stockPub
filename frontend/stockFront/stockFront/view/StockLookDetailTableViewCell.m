@@ -109,7 +109,7 @@
     updateTimeLabel.text = [Tools showTime:stockLookInfoModel.look_update_timestamp/1000];
     
     stockNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
-    stockNameLabel.text = [[NSString alloc] initWithFormat:@"%@ %@(%@)", @"股票", stockLookInfoModel.stock_name, stockLookInfoModel.stock_code];
+    stockNameLabel.text = [[NSString alloc] initWithFormat:@"%@(%@)", stockLookInfoModel.stock_name, stockLookInfoModel.stock_code];
     
     
     priceLabel.font = stockNameLabel.font;
