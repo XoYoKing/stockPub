@@ -8,7 +8,7 @@ var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
 var config = require('./config');
-
+var path = require('path');
 redisClient.on("error", function (err) {
 	logger.error(err, logger.getFileNameAndLineNum(__filename));
 });
@@ -457,7 +457,7 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 
 function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 	logger.debug('enter getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
-	var stockAPI = config.stockDataInterface+urlChild;
+	var stockAPI = path.join(config.stockDataInterface.url, urlChild);
 	logger.debug(stockAPI, logger.getFileNameAndLineNum(__filename));
 	http.get(stockAPI, function(res) {
 		if (res.statusCode == 200) {
