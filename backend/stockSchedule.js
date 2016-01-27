@@ -27,7 +27,7 @@ schedule.scheduleJob('*/20 * 13-14 * * 1-5', function(){
 });
 
 //日终行情
-schedule.scheduleJob('5 15 * * 1-5', function(){
+schedule.scheduleJob('5 16 * * 1-5', function(){
     log.info("stock crawl day start", log.getFileNameAndLineNum(__filename));
     crawl.startGetAllStockInfo();
     crawl.startCrawlMarketDay();
