@@ -480,6 +480,7 @@ exports.startCrawlMarket = function(){
 			for (var i = 0; i < result.length; ++i) {
 				var urlChild = "";
 				urlChild = urlChild + "," + result[i].market_code;
+				logger.debug(urlChild, logger.getFileNameAndLineNum(__filename));
 				getMarketIndexFromAPI(urlChild, result[i].market_code, insertMarketIndexNowToDataBase);
 			}
 		}else{
