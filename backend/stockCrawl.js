@@ -458,6 +458,7 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 	logger.debug('enter getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
 	var stockAPI = config.stockDataInterface+urlChild;
+	logger.debug(stockAPI, logger.getFileNameAndLineNum(__filename));
 	http.get(stockAPI, function(res) {
 		if (res.statusCode == 200) {
 			var htmlData = "";
@@ -469,7 +470,7 @@ function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 			});
 		}
 	}).on('error', function(e) {
-		logger.error("Got error: " + e.message);
+		logger.error("Got error: " + e.message, logger.getFileNameAndLineNum(__filename));
 	});
 }
 
