@@ -466,6 +466,7 @@ function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 				htmlData += data;
 			});
 			res.on('end', function() {
+				logger.debug('end getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
 				insertAction(htmlData, market_code);
 			});
 		}
