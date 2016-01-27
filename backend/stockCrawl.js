@@ -439,7 +439,19 @@ function formatDate(now){
 }
 
 function insertMarketIndexNowToDataBase(htmlData, market_code){
-	
+	var common = require('./utility/commonFunc');
+	var element = common.analyzeMarketMessage(htmlData, market_code);
+	if(element == null){
+		logger.info('insertMarketIndexNowToDataBase element is null');
+	}else{
+		stockOperation.insertMarketIndexNow(element, function(flag, result){
+			if(flag){
+
+			}else{
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+	}
 }
 
 function getMarketIndexFromAPI(urlChild, market_code, insertAction){

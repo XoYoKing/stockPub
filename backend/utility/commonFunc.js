@@ -18,36 +18,36 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
                 logger.warn('elementArr is empty');
                 return;
             }
-
-            element.market_code = market_code;
-            element.amount = dataArr[6];
             var date = dataArr[30];
-            element.date = date.substr(0, 4)+"-"+date.substr(4, 2)+"-"+date.substr(6, 2);
 
             var time = dataArr[30];
-            element.time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
+
+            element.market_code = market_code;
             element.market_index_date = date+' '+time;
             element.market_index_value_now   = dataArr[3];
             element.market_index_fluctuate = dataArr[32];
+            element.market_index_fluctuate_value = dataArr[31];
             element.market_index_trade_volume = dataArr[37];
+            element.market_index_trade_volume = element.market_index_trade_volume/10000; //单位亿
+            element.market_index_value_hight = dataArr[33];
+            element.market_index_value_low = dataArr[34];
+            element.market_index_value_open = dataArr[5];
+            element.market_index_value_yesterday_close = dataArr[4];
 
-            element.openPrice = dataArr[5];
-            element.high_price = dataArr[33];
-            element.low_price = dataArr[34];
-            element.market = getMarketDesc(element.stock_code);
 
-            if (element.stock_code === undefined ||
-                element.amount === undefined ||
-                element.date === undefined ||
-                element.time === undefined ||
-                element.price === undefined ||
-                element.openPrice === undefined||
-                element.amount == 0||
-                element.price == 0) {
+            if (element.market_code === undefined ||
+                element.market_index_trade_volume === undefined ||
+                element.market_index_date === undefined ||
+                element.market_index_value_now === undefined ||
+                element.market_index_value_open === undefined) {
                     //logger.warn('stockCode is undefined');
                 return null;
             }
+        }else{
+            return null
         }
+    }else{
+        return null;
     }
 
     return element;
