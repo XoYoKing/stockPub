@@ -17,12 +17,14 @@
 #import "returnCode.h"
 #import <YYModel.h>
 #import "StockActionTableViewCell.h"
+#import <Masonry.h>
 
 @implementation stockAction
 {
     ComTableViewCtrl* comTable;
     LocDatabase* locDatabase;
     NSMutableArray* stockList;
+    NSMutableArray* marketIndexList;
     pullCompleted completed;
 }
 
@@ -47,27 +49,37 @@
     }
     
     stockList = [locDatabase getStocklist];
+    marketIndexList = [[NSMutableArray alloc] init];
     
     [comTable.tableView setDelegate:self];
     [comTable.tableView setDataSource:self];
+    
     
 }
 
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* cellIdentifier = @"stockcell";
-    StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell==nil) {
-        cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        NSLog(@"new cell");
+    if(indexPath.section == 1){
+        static NSString* cellIdentifier = @"stockcell";
+        StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell==nil) {
+            cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
+        [cell configureCell:stockInfo];
+        
+        return cell;
     }
     
-    StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
-    [cell configureCell:stockInfo];
-    
-    return cell;
+    if(indexPath.section == 0){
+        //大盘指数
+        
+    }
 
+    return nil;
 }
 
 
@@ -305,6 +317,38 @@
 }
 
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+
+    UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+    sectionView.backgroundColor = [UIColor whiteColor];
+    
+    UILabel* label = [[UILabel alloc] init];
+    label.font = [UIFont fontWithName:fontName size:minFont];
+    label.textColor = [UIColor grayColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    [sectionView addSubview:label];
+    
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sectionView.mas_left);
+        make.centerY.mas_equalTo(sectionView.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+    }];
+    
+    if(section == 0){
+        label.text = @"大盘指数";
+    }
+    if(section == 1){
+        label.text = @"自选股票";
+    }
+    return sectionView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 6*minSpace;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return [StockActionTableViewCell cellHeight];
@@ -322,12 +366,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [stockList count];
+    if(section == 0){
+        return [marketIndexList count];
+    }
+    
+    if(section == 1){
+        return [stockList count];
+    }
+    return 0;
 }
 
 

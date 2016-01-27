@@ -130,3 +130,14 @@ exports.emptyMarketNowInfo = function(callback){
     var sql = 'delete from market_index_now_info';
     conn.executeSql(sql, [], callback);
 }
+
+exports.getAllMarketIndexNow = function(callback){
+    var sql = 'SELECT a.*, c.`market_name` FROM `market_index_now_info` a, ' +
+    ' (SELECT market_code, MAX(`timestamp`) as timestamp  FROM `market_index_now_info` GROUP BY `market_code`) b, ' +
+    ' `market_index_base_info` c' +
+    ' WHERE a.`market_code`  =  b.market_code' +
+    ' and a.`timestamp` = b.timestamp ' +
+    ' and a.`market_code`  = c.`market_code` ';
+
+    conn.executeSql(sql, [], callback);
+}
