@@ -457,7 +457,7 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 
 function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 	logger.debug('enter getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
-	var stockAPI = path.join(config.stockDataInterface.url, urlChild);
+	var stockAPI = config.stockDataInterface.url + urlChild;
 	logger.debug(stockAPI, logger.getFileNameAndLineNum(__filename));
 	http.get(stockAPI, function(res) {
 		if (res.statusCode == 200) {
