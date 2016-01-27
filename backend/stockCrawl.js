@@ -439,6 +439,7 @@ function formatDate(now){
 }
 
 function insertMarketIndexNowToDataBase(htmlData, market_code){
+	logger.debug('enter insertMarketIndexNowToDataBase', logger.getFileNameAndLineNum(__filename));
 	var common = require('./utility/commonFunc');
 	var element = common.analyzeMarketMessage(htmlData, market_code);
 	if(element == null){
