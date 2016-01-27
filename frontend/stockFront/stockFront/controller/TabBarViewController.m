@@ -122,6 +122,11 @@
     
     SettingCtrl* setting = [[SettingCtrl alloc] init:[AppDelegate getMyUserInfo]];
     
+    followContentTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
+    rankTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
+    stockTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
+    setting.edgesForExtendedLayout = UIRectEdgeNone;
+    
     [self initChildView:controllers viewController:followContentTableCtrl title:@"关注"];
     [self initChildView:controllers viewController:rankTableCtrl title:@"排行"];
     [self initChildView:controllers viewController:stockTableCtrl title:@"自选"];

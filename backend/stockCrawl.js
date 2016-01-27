@@ -455,6 +455,7 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 }
 
 function getMarketIndexFromAPI(urlChild, market_code, insertAction){
+	logger.debug('enter getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
 	var stockAPI = config.stockDataInterface+urlChild;
 	http.get(stockAPI, function(res) {
 		if (res.statusCode == 200) {
@@ -475,7 +476,6 @@ exports.startCrawlMarket = function(){
 	logger.info('enter startCrawlMarket');
 	stockOperation.getAllMarketIndexInfo(function(flag, result){
 		if(flag){
-
 			for (var i = 0; i < result.length; ++i) {
 				var urlChild = "";
 				urlChild = urlChild + "," + result[i].market_code;
