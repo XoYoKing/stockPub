@@ -19,17 +19,14 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
                 return;
             }
             var date = dataArr[30];
-
-            var time = dataArr[30];
-
             element.market_code = market_code;
-            element.market_index_date = date+' '+time;
+            element.market_index_date = date;
             element.market_index_value_now   = dataArr[3];
             element.market_index_fluctuate = dataArr[32];
             element.market_index_fluctuate_value = dataArr[31];
             element.market_index_trade_volume = dataArr[37];
             element.market_index_trade_volume = element.market_index_trade_volume/10000; //单位亿
-            element.market_index_value_hight = dataArr[33];
+            element.market_index_value_high = dataArr[33];
             element.market_index_value_low = dataArr[34];
             element.market_index_value_open = dataArr[5];
             element.market_index_value_yesterday_close = dataArr[4];
