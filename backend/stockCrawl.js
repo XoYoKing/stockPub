@@ -385,7 +385,11 @@ exports.emptyStockNowInfo = function(){
 
 
 exports.emptyMarketIndexNowInfo = function(){
-
+	stockOperation.emptyMarketNowInfo(function(flag, result){
+		if (!flag) {
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
 }
 
 
@@ -436,6 +440,23 @@ function formatDate(now){
 		date = "0"+date;
 	}
 	return year+"-"+month+"-"+date;
+}
+
+function insertMarketIndexDayToDataBase(htmlData, market_code){
+	logger.debug('enter insertMarketIndexDayToDataBase', logger.getFileNameAndLineNum(__filename));
+	var common = require('./utility/commonFunc');
+	var element = common.analyzeMarketMessage(htmlData, market_code);
+	if(element == null){
+		logger.info('insertMarketIndexDayToDataBase element is null');
+	}else{
+		stockOperation.insertMarketIndexDay(element, function(flag, result){
+			if(flag){
+
+			}else{
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+	}
 }
 
 function insertMarketIndexNowToDataBase(htmlData, market_code){
@@ -493,7 +514,19 @@ exports.startCrawlMarket = function(){
 }
 
 exports.startCrawlMarketDay = function(){
-
+	logger.info('enter startCrawlMarketDay');
+	stockOperation.getAllMarketIndexInfo(function(flag, result){
+		if(flag){
+			for (var i = 0; i < result.length; ++i) {
+				var urlChild = "";
+				urlChild = urlChild + "," + result[i].market_code;
+				logger.debug(urlChild, logger.getFileNameAndLineNum(__filename));
+				getMarketIndexFromAPI(urlChild, result[i].market_code, insertMarketIndexDayToDataBase);
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
 }
 
 exports.startCrawlStockNow = function(){

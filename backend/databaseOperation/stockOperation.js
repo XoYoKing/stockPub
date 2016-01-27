@@ -60,6 +60,38 @@ exports.getAllMarketIndexInfo = function(callback){
     conn.executeSql(sql, [], callback);
 }
 
+exports.insertMarketIndexDay = function(element, callback){
+    var timestamp = Date.now();
+    var sql = 'insert into `market_index_day_info` (' +
+            ' `market_code`, ' +
+            ' `market_index_value_now`,' +
+            ' `market_index_fluctuate`,' +
+            ' `market_index_fluctuate_value`,' +
+            ' `market_index_value_open`,' +
+            ' `market_index_value_yesterday_close`,' +
+            ' `market_index_trade_volume`,' +
+            ' `market_index_value_high`,' +
+            ' `market_index_value_low`,' +
+            ' `timestamp`, ' +
+            ' `market_index_date`)' +
+            ' values(?,?,?,?,?,?,?,?,?,?,?)';
+
+    var parm = [
+        element.market_code,
+        element.market_index_value_now,
+        element.market_index_fluctuate,
+        element.market_index_fluctuate_value,
+        element.market_index_value_open,
+        element.market_index_value_yesterday_close,
+        element.market_index_trade_volume,
+        element.market_index_value_high,
+        element.market_index_value_low,
+        timestamp,
+        element.market_index_date
+    ];
+    conn.executeSql(sql, parm, callback);
+}
+
 
 exports.insertMarketIndexNow = function(element, callback){
     var timestamp = Date.now();
@@ -91,4 +123,10 @@ exports.insertMarketIndexNow = function(element, callback){
         element.market_index_date
     ];
     conn.executeSql(sql, parm, callback);
+}
+
+
+exports.emptyMarketNowInfo = function(callback){
+    var sql = 'delete from market_index_now_info';
+    conn.executeSql(sql, [], callback);
 }

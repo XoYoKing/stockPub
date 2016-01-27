@@ -30,14 +30,14 @@ schedule.scheduleJob('*/20 * 13-14 * * 1-5', function(){
 schedule.scheduleJob('5 15 * * 1-5', function(){
     log.info("stock crawl day start", log.getFileNameAndLineNum(__filename));
     crawl.startGetAllStockInfo();
-    //crawl.startCrawlMarketDay();
+    crawl.startCrawlMarketDay();
 });
 
 //开市前删除now表中数据
 schedule.scheduleJob('29 9 * * 1-5', function(){
     log.info("delete stock now data", log.getFileNameAndLineNum(__filename));
     crawl.emptyStockNowInfo();
-    //crawl.emptyMarketIndexNowInfo();
+    crawl.emptyMarketIndexNowInfo();
 });
 
 //日终计算用户总收益率
