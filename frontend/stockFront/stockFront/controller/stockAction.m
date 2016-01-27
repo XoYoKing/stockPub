@@ -76,6 +76,17 @@
     
     if(indexPath.section == 0){
         //大盘指数
+        static NSString* marketCellIdentifier = @"marketCellIdentifier";
+        StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:marketCellIdentifier];
+        if (cell==nil) {
+            cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:marketCellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        StockInfoModel* stockInfo = [marketIndexList objectAtIndex:indexPath.row];
+        [cell configureCell:stockInfo];
+        
+        return cell;
         
     }
 
@@ -240,6 +251,50 @@
 }
 
 
+- (void)refreshMarketInfo
+{
+    
+    NSDictionary* msg = [[NSDictionary alloc] init];
+    [NetworkAPI callApiWithParam:msg childpath:@"/stock/getAllMarketIndexNow" successed:^(NSDictionary *response) {
+        
+        completed();
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [marketIndexList removeAllObjects];
+            
+            NSArray* marketData = (NSArray*)[response objectForKey:@"data"];
+            
+            
+            
+            if(marketData!=nil){
+                
+                for (NSDictionary* element in marketData) {
+                    StockInfoModel* marketInfoModel = [[StockInfoModel alloc] init];
+                    marketInfoModel.stock_code = [element objectForKey:@"market_code"];
+                    marketInfoModel.stock_name = [element objectForKey:@"market_name"];
+                    marketInfoModel.price = [[element objectForKey:@"market_index_value_now"] floatValue];
+                    marketInfoModel.fluctuate = [[element objectForKey:@"market_index_fluctuate"] floatValue];
+                    [marketIndexList addObject:marketInfoModel];
+                }
+                
+                [comTable.tableView reloadData];
+            }
+            
+        }else{
+            [Tools AlertBigMsg:@"未知错误"];
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+        completed();
+    }];
+
+}
+
 - (void)refreshStockInfo
 {
     stockList = [locDatabase getStocklist];
@@ -314,6 +369,7 @@
 {
     completed = completedBlock;
     [self refreshStockInfo];
+    [self refreshMarketInfo];
 }
 
 

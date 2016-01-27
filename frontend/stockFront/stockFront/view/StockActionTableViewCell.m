@@ -112,7 +112,7 @@
     [stockCodelabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(stockNameLabel.mas_left);
         make.top.mas_equalTo(stockNameLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(8*minSpace, 2*minSpace));
+        make.size.mas_equalTo(CGSizeMake(10*minSpace, 2*minSpace));
     }];
     
     [lookLabel mas_makeConstraints:^(MASConstraintMaker *make) {

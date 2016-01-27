@@ -137,7 +137,7 @@ exports.getAllMarketIndexNow = function(callback){
     ' `market_index_base_info` c' +
     ' WHERE a.`market_code`  =  b.market_code' +
     ' and a.`timestamp` = b.timestamp ' +
-    ' and a.`market_code`  = c.`market_code` ';
+    ' and a.`market_code`  = c.`market_code` order by market_code desc';
 
     conn.executeSql(sql, [], callback);
 }
