@@ -461,6 +461,7 @@ function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 	logger.debug(stockAPI, logger.getFileNameAndLineNum(__filename));
 	http.get(stockAPI, function(res) {
 		if (res.statusCode == 200) {
+			logger.debug('getMarketIndexFromAPI success', logger.getFileNameAndLineNum(__filename));
 			var htmlData = "";
 			res.on('data', function(data) {
 				htmlData += data;
