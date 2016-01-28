@@ -53,6 +53,7 @@
     }else{
         
         self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        self.window.backgroundColor = [UIColor whiteColor];
         
         startViewCtrl* startView = [[startViewCtrl alloc] init];
         loginViewCtrl* signInView = [[loginViewCtrl alloc] init];

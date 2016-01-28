@@ -41,6 +41,7 @@
 {
     UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:viewController];
     nav.navigationBar.barTintColor = [UIColor whiteColor];
+    nav.navigationBar.backgroundColor = [UIColor whiteColor];
     nav.navigationBar.tintColor = [UIColor blackColor];
     nav.navigationController.navigationBar.translucent = NO;
     
@@ -72,7 +73,7 @@
     
     [self initControllerViews];
     
-    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+//    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
 }
 
 - (BOOL)shouldAutorotate
