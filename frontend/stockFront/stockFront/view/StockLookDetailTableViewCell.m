@@ -180,7 +180,7 @@
     [updateTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right);
         make.top.mas_equalTo(faceImageView.mas_top);
-        make.size.mas_equalTo(CGSizeMake(8*minSpace, 3*minSpace));
+        make.size.mas_equalTo(CGSizeMake(9*minSpace, 3*minSpace));
     }];
     
     

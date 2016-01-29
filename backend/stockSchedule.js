@@ -14,7 +14,6 @@ log.info("run schedule", log.getFileNameAndLineNum(__filename));
 schedule.scheduleJob('*/20 * 9-11 * * 1-5', function(){
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
     crawl.startCrawlStockNow();
-
     crawl.startCrawlMarket();
 });
 
@@ -23,7 +22,6 @@ schedule.scheduleJob('*/20 * 13-14 * * 1-5', function(){
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
     crawl.startCrawlStockNow();
     crawl.startCrawlMarket();
-
 });
 
 //日终行情
