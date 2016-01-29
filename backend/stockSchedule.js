@@ -32,10 +32,10 @@ schedule.scheduleJob('5 16 * * 1-5', function(){
 });
 
 //开市前删除now表中数据
-schedule.scheduleJob('45 16 * * 1-5', function(){
+schedule.scheduleJob('25 9 * * 1-5', function(){
     log.info("delete stock now data", log.getFileNameAndLineNum(__filename));
-    //crawl.emptyStockNowInfo();
-    //crawl.emptyMarketIndexNowInfo();
+    crawl.emptyStockNowInfo();
+    crawl.emptyMarketIndexNowInfo();
 });
 
 //日终计算用户总收益率
