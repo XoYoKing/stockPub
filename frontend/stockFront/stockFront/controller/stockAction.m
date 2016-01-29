@@ -26,6 +26,7 @@
     NSMutableArray* stockList;
     NSMutableArray* marketIndexList;
     pullCompleted completed;
+    NSTimer* timer;
 }
 
 - (void)initAction:(ComTableViewCtrl *)comTableViewCtrl
@@ -57,6 +58,12 @@
     
 }
 
+
+- (void)refreshAll
+{
+    [self refreshMarketInfo];
+    [self refreshStockInfo];
+}
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -220,15 +227,36 @@
 {
     NSLog(@"viewDidAppear");
     [self refreshStockInfo];
+    [self refreshMarketInfo];
     
+    UIApplication *app = [UIApplication sharedApplication];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:app];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(refreshAll) userInfo:nil repeats:YES];
 }
 
 
+- (void)tableViewDidDisappear:(ComTableViewCtrl *)comTableViewCtrl
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [timer invalidate];
+}
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     
 }
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification
+{
+    //进入前台时调用此函数
+    [self refreshStockInfo];
+    [self refreshMarketInfo];
+}
+
 
 
 
