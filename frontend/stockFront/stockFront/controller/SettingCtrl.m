@@ -20,6 +20,8 @@
 #import "StockLookTableViewCell.h"
 #import "LocDatabase.h"
 #import "StockLookDetailTableViewController.h"
+#import "StockLookTableView.h"
+#import "HisStockLookAction.h"
 
 @implementation SettingCtrl
 {
@@ -99,11 +101,11 @@ typedef enum {
     }
     
     if (indexPath.section == hisLookInfoSection) {
-//        StockLookInfoModel* model = [hisStockLookList objectAtIndex:indexPath.row];
-//        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
-//        tableviewCtrl.stockLookInfoModel = model;
-//        tableviewCtrl.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:tableviewCtrl animated:YES];
+        StockLookTableView* stockLookTable = [[StockLookTableView alloc] init];
+        
+        stockLookTable.pullAction = [[HisStockLookAction alloc] init:myInfo.user_id];
+        ComTableViewCtrl* comTable = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:stockLookTable];
+        [self.navigationController pushViewController:comTable animated:YES];
     }
 }
 
