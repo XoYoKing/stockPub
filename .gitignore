@@ -22,3 +22,5 @@ frontend/stockFront/stockFront.xcworkspace/xcuserdata/wangjam.xcuserdatad/UserIn
 *.xcscheme
 
 frontend/stockFront/Pods/Pods.xcodeproj/xcuserdata/wangjam.xcuserdatad/xcschemes/xcschememanagement.plist
+
+backend/npm-debug.log
