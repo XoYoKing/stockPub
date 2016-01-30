@@ -23,7 +23,7 @@
 @property LocDatabase* locDatabase;
 @property UITabBarController* tabBarViewController;
 
-
+- (void)backToStartView;
 + (UserInfoModel*)getMyUserInfo;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

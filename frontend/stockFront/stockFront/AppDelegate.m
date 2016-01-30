@@ -41,6 +41,12 @@
 }
 
 
+- (void)backToStartView
+{
+    [(UINavigationController*)self.window.rootViewController popToRootViewControllerAnimated:YES];
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     _myInfo = [[UserInfoModel alloc] init];

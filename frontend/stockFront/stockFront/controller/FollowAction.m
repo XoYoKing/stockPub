@@ -34,7 +34,7 @@
     
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[user_id,
-                                               [[NSNumber alloc] initWithDouble:[[NSDate date] timeIntervalSince1970]]]
+                                               [[NSNumber alloc] initWithDouble:[[NSDate date] timeIntervalSince1970]*1000]]
                              forKeys:@[@"user_id", @"look_update_timestamp"]];
     
     [NetworkAPI callApiWithParam:message childpath:@"/stock/getFollowLookInfo" successed:^(NSDictionary *response) {
@@ -59,7 +59,7 @@
                     StockLookInfoModel* element1 = (StockLookInfoModel*)obj1;
                     StockLookInfoModel* element2 = (StockLookInfoModel*)obj2;
                     
-                    return element1.look_update_timestamp>element2.look_update_timestamp;
+                    return element1.look_update_timestamp<element2.look_update_timestamp;
                 }];
                 
                 [tableview reloadData];
@@ -107,7 +107,7 @@
                     StockLookInfoModel* element1 = (StockLookInfoModel*)obj1;
                     StockLookInfoModel* element2 = (StockLookInfoModel*)obj2;
                     
-                    return element1.look_update_timestamp>element2.look_update_timestamp;
+                    return element1.look_update_timestamp<element2.look_update_timestamp;
                 }];
                 
                 [tableview reloadData];

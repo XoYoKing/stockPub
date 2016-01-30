@@ -36,7 +36,8 @@ typedef enum {
     faceSection,
     followSection,
     lookInfoSection,
-    hisLookInfoSection
+    hisLookInfoSection,
+    logout
 } section;
 
 - (id)init:(UserInfoModel*)userInfo
@@ -108,6 +109,35 @@ typedef enum {
         comTable.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:comTable animated:YES];
     }
+    
+    if (indexPath.section == logout) {
+        [self logout];
+    }
+    
+}
+
+- (void)logout
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        // Do something...
+        //清理本地账户信息
+        NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
+        [mySettingData removeObjectForKey:@"phone"];
+        [mySettingData removeObjectForKey:@"password"];
+        [mySettingData synchronize];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [self dismissViewControllerAnimated:YES completion:nil];
+            AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            
+            [app backToStartView];
+            
+        });
+    });
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -374,6 +404,22 @@ typedef enum {
         return cell;
     }
     
+    if (indexPath.section == logout) {
+        //登出
+        static NSString* cellIdentifier = @"logoutcell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell==nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        cell.textLabel.text = @"退出登录";
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.backgroundColor = [UIColor whiteColor];
+        return cell;
+    }
+    
     return nil;
 }
 
@@ -407,6 +453,10 @@ typedef enum {
         return 8*minSpace;
     }
     
+    if (indexPath.section == logout) {
+        return 8*minSpace;
+    }
+    
     return 0;
     
 }
@@ -430,6 +480,10 @@ typedef enum {
         return 1;
     }
     
+    if(section == logout){
+        return 1;
+    }
+    
     return 0;
     
 }
@@ -438,7 +492,13 @@ typedef enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    if([myInfo.user_id isEqualToString:userInfo.user_id]){
+        return 5;
+    }else{
+        return 4;
+    }
 }
 
 
