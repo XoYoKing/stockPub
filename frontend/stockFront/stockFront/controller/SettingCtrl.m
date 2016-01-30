@@ -101,10 +101,11 @@ typedef enum {
     }
     
     if (indexPath.section == hisLookInfoSection) {
-        StockLookTableView* stockLookTable = [[StockLookTableView alloc] init];
+        StockLookTableView* stockLookTable = [[StockLookTableView alloc] init:@"历史记录"];
         
         stockLookTable.pullAction = [[HisStockLookAction alloc] init:myInfo.user_id];
         ComTableViewCtrl* comTable = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:stockLookTable];
+        comTable.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:comTable animated:YES];
     }
 }

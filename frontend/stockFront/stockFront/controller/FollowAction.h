@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "ComTableViewCtrl.h"
 
-@interface FollowAction : NSObject<ComTableViewDelegate, UITextViewDelegate>
+@interface FollowAction : NSObject<pullAction, UITextViewDelegate>
+
+- (id)init:(NSString*)userID;
+
 
 @end

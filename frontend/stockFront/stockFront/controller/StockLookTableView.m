@@ -9,16 +9,32 @@
 #import "StockLookTableView.h"
 #import "StockLookInfoModel.h"
 #import "StockLookDetailTableViewCell.h"
+#import "macro.h"
 
 @implementation StockLookTableView
 {
     NSMutableArray* list;
     ComTableViewCtrl* comtable;
+    NSString* title;
 }
 
+- (id)init:(NSString*)tableTitle
+{
+    if(self = [super init]){
+        title = tableTitle;
+    }
+    return self;
+}
 
 - (void)initAction:(ComTableViewCtrl *)comTableViewCtrl
 {
+    UILabel *navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    [navTitle setText:title];
+    [navTitle setFont:[UIFont fontWithName:fontName size:middleFont]];
+    navTitle.textAlignment = NSTextAlignmentCenter;
+    comTableViewCtrl.navigationItem.titleView = navTitle;
+    comTableViewCtrl.view.backgroundColor = [UIColor whiteColor];
+    
     comtable = comTableViewCtrl;
     [comTableViewCtrl.tableView setDelegate:self];
     [comTableViewCtrl.tableView setDataSource:self];

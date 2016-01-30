@@ -13,4 +13,6 @@
 
 @property id<pullAction> pullAction;
 
+- (id)init:(NSString*)tableTitle;
+
 @end

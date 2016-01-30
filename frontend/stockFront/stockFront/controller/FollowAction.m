@@ -8,48 +8,120 @@
 
 #import "FollowAction.h"
 #import "macro.h"
+#import "NetworkAPI.h"
+#import "StockLookInfoModel.h"
+#import "returnCode.h"
+#import <YYModel.h>
+
 
 @implementation FollowAction
+{
+    NSString* user_id;
+}
 
-- (void)initAction:(ComTableViewCtrl*)comTableViewCtrl
+- (id)init:(NSString*)userID
+{
+    if(self = [super init]){
+        user_id = userID;
+    }
+    return self;
+}
+
+- (void)pullDownAction:(pullCompleted)completedBlock list:(NSMutableArray *)list tableview:(UITableView *)tableview
 {
     
-    UILabel *navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-    [navTitle setText:@"关注"];
-    [navTitle setFont:[UIFont fontWithName:fontName size:middleFont]];
-    navTitle.textAlignment = NSTextAlignmentCenter;
-    comTableViewCtrl.navigationItem.titleView = navTitle;
-    comTableViewCtrl.view.backgroundColor = [UIColor whiteColor];
     
     
-    //    UIButton* rightBar = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    rightBar.frame = CGRectMake(0, 0, 24, 24);
-    //    [rightBar setBackgroundImage:[UIImage imageNamed:@"publishActivity48.png"] forState:UIControlStateNormal];
-    //    [rightBar addTarget:self action:@selector(publishActivity:) forControlEvents:UIControlEventTouchUpInside];
-    //    UIBarButtonItem* rightitem = [[UIBarButtonItem alloc] initWithCustomView:rightBar];
-    //    comTable.navigationItem.rightBarButtonItem = rightitem;
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[user_id,
+                                               [[NSNumber alloc] initWithDouble:[[NSDate date] timeIntervalSince1970]]]
+                             forKeys:@[@"user_id", @"look_update_timestamp"]];
     
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getFollowLookInfo" successed:^(NSDictionary *response) {
+        
+        completedBlock();
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [list removeAllObjects];
+            
+            NSArray* stocklist = (NSArray*)[response objectForKey:@"data"];
+            
+            if(stocklist!=nil){
+                for (NSDictionary* element in stocklist) {
+                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
+                    [list addObject:temp];
+                }
+                
+                [list sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                    StockLookInfoModel* element1 = (StockLookInfoModel*)obj1;
+                    StockLookInfoModel* element2 = (StockLookInfoModel*)obj2;
+                    
+                    return element1.look_update_timestamp>element2.look_update_timestamp;
+                }];
+                
+                [tableview reloadData];
+            }
+            
+        }else{
+            [Tools AlertBigMsg:@"未知错误"];
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+        completedBlock();
+    }];
+
+}
+
+- (void)pullUpAction:(pullCompleted)completedBlock list:(NSMutableArray *)list tableview:(UITableView *)tableview
+{
     
-    //    leftBar = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    leftBar.frame = CGRectMake(0, 0, leftbarWidth, leftbarWidth);
-    //    [leftBar setBackgroundImage:[UIImage imageNamed:@"info-icon.png"] forState:UIControlStateNormal];
-    //
-    //    [leftBar addTarget:self action:@selector(sideMenuOpen) forControlEvents:UIControlEventTouchUpInside];
-    //    comTable.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBar];
+    StockLookInfoModel* stockLookInfo = [list lastObject];
     
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[user_id,
+                                               [[NSNumber alloc] initWithDouble:stockLookInfo.look_update_timestamp]]
+                             forKeys:@[@"user_id", @"look_update_timestamp"]];
     
-    //注册右滑动事件
-    //    UISwipeGestureRecognizer *swapRight = [[UISwipeGestureRecognizer  alloc] initWithTarget:self action:@selector(sideMenuOpen)];
-    //    swapRight.direction = UISwipeGestureRecognizerDirectionRight;
-    //    [comTableViewCtrl.view addGestureRecognizer:swapRight];
-    //
-    //    //注册左滑动事件
-    //    UISwipeGestureRecognizer *swapLeft = [[UISwipeGestureRecognizer  alloc] initWithTarget:self action:@selector(sideMenuClose)];
-    //    swapLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-    //    [comTableViewCtrl.view addGestureRecognizer:swapLeft];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pullDown) name:@"pullDown" object:nil];
-    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getFollowLookInfo" successed:^(NSDictionary *response) {
+        
+        completedBlock();
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            NSArray* stocklist = (NSArray*)[response objectForKey:@"data"];
+            
+            if(stocklist!=nil){
+                for (NSDictionary* element in stocklist) {
+                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
+                    [list addObject:temp];
+                }
+                
+                [list sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                    StockLookInfoModel* element1 = (StockLookInfoModel*)obj1;
+                    StockLookInfoModel* element2 = (StockLookInfoModel*)obj2;
+                    
+                    return element1.look_update_timestamp>element2.look_update_timestamp;
+                }];
+                
+                [tableview reloadData];
+            }
+            
+        }else{
+            [Tools AlertBigMsg:@"未知错误"];
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+        completedBlock();
+    }];
 }
 
 

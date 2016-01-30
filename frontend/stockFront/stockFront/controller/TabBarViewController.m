@@ -15,6 +15,7 @@
 #import "RankAction.h"
 #import "stockAction.h"
 #import "SettingCtrl.h"
+#import "StockLookTableView.h"
 
 
 @interface TabBarViewController ()
@@ -110,12 +111,15 @@
     
     controllers = [NSMutableArray array];
     
+    UserInfoModel* myInfo = [AppDelegate getMyUserInfo];
     
-    ComTableViewCtrl* followContentTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:[[FollowAction alloc] init]];
+    StockLookTableView* stockLookTable = [[StockLookTableView alloc] init:@"关注"];
+    FollowAction* followAction = [[FollowAction alloc] init:myInfo.user_id];
+    stockLookTable.pullAction = followAction;
+    ComTableViewCtrl* followContentTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:stockLookTable];
+    
     
     ComTableViewCtrl* rankTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:[[RankAction alloc] init]];
-
-    
     ComTableViewCtrl* stockTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:NO initLoading:YES comDelegate:[[stockAction alloc] init]];
 
     

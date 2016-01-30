@@ -86,8 +86,8 @@
         
         [faceImageView sd_setImageWithURL:[[NSURL alloc] initWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
-            image = [Tools scaleToSize:image size:CGSizeMake(8*minSpace, 8*minSpace)];
-            faceImageView.image = image;
+//            image = [Tools scaleToSize:image size:CGSizeMake(8*minSpace, 8*minSpace)];
+//            faceImageView.image = image;
         }];
         
     }

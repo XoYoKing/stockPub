@@ -28,7 +28,7 @@ exports.getFollowLookInfo = function(reqbody, callback){
     ' and a.followed_user_id = c.user_id ' +
     ' and b.look_status = 1 ' +
     ' and b.stock_code = d.stock_code and b.look_update_timestamp<? order by b.look_update_timestamp desc limit 10';
-    conn.executeSql(sql, [reqbody.user_id, reqbody.look_timestamp], callback);
+    conn.executeSql(sql, [reqbody.user_id, reqbody.look_update_timestamp], callback);
 
 }
 
