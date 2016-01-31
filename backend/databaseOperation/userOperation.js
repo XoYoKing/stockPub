@@ -145,3 +145,9 @@ exports.getAllUser = function(callback){
 	var sql = 'select *from user_base_info';
 	conn.executeSql(sql, [], callback);
 };
+
+exports.userBaseInfo = function(user_id, callback){
+	var sql = 'select user_id, user_name, user_facethumbnail, ' +
+	' user_fans_count, user_follow_count, user_look_yield from user_base_info where user_id = ?';
+	conn.executeSql(sql, [user_id], callback);
+}

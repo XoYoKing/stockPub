@@ -318,3 +318,21 @@ router.post('/login', function(req, res) {
 		}
 	});
 });
+
+
+//get user base info
+router.post('/userBaseInfo', function(req, res){
+	userMgmt.userBaseInfo(req.body.user_id, function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			if(result.length>0){
+				returnData.data = result[0];
+			}
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});

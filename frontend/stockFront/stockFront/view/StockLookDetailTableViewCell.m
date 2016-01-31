@@ -12,6 +12,7 @@
 #import "ConfigAccess.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "Tools.h"
+#import "SettingCtrl.h"
 
 @implementation StockLookDetailTableViewCell
 {
@@ -27,7 +28,7 @@
     
     UILabel* lookTimeDateLabel;
     UILabel* finishTimeDateLabel;
-    
+    StockLookInfoModel* myStockLookInfoModel;
     
 }
 
@@ -59,10 +60,28 @@
         
         [self addSubview:lookTimeDateLabel];
         [self addSubview:finishTimeDateLabel];
+        
+        faceImageView.userInteractionEnabled = YES;
+        [faceImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(faceViewPress:)]];
+
+        
+        
     }
     return self;
 }
 
+
+
+- (void)faceViewPress:(id)sender
+{
+    UserInfoModel* userInfo = [[UserInfoModel alloc] init];
+    userInfo.user_id = myStockLookInfoModel.user_id;
+    userInfo.user_facethumbnail = myStockLookInfoModel.user_facethumbnail;
+    
+    SettingCtrl* settingViewController = [[SettingCtrl alloc] init:userInfo];
+    settingViewController.hidesBottomBarWhenPushed = YES;
+    [[Tools curNavigator] pushViewController:settingViewController animated:YES];
+}
 
 - (void)awakeFromNib {
     // Initialization code
@@ -77,6 +96,8 @@
 
 - (void)configureCell:(StockLookInfoModel*)stockLookInfoModel
 {
+    myStockLookInfoModel = stockLookInfoModel;
+    
     if(stockLookInfoModel.user_facethumbnail == nil){
         faceImageView.image = [UIImage imageNamed:@"man-noname.png"];
     }else{

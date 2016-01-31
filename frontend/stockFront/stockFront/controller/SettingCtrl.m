@@ -236,8 +236,16 @@ typedef enum {
 
 }
 
+
+- (void)getUserBaseInfo
+{
+    
+}
+
 - (void)pullDownAction
 {
+    
+    [self getUserBaseInfo];
     
     //获取当前看多股票详情
     NSDictionary* message = [[NSDictionary alloc]
