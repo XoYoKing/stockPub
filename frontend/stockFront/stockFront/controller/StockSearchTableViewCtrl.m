@@ -143,7 +143,7 @@
         
         CGSize labelSize = [Tools getTextArrange:priceLabel.text maxRect:CGSizeMake(ScreenWidth, 8*minSpace) fontSize:middleFont];
         
-        priceLabel.frame = CGRectMake(ScreenWidth - labelSize.width, 0, labelSize.width, labelSize.height);
+        priceLabel.frame = CGRectMake(ScreenWidth - labelSize.width - 10, 0, labelSize.width+10, labelSize.height);
         
         
         cell.accessoryView = priceLabel;

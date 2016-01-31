@@ -39,7 +39,7 @@
         return false;
     }
     // 初始化上下文，设置persistentStoreCoordinator属性
-    context = [[NSManagedObjectContext alloc] init];
+    context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     context.persistentStoreCoordinator = psc;
 
     return YES;
@@ -192,6 +192,85 @@
     [fetchRequest setPredicate:predicate];
     
     NSSortDescriptor* sortDesc = [[NSSortDescriptor alloc] initWithKey:@"stock_code" ascending:NO];
+    NSArray* desc = [NSArray arrayWithObject:sortDesc];
+    [fetchRequest setSortDescriptors:desc];
+    
+    NSFetchedResultsController* fetchController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:@"Root"];
+    
+    NSError* error;
+    if (![fetchController performFetch:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    
+    if([fetchController.fetchedObjects count]>0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+- (BOOL)addFollow:(UserInfoModel*)userModel
+{
+    NSLog(@"addStock");
+    
+    if(![self delFollow:userModel]){
+        return false;
+    }
+    
+    NSError* error;
+    FollowUser* msg = [NSEntityDescription insertNewObjectForEntityForName:@"FollowUser" inManagedObjectContext:context];
+    msg.user_id = userModel.user_id;
+    
+    
+    if (![context save:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
+- (BOOL)delFollow:(UserInfoModel*)userModel
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"FollowUser" inManagedObjectContext:context]];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"user_id = '%@'",userModel.user_id]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor* sortDesc = [[NSSortDescriptor alloc] initWithKey:@"user_id" ascending:NO];
+    NSArray* desc = [NSArray arrayWithObject:sortDesc];
+    [fetchRequest setSortDescriptors:desc];
+    
+    NSFetchedResultsController* fetchController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:@"Root"];
+    
+    NSError* error;
+    if (![fetchController performFetch:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    
+    for (FollowUser* msg in fetchController.fetchedObjects) {
+        [context deleteObject:msg];
+    }
+    
+    if (![context save:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    return true;
+}
+
+- (BOOL)isFollow:(UserInfoModel*)userModel
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"FollowUser" inManagedObjectContext:context]];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"user_id = '%@'",userModel.user_id]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor* sortDesc = [[NSSortDescriptor alloc] initWithKey:@"user_id" ascending:NO];
     NSArray* desc = [NSArray arrayWithObject:sortDesc];
     [fetchRequest setSortDescriptors:desc];
     

@@ -29,6 +29,8 @@
     //NSMutableArray* hisStockLookList;
     UserInfoModel* myInfo;
     LocDatabase* locDatabase;
+    UserInfoModel* phoneUserInfo;
+    BOOL isFollow;
 }
 
 
@@ -86,6 +88,8 @@ typedef enum {
     stockLookList = [[NSMutableArray alloc] init];
     //hisStockLookList = [[NSMutableArray alloc] init];
     locDatabase = [AppDelegate getLocDatabase];
+    
+    phoneUserInfo = [AppDelegate getMyUserInfo];
     
     [self pullDownAction];
     
@@ -239,7 +243,39 @@ typedef enum {
 
 - (void)getUserBaseInfo
 {
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[myInfo.user_id]
+                             forKeys:@[@"user_id"]];
     
+    [NetworkAPI callApiWithParam:message childpath:@"/user/userBaseInfo" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            
+            NSDictionary* userBaseInfo = (NSDictionary*)[response objectForKey:@"data"];
+            if(userBaseInfo!=nil){
+                
+                myInfo = [UserInfoModel yy_modelWithDictionary:userBaseInfo];
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    }];
+
 }
 
 - (void)pullDownAction
@@ -267,7 +303,9 @@ typedef enum {
                     [stockLookList addObject:temp];
                     StockInfoModel* stockInfoModel = [[StockInfoModel alloc] init];
                     stockInfoModel.stock_code = temp.stock_code;
-                    [locDatabase addLookStock:stockInfoModel];
+                    if([myInfo.user_id isEqualToString:phoneUserInfo.user_id]){
+                        [locDatabase addLookStock:stockInfoModel];
+                    }
                 }
             }
             
@@ -364,14 +402,31 @@ typedef enum {
         
         
         if(indexPath.row == 0){
-            cell.textLabel.text = @"ta关注的人";
+            
+            if([myInfo.user_id isEqualToString:phoneUserInfo.user_id]){
+                cell.textLabel.text = @"我关注的人";
+            }else{
+                cell.textLabel.text = @"ta关注的人";
+            }
             cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_follow_count];
         }
         
         if(indexPath.row == 1){
-            cell.textLabel.text = @"关注ta的人";
+            if([myInfo.user_id isEqualToString:phoneUserInfo.user_id]){
+                cell.textLabel.text = @"关注我的人";
+
+            }else{
+                cell.textLabel.text = @"关注ta的人";
+
+            }
+
             cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_fans_count];
         }
+        
+        if(indexPath.row == 2){
+            cell.textLabel.text = @"关注ta";
+        }
+        
         cell.detailTextLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
         cell.detailTextLabel.textColor = [UIColor blackColor];
         cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
@@ -477,7 +532,11 @@ typedef enum {
     }
     
     if (section == followSection) {
-        return 2;
+        if([phoneUserInfo.user_id isEqualToString:myInfo.user_id]){
+            return 2;
+        }else{
+            return 3;
+        }
     }
     
     if(section == lookInfoSection){

@@ -17,6 +17,8 @@
 #import "SettingCtrl.h"
 #import "StockLookTableView.h"
 
+#import "returnCode.h"
+#import "macro.h"
 
 @interface TabBarViewController ()
 {
@@ -75,6 +77,53 @@
     [self initControllerViews];
     
 //    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+    
+    
+    //获取follow user到本地库
+    [self getFollowUserAll];
+    
+}
+
+- (void)getFollowUserAll
+{
+    UserInfoModel* phoneUserInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[phoneUserInfo.user_id]
+                             forKeys:@[@"user_id"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getfollowUserAll" successed:^(NSDictionary *response) {
+        
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            
+            LocDatabase* loc = app.locDatabase;
+            
+            NSArray* userFollows = [response objectForKey:@"data"];
+            for (NSDictionary* element in userFollows) {
+                NSString* user_id = [element objectForKey:@"user_id"];
+                UserInfoModel* userInfo = [[UserInfoModel alloc] init];
+                userInfo.user_id = user_id;
+                if(![loc addFollow:userInfo]){
+                    alertMsg(@"本地库错误");
+                    break;
+                }
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
+
 }
 
 - (BOOL)shouldAutorotate

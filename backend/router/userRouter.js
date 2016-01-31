@@ -26,6 +26,18 @@ router.post('/cancelFollowUser', function(req, res){
 	});
 });
 
+router.post('/getfollowUserAll', function(req, res){
+	userMgmt.getfollowUserAll(req.body, function(flag, result){
+		var returnData = {};
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
 router.post('/getfollowUser', function(req, res){
 	userMgmt.getfollowUser(req.body, function(flag, result){
 		if(flag){
