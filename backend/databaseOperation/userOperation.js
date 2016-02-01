@@ -153,7 +153,8 @@ exports.userBaseInfo = function(user_id, callback){
 }
 
 exports.searchUser = function(user_name, callback){
+	user_name = '%'+user_name+'%';
 	var sql = 'select user_id, user_name, user_facethumbnail, user_look_yield ' +
-	' from user_base_info where user_name like \'\%?\%\' ';
+	' from user_base_info where user_name like ? ';
 	conn.executeSql(sql, [user_name], callback);
 }
