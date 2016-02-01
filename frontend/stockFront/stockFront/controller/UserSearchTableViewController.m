@@ -56,6 +56,16 @@
 }
 
 
+- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        return @"搜索结果";
+    }
+    return @"";
+}
+
+
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [userSearchTextField resignFirstResponder];
