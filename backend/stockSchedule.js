@@ -10,6 +10,15 @@ var caculate = require('./utility/caculate');
 
 log.info("run schedule", log.getFileNameAndLineNum(__filename));
 
+
+//实时行情-上午-每20秒
+schedule.scheduleJob('*/20 * * * * *', function(){
+    log.info("test", log.getFileNameAndLineNum(__filename));
+    //crawl.startCrawlStockNow();
+    //crawl.startCrawlMarket();
+});
+
+
 //实时行情-上午-每20秒
 schedule.scheduleJob('*/20 * 9-11 * * 1-5', function(){
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
