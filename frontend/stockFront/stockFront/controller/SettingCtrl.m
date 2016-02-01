@@ -22,6 +22,8 @@
 #import "StockLookDetailTableViewController.h"
 #import "StockLookTableView.h"
 #import "HisStockLookAction.h"
+#import "UserTableView.h"
+#import "getFollowUserAction.h"
 
 @implementation SettingCtrl
 {
@@ -128,6 +130,21 @@ typedef enum {
                 [self follow];
             }
         }
+        
+        if(indexPath.row == 0){
+            //我关注的人
+            getFollowUserAction* getFollowUser = [[getFollowUserAction alloc] init:myInfo.user_id];
+            UserTableView* userTable = [[UserTableView alloc] init];
+            userTable.pullAction = getFollowUser;
+            ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:userTable];
+            com.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:com animated:YES];
+        }
+        
+        if(indexPath.row == 1){
+            //关注我的人
+        }
+        
     }
 }
 
