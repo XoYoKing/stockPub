@@ -24,6 +24,7 @@
 #import "HisStockLookAction.h"
 #import "UserTableView.h"
 #import "getFollowUserAction.h"
+#import "GetFansAction.h"
 
 @implementation SettingCtrl
 {
@@ -66,6 +67,9 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     //[self.tableView reloadData];
+    NSLog(@"viewWillAppear");
+    
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 - (void)viewDidLoad
@@ -134,7 +138,7 @@ typedef enum {
         if(indexPath.row == 0){
             //我关注的人
             getFollowUserAction* getFollowUser = [[getFollowUserAction alloc] init:myInfo.user_id];
-            UserTableView* userTable = [[UserTableView alloc] init];
+            UserTableView* userTable = [[UserTableView alloc] init:@"关注"];
             userTable.pullAction = getFollowUser;
             ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:userTable];
             com.hidesBottomBarWhenPushed = YES;
@@ -143,6 +147,12 @@ typedef enum {
         
         if(indexPath.row == 1){
             //关注我的人
+            GetFansAction* getFansAction = [[GetFansAction alloc] init:myInfo.user_id];
+            UserTableView* userTable = [[UserTableView alloc] init:@"被关注"];
+            userTable.pullAction = getFansAction;
+            ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:userTable];
+            com.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:com animated:YES];
         }
         
     }
