@@ -118,6 +118,82 @@ typedef enum {
         [self logout];
     }
     
+    
+    if(indexPath.section == followSection){
+        if (indexPath.row == 2) {
+            //follow, cancel follow
+            if ([locDatabase isFollow:myInfo]) {
+                [self cancelFollow];
+            }else{
+                [self follow];
+            }
+        }
+    }
+}
+
+- (void)follow
+{
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[phoneUserInfo.user_id, phoneUserInfo.user_name, myInfo.user_id]
+                             forKeys:@[@"user_id", @"user_name", @"followed_user_id"]];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/followUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [locDatabase addFollow:myInfo];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    }];
+}
+
+- (void)cancelFollow
+{
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[phoneUserInfo.user_id, myInfo.user_id]
+                             forKeys:@[@"user_id", @"followed_user_id"]];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/cancelFollowUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [locDatabase delFollow:myInfo];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    }];
+
 }
 
 - (void)logout
@@ -424,7 +500,11 @@ typedef enum {
         }
         
         if(indexPath.row == 2){
-            cell.textLabel.text = @"关注ta";
+            if([locDatabase isFollow:myInfo]){
+                cell.textLabel.text = @"取消关注ta";
+            }else{
+                cell.textLabel.text = @"关注ta";
+            }
         }
         
         cell.detailTextLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
