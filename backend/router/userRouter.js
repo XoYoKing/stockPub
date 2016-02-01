@@ -348,3 +348,19 @@ router.post('/userBaseInfo', function(req, res){
 		res.send(returnData);
 	});
 });
+
+
+//search user
+router.post('/searchUser', function(req, res){
+	userMgmt.searchUser(req.body.user_name, function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			returnData.data = result;
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});

@@ -45,7 +45,7 @@
     userSearchTextField.font = [UIFont fontWithName:fontName size:minFont];
     userSearchTextField.placeholder = @"查找的用户名";
     userSearchTextField.delegate = self;
-    [userSearchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    userSearchTextField.returnKeyType = UIReturnKeySearch;
     
     userlist = [[NSMutableArray alloc] init];
     self.tableView.delegate = self;
@@ -53,6 +53,13 @@
     [self.tableView reloadData];
 
     
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if(textField == userSearchTextField){
+        NSLog(@"textFieldShouldReturn");
+    }
+    return YES;
 }
 
 

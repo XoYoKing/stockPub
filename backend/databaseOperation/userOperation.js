@@ -151,3 +151,8 @@ exports.userBaseInfo = function(user_id, callback){
 	' user_fans_count, user_follow_count, user_look_yield from user_base_info where user_id = ?';
 	conn.executeSql(sql, [user_id], callback);
 }
+
+exports.searchUser = function(user_name, callback){
+	var sql = 'select user_id, user_name, user_facethumbnail, user_look_yield from user_base_info where user_name like \'%?%\' ';
+	conn.executeSql(sql, [user_name], callback);
+}
