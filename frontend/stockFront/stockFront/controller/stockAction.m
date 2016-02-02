@@ -17,13 +17,16 @@
 #import "returnCode.h"
 #import <YYModel.h>
 #import "StockActionTableViewCell.h"
+#import <Masonry.h>
 
 @implementation stockAction
 {
     ComTableViewCtrl* comTable;
     LocDatabase* locDatabase;
     NSMutableArray* stockList;
+    NSMutableArray* marketIndexList;
     pullCompleted completed;
+    NSTimer* timer;
 }
 
 - (void)initAction:(ComTableViewCtrl *)comTableViewCtrl
@@ -47,147 +50,176 @@
     }
     
     stockList = [locDatabase getStocklist];
+    marketIndexList = [[NSMutableArray alloc] init];
     
     [comTable.tableView setDelegate:self];
     [comTable.tableView setDataSource:self];
     
-    //comTable.edgesForExtendedLayout=UIRectEdgeNone;
+    
 }
 
 
+- (void)refreshAll
+{
+    [self refreshMarketInfo];
+    [self refreshStockInfo];
+}
+
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* cellIdentifier = @"stockcell";
-    StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell==nil) {
-        cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        NSLog(@"new cell");
+    if(indexPath.section == 1){
+        static NSString* cellIdentifier = @"stockcell";
+        StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell==nil) {
+            cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
+        [cell configureCell:stockInfo];
+        
+        return cell;
     }
     
-    StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
-    [cell configureCell:stockInfo];
-    
-    return cell;
+    if(indexPath.section == 0){
+        //大盘指数
+        static NSString* marketCellIdentifier = @"marketCellIdentifier";
+        StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:marketCellIdentifier];
+        if (cell==nil) {
+            cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:marketCellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        StockInfoModel* stockInfo = [marketIndexList objectAtIndex:indexPath.row];
+        [cell configureCell:stockInfo];
+        
+        return cell;
+        
+    }
 
+    return nil;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
-    StockInfoModel* stockinfo = [stockList objectAtIndex:indexPath.row];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        ;
-    }];
-    
-    UIAlertAction *okAction = nil;
-    UIAlertController *alertController = nil;
-    
-    if([locDatabase isLookStock:stockinfo]){
+    if(indexPath.section == 1){
+        StockInfoModel* stockinfo = [stockList objectAtIndex:indexPath.row];
         
-        
-        NSString* title = [[NSString alloc] initWithFormat:@"取消看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
-        
-        alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
-        
-         okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-             
-             //delete from lookinfo
-             
-             [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
-             
-             
-             UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
-             NSDictionary* message = [[NSDictionary alloc]
-                                      initWithObjects:@[userInfo.user_id,
-                                                        userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name]
-                                      forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name"]];
-             
-             [NetworkAPI callApiWithParam:message childpath:@"/stock/dellook" successed:^(NSDictionary *response) {
-                 [MBProgressHUD hideHUDForView:comTable.view animated:YES];
-                 
-                 
-                 NSInteger code = [[response objectForKey:@"code"] integerValue];
-                 
-                 if(code == SUCCESS){
-                     
-                     if(![locDatabase deleteLookStock:stockinfo]){
-                         alertMsg(@"操作失败");
-                     }else{
-                         //alertMsg(@"已删除");
-                     }
-                     
-                     [tableView reloadData];
-                 }else{
-                     alertMsg(@"未知错误");
-                 }
-                 
-                 
-             } failed:^(NSError *error) {
-                 [MBProgressHUD hideHUDForView:comTable.view animated:YES];
-                 alertMsg(@"网络问题");
-             }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            ;
         }];
-
         
-    }else{
+        UIAlertAction *okAction = nil;
+        UIAlertController *alertController = nil;
         
-        NSString* title = [[NSString alloc] initWithFormat:@"看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
-
-        alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
-        
-        
-        okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"add stock to coredata");
-            
-            //看多股票，发送消息到后台
-            [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
+        if([locDatabase isLookStock:stockinfo]){
             
             
-            UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
-            NSDictionary* message = [[NSDictionary alloc]
-                                     initWithObjects:@[userInfo.user_id,
-                                                       userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name,
-                                                       [[NSNumber alloc] initWithInteger:1]]
-                                     forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name", @"look_direct"]];
+            NSString* title = [[NSString alloc] initWithFormat:@"取消看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
             
-            [NetworkAPI callApiWithParam:message childpath:@"/stock/addlook" successed:^(NSDictionary *response) {
-                [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+            alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
+            
+            okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                //delete from lookinfo
+                
+                [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
                 
                 
-                NSInteger code = [[response objectForKey:@"code"] integerValue];
+                UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+                NSDictionary* message = [[NSDictionary alloc]
+                                         initWithObjects:@[userInfo.user_id,
+                                                           userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name]
+                                         forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name"]];
                 
-                if(code == SUCCESS){
+                [NetworkAPI callApiWithParam:message childpath:@"/stock/dellook" successed:^(NSDictionary *response) {
+                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
                     
-                    if(![locDatabase addLookStock:stockinfo]){
-                        alertMsg(@"操作失败");
+                    
+                    NSInteger code = [[response objectForKey:@"code"] integerValue];
+                    
+                    if(code == SUCCESS){
+                        
+                        if(![locDatabase deleteLookStock:stockinfo]){
+                            alertMsg(@"操作失败");
+                        }else{
+                            //alertMsg(@"已删除");
+                        }
+                        
+                        [tableView reloadData];
                     }else{
-                        //alertMsg(@"已添加");
+                        alertMsg(@"未知错误");
                     }
                     
-                    [tableView reloadData];
-                }else if(code == LOOK_STOCK_EXIST){
-                    alertMsg(@"不能重复添加");
-                }else if(code == LOOK_STOCK_COUNT_OVER){
-                    alertMsg(@"当前看多股票不能超过5支");
-                }else{
-                    alertMsg(@"未知错误");
-                }
-            } failed:^(NSError *error) {
-                [MBProgressHUD hideHUDForView:comTable.view animated:YES];
-                alertMsg(@"网络问题");
+                    
+                } failed:^(NSError *error) {
+                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+                    alertMsg(@"网络问题");
+                }];
             }];
-
-        }];
+            
+            
+        }else{
+            
+            NSString* title = [[NSString alloc] initWithFormat:@"看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
+            
+            alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
+            
+            
+            okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSLog(@"add stock to coredata");
+                
+                //看多股票，发送消息到后台
+                [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
+                
+                
+                UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+                NSDictionary* message = [[NSDictionary alloc]
+                                         initWithObjects:@[userInfo.user_id,
+                                                           userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name,
+                                                           [[NSNumber alloc] initWithInteger:1]]
+                                         forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name", @"look_direct"]];
+                
+                [NetworkAPI callApiWithParam:message childpath:@"/stock/addlook" successed:^(NSDictionary *response) {
+                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+                    
+                    
+                    NSInteger code = [[response objectForKey:@"code"] integerValue];
+                    
+                    if(code == SUCCESS){
+                        
+                        if(![locDatabase addLookStock:stockinfo]){
+                            alertMsg(@"操作失败");
+                        }else{
+                            //alertMsg(@"已添加");
+                        }
+                        
+                        [tableView reloadData];
+                    }else if(code == LOOK_STOCK_EXIST){
+                        alertMsg(@"不能重复添加");
+                    }else if(code == LOOK_STOCK_COUNT_OVER){
+                        alertMsg(@"当前看多股票不能超过5支");
+                    }else{
+                        alertMsg(@"未知错误");
+                    }
+                } failed:^(NSError *error) {
+                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+                    alertMsg(@"网络问题");
+                }];
+                
+            }];
+        }
+        
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        [comTable presentViewController:alertController animated:YES completion:nil];
     }
-    
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-    [comTable presentViewController:alertController animated:YES completion:nil];
-    
 }
 
 
@@ -195,39 +227,117 @@
 {
     NSLog(@"viewDidAppear");
     [self refreshStockInfo];
+    [self refreshMarketInfo];
     
+    UIApplication *app = [UIApplication sharedApplication];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:app];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(refreshAll) userInfo:nil repeats:YES];
 }
 
 
+- (void)tableViewDidDisappear:(ComTableViewCtrl *)comTableViewCtrl
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [timer invalidate];
+}
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     
 }
 
+- (void)applicationWillEnterForeground:(NSNotification *)notification
+{
+    //进入前台时调用此函数
+    [self refreshStockInfo];
+    [self refreshMarketInfo];
+}
+
+
 
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
+    if(indexPath.section == 1){
+        if (editingStyle == UITableViewCellEditingStyleDelete) {
+            // Delete the row from the data source
+            
+            
+            StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
+            if ([locDatabase deleteStock:stockInfo]) {
+                [stockList removeObjectAtIndex:indexPath.row];
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }else{
+                [Tools AlertBigMsg:@"删除失败"];
+            }
+            
+            
+        } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
+    if(indexPath.section == 0){
+        if (editingStyle == UITableViewCellEditingStyleDelete) {
+            // Delete the row from the data source
+                [marketIndexList removeObjectAtIndex:indexPath.row];
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+    
+}
+
+
+- (void)refreshMarketInfo
+{
+    
+    NSDictionary* msg = [[NSDictionary alloc] init];
+    [NetworkAPI callApiWithParam:msg childpath:@"/stock/getAllMarketIndexNow" successed:^(NSDictionary *response) {
         
+        completed();
         
-        StockInfoModel* stockInfo = [stockList objectAtIndex:indexPath.row];
-        if ([locDatabase deleteStock:stockInfo]) {
-            [stockList removeObjectAtIndex:indexPath.row];
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [marketIndexList removeAllObjects];
+            
+            NSArray* marketData = (NSArray*)[response objectForKey:@"data"];
+            
+            
+            
+            if(marketData!=nil){
+                
+                for (NSDictionary* element in marketData) {
+                    StockInfoModel* marketInfoModel = [[StockInfoModel alloc] init];
+                    marketInfoModel.stock_code = [element objectForKey:@"market_code"];
+                    marketInfoModel.stock_name = [element objectForKey:@"market_name"];
+                    marketInfoModel.price = [[element objectForKey:@"market_index_value_now"] floatValue];
+                    marketInfoModel.fluctuate = [[element objectForKey:@"market_index_fluctuate"] floatValue];
+                    [marketIndexList addObject:marketInfoModel];
+                }
+                
+                [comTable.tableView reloadData];
+            }
+            
         }else{
-            [Tools AlertBigMsg:@"删除失败"];
+            [Tools AlertBigMsg:@"未知错误"];
         }
         
         
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }
-}
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+        completed();
+    }];
 
+}
 
 - (void)refreshStockInfo
 {
@@ -303,8 +413,41 @@
 {
     completed = completedBlock;
     [self refreshStockInfo];
+    [self refreshMarketInfo];
 }
 
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+
+    UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+    sectionView.backgroundColor = [UIColor whiteColor];
+    
+    UILabel* label = [[UILabel alloc] init];
+    label.font = [UIFont fontWithName:fontName size:minFont];
+    label.textColor = [UIColor grayColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    [sectionView addSubview:label];
+    
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sectionView.mas_left);
+        make.centerY.mas_equalTo(sectionView.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+    }];
+    
+    if(section == 0){
+        label.text = @"大盘指数";
+    }
+    if(section == 1){
+        label.text = @"自选股票";
+    }
+    return sectionView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 6*minSpace;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -323,12 +466,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [stockList count];
+    if(section == 0){
+        return [marketIndexList count];
+    }
+    
+    if(section == 1){
+        return [stockList count];
+    }
+    return 0;
 }
 
 

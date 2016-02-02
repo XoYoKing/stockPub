@@ -12,6 +12,9 @@
 #import "ConfigAccess.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "Tools.h"
+#import "SettingCtrl.h"
+#import "ComTableViewCtrl.h"
+#import "CommentTableView.h"
 
 @implementation StockLookDetailTableViewCell
 {
@@ -27,7 +30,9 @@
     
     UILabel* lookTimeDateLabel;
     UILabel* finishTimeDateLabel;
+    StockLookInfoModel* myStockLookInfoModel;
     
+    UIButton* commentButton;
     
 }
 
@@ -48,6 +53,8 @@
         lookTimeDateLabel = [[UILabel alloc] init];
         finishTimeDateLabel = [[UILabel alloc] init];
         
+        commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        
         [self addSubview:faceImageView];
         [self addSubview:updateTimeLabel];
         [self addSubview:userNameLabel];
@@ -59,10 +66,38 @@
         
         [self addSubview:lookTimeDateLabel];
         [self addSubview:finishTimeDateLabel];
+        [self addSubview:commentButton];
+        
+        faceImageView.userInteractionEnabled = YES;
+        [faceImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(faceViewPress:)]];
+
+        [commentButton addTarget:self action:@selector(commentPress:) forControlEvents:UIControlEventTouchUpInside];
+        
     }
     return self;
 }
 
+
+- (void)commentPress:(id)sender
+{
+    CommentTableView* commentTable = [[CommentTableView alloc] init];
+    commentTable.stockLookInfo = myStockLookInfoModel;
+    ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:commentTable];
+    com.hidesBottomBarWhenPushed = YES;
+    [[Tools curNavigator] pushViewController:com animated:YES];
+}
+
+
+- (void)faceViewPress:(id)sender
+{
+    UserInfoModel* userInfo = [[UserInfoModel alloc] init];
+    userInfo.user_id = myStockLookInfoModel.user_id;
+    userInfo.user_facethumbnail = myStockLookInfoModel.user_facethumbnail;
+    
+    SettingCtrl* settingViewController = [[SettingCtrl alloc] init:userInfo];
+    settingViewController.hidesBottomBarWhenPushed = YES;
+    [[Tools curNavigator] pushViewController:settingViewController animated:YES];
+}
 
 - (void)awakeFromNib {
     // Initialization code
@@ -77,6 +112,8 @@
 
 - (void)configureCell:(StockLookInfoModel*)stockLookInfoModel
 {
+    myStockLookInfoModel = stockLookInfoModel;
+    
     if(stockLookInfoModel.user_facethumbnail == nil){
         faceImageView.image = [UIImage imageNamed:@"man-noname.png"];
     }else{
@@ -86,8 +123,8 @@
         
         [faceImageView sd_setImageWithURL:[[NSURL alloc] initWithString:urlStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             
-            image = [Tools scaleToSize:image size:CGSizeMake(8*minSpace, 8*minSpace)];
-            faceImageView.image = image;
+//            image = [Tools scaleToSize:image size:CGSizeMake(8*minSpace, 8*minSpace)];
+//            faceImageView.image = image;
         }];
         
     }
@@ -144,12 +181,17 @@
     finishTimeDateLabel.font = lookTimeDateLabel.font;
     
     if(stockLookInfoModel.look_status == 2){
-        finishTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", [Tools showTimeFormat:stockLookInfoModel.look_finish_timestamp/1000], @"取消看多"];
+        finishTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", [Tools showTimeFormat:stockLookInfoModel.look_finish_timestamp/1000], @"取消"];
         finishTimeDateLabel.textColor = [UIColor grayColor];
     }else{
         finishTimeDateLabel.text = @"持续看多";
         finishTimeDateLabel.textColor = myred;
     }
+    
+    commentButton.titleLabel.font = [UIFont fontWithName:fontName size:minFont];
+    [commentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [commentButton setTitle:@"评论" forState:UIControlStateNormal];
+    [commentButton setTintColor:[UIColor whiteColor]];
 }
 
 - (void)layoutSubviews
@@ -180,7 +222,7 @@
     [updateTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right);
         make.top.mas_equalTo(faceImageView.mas_top);
-        make.size.mas_equalTo(CGSizeMake(8*minSpace, 3*minSpace));
+        make.size.mas_equalTo(CGSizeMake(9*minSpace, 3*minSpace));
     }];
     
     
@@ -222,12 +264,17 @@
         make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
     }];
 
+    [commentButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
+        make.top.mas_equalTo(finishTimeDateLabel.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(8*minSpace, 4*minSpace));
+    }];
     
 }
 
 + (CGFloat)cellHeight
 {
-    return 34*minSpace;
+    return 37*minSpace;
 }
 
 @end

@@ -7,8 +7,8 @@ var redisClient = redis.createClient({auth_pass:'here_dev'});
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
-
-
+var config = require('./config');
+var path = require('path');
 redisClient.on("error", function (err) {
 	logger.error(err, logger.getFileNameAndLineNum(__filename));
 });
@@ -384,6 +384,14 @@ exports.emptyStockNowInfo = function(){
 };
 
 
+exports.emptyMarketIndexNowInfo = function(){
+	stockOperation.emptyMarketNowInfo(function(flag, result){
+		if (!flag) {
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
 
 exports.startGetAllStockInfo = function(){
 
@@ -434,8 +442,92 @@ function formatDate(now){
 	return year+"-"+month+"-"+date;
 }
 
+function insertMarketIndexDayToDataBase(htmlData, market_code){
+	logger.debug('enter insertMarketIndexDayToDataBase', logger.getFileNameAndLineNum(__filename));
+	var common = require('./utility/commonFunc');
+	var element = common.analyzeMarketMessage(htmlData, market_code);
+	if(element == null){
+		logger.info('insertMarketIndexDayToDataBase element is null');
+	}else{
+		stockOperation.insertMarketIndexDay(element, function(flag, result){
+			if(flag){
 
+			}else{
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+	}
+}
 
+function insertMarketIndexNowToDataBase(htmlData, market_code){
+	logger.debug('enter insertMarketIndexNowToDataBase', logger.getFileNameAndLineNum(__filename));
+	var common = require('./utility/commonFunc');
+	var element = common.analyzeMarketMessage(htmlData, market_code);
+	if(element == null){
+		logger.info('insertMarketIndexNowToDataBase element is null');
+	}else{
+		stockOperation.insertMarketIndexNow(element, function(flag, result){
+			if(flag){
+
+			}else{
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+	}
+}
+
+function getMarketIndexFromAPI(urlChild, market_code, insertAction){
+	logger.debug('enter getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
+	var stockAPI = config.stockDataInterface.url + urlChild;
+	logger.debug(stockAPI, logger.getFileNameAndLineNum(__filename));
+	http.get(stockAPI, function(res) {
+		if (res.statusCode == 200) {
+			logger.debug('getMarketIndexFromAPI success', logger.getFileNameAndLineNum(__filename));
+			var htmlData = "";
+			res.on('data', function(data) {
+				htmlData += data;
+			});
+			res.on('end', function() {
+				logger.debug('end getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
+				insertAction(htmlData, market_code);
+			});
+		}
+	}).on('error', function(e) {
+		logger.error("Got error: " + e.message, logger.getFileNameAndLineNum(__filename));
+	});
+}
+
+exports.startCrawlMarket = function(){
+	logger.info('enter startCrawlMarket');
+	stockOperation.getAllMarketIndexInfo(function(flag, result){
+		if(flag){
+			for (var i = 0; i < result.length; ++i) {
+				var urlChild = "";
+				urlChild = urlChild + "," + result[i].market_code;
+				logger.debug(urlChild, logger.getFileNameAndLineNum(__filename));
+				getMarketIndexFromAPI(urlChild, result[i].market_code, insertMarketIndexNowToDataBase);
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
+exports.startCrawlMarketDay = function(){
+	logger.info('enter startCrawlMarketDay');
+	stockOperation.getAllMarketIndexInfo(function(flag, result){
+		if(flag){
+			for (var i = 0; i < result.length; ++i) {
+				var urlChild = "";
+				urlChild = urlChild + "," + result[i].market_code;
+				logger.debug(urlChild, logger.getFileNameAndLineNum(__filename));
+				getMarketIndexFromAPI(urlChild, result[i].market_code, insertMarketIndexDayToDataBase);
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+}
 
 exports.startCrawlStockNow = function(){
 

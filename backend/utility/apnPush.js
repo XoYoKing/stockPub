@@ -18,7 +18,7 @@ exports.pushMsg = function(user_id, msg){
 				var apnpush = require('./apnPush.js');
 				apnpush.pushMsgToUsers(result[0].device_token, pushMsg);
 			} else {
-				log.warn(req.body.followed_user_id + ' has no device token', log.getFileNameAndLineNum(
+				log.warn(user_id + ' has no device token', log.getFileNameAndLineNum(
 					__filename));
 			}
 		} else {

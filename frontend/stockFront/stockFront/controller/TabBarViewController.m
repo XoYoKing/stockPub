@@ -15,7 +15,10 @@
 #import "RankAction.h"
 #import "stockAction.h"
 #import "SettingCtrl.h"
+#import "StockLookTableView.h"
 
+#import "returnCode.h"
+#import "macro.h"
 
 @interface TabBarViewController ()
 {
@@ -41,6 +44,7 @@
 {
     UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:viewController];
     nav.navigationBar.barTintColor = [UIColor whiteColor];
+    nav.navigationBar.backgroundColor = [UIColor whiteColor];
     nav.navigationBar.tintColor = [UIColor blackColor];
     nav.navigationController.navigationBar.translucent = NO;
     
@@ -72,7 +76,54 @@
     
     [self initControllerViews];
     
-    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+//    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+    
+    
+    //获取follow user到本地库
+    [self getFollowUserAll];
+    
+}
+
+- (void)getFollowUserAll
+{
+    UserInfoModel* phoneUserInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[phoneUserInfo.user_id]
+                             forKeys:@[@"user_id"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getfollowUserAll" successed:^(NSDictionary *response) {
+        
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            
+            LocDatabase* loc = app.locDatabase;
+            
+            NSArray* userFollows = [response objectForKey:@"data"];
+            for (NSDictionary* element in userFollows) {
+                NSString* user_id = [element objectForKey:@"user_id"];
+                UserInfoModel* userInfo = [[UserInfoModel alloc] init];
+                userInfo.user_id = user_id;
+                if(![loc addFollow:userInfo]){
+                    alertMsg(@"本地库错误");
+                    break;
+                }
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
+
 }
 
 - (BOOL)shouldAutorotate
@@ -85,7 +136,7 @@
 
     //double click to refresh
     
-    if(self.selectedIndex == 2&&item.tag == 2){
+    if(self.selectedIndex == item.tag){
         NSLog(@"%ld", item.tag);
         UINavigationController* nav = [self.viewControllers objectAtIndex:self.selectedIndex];
         
@@ -96,7 +147,6 @@
             //[comTable pullDown];
             [comTable refreshNew];
         }
-
     }
 }
 
@@ -109,18 +159,26 @@
     
     controllers = [NSMutableArray array];
     
+    UserInfoModel* myInfo = [AppDelegate getMyUserInfo];
     
-    ComTableViewCtrl* followContentTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:[[FollowAction alloc] init]];
+    StockLookTableView* stockLookTable = [[StockLookTableView alloc] init:@"关注"];
+    FollowAction* followAction = [[FollowAction alloc] init:myInfo.user_id];
+    stockLookTable.pullAction = followAction;
+    ComTableViewCtrl* followContentTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:stockLookTable];
+    
     
     ComTableViewCtrl* rankTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:[[RankAction alloc] init]];
-
-    
     ComTableViewCtrl* stockTableCtrl = [[ComTableViewCtrl alloc] init:YES allowPullUp:NO initLoading:YES comDelegate:[[stockAction alloc] init]];
 
     
     
     
     SettingCtrl* setting = [[SettingCtrl alloc] init:[AppDelegate getMyUserInfo]];
+    
+    followContentTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
+    rankTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
+    stockTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
+    setting.edgesForExtendedLayout = UIRectEdgeNone;
     
     [self initChildView:controllers viewController:followContentTableCtrl title:@"关注"];
     [self initChildView:controllers viewController:rankTableCtrl title:@"排行"];

@@ -25,5 +25,6 @@
 @property CGFloat look_cur_price;
 @property NSInteger look_update_timestamp;
 @property NSInteger look_cur_price_timestamp;
+@property NSString* look_id;
 
 @end

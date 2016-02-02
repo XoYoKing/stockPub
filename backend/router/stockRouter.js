@@ -90,6 +90,7 @@ router.post('/addlook', function(req, res){
 							res.send(returnData);
 						}else{
 							req.body.look_stock_price = stockInfoArr[0].price;
+							
 							logger.debug(JSON.stringify(req.body), logger.getFileNameAndLineNum(__filename));
 
 							stockOperation.addlookStock(req.body, function(flag, result){
@@ -139,6 +140,21 @@ router.post('/addlook', function(req, res){
 	});
 });
 
+
+//获取当前大盘指数
+router.post('/getAllMarketIndexNow', function(req, res){
+	stockOperation.getAllMarketIndexNow(function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			returnData.data = result;
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+})
 
 //获取特定人的当前看多
 router.post('/getLookInfoByUser', function(req, res){

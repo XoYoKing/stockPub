@@ -35,5 +35,6 @@
 
 @property CGFloat user_look_yield;
 
+@property NSInteger follow_timestamp;
 
 @end

@@ -41,6 +41,12 @@
 }
 
 
+- (void)backToStartView
+{
+    [(UINavigationController*)self.window.rootViewController popToRootViewControllerAnimated:YES];
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     _myInfo = [[UserInfoModel alloc] init];
@@ -53,6 +59,7 @@
     }else{
         
         self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        self.window.backgroundColor = [UIColor whiteColor];
         
         startViewCtrl* startView = [[startViewCtrl alloc] init];
         loginViewCtrl* signInView = [[loginViewCtrl alloc] init];

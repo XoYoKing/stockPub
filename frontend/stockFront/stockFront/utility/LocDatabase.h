@@ -10,6 +10,8 @@
 #import "StockInfoModel.h"
 #import "MyStock.h"
 #import "LookStock.h"
+#import "UserInfoModel.h"
+#import "FollowUser.h"
 
 @interface LocDatabase : NSObject
 
@@ -17,6 +19,12 @@
 
 
 - (BOOL)connectToDatabase:(NSString*)fileName;
+
+- (BOOL)addFollow:(UserInfoModel*)userModel;
+
+- (BOOL)delFollow:(UserInfoModel*)userModel;
+
+- (BOOL)isFollow:(UserInfoModel*)userModel;
 
 - (BOOL)addStock:(StockInfoModel*)model;
 

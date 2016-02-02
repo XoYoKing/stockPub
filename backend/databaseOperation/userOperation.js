@@ -145,3 +145,46 @@ exports.getAllUser = function(callback){
 	var sql = 'select *from user_base_info';
 	conn.executeSql(sql, [], callback);
 };
+
+exports.userBaseInfo = function(user_id, callback){
+	var sql = 'select user_id, user_name, user_facethumbnail, ' +
+	' user_fans_count, user_follow_count, user_look_yield from user_base_info where user_id = ?';
+	conn.executeSql(sql, [user_id], callback);
+}
+
+exports.searchUser = function(user_id, user_name, callback){
+	user_name = '%'+user_name+'%';
+	var sql = 'select user_id, user_name, user_facethumbnail, user_look_yield ' +
+	' from user_base_info where user_id<>? and user_name like ? ';
+	conn.executeSql(sql, [user_id, user_name], callback);
+}
+
+exports.addCommentToLook = function(reqBody, callback){
+	var timestamp = Date.now();
+	var md5 = require('MD5');
+	var comment_id = md5(reqBody.comment_user_id +
+		reqBody.comment_to_user_id + reqBody.look_id + timestamp);
+	var sql = 'insert into look_comment_info ' +
+	'(comment_id, look_id, comment_user_id, comment_to_user_id, ' +
+	' comment_content, comment_timestamp, to_look) values(?,?,?,?,?,?,?)';
+	conn.executeSql(sql, [comment_id, reqBody.look_id,
+		reqBody.comment_user_id,
+		reqBody.comment_to_user_id,
+		reqBody.comment_content,
+		timestamp, reqBody.to_look], callback);
+}
+
+
+exports.getComments = function (look_id, comment_timestamp, callback) {
+	var sql = 'select a.*, b.user_name as comment_user_name, ' +
+	' b.user_facethumbnail as comment_user_facethumbnail, ' +
+	' c.user_name as comment_to_user_name from ' +
+	' look_comment_info a, user_base_info b, user_base_info c ' +
+	' where a.look_id = ? ' +
+	' and a.comment_user_id = b.user_id ' +
+	' and a.comment_to_user_id = c.user_id ' +
+	' and a.comment_timestamp<? ' +
+	' order by a.comment_timestamp DESC limit 12 ';
+	console.log(look_id+' '+comment_timestamp);
+	conn.executeSql(sql, [look_id, comment_timestamp], callback);
+};

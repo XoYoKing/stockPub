@@ -16,6 +16,7 @@
 #import "ConfigAccess.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "YYWebImage.h"
+#import "AppDelegate.h"
 
 
 @implementation FaceCellViewTableViewCell
@@ -24,6 +25,7 @@
     UILabel* userNameLabel;
     UILabel* userYieldLabel;
     UserInfoModel* myInfo;
+    //UIButton* followButton;
 
 }
 
@@ -37,10 +39,13 @@
         
         userNameLabel = [[UILabel alloc] init];
         userYieldLabel = [[UILabel alloc] init];
+        //followButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        //[followButton addTarget:self action:@selector(followAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [self addSubview:faceImageView];
         [self addSubview:userNameLabel];
         [self addSubview:userYieldLabel];
+        //[self addSubview:followButton];
     }
     return self;
 }
@@ -62,6 +67,10 @@
     // Configure the view for the selected state
 }
 
+//- (void)followAction:(id)sender
+//{
+//    
+//}
 
 - (void)configureCell:(UserInfoModel*)userInfo
 {
@@ -97,8 +106,8 @@
         userYieldLabel.textColor = mygreen;
     }
     
-    
-    
+    //[followButton setTitle:@"关注" forState:UIControlStateNormal];
+    //followButton.backgroundColor = [UIColor blackColor];
 }
 
 - (void)layoutSubviews
@@ -110,6 +119,8 @@
         make.centerY.mas_equalTo(self.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(8*minSpace, 8*minSpace));
     }];
+    faceImageView.clipsToBounds = YES;
+    faceImageView.contentMode = UIViewContentModeScaleAspectFill;
     faceImageView.layer.cornerRadius = faceImageView.frame.size.height/2;
     faceImageView.layer.masksToBounds = YES;
     
@@ -124,6 +135,20 @@
         make.top.mas_equalTo(userNameLabel.mas_bottom);
         make.size.mas_equalTo(CGSizeMake(180, 4*minSpace));
     }];
+    
+    
+//    UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
+//    if ([phoneUser.user_id isEqualToString:myInfo.user_id]) {
+//        followButton.hidden = YES;
+//    }else{
+//        followButton.hidden = NO;
+//        
+//        [followButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.right.mas_equalTo(self.mas_right).offset(-minSpace);
+//            make.centerY.mas_equalTo(userNameLabel.mas_centerY);
+//            make.size.mas_equalTo(CGSizeMake(6*minSpace, 3*minSpace));
+//        }];
+//    }
     
 }
 

@@ -20,6 +20,11 @@
 #import "StockLookTableViewCell.h"
 #import "LocDatabase.h"
 #import "StockLookDetailTableViewController.h"
+#import "StockLookTableView.h"
+#import "HisStockLookAction.h"
+#import "UserTableView.h"
+#import "getFollowUserAction.h"
+#import "GetFansAction.h"
 
 @implementation SettingCtrl
 {
@@ -27,6 +32,8 @@
     //NSMutableArray* hisStockLookList;
     UserInfoModel* myInfo;
     LocDatabase* locDatabase;
+    UserInfoModel* phoneUserInfo;
+    BOOL isFollow;
 }
 
 
@@ -34,7 +41,8 @@ typedef enum {
     faceSection,
     followSection,
     lookInfoSection,
-    hisLookInfoSection
+    hisLookInfoSection,
+    logout
 } section;
 
 - (id)init:(UserInfoModel*)userInfo
@@ -59,6 +67,9 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     //[self.tableView reloadData];
+    NSLog(@"viewWillAppear");
+    
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 - (void)viewDidLoad
@@ -84,6 +95,8 @@ typedef enum {
     //hisStockLookList = [[NSMutableArray alloc] init];
     locDatabase = [AppDelegate getLocDatabase];
     
+    phoneUserInfo = [AppDelegate getMyUserInfo];
+    
     [self pullDownAction];
     
 }
@@ -99,12 +112,139 @@ typedef enum {
     }
     
     if (indexPath.section == hisLookInfoSection) {
-//        StockLookInfoModel* model = [hisStockLookList objectAtIndex:indexPath.row];
-//        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
-//        tableviewCtrl.stockLookInfoModel = model;
-//        tableviewCtrl.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:tableviewCtrl animated:YES];
+        StockLookTableView* stockLookTable = [[StockLookTableView alloc] init:@"历史记录"];
+        
+        stockLookTable.pullAction = [[HisStockLookAction alloc] init:myInfo.user_id];
+        ComTableViewCtrl* comTable = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:stockLookTable];
+        comTable.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:comTable animated:YES];
     }
+    
+    if (indexPath.section == logout) {
+        [self logout];
+    }
+    
+    
+    if(indexPath.section == followSection){
+        if (indexPath.row == 2) {
+            //follow, cancel follow
+            if ([locDatabase isFollow:myInfo]) {
+                [self cancelFollow];
+            }else{
+                [self follow];
+            }
+        }
+        
+        if(indexPath.row == 0){
+            //我关注的人
+            getFollowUserAction* getFollowUser = [[getFollowUserAction alloc] init:myInfo.user_id];
+            UserTableView* userTable = [[UserTableView alloc] init:@"关注"];
+            userTable.pullAction = getFollowUser;
+            ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:userTable];
+            com.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:com animated:YES];
+        }
+        
+        if(indexPath.row == 1){
+            //关注我的人
+            GetFansAction* getFansAction = [[GetFansAction alloc] init:myInfo.user_id];
+            UserTableView* userTable = [[UserTableView alloc] init:@"被关注"];
+            userTable.pullAction = getFansAction;
+            ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:userTable];
+            com.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:com animated:YES];
+        }
+        
+    }
+}
+
+- (void)follow
+{
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[phoneUserInfo.user_id, phoneUserInfo.user_name, myInfo.user_id]
+                             forKeys:@[@"user_id", @"user_name", @"followed_user_id"]];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/followUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [locDatabase addFollow:myInfo];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    }];
+}
+
+- (void)cancelFollow
+{
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[phoneUserInfo.user_id, myInfo.user_id]
+                             forKeys:@[@"user_id", @"followed_user_id"]];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/cancelFollowUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [locDatabase delFollow:myInfo];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        [self.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    }];
+
+}
+
+- (void)logout
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        // Do something...
+        //清理本地账户信息
+        NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
+        [mySettingData removeObjectForKey:@"phone"];
+        [mySettingData removeObjectForKey:@"password"];
+        [mySettingData synchronize];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [self dismissViewControllerAnimated:YES completion:nil];
+            AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+            
+            [app backToStartView];
+            
+        });
+    });
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -203,8 +343,48 @@ typedef enum {
 
 }
 
+
+- (void)getUserBaseInfo
+{
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[myInfo.user_id]
+                             forKeys:@[@"user_id"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/userBaseInfo" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            
+            NSDictionary* userBaseInfo = (NSDictionary*)[response objectForKey:@"data"];
+            if(userBaseInfo!=nil){
+                
+                myInfo = [UserInfoModel yy_modelWithDictionary:userBaseInfo];
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    }];
+
+}
+
 - (void)pullDownAction
 {
+    
+    [self getUserBaseInfo];
     
     //获取当前看多股票详情
     NSDictionary* message = [[NSDictionary alloc]
@@ -226,7 +406,9 @@ typedef enum {
                     [stockLookList addObject:temp];
                     StockInfoModel* stockInfoModel = [[StockInfoModel alloc] init];
                     stockInfoModel.stock_code = temp.stock_code;
-                    [locDatabase addLookStock:stockInfoModel];
+                    if([myInfo.user_id isEqualToString:phoneUserInfo.user_id]){
+                        [locDatabase addLookStock:stockInfoModel];
+                    }
                 }
             }
             
@@ -323,14 +505,35 @@ typedef enum {
         
         
         if(indexPath.row == 0){
-            cell.textLabel.text = @"ta关注的人";
+            
+            if([myInfo.user_id isEqualToString:phoneUserInfo.user_id]){
+                cell.textLabel.text = @"我关注的人";
+            }else{
+                cell.textLabel.text = @"ta关注的人";
+            }
             cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_follow_count];
         }
         
         if(indexPath.row == 1){
-            cell.textLabel.text = @"关注ta的人";
+            if([myInfo.user_id isEqualToString:phoneUserInfo.user_id]){
+                cell.textLabel.text = @"关注我的人";
+
+            }else{
+                cell.textLabel.text = @"关注ta的人";
+
+            }
+
             cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_fans_count];
         }
+        
+        if(indexPath.row == 2){
+            if([locDatabase isFollow:myInfo]){
+                cell.textLabel.text = @"取消关注ta";
+            }else{
+                cell.textLabel.text = @"关注ta";
+            }
+        }
+        
         cell.detailTextLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
         cell.detailTextLabel.textColor = [UIColor blackColor];
         cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
@@ -371,6 +574,22 @@ typedef enum {
         return cell;
     }
     
+    if (indexPath.section == logout) {
+        //登出
+        static NSString* cellIdentifier = @"logoutcell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell==nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        cell.textLabel.text = @"退出登录";
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.backgroundColor = [UIColor whiteColor];
+        return cell;
+    }
+    
     return nil;
 }
 
@@ -404,6 +623,10 @@ typedef enum {
         return 8*minSpace;
     }
     
+    if (indexPath.section == logout) {
+        return 8*minSpace;
+    }
+    
     return 0;
     
 }
@@ -416,7 +639,11 @@ typedef enum {
     }
     
     if (section == followSection) {
-        return 2;
+        if([phoneUserInfo.user_id isEqualToString:myInfo.user_id]){
+            return 2;
+        }else{
+            return 3;
+        }
     }
     
     if(section == lookInfoSection){
@@ -424,6 +651,10 @@ typedef enum {
     }
     
     if(section == hisLookInfoSection){
+        return 1;
+    }
+    
+    if(section == logout){
         return 1;
     }
     
@@ -435,7 +666,13 @@ typedef enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    if([myInfo.user_id isEqualToString:userInfo.user_id]){
+        return 5;
+    }else{
+        return 4;
+    }
 }
 
 

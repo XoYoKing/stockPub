@@ -9,6 +9,8 @@ var apn = require('../utility/apnPush.js');
 var config = require('../config');
 var formidable = require('formidable');
 var path = require('path');
+var apn = require('../utility/apnPush.js');
+
 
 module.exports = router;
 
@@ -16,6 +18,18 @@ module.exports = router;
 
 router.post('/cancelFollowUser', function(req, res){
 	userMgmt.cancelFollowUser(req.body, function(flag, result){
+		var returnData = {};
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+router.post('/getfollowUserAll', function(req, res){
+	userMgmt.getfollowUserAll(req.body, function(flag, result){
 		var returnData = {};
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
@@ -315,6 +329,74 @@ router.post('/login', function(req, res) {
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			returnData.code = constant.returnCode.ERROR;
 			res.send(returnData);
+		}
+	});
+});
+
+
+//get user base info
+router.post('/userBaseInfo', function(req, res){
+	userMgmt.userBaseInfo(req.body.user_id, function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			if(result.length>0){
+				returnData.data = result[0];
+			}
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
+
+//search user
+router.post('/searchUser', function(req, res){
+	userMgmt.searchUser(req.body.user_id, req.body.user_name, function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			returnData.data = result;
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
+
+
+//comment
+// add by wanghan 20160202 for add active comment
+router.post('/addCommentToLook', function(req, res) {
+	userMgmt.addCommentToLook(req.body, function(flag, result) {
+		if (flag) {
+			// apn
+			if (req.body.comment_user_id === req.body.comment_to_user_id) {
+				log.debug('not to apn', log.getFileNameAndLineNum(__filename));
+			} else {
+				var msg = req.body.comment_user_name + '评论了你';
+				apn.pushMsg(req.body.comment_to_user_id, msg);
+				//apnToUser(req.body.to_user_id, req.body.user_name + '评论了你');
+				//redisOper.increaseUnreadCommentCount(req.body.to_user_id);
+			}
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+
+	});
+});
+
+router.post('/getComments', function(req, res){
+	userMgmt.getComments(req.body.look_id, req.body.comment_timestamp, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else {
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});
 });

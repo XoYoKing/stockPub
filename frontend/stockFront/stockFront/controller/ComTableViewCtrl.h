@@ -11,6 +11,15 @@
 typedef void(^pullCompleted)();
 @class ComTableViewCtrl;
 
+
+@protocol pullAction <NSObject>
+
+@optional
+- (void)pullUpAction:(pullCompleted)completedBlock list:(NSMutableArray*)list tableview:(UITableView*)tableview; //上拉响应函数
+- (void)pullDownAction:(pullCompleted)completedBlock list:(NSMutableArray*)list tableview:(UITableView*)tableview; //下拉响应函数
+
+@end
+
 @protocol ComTableViewDelegate <NSObject>
 
 @optional
@@ -28,10 +37,9 @@ typedef void(^pullCompleted)();
 - (void)tableViewDidDisappear:(ComTableViewCtrl*)comTableViewCtrl;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
-@required
 - (UITableViewCell*)generateCell:(UITableView*)tableview indexPath:(NSIndexPath *)indexPath;
 
-
+@required
 @end
 
 @interface ComTableViewCtrl : UITableViewController
