@@ -9,6 +9,8 @@ var apn = require('../utility/apnPush.js');
 var config = require('../config');
 var formidable = require('formidable');
 var path = require('path');
+var apn = require('../utility/apnPush.js');
+
 
 module.exports = router;
 
@@ -362,5 +364,27 @@ router.post('/searchUser', function(req, res){
 			returnData.code = constant.returnCode.ERROR;
 		}
 		res.send(returnData);
+	});
+});
+
+
+
+//comment
+// add by wanghan 20141219 for add active comment
+router.post('/addCommentToLook', function(req, res) {
+	userMgmt.addCommentToLook(req.body, function(flag, result) {
+		if (flag) {
+			// apn
+			if (req.body.comment_user_id === req.body.comment_to_user_id) {
+				log.debug('not to apn', log.getFileNameAndLineNum(__filename));
+			} else {
+				var msg = req.body.comment_user_name + '评论了你';
+				apn.pushMsg(req.body.comment_to_user_id, msg);
+				//apnToUser(req.body.to_user_id, req.body.user_name + '评论了你');
+				//redisOper.increaseUnreadCommentCount(req.body.to_user_id);
+			}
+		}
+
+		routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 	});
 });

@@ -158,3 +158,18 @@ exports.searchUser = function(user_id, user_name, callback){
 	' from user_base_info where user_id<>? and user_name like ? ';
 	conn.executeSql(sql, [user_id, user_name], callback);
 }
+
+exports.addCommentToLook = function(reqBody, callback){
+	var timestamp = Date.now();
+	var md5 = require('MD5');
+	var comment_id = md5(reqBody.comment_user_id +
+		reqBody.comment_to_user_id + reqBody.look_id + timestamp);
+	var sql = 'insert into look_comment_info ' +
+	'(comment_id, look_id, comment_user_id, comment_to_user_id, ' +
+	' comment_content, comment_timestamp, to_look) values(?,?,?,?,?,?,?)';
+	conn.executeSql(sql, [comment_id, reqBody.look_id,
+		reqBody.comment_user_id,
+		reqBody.comment_to_user_id,
+		reqBody.comment_content,
+		timestamp, reqBody.to_look], callback);
+}
