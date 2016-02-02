@@ -370,6 +370,7 @@ router.post('/searchUser', function(req, res){
 
 
 //comment
+// add by wanghan 20160202 for add active comment
 router.post('/addCommentToLook', function(req, res) {
 	userMgmt.addCommentToLook(req.body, function(flag, result) {
 		if (flag) {
@@ -387,5 +388,15 @@ router.post('/addCommentToLook', function(req, res) {
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 
+	});
+});
+
+router.post('/getComments', function(req, res){
+	userMgmt.getComments(req.body.look_id, req.body.comment_timestamp, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else {
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
 	});
 });
