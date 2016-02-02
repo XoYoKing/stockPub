@@ -13,6 +13,8 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "Tools.h"
 #import "SettingCtrl.h"
+#import "ComTableViewCtrl.h"
+#import "CommentTableView.h"
 
 @implementation StockLookDetailTableViewCell
 {
@@ -78,7 +80,11 @@
 
 - (void)commentPress:(id)sender
 {
+    CommentTableView* commentTable = [[CommentTableView alloc] init];
+    commentTable.look_id = myStockLookInfoModel.look_id;
+    ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:commentTable];
     
+    [[Tools curNavigator] pushViewController:com animated:YES];
 }
 
 

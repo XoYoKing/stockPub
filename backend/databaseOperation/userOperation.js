@@ -173,3 +173,17 @@ exports.addCommentToLook = function(reqBody, callback){
 		reqBody.comment_content,
 		timestamp, reqBody.to_look], callback);
 }
+
+
+exports.getComments = function (look_id, comment_timestamp, callback) {
+	var sql = 'select a.*, b.user_name as comment_user_name, ' +
+	' b.user_facethumbnail as comment_user_facethumbnail, ' +
+	' c.user_name as comment_to_user_name from ' +
+	' look_comment_info a, user_base_info b, user_base_info c ' +
+	' where a.look_id = ? ' +
+	' and a.comment_user_id = b.user_id ' +
+	' and a.comment_to_user_id = c.user_id ' +
+	' and a.comment_timestamp<? ' +
+	' order by a.comment_timestamp DESC limit 12 ';
+	conn.executeSql(sql, [look_id, comment_timestamp], callback);
+};
