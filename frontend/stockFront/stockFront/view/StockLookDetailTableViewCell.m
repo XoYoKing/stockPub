@@ -30,6 +30,8 @@
     UILabel* finishTimeDateLabel;
     StockLookInfoModel* myStockLookInfoModel;
     
+    UIButton* commentButton;
+    
 }
 
 
@@ -49,6 +51,8 @@
         lookTimeDateLabel = [[UILabel alloc] init];
         finishTimeDateLabel = [[UILabel alloc] init];
         
+        commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        
         [self addSubview:faceImageView];
         [self addSubview:updateTimeLabel];
         [self addSubview:userNameLabel];
@@ -60,16 +64,22 @@
         
         [self addSubview:lookTimeDateLabel];
         [self addSubview:finishTimeDateLabel];
+        [self addSubview:commentButton];
         
         faceImageView.userInteractionEnabled = YES;
         [faceImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(faceViewPress:)]];
 
-        
+        [commentButton addTarget:self action:@selector(commentPress:) forControlEvents:UIControlEventTouchUpInside];
         
     }
     return self;
 }
 
+
+- (void)commentPress:(id)sender
+{
+    
+}
 
 
 - (void)faceViewPress:(id)sender
@@ -165,12 +175,17 @@
     finishTimeDateLabel.font = lookTimeDateLabel.font;
     
     if(stockLookInfoModel.look_status == 2){
-        finishTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", [Tools showTimeFormat:stockLookInfoModel.look_finish_timestamp/1000], @"取消看多"];
+        finishTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", [Tools showTimeFormat:stockLookInfoModel.look_finish_timestamp/1000], @"取消"];
         finishTimeDateLabel.textColor = [UIColor grayColor];
     }else{
         finishTimeDateLabel.text = @"持续看多";
         finishTimeDateLabel.textColor = myred;
     }
+    
+    commentButton.titleLabel.font = [UIFont fontWithName:fontName size:minFont];
+    [commentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [commentButton setTitle:@"评论" forState:UIControlStateNormal];
+    [commentButton setTintColor:[UIColor whiteColor]];
 }
 
 - (void)layoutSubviews
@@ -243,12 +258,17 @@
         make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 4*minSpace));
     }];
 
+    [commentButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
+        make.top.mas_equalTo(finishTimeDateLabel.mas_top);
+        make.size.mas_equalTo(CGSizeMake(8*minSpace, 4*minSpace));
+    }];
     
 }
 
 + (CGFloat)cellHeight
 {
-    return 34*minSpace;
+    return 35*minSpace;
 }
 
 @end

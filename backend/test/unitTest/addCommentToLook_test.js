@@ -6,7 +6,7 @@ var Json = {
     childpath: '/user/addCommentToLook',
     look_id: '123',
     comment_user_id: '22233',
-    comment_to_user_id: '111123',
+    comment_to_user_id: 'cbd41c6103064d3f0af848208c20ece2',
     comment_content: '1122333',
     to_look: 1,
     comment_user_name:'111233'
