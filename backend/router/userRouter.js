@@ -383,8 +383,10 @@ router.post('/addCommentToLook', function(req, res) {
 				//apnToUser(req.body.to_user_id, req.body.user_name + '评论了你');
 				//redisOper.increaseUnreadCommentCount(req.body.to_user_id);
 			}
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 
-		routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 	});
 });
