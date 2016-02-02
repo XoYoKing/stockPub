@@ -90,6 +90,7 @@ router.post('/addlook', function(req, res){
 							res.send(returnData);
 						}else{
 							req.body.look_stock_price = stockInfoArr[0].price;
+							
 							logger.debug(JSON.stringify(req.body), logger.getFileNameAndLineNum(__filename));
 
 							stockOperation.addlookStock(req.body, function(flag, result){

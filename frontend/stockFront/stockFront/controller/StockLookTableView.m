@@ -36,12 +36,19 @@
     comTableViewCtrl.view.backgroundColor = [UIColor whiteColor];
     
     comtable = comTableViewCtrl;
+    
     [comTableViewCtrl.tableView setDelegate:self];
     [comTableViewCtrl.tableView setDataSource:self];
     
     list = [[NSMutableArray alloc] init];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([comtable respondsToSelector:@selector(scrollViewDidScroll:)]) {
+        [comtable scrollViewDidScroll:scrollView];
+    }
+}
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

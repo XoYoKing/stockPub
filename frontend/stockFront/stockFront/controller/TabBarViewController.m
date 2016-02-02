@@ -136,7 +136,7 @@
 
     //double click to refresh
     
-    if(self.selectedIndex == 2&&item.tag == 2){
+    if(self.selectedIndex == item.tag){
         NSLog(@"%ld", item.tag);
         UINavigationController* nav = [self.viewControllers objectAtIndex:self.selectedIndex];
         
@@ -147,7 +147,6 @@
             //[comTable pullDown];
             [comTable refreshNew];
         }
-
     }
 }
 
