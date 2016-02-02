@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "ComTableViewCtrl.h"
+#import "InputToolbar.h"
+#import "StockLookInfoModel.h"
 
+@interface CommentTableView : NSObject<ComTableViewDelegate, UITableViewDataSource, UITableViewDelegate, InputToolbarDelegate>
 
-@interface CommentTableView : NSObject<ComTableViewDelegate, UITableViewDataSource, UITableViewDelegate>
-
-@property NSString* look_id;
+@property StockLookInfoModel* stockLookInfo;
 
 
 @end

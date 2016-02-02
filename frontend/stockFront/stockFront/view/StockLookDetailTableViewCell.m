@@ -81,9 +81,9 @@
 - (void)commentPress:(id)sender
 {
     CommentTableView* commentTable = [[CommentTableView alloc] init];
-    commentTable.look_id = myStockLookInfoModel.look_id;
+    commentTable.stockLookInfo = myStockLookInfoModel;
     ComTableViewCtrl* com = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:commentTable];
-    
+    com.hidesBottomBarWhenPushed = YES;
     [[Tools curNavigator] pushViewController:com animated:YES];
 }
 

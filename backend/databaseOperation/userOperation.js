@@ -185,5 +185,6 @@ exports.getComments = function (look_id, comment_timestamp, callback) {
 	' and a.comment_to_user_id = c.user_id ' +
 	' and a.comment_timestamp<? ' +
 	' order by a.comment_timestamp DESC limit 12 ';
+	console.log(look_id+' '+comment_timestamp);
 	conn.executeSql(sql, [look_id, comment_timestamp], callback);
 };

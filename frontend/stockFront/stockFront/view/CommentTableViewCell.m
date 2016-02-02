@@ -69,7 +69,7 @@
     [faceImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.mas_left).offset(2*minSpace);
         make.top.mas_equalTo(self.mas_top).offset(2*minSpace);
-        make.size.mas_equalTo(CGSizeMake(6*minSpace, 6*minSpace));
+        make.size.mas_equalTo(CGSizeMake(8*minSpace, 8*minSpace));
     }];
     faceImageView.layer.cornerRadius = faceImageView.frame.size.height/2;
     faceImageView.layer.masksToBounds = YES;
@@ -84,6 +84,15 @@
         make.right.mas_equalTo(self.mas_right);
         make.top.mas_equalTo(faceImageView.mas_top);
         make.size.mas_equalTo(CGSizeMake(9*minSpace, 3*minSpace));
+    }];
+
+    
+    CGSize size = [Tools getTextArrange:myCommentModel.comment_content maxRect:CGSizeMake(ScreenWidth - 12*minSpace, ScreenHeight) fontSize:minFont];
+    
+    [commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(faceImageView.mas_right).offset(minSpace);
+        make.top.mas_equalTo(userNameLabel.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(size.width, size.height));
     }];
 
 }
@@ -115,12 +124,17 @@
     timeLabel.font = [UIFont fontWithName:fontName size:minFont];
     timeLabel.text = [Tools showTime:commentModel.comment_timestamp/1000];
     
+    commentLabel.font = [UIFont fontWithName:fontName size:minFont];
+    commentLabel.textColor = [UIColor grayColor];
+    commentLabel.text = commentModel.comment_content;
     
 }
 
 + (CGFloat)cellHeight:(NSString*)commentStr
 {
-    return 0;
+    CGSize size = [Tools getTextArrange:commentStr maxRect:CGSizeMake(ScreenWidth - 12*minSpace, ScreenHeight) fontSize:minFont];
+    
+    return 4*minSpace+3*minSpace+2*minSpace+size.height;
 }
 
 @end
