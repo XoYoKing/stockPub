@@ -44,7 +44,7 @@
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:MM:ss"];
+    [formatter setDateFormat:@"yy-MM-dd HH:MM:ss"];
     
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeStamp];
     

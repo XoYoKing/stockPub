@@ -266,7 +266,7 @@
 
     [commentButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
-        make.top.mas_equalTo(finishTimeDateLabel.mas_top);
+        make.top.mas_equalTo(finishTimeDateLabel.mas_bottom);
         make.size.mas_equalTo(CGSizeMake(8*minSpace, 4*minSpace));
     }];
     
@@ -274,7 +274,7 @@
 
 + (CGFloat)cellHeight
 {
-    return 35*minSpace;
+    return 37*minSpace;
 }
 
 @end

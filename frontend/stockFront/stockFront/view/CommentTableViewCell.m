@@ -86,15 +86,13 @@
         make.size.mas_equalTo(CGSizeMake(9*minSpace, 3*minSpace));
     }];
 
+    commentLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    commentLabel.numberOfLines = 0;
     
-    CGSize size = [Tools getTextArrange:myCommentModel.comment_content maxRect:CGSizeMake(ScreenWidth - 12*minSpace, ScreenHeight) fontSize:minFont];
+    CGSize size = [Tools getTextArrange:myCommentModel.comment_content maxRect:CGSizeMake(ScreenWidth - 16*minSpace, ScreenHeight) fontSize:minFont];
     
-    [commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(faceImageView.mas_right).offset(minSpace);
-        make.top.mas_equalTo(userNameLabel.mas_bottom).offset(minSpace);
-        make.size.mas_equalTo(CGSizeMake(size.width, size.height));
-    }];
-
+    
+    commentLabel.frame = CGRectMake(faceImageView.frame.origin.x+faceImageView.frame.size.width+minSpace, userNameLabel.frame.origin.y+userNameLabel.frame.size.height+minSpace, size.width+minSpace, size.height);
 }
 
 
@@ -123,10 +121,18 @@
 
     timeLabel.font = [UIFont fontWithName:fontName size:minFont];
     timeLabel.text = [Tools showTime:commentModel.comment_timestamp/1000];
+    timeLabel.textColor = [UIColor grayColor];
     
     commentLabel.font = [UIFont fontWithName:fontName size:minFont];
     commentLabel.textColor = [UIColor grayColor];
-    commentLabel.text = commentModel.comment_content;
+    
+    if(myCommentModel.to_look == 0){
+        commentLabel.text = [[NSString alloc] initWithFormat:@"回复%@:%@", myCommentModel.comment_to_user_name, commentModel.comment_content];
+    }else{
+        commentLabel.text = commentModel.comment_content;
+    }
+    
+    
     
 }
 
@@ -134,7 +140,7 @@
 {
     CGSize size = [Tools getTextArrange:commentStr maxRect:CGSizeMake(ScreenWidth - 12*minSpace, ScreenHeight) fontSize:minFont];
     
-    return 4*minSpace+3*minSpace+2*minSpace+size.height;
+    return 4*minSpace+3*minSpace+2*minSpace+size.height+minSpace;
 }
 
 @end

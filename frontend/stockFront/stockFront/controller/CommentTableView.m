@@ -116,8 +116,8 @@
     NSString* comment_to_user_name = @"";
     if(toUserInfo == nil){
         to_look = 1;
-        comment_to_user_id = @"";
-        comment_to_user_name = @"";
+        comment_to_user_id = _stockLookInfo.user_id;
+        comment_to_user_name = _stockLookInfo.user_name;
     }else{
         to_look = 0;
         comment_to_user_id = toUserInfo.user_id;
@@ -145,7 +145,8 @@
             commentModel.comment_to_user_name = comment_to_user_name;
             commentModel.comment_to_user_id = comment_to_user_id;
             commentModel.look_id = _stockLookInfo.look_id;
-            [list addObject:commentModel];
+            commentModel.to_look = to_look;
+            [list insertObject:commentModel atIndex:0];
             
             [comtable.tableView reloadData];
             

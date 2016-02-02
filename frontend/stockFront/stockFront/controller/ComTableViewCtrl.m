@@ -59,7 +59,7 @@ static int bottomActiveHeight = 30;
     }
     
     if (initLoading == true) {
-        [self pullDown];
+        [self pullDownAction];
     }
 }
 
