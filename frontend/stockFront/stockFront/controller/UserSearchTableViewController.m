@@ -11,6 +11,11 @@
 #import "UserInfoModel.h"
 #import "AppDelegate.h"
 #import "FaceCellViewTableViewCell.h"
+#import "NetworkAPI.h"
+#import "returnCode.h"
+#import <YYModel.h>
+#import "SettingCtrl.h"
+
 
 @interface UserSearchTableViewController ()
 {
@@ -55,9 +60,57 @@
     
 }
 
+
+- (void)searchByName:(NSString*)user_name
+{
+    UserInfoModel* myinfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[user_name, myinfo.user_id]
+                             forKeys:@[@"user_name", @"user_id"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/searchUser" successed:^(NSDictionary *response) {
+        
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [userlist removeAllObjects];
+            
+            NSArray* templist = (NSArray*)[response objectForKey:@"data"];
+            
+            if(templist!=nil){
+                for (NSDictionary* element in templist) {
+                    UserInfoModel* temp = [UserInfoModel yy_modelWithDictionary:element];
+                    [userlist addObject:temp];
+                }
+                
+                
+                [self.tableView reloadData];
+            }
+            
+        }else{
+            [Tools AlertBigMsg:@"未知错误"];
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+    }];
+
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     if(textField == userSearchTextField){
         NSLog(@"textFieldShouldReturn");
+        textField.text = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        if (textField.text.length==0||textField.text==nil) {
+            return YES;
+        }
+
+        [self searchByName:textField.text];
     }
     return YES;
 }
@@ -163,6 +216,25 @@
     }
     
     return 0;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    //[self.tableView reloadData];
+    NSLog(@"viewWillAppear");
+    
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1) {
+        UserInfoModel* userInfo = [userlist objectAtIndex:indexPath.row];
+        SettingCtrl* settingViewController = [[SettingCtrl alloc] init:userInfo];
+        settingViewController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:settingViewController animated:YES];
+    }
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

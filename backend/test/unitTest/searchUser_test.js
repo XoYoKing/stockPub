@@ -4,7 +4,8 @@ var runner = require('./unitTestRunner.js');
 
 var Json = {
     childpath: '/user/searchUser',
-    user_name: 'jam112'
+    user_name: 'jam',
+    user_id: '11233'
 };
 
 describe('searchUser', function(){

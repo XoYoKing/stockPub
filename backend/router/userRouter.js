@@ -352,7 +352,7 @@ router.post('/userBaseInfo', function(req, res){
 
 //search user
 router.post('/searchUser', function(req, res){
-	userMgmt.searchUser(req.body.user_name, function(flag, result){
+	userMgmt.searchUser(req.body.user_id, req.body.user_name, function(flag, result){
 		var returnData = {};
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
