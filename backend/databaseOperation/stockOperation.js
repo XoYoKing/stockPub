@@ -6,7 +6,7 @@ var logger = global.logger;
 exports.addlookStock = function(reqbody, callback){
     var look_timestamp = Date.now();
     var md5 = require('MD5');
-    var look_id = md5(reqbody.user_id+reqbody.stock_code+reqbody.look_timestamp);
+    var look_id = md5(reqbody.user_id+reqbody.stock_code+look_timestamp);
 
     var sql = 'insert into stock_look_info(look_id, user_id, stock_code, look_direct, look_stock_price, look_time, look_timestamp, look_update_timestamp) ' +
     'values(?, ?, ?, ?, ?, NOW(), ?, ?)';
