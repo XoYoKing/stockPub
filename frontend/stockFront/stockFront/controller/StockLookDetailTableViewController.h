@@ -13,4 +13,6 @@
 
 @property StockLookInfoModel* stockLookInfoModel;
 
+@property NSMutableArray* stocklist;
+
 @end

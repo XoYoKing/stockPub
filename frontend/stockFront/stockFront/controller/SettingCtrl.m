@@ -70,6 +70,9 @@ typedef enum {
     NSLog(@"viewWillAppear");
     
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    
+    [self.tableView reloadData];
+    
 }
 
 - (void)viewDidLoad
@@ -107,6 +110,7 @@ typedef enum {
         StockLookInfoModel* model = [stockLookList objectAtIndex:indexPath.row];
         StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
         tableviewCtrl.stockLookInfoModel = model;
+        tableviewCtrl.stocklist = stockLookList;
         tableviewCtrl.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:tableviewCtrl animated:YES];
     }

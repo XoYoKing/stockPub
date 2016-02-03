@@ -76,6 +76,7 @@
                 alertMsg(@"操作失败");
             }else{
                 //alertMsg(@"已删除");
+                [_stocklist removeObject:_stockLookInfoModel];
             }
             
             [self.navigationController popViewControllerAnimated:YES];

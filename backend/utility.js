@@ -49,30 +49,38 @@ exports.isMarketOpenTime = function() {
 
 
 exports.sha1Cryp = function(str){
-	var crypto = require('crypto'); 
-	var shasum = crypto.createHash('sha1'); 
-	shasum.update(str); 
+	var crypto = require('crypto');
+	var shasum = crypto.createHash('sha1');
+	shasum.update(str);
 	return shasum.digest('hex');
 }
 
 exports.executeSql = function(sql, para, callback) {
+
+	logger.debug(sql, logger.getFileNameAndLineNum(__filename));
+
 	pool.getConnection(function(err, conn){
-		if (err&&callback!=null) {
-			logger.error(err);
-			callback(false, err);
+		if (err) {
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			if(callback!=null){
+				callback(false, err);
+			}
 		}
 		//modify by wanghan 20141007
 		else{
 			conn.query(sql, para, function(err, result){
-				if (err&&callback!=null) {
-					callback(false, err);
+				if (err) {
+					logger.error(err, logger.getFileNameAndLineNum(__filename));
+					if(callback!=null){
+						callback(false, err);
+					}
 				} else{
 					if (callback && typeof callback === 'function') callback(true, result);
 				}
-				//logger.debug('conn release');
+				logger.debug('conn release', logger.getFileNameAndLineNum(__filename));
 				//conn.end();
 				conn.release();
-			});			
+			});
 		}
 	});
 }
