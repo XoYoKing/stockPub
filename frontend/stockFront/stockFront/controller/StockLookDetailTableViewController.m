@@ -8,9 +8,18 @@
 
 #import "StockLookDetailTableViewController.h"
 #import "StockLookDetailTableViewCell.h"
+#import "UserInfoModel.h"
+#import "AppDelegate.h"
+#import <MBProgressHUD.h>
+#import "NetworkAPI.h"
+#import "macro.h"
+#import "returnCode.h"
+#import "LocDatabase.h"
 
 @interface StockLookDetailTableViewController ()
-
+{
+    LocDatabase* locDatabase;
+}
 @end
 
 @implementation StockLookDetailTableViewController
@@ -29,6 +38,58 @@
 //    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
 //    self.navigationController.navigationController.navigationBar.translucent = NO;
     
+    
+    UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
+    if([phoneUser.user_id isEqualToString:_stockLookInfoModel.user_id]){
+        if (_stockLookInfoModel.look_status == 1) {
+            //有效
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消看多" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLook:)];
+        }
+    }
+    
+    
+    locDatabase = [AppDelegate getLocDatabase];
+    
+}
+
+- (void)cancelLook:(id)sender
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[_stockLookInfoModel.user_id,
+                                               _stockLookInfoModel.user_name, _stockLookInfoModel.stock_code, _stockLookInfoModel.stock_name]
+                             forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/dellook" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            StockInfoModel* stockInfo = [[StockInfoModel alloc] init];
+            stockInfo.stock_code = _stockLookInfoModel.stock_code;
+            if(![locDatabase deleteLookStock:stockInfo]){
+                alertMsg(@"操作失败");
+            }else{
+                //alertMsg(@"已删除");
+            }
+            
+            [self.navigationController popViewControllerAnimated:YES];
+            //[self.navigationController popoverPresentationController];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
+
 }
 
 - (void)didReceiveMemoryWarning {
