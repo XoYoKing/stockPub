@@ -141,3 +141,26 @@ exports.getAllMarketIndexNow = function(callback){
 
     conn.executeSql(sql, [], callback);
 }
+
+exports.clearStockLookYield = function(callback){
+    var sql = 'TRUNCATE `stock_look_yield`';
+    conn.executeSql(sql, [], callback);
+}
+
+exports.getStockLookInfoByStatus = function(status, callback){
+    var sql = 'select *from stock_look_info where look_status = ?';
+    conn.executeSql(sql, [status], callback);
+}
+
+exports.insertStockLookYield = function(element, callback){
+    var update_timestamp = Date.now();
+    var sql = 'insert into stock_look_yield(look_id, look_yield, look_duration, update_timestamp) ' +
+    ' values(?,?,?,?)';
+    conn.executeSql(sql, [element.look_id, element.look_yield, element.look_duration, update_timestamp], callback);
+}
+
+
+exports.getStockDayInfoByDate = function(stock_code, date, callback){
+    var sql = 'select* from stock_amount_info where stock_code = ? and date>=? order by date asc limit 1';
+    conn.executeSql(sql, [element.stock_code, element.date], callback);
+}
