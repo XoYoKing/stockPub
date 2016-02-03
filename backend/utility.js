@@ -1,7 +1,16 @@
 var mysql = require('mysql');
 var config = require('./config');
 
-var pool = mysql.createPool(config.mysql_dev);
+
+var pool = mysql.createPool({
+	host: config.mysql_dev.host,
+	user: config.mysql_dev.user,
+  	password: config.mysql_dev.password,
+	database: config.mysql_dev.database,
+	port: config.mysql_dev.port,
+	waitForConnections:false
+});
+
 var logger = global.logger;
 
 exports.getPlusMinus = function(num){
@@ -60,6 +69,7 @@ exports.executeSql = function(sql, para, callback) {
 	logger.debug(sql, logger.getFileNameAndLineNum(__filename));
 
 	pool.getConnection(function(err, conn){
+		logger.debug('enter getConnection', logger.getFileNameAndLineNum(__filename));
 		if (err) {
 			logger.error(err, logger.getFileNameAndLineNum(__filename));
 			if(callback!=null){

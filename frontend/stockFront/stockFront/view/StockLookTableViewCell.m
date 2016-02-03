@@ -82,10 +82,12 @@
     
     
     [yieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.mas_right).offset(-minSpace);
+        make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
         make.centerY.mas_equalTo(self.mas_centerY);
-        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, 8*minSpace));
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3 - 2*minSpace, 6*minSpace));
     }];
+    
+    
     
 //    [lookLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.mas_equalTo(stockCodelabel.mas_right).offset(minSpace);
@@ -119,22 +121,26 @@
     primePriceLabel.font = [UIFont fontWithName:fontName size:minFont];
     primePriceLabel.textColor = [UIColor grayColor];
     
-    yieldLabel.font = [UIFont fontWithName:fontName size:middleFont];
+    yieldLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
+    
+    yieldLabel.textAlignment = NSTextAlignmentCenter;
     
     if (stockLookInfoModel.stock_yield>0) {
-        yieldLabel.textColor = myred;
+        yieldLabel.textColor = [UIColor whiteColor];
         yieldLabel.text = [[NSString alloc] initWithFormat:@"+%.2lf%%", stockLookInfoModel.stock_yield];
+        yieldLabel.backgroundColor = myred;
     }
     
-    if(stockLookInfoModel.stock_yield<0){
-        yieldLabel.textColor = mygreen;
+    if(stockLookInfoModel.stock_yield<=0){
+        yieldLabel.textColor = [UIColor whiteColor];
         yieldLabel.text = [[NSString alloc] initWithFormat:@"%.2lf%%", stockLookInfoModel.stock_yield];
+        yieldLabel.backgroundColor = mygreen;
     }
     
-    if(stockLookInfoModel.stock_yield == 0){
-        yieldLabel.textColor = [UIColor blackColor];
-        yieldLabel.text = [[NSString alloc] initWithFormat:@"%.2lf%%", stockLookInfoModel.stock_yield];
-    }
+//    if(stockLookInfoModel.stock_yield == 0){
+//        yieldLabel.textColor = [UIColor blackColor];
+//        yieldLabel.text = [[NSString alloc] initWithFormat:@"%.2lf%%", stockLookInfoModel.stock_yield];
+//    }
 }
 
 + (CGFloat)cellHeight
