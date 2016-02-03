@@ -13,7 +13,7 @@ var cronJob = require('cron').CronJob;
 log.info("run CronJob", log.getFileNameAndLineNum(__filename));
 
 //实时行情-上午-每20秒
-new CronJob('*/20 * 9-11 * * 1-5', function() {
+new cronJob('*/20 * 9-11 * * 1-5', function() {
     log.info("stock crawl Now start", log.getFileNameAndLineNum(__filename));
     crawl.startCrawlStockNow();
     crawl.startCrawlMarket();
