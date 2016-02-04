@@ -162,7 +162,11 @@ exports.insertStockLookYield = function(element, callback){
         element.look_yield,
         element.look_duration,
         update_timestamp,
-        look_cur_price, look_cur_price_date, look_duration_price, look_duration_price_date, look_date], callback);
+        element.look_cur_price,
+        element.look_cur_price_date,
+        element.look_duration_price,
+        element.look_duration_price_date,
+        element.look_date], callback);
 }
 
 
