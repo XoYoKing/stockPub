@@ -157,6 +157,7 @@ exports.insertStockLookYield = function(element, callback){
     var sql = 'insert into stock_look_yield(look_id, look_yield, look_duration, update_timestamp, ' +
     'look_cur_price, look_cur_price_date, look_duration_price, look_duration_price_date, look_date) ' +
     'values(?,?,?,?,?,?,?,?,?)';
+    
     conn.executeSql(sql,
         [element.look_id,
         element.look_yield,

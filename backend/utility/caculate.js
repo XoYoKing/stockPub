@@ -36,7 +36,7 @@ function caculateDurationYieldForSingle(element, durationDay){
         //看多时间到现在没有超过durationDay,取总的收益率
         stockLookYield.look_yield = element.stock_yield;
         stockLookYield.look_duration_price = element.look_stock_price;
-        stockLookYield.look_duration_price_date = moment(element.look_timestamp);
+        stockLookYield.look_duration_price_date = moment(element.look_timestamp).format('YYYY-MM-DD');
 
         stockOperation.insertStockLookYield(stockLookYield, function(flag, result){
             if(!flag){
