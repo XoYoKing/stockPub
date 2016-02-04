@@ -176,3 +176,8 @@ exports.getStockDayInfoByDate = function(stock_code, date, callback){
     var sql = 'select* from stock_amount_info where stock_code = ? and date>=? order by date asc limit 1';
     conn.executeSql(sql, [stock_code, date], callback);
 }
+
+exports.getUserIdFromLookYield = function(callback){
+    var sql = 'select user_id from stock_look_yield group by user_id';
+    conn.executeSql(sql, [], callback);
+}

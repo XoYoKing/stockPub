@@ -92,13 +92,21 @@ exports.caculateDurationYield = function(){
     });
 }
 
-
-exports.caculateUserRank = function(){
-    userOperation.clearUserYieldRank(function(flag, result){
-        if(flag){
-
-        }else{
-            logger.error(result, logger.getFileNameAndLineNum(__filename));
-        }
-    });
-};
+//
+// exports.caculateUserRank = function(){
+//     userOperation.clearUserYieldRank(function(flag, result){
+//         if(flag){
+//             stockOperation.getUserIdFromLookYield(function(flag, result){
+//                 if(flag){
+//                     result.forEach(function(element){
+//
+//                     });
+//                 }else{
+//                     logger.error(result, logger.getFileNameAndLineNum(__filename));
+//                 }
+//             });
+//         }else{
+//             logger.error(result, logger.getFileNameAndLineNum(__filename));
+//         }
+//     });
+// };
