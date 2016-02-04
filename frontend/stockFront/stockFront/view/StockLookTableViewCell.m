@@ -84,7 +84,7 @@
     [yieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
         make.centerY.mas_equalTo(self.mas_centerY);
-        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3 - 2*minSpace, 6*minSpace));
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3 - 2*minSpace, 5*minSpace));
     }];
     
     

@@ -144,6 +144,7 @@
     
     updateTimeLabel.font = [UIFont fontWithName:fontName size:minFont];
     updateTimeLabel.text = [Tools showTime:stockLookInfoModel.look_update_timestamp/1000];
+    updateTimeLabel.textColor = [UIColor grayColor];
     
     stockNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     stockNameLabel.text = [[NSString alloc] initWithFormat:@"%@(%@)", stockLookInfoModel.stock_name, stockLookInfoModel.stock_code];
@@ -174,14 +175,15 @@
     
     lookTimeDateLabel.font = [UIFont fontWithName:fontName size:minFont];
     lookTimeDateLabel.textColor = [UIColor grayColor];
-    lookTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@",[Tools showTimeFormat:stockLookInfoModel.look_timestamp/1000], @"看多"];
+    
+    lookTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@",[Tools showTime:stockLookInfoModel.look_timestamp/1000], @"看多"];
     
     
     
     finishTimeDateLabel.font = lookTimeDateLabel.font;
     
     if(stockLookInfoModel.look_status == 2){
-        finishTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", [Tools showTimeFormat:stockLookInfoModel.look_finish_timestamp/1000], @"取消"];
+        finishTimeDateLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", [Tools showTime:stockLookInfoModel.look_finish_timestamp/1000], @"取消"];
         finishTimeDateLabel.textColor = [UIColor grayColor];
     }else{
         finishTimeDateLabel.text = @"持续看多";
@@ -220,7 +222,7 @@
     
     
     [updateTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.mas_right);
+        make.right.mas_equalTo(self.mas_right).offset(-minSpace);
         make.top.mas_equalTo(faceImageView.mas_top);
         make.size.mas_equalTo(CGSizeMake(9*minSpace, 3*minSpace));
     }];

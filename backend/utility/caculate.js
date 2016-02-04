@@ -59,7 +59,7 @@ function caculateDurationYieldForSingle(element, durationDay){
 
 
 exports.caculateDurationYield = function(){
-    userOperation.clearStockLookYield(function(flag, result){
+    stockOperation.clearStockLookYield(function(flag, result){
         if(flag){
             stockOperation.getStockLookInfoByStatus(1, function(flag, result){
                 if(flag){
