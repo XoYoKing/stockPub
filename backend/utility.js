@@ -8,7 +8,7 @@ var pool = mysql.createPool({
   	password: config.mysql_dev.password,
 	database: config.mysql_dev.database,
 	port: config.mysql_dev.port,
-	waitForConnections:false
+	acquireTimeout: 10000
 });
 
 var logger = global.logger;
