@@ -38,7 +38,7 @@ function caculateDurationYieldForSingle(element, durationDay){
         });
     }else{
         var price_timestamp = now_timestamp - durationTimestamp;//durationDay之前的时间戳
-        var price_date = moment(price_timestamp).format('yyyy-mm-dd');
+        var price_date = moment(price_timestamp).format('YYYY-MM-DD');
         console.log(element.stock_code +' price_date ' + price_date);
         stockOperation.getStockDayInfoByDate(element.stock_code, price_date, function(flag, result){
             if(flag){
