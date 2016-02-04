@@ -45,15 +45,22 @@ new cronJob('00 25 9 * * 1-5', function(){
 //
 
 //日终计算用户总收益率
-new cronJob('00 50 23 * * *', function(){
+new cronJob('00 50 23 * * 1-5', function(){
     log.info('caculate yield for all user', log.getFileNameAndLineNum(__filename));
     caculate.caculateAllUserYield();
 }, null, true);
 
 //计算最近一周，最近一个月，最近一年的收益
-new cronJob('00 55 23 * * *', function(){
+new cronJob('00 55 23 * * 1-5', function(){
     log.info('caculate yield for one week, one month, one year', log.getFileNameAndLineNum(__filename));
     caculate.caculateDurationYield();
+}, null, true);
+
+
+//对最近一周，一月，一年收益进行排名
+new cronJob('00 59 23 * * 1-5', function(){
+    log.info('caculate user rank for one week, one month, one year', log.getFileNameAndLineNum(__filename));
+    caculate.caculateUserRank();
 }, null, true);
 
 

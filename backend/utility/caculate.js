@@ -27,6 +27,7 @@ function caculateDurationYieldForSingle(element, durationDay){
     var durationTimestamp = durationDay*24*3600*1000;
     var stockLookYield = {};
     stockLookYield.look_id = element.look_id;
+    stockLookYield.user_id = element.user_id;
     stockLookYield.look_duration = durationDay;
     stockLookYield.look_date = moment(look_timestamp).format('YYYY-MM-DD');
     stockLookYield.look_cur_price = element.look_cur_price;
@@ -90,3 +91,14 @@ exports.caculateDurationYield = function(){
         }
     });
 }
+
+
+exports.caculateUserRank = function(){
+    userOperation.clearUserYieldRank(function(flag, result){
+        if(flag){
+
+        }else{
+            logger.error(result, logger.getFileNameAndLineNum(__filename));
+        }
+    });
+};
