@@ -39,6 +39,7 @@ function caculateDurationYieldForSingle(element, durationDay){
     }else{
         var price_timestamp = now_timestamp - durationTimestamp;//durationDay之前的时间戳
         var price_date = moment(price_timestamp).format('yyyy-mm-dd');
+        console.log(element.stock_code +' price_date ' + price_date);
         stockOperation.getStockDayInfoByDate(element.stock_code, price_date, function(flag, result){
             if(flag){
                 if(result.length>0){
@@ -50,7 +51,7 @@ function caculateDurationYieldForSingle(element, durationDay){
                         }
                     });
                 }else{
-                    logger.warn(element.stock_code+'not has record less '+price_date, logger.getFileNameAndLineNum(__filename));
+                    logger.warn(element.stock_code+' not has record less '+price_date, logger.getFileNameAndLineNum(__filename));
                 }
             }else{
                 logger.error(result, logger.getFileNameAndLineNum(__filename));
