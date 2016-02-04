@@ -69,7 +69,7 @@ exports.executeSql = function(sql, para, callback) {
 	//logger.debug(sql, logger.getFileNameAndLineNum(__filename));
 
 	pool.getConnection(function(err, conn){
-		logger.debug('enter getConnection', logger.getFileNameAndLineNum(__filename));
+		//logger.debug('enter getConnection', logger.getFileNameAndLineNum(__filename));
 		if (err) {
 			logger.error(err, logger.getFileNameAndLineNum(__filename));
 			if(callback!=null){
