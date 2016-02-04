@@ -49,6 +49,8 @@ function caculateDurationYieldForSingle(element, durationDay){
                             logger.error(result, logger.getFileNameAndLineNum(__filename));
                         }
                     });
+                }else{
+                    logger.warn(element.stock_code+'not has record less '+price_date, logger.getFileNameAndLineNum(__filename));
                 }
             }else{
                 logger.error(result, logger.getFileNameAndLineNum(__filename));
