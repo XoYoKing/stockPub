@@ -66,7 +66,7 @@ exports.sha1Cryp = function(str){
 
 exports.executeSql = function(sql, para, callback) {
 
-	logger.debug(sql, logger.getFileNameAndLineNum(__filename));
+	//logger.debug(sql, logger.getFileNameAndLineNum(__filename));
 
 	pool.getConnection(function(err, conn){
 		logger.debug('enter getConnection', logger.getFileNameAndLineNum(__filename));
@@ -87,7 +87,7 @@ exports.executeSql = function(sql, para, callback) {
 				} else{
 					if (callback && typeof callback === 'function') callback(true, result);
 				}
-				logger.debug('conn release', logger.getFileNameAndLineNum(__filename));
+				//logger.debug('conn release', logger.getFileNameAndLineNum(__filename));
 				//conn.end();
 				conn.release();
 			});
