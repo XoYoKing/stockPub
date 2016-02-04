@@ -51,7 +51,7 @@ new cronJob('00 50 23 * * *', function(){
 }, null, true);
 
 //计算最近一周，最近一个月，最近一年的收益
-new cronJob('00 18 11 * * *', function(){
+new cronJob('00 22 11 * * *', function(){
     log.info('caculate yield for one week, one month, one year', log.getFileNameAndLineNum(__filename));
     caculate.caculateDurationYield();
 }, null, true);
