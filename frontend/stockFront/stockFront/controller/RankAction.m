@@ -10,6 +10,8 @@
 #import "macro.h"
 #import "UserSearchTableViewController.h"
 #import "NetworkAPI.h"
+#import "RankModel.h"
+#import "returnCode.h"
 
 typedef enum {
     week,
@@ -26,6 +28,8 @@ typedef enum {
     UIAlertAction *monthAction;
     UIAlertAction *quarterAction;
     UIAlertAction *yearAction;
+    
+    NSMutableArray* list;
 }
 
 
@@ -52,7 +56,64 @@ typedef enum {
 
 - (void)pullDownAction:(pullCompleted)completedBlock
 {
+    NSInteger lookDuration = 0;
+    if (rankby == week) {
+        lookDuration = 7;
+    }
     
+    if (rankby == month) {
+        lookDuration = 30;
+    }
+
+    if (rankby == quarter) {
+        lookDuration = 120;
+    }
+
+    if (rankby == year) {
+        lookDuration = 360;
+    }
+    
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[[[NSNumber alloc] initWithInteger:lookDuration]]
+                             forKeys:@[@"look_duration"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getRankUser" successed:^(NSDictionary *response) {
+        
+        completedBlock();
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [list removeAllObjects];
+            
+            NSArray* data = (NSArray*)[response objectForKey:@"data"];
+            
+            if(data!=nil){
+                for (NSDictionary* element in data) {
+                    RankModel* rankModel = [[RankModel alloc] init];
+                    rankModel.user_id = [element objectForKey:@"user_id"];
+                    rankModel.user_name = [element objectForKey:@"user_name"];
+                    rankModel.user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
+                    rankModel.total_yield = [[element objectForKey:@"total_yield"] floatValue];
+                    rankModel.stocklist = (NSMutableArray*)[element objectForKey:@"stocklist"];
+                    [list addObject:rankModel];
+                }
+                
+                [comtable.tableView reloadData];
+            }
+            
+        }else{
+            [Tools AlertBigMsg:@"未知错误"];
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+        completedBlock();
+    }];
+
 }
 
 //- (void)pullUpAction:(pullCompleted)completedBlock
