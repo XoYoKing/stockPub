@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B2C943D81C38C60900D06B61"
+               BlueprintIdentifier = "B227F39A1C64A0C200235B64"
                BuildableName = "stockFront.app"
                BlueprintName = "stockFront"
                ReferencedContainer = "container:stockFront.xcodeproj">
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B2C943F41C38C60A00D06B61"
+               BlueprintIdentifier = "B227F3B61C64A0C300235B64"
                BuildableName = "stockFrontTests.xctest"
                BlueprintName = "stockFrontTests"
                ReferencedContainer = "container:stockFront.xcodeproj">
@@ -42,7 +42,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B2C943FF1C38C60A00D06B61"
+               BlueprintIdentifier = "B227F3C11C64A0C300235B64"
                BuildableName = "stockFrontUITests.xctest"
                BlueprintName = "stockFrontUITests"
                ReferencedContainer = "container:stockFront.xcodeproj">
@@ -52,7 +52,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B2C943D81C38C60900D06B61"
+            BlueprintIdentifier = "B227F39A1C64A0C200235B64"
             BuildableName = "stockFront.app"
             BlueprintName = "stockFront"
             ReferencedContainer = "container:stockFront.xcodeproj">
@@ -75,7 +75,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B2C943D81C38C60900D06B61"
+            BlueprintIdentifier = "B227F39A1C64A0C200235B64"
             BuildableName = "stockFront.app"
             BlueprintName = "stockFront"
             ReferencedContainer = "container:stockFront.xcodeproj">
@@ -94,7 +94,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B2C943D81C38C60900D06B61"
+            BlueprintIdentifier = "B227F39A1C64A0C200235B64"
             BuildableName = "stockFront.app"
             BlueprintName = "stockFront"
             ReferencedContainer = "container:stockFront.xcodeproj">

@@ -2,7 +2,7 @@
 //  stockFrontUITests.m
 //  stockFrontUITests
 //
-//  Created by wang jam on 1/3/16.
+//  Created by wang jam on 2/5/16.
 //  Copyright © 2016 jam wang. All rights reserved.
 //
 
