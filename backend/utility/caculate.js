@@ -28,7 +28,7 @@ function caculateDurationYieldForSingle(element, durationDay){
 
     if(element.look_status == 2){
         //如果取消，需要判断取消的时间是否在durationDay里面
-        if(now_timestamp - durationTimestamp > look_finish_timestamp){
+        if(now_timestamp - durationTimestamp > element.look_finish_timestamp){
             //取消的时间比duration还早
             return;
         }
