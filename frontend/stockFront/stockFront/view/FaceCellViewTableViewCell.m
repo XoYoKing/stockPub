@@ -98,12 +98,18 @@
     
     
     userYieldLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
+    userYieldLabel.textAlignment = NSTextAlignmentLeft;
+    
     if(userInfo.user_look_yield>0){
         userYieldLabel.text = [[NSString alloc] initWithFormat:@"%@+%.2f%%", @"总收益", userInfo.user_look_yield];
+        //userYieldLabel.backgroundColor = myred;
         userYieldLabel.textColor = myred;
+
     }else{
         userYieldLabel.text = [[NSString alloc] initWithFormat:@"%@%.2f%%", @"总收益", userInfo.user_look_yield];
+        //userYieldLabel.backgroundColor = mygreen;
         userYieldLabel.textColor = mygreen;
+
     }
     
     //[followButton setTitle:@"关注" forState:UIControlStateNormal];
@@ -132,8 +138,8 @@
     
     [userYieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(faceImageView.mas_right).offset(2*minSpace);
-        make.top.mas_equalTo(userNameLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(180, 4*minSpace));
+        make.top.mas_equalTo(userNameLabel.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(20*minSpace, 4*minSpace));
     }];
     
     

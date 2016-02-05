@@ -81,7 +81,7 @@
     }];
     
     [timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.mas_right);
+        make.right.mas_equalTo(self.mas_right).offset(-minSpace);
         make.top.mas_equalTo(faceImageView.mas_top);
         make.size.mas_equalTo(CGSizeMake(9*minSpace, 3*minSpace));
     }];
@@ -126,11 +126,7 @@
     commentLabel.font = [UIFont fontWithName:fontName size:minFont];
     commentLabel.textColor = [UIColor grayColor];
     
-    if(myCommentModel.to_look == 0){
-        commentLabel.text = [[NSString alloc] initWithFormat:@"回复%@:%@", myCommentModel.comment_to_user_name, commentModel.comment_content];
-    }else{
-        commentLabel.text = commentModel.comment_content;
-    }
+    commentLabel.text = commentModel.comment_content;
     
     
     
@@ -140,7 +136,15 @@
 {
     CGSize size = [Tools getTextArrange:commentStr maxRect:CGSizeMake(ScreenWidth - 12*minSpace, ScreenHeight) fontSize:minFont];
     
-    return 4*minSpace+3*minSpace+2*minSpace+size.height+minSpace;
+    CGFloat faceHeight = 12*minSpace;
+    
+    CGFloat contentSize = size.height+3*minSpace+2*minSpace+2*minSpace+minSpace;
+    
+    if (faceHeight>contentSize) {
+        return faceHeight;
+    }else{
+        return contentSize;
+    }
 }
 
 @end

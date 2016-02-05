@@ -140,12 +140,18 @@
             commentModel.comment_user_id = phoneUser.user_id;
             commentModel.comment_user_name = phoneUser.user_name;
             commentModel.comment_user_facethumbnail = phoneUser.user_facethumbnail;
-            commentModel.comment_content = msg;
             commentModel.comment_timestamp = [[NSDate date] timeIntervalSince1970]*1000;
             commentModel.comment_to_user_name = comment_to_user_name;
             commentModel.comment_to_user_id = comment_to_user_id;
             commentModel.look_id = _stockLookInfo.look_id;
             commentModel.to_look = to_look;
+            if(commentModel.to_look == 0){
+                commentModel.comment_content = [[NSString alloc] initWithFormat:@"回复%@:%@", commentModel.comment_to_user_name, msg];
+            }else{
+                commentModel.comment_content = msg;
+            }
+
+            
             [list insertObject:commentModel atIndex:0];
             
             [comtable.tableView reloadData];
@@ -194,6 +200,24 @@
 //    SettingCtrl* settingViewController = [[SettingCtrl alloc] init:userInfo];
 //    settingViewController.hidesBottomBarWhenPushed = YES;
 //    [comtable.navigationController pushViewController:settingViewController animated:YES];
+    
+    CommentModel* commentModel = [list objectAtIndex:indexPath.row];
+    
+    if ([phoneUser.user_id isEqualToString:commentModel.comment_user_id]) {
+        return;
+    }
+    
+    toUserInfo = [[UserInfoModel alloc] init];
+    toUserInfo.user_id = commentModel.comment_user_id;
+    toUserInfo.user_name = commentModel.comment_user_name;
+    
+    inputToolbar = [[InputToolbar alloc] init];
+    inputToolbar.inputDelegate = self;
+    
+    [[Tools curNavigator].view addSubview:inputToolbar];
+    
+    [inputToolbar showInput];
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -227,11 +251,23 @@
             if(commentlist!=nil){
                 for (NSDictionary* element in commentlist) {
                     CommentModel* temp = [CommentModel yy_modelWithDictionary:element];
+                    
+                    if(temp.to_look == 0){
+                        temp.comment_content = [[NSString alloc] initWithFormat:@"回复%@:%@", temp.comment_to_user_name, temp.comment_content];
+                    }
+
+                    
                     [list addObject:temp];
+                    
                 }
                 
                 [comtable.tableView reloadData];
+                if ([commentlist count] == 0) {
+                    [comtable forbidPullUp];
+                }
             }
+            
+            
             
         }else{
             [Tools AlertBigMsg:@"未知错误"];
@@ -268,6 +304,11 @@
             if(commentlist!=nil){
                 for (NSDictionary* element in commentlist) {
                     CommentModel* temp = [CommentModel yy_modelWithDictionary:element];
+                    
+                    if(temp.to_look == 0){
+                        temp.comment_content = [[NSString alloc] initWithFormat:@"回复%@:%@", temp.comment_to_user_name, temp.comment_content];
+                    }
+                    
                     [list addObject:temp];
                 }
                 

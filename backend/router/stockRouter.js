@@ -90,7 +90,7 @@ router.post('/addlook', function(req, res){
 							res.send(returnData);
 						}else{
 							req.body.look_stock_price = stockInfoArr[0].price;
-							
+
 							logger.debug(JSON.stringify(req.body), logger.getFileNameAndLineNum(__filename));
 
 							stockOperation.addlookStock(req.body, function(flag, result){
@@ -116,6 +116,7 @@ router.post('/addlook', function(req, res){
 
 								}else{
 									if(result.code == 'ER_DUP_ENTRY'){
+										logger.warn('主键冲突', logger.getFileNameAndLineNum(__filename));
 										returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
 									}else{
 										returnData.code = constant.returnCode.ERROR;

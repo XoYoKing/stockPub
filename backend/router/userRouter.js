@@ -400,3 +400,36 @@ router.post('/getComments', function(req, res){
 		}
 	});
 });
+
+
+router.post('/getRankUser', function(req, res){
+	userMgmt.getRankUser(req.body.look_duration, function(flag, result){
+		var userlist = {};
+		if(flag){
+			result.forEach(function(element){
+				if(userlist[element.user_id] == null){
+					userlist[element.user_id] =
+					{
+						user_id: element.user_id,
+						user_name: element.user_name,
+						user_facethumbnail: element.user_facethumbnail,
+						total_yield: element.total_yield,
+						stocklist: [{
+							stock_code: element.stock_code,
+							stock_name: element.stock_name
+						}]
+					};
+				}else{
+					userlist[element.user_id].stocklist.push({
+						stock_code: element.stock_code,
+						stock_name: element.stock_name
+					});
+				}
+			});
+
+			routerFunc.feedBack(constant.returnCode.SUCCESS, userlist, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
