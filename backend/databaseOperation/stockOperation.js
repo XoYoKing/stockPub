@@ -181,3 +181,9 @@ exports.getUserIdFromLookYield = function(callback){
     var sql = 'select user_id from stock_look_yield group by user_id';
     conn.executeSql(sql, [], callback);
 }
+
+
+exports.getAllStockLook = function(callback){
+    var sql = 'select * from stock_look_info';
+    conn.executeSql(sql, [], callback);
+}
