@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="14F1509" minimumToolsVersion="Xcode 7.0">
+    <entity name="FollowUser" representedClassName="FollowUser" syncable="YES">
+        <attribute name="user_id" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="LookStock" representedClassName="LookStock" syncable="YES">
+        <attribute name="stock_code" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MyStock" representedClassName="MyStock" syncable="YES">
+        <attribute name="stock_code" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="LookStock" positionX="-54" positionY="9" width="128" height="60"/>
+        <element name="MyStock" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="FollowUser" positionX="-54" positionY="0" width="128" height="60"/>
+    </elements>
+</model>
