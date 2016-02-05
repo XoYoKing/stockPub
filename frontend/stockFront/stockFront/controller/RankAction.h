@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "ComTableViewCtrl.h"
 
-@interface RankAction : NSObject<ComTableViewDelegate, UITextViewDelegate>
+@interface RankAction : NSObject<ComTableViewDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @end

@@ -12,6 +12,9 @@
 #import "NetworkAPI.h"
 #import "RankModel.h"
 #import "returnCode.h"
+#import "RankCell.h"
+#import <YYModel.h>
+#import "SettingCtrl.h"
 
 typedef enum {
     week,
@@ -32,8 +35,6 @@ typedef enum {
     NSMutableArray* list;
 }
 
-
-
 - (void)showRankButton
 {
     if (rankby == week) {
@@ -53,6 +54,22 @@ typedef enum {
     }
 }
 
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    [comtable.tableView deselectRowAtIndexPath:[comtable.tableView indexPathForSelectedRow] animated:YES];
+    
+    RankModel* rankModel = [list objectAtIndex:indexPath.row];
+    
+    UserInfoModel* userInfo = [[UserInfoModel alloc] init];
+    userInfo.user_id = rankModel.user_id;
+    userInfo.user_facethumbnail = rankModel.user_facethumbnail;
+    
+    SettingCtrl* settingViewController = [[SettingCtrl alloc] init:userInfo];
+    settingViewController.hidesBottomBarWhenPushed = YES;
+    [comtable.navigationController pushViewController:settingViewController animated:YES];
+}
 
 - (void)pullDownAction:(pullCompleted)completedBlock
 {
@@ -88,18 +105,28 @@ typedef enum {
             
             [list removeAllObjects];
             
-            NSArray* data = (NSArray*)[response objectForKey:@"data"];
+            NSDictionary* data = (NSDictionary*)[response objectForKey:@"data"];
+            
+            NSArray* userData = [data allValues];
             
             if(data!=nil){
-                for (NSDictionary* element in data) {
-                    RankModel* rankModel = [[RankModel alloc] init];
-                    rankModel.user_id = [element objectForKey:@"user_id"];
-                    rankModel.user_name = [element objectForKey:@"user_name"];
-                    rankModel.user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
-                    rankModel.total_yield = [[element objectForKey:@"total_yield"] floatValue];
-                    rankModel.stocklist = (NSMutableArray*)[element objectForKey:@"stocklist"];
+                for (NSDictionary* element in userData) {
+                    RankModel* rankModel = [RankModel yy_modelWithDictionary:element];
+//                    rankModel.user_id = [element objectForKey:@"user_id"];
+//                    rankModel.user_name = [element objectForKey:@"user_name"];
+//                    rankModel.user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
+//                    rankModel.total_yield = [[element objectForKey:@"total_yield"] floatValue];
+//                    rankModel.stocklist = (NSMutableArray*)[element objectForKey:@"stocklist"];
                     [list addObject:rankModel];
                 }
+                
+                [list sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                    RankModel* element1 = (RankModel*)obj1;
+                    RankModel* element2 = (RankModel*)obj2;
+                    
+                    return element1.total_yield<element2.total_yield;
+
+                }];
                 
                 [comtable.tableView reloadData];
             }
@@ -128,7 +155,7 @@ typedef enum {
     rankby = rankOption;
     [self showRankButton];
     
-    
+    [comtable pullDown];
 }
 
 - (void)showRankList
@@ -183,8 +210,47 @@ typedef enum {
     
     rankby = week;
     
+    list = [[NSMutableArray alloc] init];
     [self showRankButton];
     
+    [comTableViewCtrl.tableView setDelegate:self];
+    [comTableViewCtrl.tableView setDataSource:self];
+    
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    RankModel* model = [list objectAtIndex:indexPath.row];
+    
+    return [RankCell cellHeight:model.stocklist];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [list count];
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString* cellIdentifier = @"RankCell";
+    RankCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    // Configure the cell...
+    // Configure the cell...
+    if (cell==nil) {
+        cell = [[RankCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        NSLog(@"new cell");
+    }
+    
+    
+    [cell configureCell:[list objectAtIndex:indexPath.row]];
+    
+    return cell;
 }
 
 - (void)searchPeopleAction:(id)sender
