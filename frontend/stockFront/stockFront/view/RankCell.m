@@ -87,13 +87,15 @@
     [commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(faceImageView.mas_right).offset(minSpace);
         make.top.mas_equalTo(userNameLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(170, 3*minSpace));
+        make.size.mas_equalTo(CGSizeMake(160, 3*minSpace));
     }];
+    
+    
     
     [yieldLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
         make.centerY.mas_equalTo(self.mas_centerY);
-        make.size.mas_equalTo(CGSizeMake(ScreenWidth/4 - 2*minSpace, 4*minSpace));
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/4 - minSpace/2, 4*minSpace));
     }];
     
 }
