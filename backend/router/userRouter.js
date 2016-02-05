@@ -400,3 +400,14 @@ router.post('/getComments', function(req, res){
 		}
 	});
 });
+
+
+router.post('/getRankUser', function(req, res){
+	userMgmt.getRankUser(req.body.look_duration, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});

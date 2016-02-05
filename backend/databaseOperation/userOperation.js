@@ -193,3 +193,7 @@ exports.clearUserYieldRank = function(){
 	var sql = 'TRUNCATE `user_yield_rank`';
     conn.executeSql(sql, [], callback);
 }
+
+exports.getRankUser = function(){
+	
+}
