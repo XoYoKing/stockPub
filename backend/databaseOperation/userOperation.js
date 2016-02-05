@@ -194,6 +194,22 @@ exports.clearUserYieldRank = function(){
     conn.executeSql(sql, [], callback);
 }
 
-exports.getRankUser = function(){
-	
+exports.getRankUser = function(look_duration, callback){
+	var sql = 'select b.user_id, c.`user_name`, c.`user_facethumbnail`, ' +
+	' b.look_duration, b.total_yield, a.`stock_code`, d.`stock_name` ' +
+	' from `stock_look_info` a, ' +
+	' `user_base_info` c,' +
+	' `stock_base_info` d,' +
+	' (SELECT `user_id`,`look_duration` , SUM(`look_yield`) as total_yield  ' +
+	' FROM `stock_look_yield` GROUP BY `user_id` , `look_duration` ' +
+	' HAVING `look_duration` = ? '+
+	' ORDER BY total_yield desc ' +
+	' LIMIT 20 ' +
+	' ) b ' +
+	' WHERE a.`user_id` = b.user_id' +
+	' and a.`user_id` = c.`user_id` ' +
+	' and a.`stock_code` = d.`stock_code`' +
+	' and a.`look_status`  = 1'+
+	' ORDER BY b.total_yield desc';
+	conn.executeSql(sql, [look_duration], callback);
 }
