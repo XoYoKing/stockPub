@@ -417,7 +417,7 @@ router.post('/getRankUser', function(req, res){
 						stocklist: [{
 							stock_code: element.stock_code,
 							stock_name: element.stock_name
-						}];
+						}]
 					};
 				}else{
 					userlist[element.user_id].stocklist.push({
@@ -426,7 +426,7 @@ router.post('/getRankUser', function(req, res){
 					});
 				}
 			});
-			
+
 			routerFunc.feedBack(constant.returnCode.SUCCESS, userlist, res);
 		}else{
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
