@@ -25,6 +25,16 @@ function caculateDurationYieldForSingle(element, durationDay){
     var now_timestamp = Date.now();
     var look_timestamp = element.look_timestamp;
     var durationTimestamp = durationDay*24*3600*1000;
+
+    if(element.look_status == 2){
+        //如果取消，需要判断取消的时间是否在durationDay里面
+        if(now_timestamp - durationTimestamp > element.look_finish_timestamp){
+            //取消的时间比duration还早
+            return;
+        }
+    }
+
+
     var stockLookYield = {};
     stockLookYield.look_id = element.look_id;
     stockLookYield.user_id = element.user_id;
@@ -74,7 +84,7 @@ function caculateDurationYieldForSingle(element, durationDay){
 exports.caculateDurationYield = function(){
     stockOperation.clearStockLookYield(function(flag, result){
         if(flag){
-            stockOperation.getStockLookInfoByStatus(1, function(flag, result){
+            stockOperation.getAllStockLook(function(flag, result){
                 if(flag){
                     result.forEach(function(element){
                         caculateDurationYieldForSingle(element, 7);
