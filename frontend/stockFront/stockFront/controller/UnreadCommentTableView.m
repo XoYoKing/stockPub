@@ -16,11 +16,18 @@
 #import <YYModel.h>
 #import "CommentTableViewCell.h"
 #import "StockLookTableViewCell.h"
+#import "StockLookDetailTableViewController.h"
+#import "AppDelegate.h"
+#import "InputToolbar.h"
 
 @interface UnreadCommentTableView ()
 {
     NSMutableArray* commentlist;
     NSMutableArray* looklist;
+    UserInfoModel* toUserInfo;
+    StockLookInfoModel* toStockLook;
+    InputToolbar* inputToolbar;
+
 }
 @end
 
@@ -85,14 +92,14 @@
             alertMsg(@"未知错误");
         }
         
-        //[self.refreshControl endRefreshing];
-        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
         [self.tableView reloadData];
         
     } failed:^(NSError *error) {
         alertMsg(@"网络问题");
-        //[self.refreshControl endRefreshing];
-        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
         [self.tableView reloadData];
         
     }];
@@ -173,11 +180,144 @@
     return 2;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 2*minSpace;
+    return minSpace;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return minSpace;
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
+
+    if (indexPath.row == 0) {
+        StockLookInfoModel* model = [looklist objectAtIndex:indexPath.section];
+        
+        model.user_id = phoneUser.user_id;
+        model.user_facethumbnail = phoneUser.user_facethumbnail;
+        model.user_name = phoneUser.user_name;
+        model.user_look_yield = phoneUser.user_look_yield;
+        
+        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
+        tableviewCtrl.stockLookInfoModel = model;
+        tableviewCtrl.stocklist = looklist;
+        tableviewCtrl.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:tableviewCtrl animated:YES];
+    }
+    
+    if (indexPath.row == 1) {
+        CommentModel* commentModel = [commentlist objectAtIndex:indexPath.section];
+        
+        if (![phoneUser.user_id isEqualToString:commentModel.comment_user_id]) {
+            
+            toUserInfo = [[UserInfoModel alloc] init];
+            toUserInfo.user_id = commentModel.comment_user_id;
+            toUserInfo.user_name = commentModel.comment_user_name;
+            
+            toStockLook = [looklist objectAtIndex:indexPath.section];
+            
+            inputToolbar = [[InputToolbar alloc] init];
+            inputToolbar.inputDelegate = self;
+            
+            [[Tools curNavigator].view addSubview:inputToolbar];
+
+            
+            [inputToolbar showInput];
+        }
+        
+    }
+    
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+
+    
+}
+
+- (void)sendAction:(NSString*)msg
+{
+    msg = [msg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (msg.length==0||msg==nil) {
+        return;
+    }
+    
+    if(inputToolbar!=nil){
+        [inputToolbar hideInput];
+        [inputToolbar removeFromSuperview];
+        inputToolbar = nil;
+        [self sendDetailComment:msg];
+    }
+}
+
+
+- (void)sendDetailComment:(NSString*)msg
+{
+    
+    NSInteger to_look = 0;
+    NSString* comment_to_user_id = @"";
+    NSString* comment_to_user_name = @"";
+    to_look = 0;
+    comment_to_user_id = toUserInfo.user_id;
+    comment_to_user_name = toUserInfo.user_name;
+    
+    UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
+
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[toStockLook.look_id, phoneUser.user_id, phoneUser.user_name, comment_to_user_id, msg, [[NSNumber alloc] initWithInteger:to_look]]
+                             forKeys:@[@"look_id", @"comment_user_id", @"comment_user_name", @"comment_to_user_id", @"comment_content", @"to_look"]];
+    
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/addCommentToLook" successed:^(NSDictionary *response) {
+        
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [Tools AlertBigMsg:@"回复成功"];
+            
+        }else{
+            [Tools AlertBigMsg:@"未知错误"];
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [Tools AlertBigMsg:@"网络问题"];
+    }];
+    
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+
+    
+    if (scrollView == self.tableView) {
+        //[myTextField resignFirstResponder];
+        if (inputToolbar!=nil) {
+            [inputToolbar hideInput];
+            [inputToolbar removeFromSuperview];
+            inputToolbar = nil;
+            
+        }
+    }
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (inputToolbar!=nil) {
+        [inputToolbar hideInput];
+        [inputToolbar removeFromSuperview];
+        inputToolbar = nil;
+    }
+}
+
+
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

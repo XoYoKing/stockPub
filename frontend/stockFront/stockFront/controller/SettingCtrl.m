@@ -74,6 +74,8 @@ typedef enum {
     
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
     
+    [self getUnreadCommentCount];
+    
     [self.tableView reloadData];
     
 }
@@ -167,16 +169,12 @@ typedef enum {
     if(indexPath.section == msgSection){
         if (indexPath.row == 0) {
             //未读评论
-            UnreadCommentTableView* unreadCommentTableView = [[UnreadCommentTableView alloc] init];
+            UnreadCommentTableView* unreadCommentTableView = [[UnreadCommentTableView alloc] initWithStyle:UITableViewStyleGrouped];
             unreadCommentTableView.hidesBottomBarWhenPushed = YES;
             unreadCommentTableView.userInfo = myInfo;
             
             [self.navigationController pushViewController:unreadCommentTableView animated:YES];
             
-            NSIndexPath *selectindexPath = [self.tableView indexPathForSelectedRow];
-            
-            UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:selectindexPath];
-            cell.accessoryView = nil;
             
         }
     }

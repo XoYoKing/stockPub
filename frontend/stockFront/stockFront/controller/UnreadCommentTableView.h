@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "UserInfoModel.h"
+#import "InputToolbar.h"
 
-@interface UnreadCommentTableView : UITableViewController
+@interface UnreadCommentTableView : UITableViewController<InputToolbarDelegate>
 
 @property UserInfoModel* userInfo;
 
