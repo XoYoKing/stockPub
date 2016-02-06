@@ -213,3 +213,17 @@ exports.getRankUser = function(look_duration, callback){
 	' ORDER BY b.total_yield desc';
 	conn.executeSql(sql, [look_duration], callback);
 }
+
+
+exports.getUnreadCommentCount = function(user_id, callback){
+	var sql = 'select count(*) as count from look_comment_info where comment_to_user_id = ? and comment_unread = 1';
+	conn.executeSql(sql, [user_id], callback);
+}
+
+exports.updateUnreadComment = function(user_id, callback){
+
+}
+
+exports.getUnreadComment = function(user_id, callback){
+
+}

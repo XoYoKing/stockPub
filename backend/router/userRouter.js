@@ -385,6 +385,7 @@ router.post('/addCommentToLook', function(req, res) {
 			}
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 
@@ -396,6 +397,7 @@ router.post('/getComments', function(req, res){
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});
@@ -429,6 +431,21 @@ router.post('/getRankUser', function(req, res){
 
 			routerFunc.feedBack(constant.returnCode.SUCCESS, userlist, res);
 		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/getUnreadCommentCount', function(req, res){
+	userMgmt.getUnreadCommentCount(req.body.user_id, function(flag, result){
+		if(flag){
+			var count = result[0].count;
+			log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, count, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});
