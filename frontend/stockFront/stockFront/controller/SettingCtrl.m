@@ -172,6 +172,12 @@ typedef enum {
             unreadCommentTableView.userInfo = myInfo;
             
             [self.navigationController pushViewController:unreadCommentTableView animated:YES];
+            
+            NSIndexPath *selectindexPath = [self.tableView indexPathForSelectedRow];
+            
+            UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:selectindexPath];
+            cell.accessoryView = nil;
+            
         }
     }
 }

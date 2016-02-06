@@ -453,7 +453,7 @@ router.post('/getUnreadCommentCount', function(req, res){
 
 
 router.post('/getUnreadComment', function(req, res){
-	userMgmt.getUnreadComment(req.body.user_id, function(flag, result){
+	userMgmt.getUnreadComment(req.body.user_id, req.body.comment_timestamp, function(flag, result){
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 			userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
