@@ -238,5 +238,5 @@ exports.getUnreadComment = function(user_id, comment_timestamp, callback){
 	' and b.stock_code = d.stock_code ' +
 	' and a.comment_timestamp<? ' +
 	' order by a.comment_timestamp desc limit 12';
-	conn.executeSql(sql, [user_id], callback);
+	conn.executeSql(sql, [user_id, comment_timestamp], callback);
 }
