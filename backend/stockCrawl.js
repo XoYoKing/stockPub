@@ -1,17 +1,17 @@
 var databaseOperation = require('./databaseOperation');
 var logger = global.logger;
 var http = require('http');
-var redis = require("redis");
-var redisClient = redis.createClient({auth_pass:'here_dev'});
+//var redis = require("redis");
+//var redisClient = redis.createClient({auth_pass:'here_dev'});
 
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
 var config = require('./config');
 var path = require('path');
-redisClient.on("error", function (err) {
-	logger.error(err, logger.getFileNameAndLineNum(__filename));
-});
+// redisClient.on("error", function (err) {
+// 	logger.error(err, logger.getFileNameAndLineNum(__filename));
+// });
 
 
 function isMarketOpenTime() {
@@ -170,18 +170,18 @@ function insertToDatabase(htmlData, isnow) {
 
 
 
-exports.removeKeys = function(){
-	logger.info('enter removeKeys');
-	databaseOperation.getAllStockCode(function(flag, result){
-		if (flag) {
-			result.forEach(function(element){
-				redisClient.del(element.stock_code+"_3day");
-			});
-		}else{
-			logger.error('getAllStockCode error code '+result.errno);
-		}
-	});
-}
+// exports.removeKeys = function(){
+// 	logger.info('enter removeKeys');
+// 	databaseOperation.getAllStockCode(function(flag, result){
+// 		if (flag) {
+// 			result.forEach(function(element){
+// 				redisClient.del(element.stock_code+"_3day");
+// 			});
+// 		}else{
+// 			logger.error('getAllStockCode error code '+result.errno);
+// 		}
+// 	});
+// }
 
 function getMaxPrice(result){
 	var max = result[0].high_price;

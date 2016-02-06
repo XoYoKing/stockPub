@@ -42,6 +42,7 @@ typedef enum {
     followSection,
     lookInfoSection,
     hisLookInfoSection,
+    msgSection,
     logout
 } section;
 
@@ -253,10 +254,10 @@ typedef enum {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if(section == lookInfoSection||section == hisLookInfoSection){
-        return 6*minSpace;
-    }else{
+    if (section == hisLookInfoSection||section == faceSection||section == followSection) {
         return 0;
+    }else{
+        return 6*minSpace;
     }
 }
 
@@ -267,28 +268,55 @@ typedef enum {
     }
 
     if(section == hisLookInfoSection){
-        //当前看多
-        UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
-        sectionView.backgroundColor = [UIColor whiteColor];
-        
-        //股票名称
-        UILabel* label = [[UILabel alloc] init];
-        label.font = [UIFont fontWithName:fontName size:minFont];
-        label.textColor = [UIColor grayColor];
-        label.text = @"历史记录";
-        label.textAlignment = NSTextAlignmentCenter;
-        [sectionView addSubview:label];
-        
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(sectionView.mas_left);
-            make.centerY.mas_equalTo(sectionView.mas_centerY);
-            make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
-        }];
-        
-        return sectionView;
+//        //历史看多
+//        UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+//        sectionView.backgroundColor = [UIColor whiteColor];
+//        
+//        //股票名称
+//        UILabel* label = [[UILabel alloc] init];
+//        label.font = [UIFont fontWithName:fontName size:minFont];
+//        label.textColor = [UIColor grayColor];
+//        label.text = @"历史记录";
+//        label.textAlignment = NSTextAlignmentCenter;
+//        [sectionView addSubview:label];
+//        
+//        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.mas_equalTo(sectionView.mas_left);
+//            make.centerY.mas_equalTo(sectionView.mas_centerY);
+//            make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+//        }];
+//        
+//        return sectionView;
+        return nil;
     }
     
+//    if (section == msgSection) {
+//        return [self getSectionView:@"消息"];
+//    }
+    
     return nil;
+}
+
+
+- (UIView*)getSectionView:(NSString*)title
+{
+    UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+    sectionView.backgroundColor = [UIColor whiteColor];
+    
+    //股票名称
+    UILabel* label = [[UILabel alloc] init];
+    label.font = [UIFont fontWithName:fontName size:minFont];
+    label.textColor = [UIColor grayColor];
+    label.text = title;
+    [sectionView addSubview:label];
+    
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sectionView.mas_left);
+        make.centerY.mas_equalTo(sectionView.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+    }];
+    
+    return sectionView;
 }
 
 - (UIView*)getStockSectionView
@@ -594,6 +622,23 @@ typedef enum {
         return cell;
     }
     
+    if (indexPath.section == msgSection) {
+        //评论
+        static NSString* cellIdentifier = @"msgcell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell==nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        cell.textLabel.text = @"评论";
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.backgroundColor = [UIColor whiteColor];
+        return cell;
+
+    }
+    
     return nil;
 }
 
@@ -605,8 +650,12 @@ typedef enum {
         return @"当前看多";
     }
     
-    if (section == hisLookInfoSection){
-        return @"历史记录";
+//    if (section == hisLookInfoSection){
+//        return @"历史记录";
+//    }
+    
+    if (section == msgSection) {
+        return @"";
     }
     
     return @"";
@@ -631,7 +680,7 @@ typedef enum {
         return 8*minSpace;
     }
     
-    return 0;
+    return 6*minSpace;
     
 }
 
@@ -662,6 +711,10 @@ typedef enum {
         return 1;
     }
     
+    if (section == msgSection) {
+        return 1;
+    }
+    
     return 0;
     
 }
@@ -673,9 +726,9 @@ typedef enum {
     UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
     
     if([myInfo.user_id isEqualToString:userInfo.user_id]){
-        return 5;
+        return 6;
     }else{
-        return 4;
+        return 5;
     }
 }
 
