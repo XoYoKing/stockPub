@@ -224,9 +224,11 @@ exports.getUnreadCommentCount = function(user_id, callback){
 }
 
 exports.updateUnreadComment = function(user_id, callback){
-
+	var sql = 'update look_comment_info set comment_unread = 2 where comment_to_user_id = ?';
+	conn.executeSql(sql, [user_id], callback);
 }
 
 exports.getUnreadComment = function(user_id, callback){
+
 
 }
