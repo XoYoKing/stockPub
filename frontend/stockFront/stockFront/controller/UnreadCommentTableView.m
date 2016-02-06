@@ -57,8 +57,8 @@
 - (void)pullDownAction
 {
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[_userInfo.user_id]
-                             forKeys:@[@"user_id"]];
+                             initWithObjects:@[_userInfo.user_id, [[NSNumber alloc] initWithInteger:[[NSDate date] timeIntervalSince1970]*1000]]
+                             forKeys:@[@"user_id", @"comment_timestamp"]];
     
     [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadComment" successed:^(NSDictionary *response) {
         
