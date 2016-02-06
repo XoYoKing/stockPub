@@ -443,7 +443,7 @@ router.post('/getUnreadCommentCount', function(req, res){
 		if(flag){
 			var count = result[0].count;
 			log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
-			routerFunc.feedBack(constant.returnCode.ERROR, count, res);
+			routerFunc.feedBack(constant.returnCode.SUCCESS, count, res);
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
