@@ -676,6 +676,7 @@ typedef enum {
                 
             }else{
                 cell.detailTextLabel.text = @"";
+                cell.accessoryView = nil;
             }
 
             cell.textLabel.textColor = [UIColor grayColor];

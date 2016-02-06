@@ -229,7 +229,7 @@ exports.updateUnreadComment = function(user_id, callback){
 }
 
 exports.getUnreadComment = function(user_id, callback){
-	var sql = 'select a.*, b.*, c.user_id, c.user_name, c.user_facethumbnail, d.stock_name from look_comment_info a, ' +
+	var sql = 'select a.*, b.*, c.user_id as comment_user_id, c.user_name as comment_user_name, c.user_facethumbnail as comment_user_facethumbnail, d.stock_name from look_comment_info a, ' +
 	' stock_look_info b, user_base_info c, stock_base_info d ' +
 	' where a.comment_to_user_id = ? and a.comment_unread = 1 ' +
 	' and a.look_id = b.look_id and a.comment_user_id = c.user_id and b.stock_code = d.stock_code';
