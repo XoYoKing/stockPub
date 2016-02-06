@@ -172,6 +172,9 @@ exports.addCommentToLook = function(reqBody, callback){
 		reqBody.comment_to_user_id,
 		reqBody.comment_content,
 		timestamp, reqBody.to_look], callback);
+
+	sql = 'update stock_look_info set comment_count = comment_count+1 where look_id = ?';
+	conn.executeSql(sql, [reqBody.look_id], null);
 }
 
 

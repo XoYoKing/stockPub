@@ -34,6 +34,7 @@
     LocDatabase* locDatabase;
     UserInfoModel* phoneUserInfo;
     BOOL isFollow;
+    NSInteger unreadCommentCount;
 }
 
 
@@ -413,11 +414,42 @@ typedef enum {
 
 }
 
-- (void)pullDownAction
+- (void)getUnreadCommentCount
 {
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[myInfo.user_id]
+                             forKeys:@[@"user_id"]];
     
-    [self getUserBaseInfo];
-    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadCommentCount" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            
+            NSInteger unreadCount = [[response objectForKey:@"data"] integerValue];
+            unreadCommentCount = unreadCount;
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    }];
+
+}
+
+
+- (void)getCurStockLook
+{
     //获取当前看多股票详情
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[myInfo.user_id]
@@ -457,45 +489,19 @@ typedef enum {
         [self.refreshControl endRefreshing];
         self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
         [self.tableView reloadData];
-
+        
     }];
+
+}
+
+- (void)pullDownAction
+{
     
-//    //获取历史
-//    message = [[NSDictionary alloc]
-//                             initWithObjects:@[myInfo.user_id,[[NSNumber alloc] initWithInteger:5]]
-//                             forKeys:@[@"user_id", @"limit"]];
-//    
-//    [NetworkAPI callApiWithParam:message childpath:@"/stock/getHisLookInfoByUser" successed:^(NSDictionary *response) {
-//        
-//        NSInteger code = [[response objectForKey:@"code"] integerValue];
-//        
-//        if(code == SUCCESS){
-//            
-//            [hisStockLookList removeAllObjects];
-//            
-//            NSArray* stockLookInfoArray = (NSArray*)[response objectForKey:@"data"];
-//            if(stockLookInfoArray!=nil){
-//                for (NSDictionary* element in stockLookInfoArray) {
-//                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
-//                    [hisStockLookList addObject:temp];
-//                }
-//            }
-//            
-//        }else{
-//            alertMsg(@"未知错误");
-//        }
-//        
-//        [self.refreshControl endRefreshing];
-//        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-//        [self.tableView reloadData];
-//        
-//    } failed:^(NSError *error) {
-//        alertMsg(@"网络问题");
-//        [self.refreshControl endRefreshing];
-//        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-//        [self.tableView reloadData];
-//        
-//    }];
+    [self getUserBaseInfo];
+    [self getCurStockLook];
+    if ([myInfo.user_id isEqualToString:phoneUserInfo.user_id]) {
+        [self getUnreadCommentCount];
+    }
     
 }
 
@@ -624,19 +630,40 @@ typedef enum {
     
     if (indexPath.section == msgSection) {
         //评论
-        static NSString* cellIdentifier = @"msgcell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (cell==nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-            NSLog(@"new cell");
+        if(indexPath.row == 0){
+            static NSString* cellIdentifier = @"msgcell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if (cell==nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+                NSLog(@"new cell");
+            }
+            
+            cell.textLabel.text = @"评论";
+            
+            
+            
+            if(unreadCommentCount != 0){
+                
+                UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
+                numberLabel.backgroundColor = [UIColor redColor];
+                numberLabel.text = [[NSString alloc] initWithFormat:@"%ld", unreadCommentCount];
+                numberLabel.textColor = [UIColor whiteColor];
+                numberLabel.layer.cornerRadius = 3*minSpace/2;
+                numberLabel.font = [UIFont fontWithName:fontName size:minFont];
+                numberLabel.textAlignment = NSTextAlignmentCenter;
+                numberLabel.layer.masksToBounds = YES;
+                cell.accessoryView = numberLabel;
+                
+            }else{
+                cell.detailTextLabel.text = @"";
+            }
+
+            cell.textLabel.textColor = [UIColor grayColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.backgroundColor = [UIColor whiteColor];
+            return cell;
         }
         
-        cell.textLabel.text = @"评论";
-        cell.textLabel.textColor = [UIColor grayColor];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.backgroundColor = [UIColor whiteColor];
-        return cell;
-
     }
     
     return nil;
@@ -678,6 +705,10 @@ typedef enum {
     
     if (indexPath.section == logout) {
         return 8*minSpace;
+    }
+    
+    if(indexPath.section == msgSection){
+        return 6*minSpace;
     }
     
     return 6*minSpace;
@@ -728,7 +759,7 @@ typedef enum {
     if([myInfo.user_id isEqualToString:userInfo.user_id]){
         return 6;
     }else{
-        return 5;
+        return 4;
     }
 }
 
