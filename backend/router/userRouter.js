@@ -452,6 +452,17 @@ router.post('/getUnreadCommentCount', function(req, res){
 });
 
 
+router.post('/getUnreadComment', function(req, res){
+	userMgmt.getUnreadComment(req.body.user_id, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
 router.post('/updateUnreadComment', function(req, res){
 	userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
 		if(flag){
