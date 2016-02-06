@@ -4,7 +4,7 @@ var runner = require('./unitTestRunner.js');
 
 var Json = {
     childpath: '/user/getUnreadComment',
-    user_id: 'c186c03ba298bc3cc20490684010a353'
+    user_id: 'cbd41c6103064d3f0af848208c20ece2'
 };
 
 describe('getUnreadComment', function(){

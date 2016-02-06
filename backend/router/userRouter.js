@@ -456,6 +456,11 @@ router.post('/getUnreadComment', function(req, res){
 	userMgmt.getUnreadComment(req.body.user_id, function(flag, result){
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+			userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
+				if(!flag){
+					log.error(result, log.getFileNameAndLineNum(__filename));
+				}
+			});
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);

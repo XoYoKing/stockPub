@@ -25,6 +25,7 @@
 #import "UserTableView.h"
 #import "getFollowUserAction.h"
 #import "GetFansAction.h"
+#import "UnreadCommentTableView.h"
 
 @implementation SettingCtrl
 {
@@ -162,6 +163,17 @@ typedef enum {
         }
         
     }
+    
+    if(indexPath.section == msgSection){
+        if (indexPath.row == 0) {
+            //未读评论
+            UnreadCommentTableView* unreadCommentTableView = [[UnreadCommentTableView alloc] init];
+            unreadCommentTableView.hidesBottomBarWhenPushed = YES;
+            unreadCommentTableView.userInfo = myInfo;
+            
+            [self.navigationController pushViewController:unreadCommentTableView animated:YES];
+        }
+    }
 }
 
 - (void)follow
@@ -258,7 +270,7 @@ typedef enum {
     if (section == hisLookInfoSection||section == faceSection||section == followSection) {
         return 0;
     }else{
-        return 6*minSpace;
+        return 4*minSpace;
     }
 }
 
@@ -429,6 +441,14 @@ typedef enum {
             
             NSInteger unreadCount = [[response objectForKey:@"data"] integerValue];
             unreadCommentCount = unreadCount;
+            
+            if (unreadCommentCount>0) {
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentCount]];
+                
+            }else{
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:nil];
+            }
+            
         }else{
             alertMsg(@"未知错误");
         }
