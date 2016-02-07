@@ -320,6 +320,7 @@
                     marketInfoModel.stock_code = [element objectForKey:@"market_code"];
                     marketInfoModel.stock_name = [element objectForKey:@"market_name"];
                     marketInfoModel.price = [[element objectForKey:@"market_index_value_now"] floatValue];
+                    marketInfoModel.fluctuate_value = [[element objectForKey:@"market_index_fluctuate_value"] floatValue];
                     marketInfoModel.fluctuate = [[element objectForKey:@"market_index_fluctuate"] floatValue];
                     [marketIndexList addObject:marketInfoModel];
                 }
