@@ -128,13 +128,19 @@
             
         }else if(code == LOGIN_FAIL){
             alertMsg(@"用户或密码错误");
+            self.view.hidden = NO;
+
         }else{
             alertMsg(@"未知错误");
+            self.view.hidden = NO;
+
         }
         
         
     } failed:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        self.view.hidden = NO;
         alertMsg(@"网络问题");
     }];
 

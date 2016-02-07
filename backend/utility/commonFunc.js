@@ -25,12 +25,11 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
             element.market_index_fluctuate = dataArr[32];
             element.market_index_fluctuate_value = dataArr[31];
             element.market_index_trade_volume = dataArr[37];
-            element.market_index_trade_volume = element.market_index_trade_volume/10000; //单位亿
             element.market_index_value_high = dataArr[33];
             element.market_index_value_low = dataArr[34];
             element.market_index_value_open = dataArr[5];
             element.market_index_value_yesterday_close = dataArr[4];
-
+            element.market_index_trade_amount = dataArr[36];
 
             if (element.market_code === undefined ||
                 element.market_index_trade_volume === undefined ||
@@ -82,6 +81,7 @@ exports.analyzeMessage = function(htmlData){
 				element.time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
 				element.price = dataArr[3];
 				element.fluctuate = dataArr[32];
+                element.fluctuate_value = dataArr[31];
 				element.priceearning = dataArr[39];
 				element.marketValue = dataArr[45];
 				element.pb = dataArr[46];

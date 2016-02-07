@@ -138,7 +138,7 @@
 
     CGFloat faceHeight = 10*minSpace;
 
-    CGFloat contentSize = size.height+3*minSpace+2*minSpace+2*minSpace+minSpace;
+    CGFloat contentSize = size.height+3*minSpace+2*minSpace+2*minSpace+minSpace+minSpace;
 
     if (faceHeight>contentSize) {
         return faceHeight;

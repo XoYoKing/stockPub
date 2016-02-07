@@ -91,6 +91,7 @@ function insertToDatabase(htmlData, isnow) {
 				var openPrice = dataArr[5];
 				var high_price = dataArr[33];
 				var low_price = dataArr[34];
+				var fluctuate_value = dataArr[31];
 
 				if (stockCode === undefined ||
 					amount === undefined ||
@@ -117,6 +118,7 @@ function insertToDatabase(htmlData, isnow) {
 								pb,
 								openPrice,
 								high_price,
+								fluctuate_value,
 								function(flag, result) {
 									//logger.debug(stockCode+" now insert");
 									if (!flag) {

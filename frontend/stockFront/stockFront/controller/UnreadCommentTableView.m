@@ -27,11 +27,15 @@
     UserInfoModel* toUserInfo;
     StockLookInfoModel* toStockLook;
     InputToolbar* inputToolbar;
+    UIActivityIndicatorView* bottomActive;
+    BOOL allowPullUp;
 
 }
 @end
 
 @implementation UnreadCommentTableView
+static int bottomActiveHeight = 30;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,7 +47,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     UILabel *navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-    [navTitle setText:@"未读评论"];
+    [navTitle setText:@"评论"];
     [navTitle setFont:[UIFont fontWithName:fontName size:middleFont]];
     navTitle.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = navTitle;
@@ -58,8 +62,110 @@
     looklist = [[NSMutableArray alloc] init];
     
     [self pullDownAction];
+    
+    [self setBottomActive];
+    allowPullUp = true;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    
+    if(allowPullUp == YES){
+        CGPoint off = scrollView.contentOffset;
+        CGRect bounds = scrollView.bounds;
+        CGSize size = scrollView.contentSize;
+        CGFloat currentOffset = off.y + bounds.size.height;
+        CGFloat maximumOffset = size.height;
+        
+        if ([bottomActive isAnimating]) {
+            return;
+        }
+        
+        if((currentOffset - maximumOffset)>64.0&&maximumOffset>bounds.size.height){
+            
+            [bottomActive startAnimating];
+            [self pullUpAction];
+        }
+    }
+    
+    
+    if (scrollView == self.tableView) {
+        //[myTextField resignFirstResponder];
+        if (inputToolbar!=nil) {
+            [inputToolbar hideInput];
+            [inputToolbar removeFromSuperview];
+            inputToolbar = nil;
+            
+        }
+    }
+}
+
+- (void)setBottomActive
+{
+    UIView* bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, bottomActiveHeight*2)];
+    [self.tableView setTableFooterView:bottomView];
+    
+    bottomActive = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    bottomActive.frame = CGRectMake((ScreenWidth - bottomActiveHeight)/2, (self.tableView.tableFooterView.frame.size.height - bottomActiveHeight)/2, bottomActiveHeight, bottomActiveHeight);
+    [bottomActive setColor:[UIColor grayColor]];
+    [bottomActive hidesWhenStopped];
+    
+    for (UIView* view in self.tableView.tableFooterView.subviews) {
+        [view removeFromSuperview];
+    }
+    [self.tableView.tableFooterView addSubview:bottomActive];
+}
+
+
+- (void)pullUpAction
+{
+    CommentModel* commentModel = [commentlist lastObject];
+    
+    
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[_userInfo.user_id, [[NSNumber alloc] initWithInteger:commentModel.comment_timestamp]]
+                             forKeys:@[@"user_id", @"comment_timestamp"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadComment" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            
+            NSArray* unreadCommentArray = (NSArray*)[response objectForKey:@"data"];
+            
+            if(unreadCommentArray!=nil){
+                for (NSDictionary* element in unreadCommentArray) {
+                    StockLookInfoModel* stockLookInfo = [StockLookInfoModel yy_modelWithDictionary:element];
+                    CommentModel* commentModel = [CommentModel yy_modelWithDictionary:element];
+                    
+                    [looklist addObject:stockLookInfo];
+                    [commentlist addObject:commentModel];
+                }
+            }
+            
+            if([unreadCommentArray count] == 0){
+                allowPullUp = NO;
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        [bottomActive stopAnimating];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        
+        [bottomActive stopAnimating];
+        [self.tableView reloadData];
+        
+    }];
+
+}
 
 - (void)pullDownAction
 {
@@ -292,20 +398,7 @@
     
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
 
-    
-    if (scrollView == self.tableView) {
-        //[myTextField resignFirstResponder];
-        if (inputToolbar!=nil) {
-            [inputToolbar hideInput];
-            [inputToolbar removeFromSuperview];
-            inputToolbar = nil;
-            
-        }
-    }
-}
 
 
 - (void)viewWillDisappear:(BOOL)animated

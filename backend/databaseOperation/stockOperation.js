@@ -24,7 +24,8 @@ exports.dellookStock = function(reqbody, callback){
 }
 
 exports.getFollowLookInfo = function(reqbody, callback){
-    var sql = 'select b.*, c.user_name, c.user_facethumbnail, d.stock_name from user_follow_base_info a, stock_look_info b, user_base_info c, stock_base_info d' +
+    var sql = 'select b.*, c.user_name, c.user_facethumbnail, c.user_look_yield, ' +
+    ' d.stock_name from user_follow_base_info a, stock_look_info b, user_base_info c, stock_base_info d' +
     ' where a.user_id = ? and a.followed_user_id = b.user_id ' +
     ' and a.followed_user_id = c.user_id ' +
     ' and b.stock_code = d.stock_code and b.look_update_timestamp<? order by b.look_update_timestamp desc limit 10';
@@ -49,7 +50,7 @@ exports.updateLookYield = function(stock_code, price, callback){
 }
 
 exports.getStockInfo = function(reqbody, callback){
-	var sql = "select a.stock_code, a.stock_name, b.price, b.fluctuate, b.date, b.time from stock_base_info a, stock_now_info b where a.stock_code = ? " +
+	var sql = "select a.stock_code, a.stock_name, b.* from stock_base_info a, stock_now_info b where a.stock_code = ? " +
     " and a.stock_code = b.stock_code order by timestamp desc limit 1";
 	conn.executeSql(sql, [reqbody.stock_code], callback);
 }
@@ -73,8 +74,9 @@ exports.insertMarketIndexDay = function(element, callback){
             ' `market_index_value_high`,' +
             ' `market_index_value_low`,' +
             ' `timestamp`, ' +
-            ' `market_index_date`)' +
-            ' values(?,?,?,?,?,?,?,?,?,?,?)';
+            ' `market_index_date`,' +
+            ' market_index_trade_amount)' +
+            ' values(?,?,?,?,?,?,?,?,?,?,?,?)';
 
     var parm = [
         element.market_code,
@@ -87,7 +89,8 @@ exports.insertMarketIndexDay = function(element, callback){
         element.market_index_value_high,
         element.market_index_value_low,
         timestamp,
-        element.market_index_date
+        element.market_index_date,
+        element.market_index_trade_amount
     ];
     conn.executeSql(sql, parm, callback);
 }
@@ -106,8 +109,10 @@ exports.insertMarketIndexNow = function(element, callback){
             ' `market_index_value_high`,' +
             ' `market_index_value_low`,' +
             ' `timestamp`, ' +
-            ' `market_index_date`)' +
-            ' values(?,?,?,?,?,?,?,?,?,?,?)';
+            ' `market_index_date`,' +
+            ' market_index_trade_amount '+
+            ')' +
+            ' values(?,?,?,?,?,?,?,?,?,?,?,?)';
 
     var parm = [
         element.market_code,
@@ -120,7 +125,8 @@ exports.insertMarketIndexNow = function(element, callback){
         element.market_index_value_high,
         element.market_index_value_low,
         timestamp,
-        element.market_index_date
+        element.market_index_date,
+        element.market_index_trade_amount
     ];
     conn.executeSql(sql, parm, callback);
 }
