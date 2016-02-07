@@ -82,6 +82,7 @@ exports.analyzeMessage = function(htmlData){
 				element.time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
 				element.price = dataArr[3];
 				element.fluctuate = dataArr[32];
+                element.fluctuate_value = dataArr[31];
 				element.priceearning = dataArr[39];
 				element.marketValue = dataArr[45];
 				element.pb = dataArr[46];
