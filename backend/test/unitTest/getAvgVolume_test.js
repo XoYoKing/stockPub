@@ -5,7 +5,7 @@ var runner = require('./unitTestRunner.js');
 var followUserJson = {
     childpath: '/stock/getAvgVolume',
     stock_code: '000001',
-    day: 5
+    day: 20
 };
 
 describe('getAvgVolume', function(){

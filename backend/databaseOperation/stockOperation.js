@@ -197,6 +197,6 @@ exports.getAllStockLook = function(callback){
 //获取平均成交额
 exports.getAvgVolume = function(stock_code, day, callback){
     var sql = 'SELECT `volume`  FROM `stock_amount_info` ' +
-    ' WHERE `stock_code`  = ? ORDER BY `date` desc LIMIT ? ';
-    conn.executeSql(sql, [stock_code, day], callback);
+    ' WHERE `stock_code`  = ? ORDER BY `date` desc LIMIT '+day;
+    conn.executeSql(sql, [stock_code], callback);
 }

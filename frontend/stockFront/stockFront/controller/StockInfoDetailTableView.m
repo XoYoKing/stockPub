@@ -20,7 +20,10 @@
 #import "UserInfoModel.h"
 
 @interface StockInfoDetailTableView ()
-
+{
+    CGFloat fiveAvVolume;
+    CGFloat twentyAvVolume;
+}
 @end
 
 @implementation StockInfoDetailTableView
@@ -41,8 +44,64 @@
     
     [self showRightItem];
     
+    [self get20AvgVolume];
+    [self get5AvgVolume];
+    
 }
 
+
+- (void)get20AvgVolume
+{
+    
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[_stockInfoModel.stock_code,[[NSNumber alloc] initWithInteger:20]]
+                             forKeys:@[@"stock_code", @"day"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getAvgVolume" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            twentyAvVolume = [[response objectForKey:@"data"] floatValue];
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
+
+}
+
+- (void)get5AvgVolume
+{
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[_stockInfoModel.stock_code,[[NSNumber alloc] initWithInteger:5]]
+                             forKeys:@[@"stock_code", @"day"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getAvgVolume" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            fiveAvVolume = [[response objectForKey:@"data"] floatValue];
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
+}
 
 - (void)showRightItem
 {
@@ -334,7 +393,9 @@
         if (indexPath.row == 4) {
             cell.textLabel.text = @"1d/5d平均成交额比";
             cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
-
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f", 100*_stockInfoModel.volume/fiveAvVolume];
+            
+            
 //            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f万手", _stockInfoModel.amount/10000.0];
         }
         
@@ -343,6 +404,8 @@
             cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
 
 //            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f万手", _stockInfoModel.amount/10000.0];
+            
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f", 100*fiveAvVolume/twentyAvVolume];
         }
         
         
