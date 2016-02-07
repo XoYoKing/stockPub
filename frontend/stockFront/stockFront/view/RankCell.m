@@ -87,7 +87,7 @@
     [commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(faceImageView.mas_right).offset(minSpace);
         make.top.mas_equalTo(userNameLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(160, 3*minSpace));
+        make.size.mas_equalTo(CGSizeMake(150, 3*minSpace));
     }];
     
     

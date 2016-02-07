@@ -175,6 +175,7 @@
     
     SettingCtrl* setting = [[SettingCtrl alloc] init:[AppDelegate getMyUserInfo]];
     
+    
     followContentTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
     rankTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
     stockTableCtrl.edgesForExtendedLayout = UIRectEdgeNone;
@@ -215,6 +216,9 @@
     //image = [UIImage imageNamed:@"setting.png"];
     //[tabItem setImage:image];
     tabItem.tag = 3;
+    
+    
+    [setting getUnreadCommentCount];
     
 }
 
