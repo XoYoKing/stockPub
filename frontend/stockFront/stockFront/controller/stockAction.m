@@ -18,6 +18,7 @@
 #import <YYModel.h>
 #import "StockActionTableViewCell.h"
 #import <Masonry.h>
+#import "StockInfoDetailTableView.h"
 
 @implementation stockAction
 {
@@ -107,119 +108,138 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    
-    if(indexPath.section == 1){
-        StockInfoModel* stockinfo = [stockList objectAtIndex:indexPath.row];
+    if(indexPath.section == 0){
+        StockInfoModel* stockinfo = [marketIndexList objectAtIndex:indexPath.row];
+        StockInfoDetailTableView* detail = [[StockInfoDetailTableView alloc] init];
+        detail.hidesBottomBarWhenPushed = YES;
+        detail.ismarket = true;
+        detail.stockInfoModel = stockinfo;
+        [comTable.navigationController pushViewController:detail animated:YES];
         
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            ;
-        }];
-        
-        UIAlertAction *okAction = nil;
-        UIAlertController *alertController = nil;
-        
-        if([locDatabase isLookStock:stockinfo]){
-            
-            
-            NSString* title = [[NSString alloc] initWithFormat:@"取消看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
-            
-            alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
-            
-            okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-                //delete from lookinfo
-                
-                [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
-                
-                
-                UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
-                NSDictionary* message = [[NSDictionary alloc]
-                                         initWithObjects:@[userInfo.user_id,
-                                                           userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name]
-                                         forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name"]];
-                
-                [NetworkAPI callApiWithParam:message childpath:@"/stock/dellook" successed:^(NSDictionary *response) {
-                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
-                    
-                    
-                    NSInteger code = [[response objectForKey:@"code"] integerValue];
-                    
-                    if(code == SUCCESS){
-                        
-                        if(![locDatabase deleteLookStock:stockinfo]){
-                            alertMsg(@"操作失败");
-                        }else{
-                            //alertMsg(@"已删除");
-                        }
-                        
-                        [tableView reloadData];
-                    }else{
-                        alertMsg(@"未知错误");
-                    }
-                    
-                    
-                } failed:^(NSError *error) {
-                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
-                    alertMsg(@"网络问题");
-                }];
-            }];
-            
-            
-        }else{
-            
-            NSString* title = [[NSString alloc] initWithFormat:@"看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
-            
-            alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
-            
-            
-            okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSLog(@"add stock to coredata");
-                
-                //看多股票，发送消息到后台
-                [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
-                
-                
-                UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
-                NSDictionary* message = [[NSDictionary alloc]
-                                         initWithObjects:@[userInfo.user_id,
-                                                           userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name,
-                                                           [[NSNumber alloc] initWithInteger:1]]
-                                         forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name", @"look_direct"]];
-                
-                [NetworkAPI callApiWithParam:message childpath:@"/stock/addlook" successed:^(NSDictionary *response) {
-                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
-                    
-                    
-                    NSInteger code = [[response objectForKey:@"code"] integerValue];
-                    
-                    if(code == SUCCESS){
-                        
-                        if(![locDatabase addLookStock:stockinfo]){
-                            alertMsg(@"操作失败");
-                        }else{
-                            //alertMsg(@"已添加");
-                        }
-                        
-                        [tableView reloadData];
-                    }else if(code == LOOK_STOCK_EXIST){
-                        alertMsg(@"不能重复添加");
-                    }else if(code == LOOK_STOCK_COUNT_OVER){
-                        alertMsg(@"当前看多股票不能超过5支");
-                    }else{
-                        alertMsg(@"未知错误");
-                    }
-                } failed:^(NSError *error) {
-                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
-                    alertMsg(@"网络问题");
-                }];
-                
-            }];
-        }
-        
-        [alertController addAction:cancelAction];
-        [alertController addAction:okAction];
-        [comTable presentViewController:alertController animated:YES completion:nil];
     }
+    
+    if (indexPath.section == 1) {
+        StockInfoModel* stockinfo = [stockList objectAtIndex:indexPath.row];
+        StockInfoDetailTableView* detail = [[StockInfoDetailTableView alloc] init];
+        detail.hidesBottomBarWhenPushed = YES;
+        detail.ismarket = false;
+        detail.stockInfoModel = stockinfo;
+        [comTable.navigationController pushViewController:detail animated:YES];
+    }
+    
+    
+//    if(indexPath.section == 1){
+//        StockInfoModel* stockinfo = [stockList objectAtIndex:indexPath.row];
+//        
+//        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//            ;
+//        }];
+//        
+//        UIAlertAction *okAction = nil;
+//        UIAlertController *alertController = nil;
+//        
+//        if([locDatabase isLookStock:stockinfo]){
+//            
+//            
+//            NSString* title = [[NSString alloc] initWithFormat:@"取消看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
+//            
+//            alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
+//            
+//            okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                
+//                //delete from lookinfo
+//                
+//                [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
+//                
+//                
+//                UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+//                NSDictionary* message = [[NSDictionary alloc]
+//                                         initWithObjects:@[userInfo.user_id,
+//                                                           userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name]
+//                                         forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name"]];
+//                
+//                [NetworkAPI callApiWithParam:message childpath:@"/stock/dellook" successed:^(NSDictionary *response) {
+//                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+//                    
+//                    
+//                    NSInteger code = [[response objectForKey:@"code"] integerValue];
+//                    
+//                    if(code == SUCCESS){
+//                        
+//                        if(![locDatabase deleteLookStock:stockinfo]){
+//                            alertMsg(@"操作失败");
+//                        }else{
+//                            //alertMsg(@"已删除");
+//                        }
+//                        
+//                        [tableView reloadData];
+//                    }else{
+//                        alertMsg(@"未知错误");
+//                    }
+//                    
+//                    
+//                } failed:^(NSError *error) {
+//                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+//                    alertMsg(@"网络问题");
+//                }];
+//            }];
+//            
+//            
+//        }else{
+//            
+//            NSString* title = [[NSString alloc] initWithFormat:@"看多股票%@(%@)", stockinfo.stock_name, stockinfo.stock_code];
+//            
+//            alertController = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
+//            
+//            
+//            okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                NSLog(@"add stock to coredata");
+//                
+//                //看多股票，发送消息到后台
+//                [MBProgressHUD showHUDAddedTo:comTable.view animated:YES];
+//                
+//                
+//                UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+//                NSDictionary* message = [[NSDictionary alloc]
+//                                         initWithObjects:@[userInfo.user_id,
+//                                                           userInfo.user_name, stockinfo.stock_code, stockinfo.stock_name,
+//                                                           [[NSNumber alloc] initWithInteger:1]]
+//                                         forKeys:@[@"user_id", @"user_name", @"stock_code", @"stock_name", @"look_direct"]];
+//                
+//                [NetworkAPI callApiWithParam:message childpath:@"/stock/addlook" successed:^(NSDictionary *response) {
+//                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+//                    
+//                    
+//                    NSInteger code = [[response objectForKey:@"code"] integerValue];
+//                    
+//                    if(code == SUCCESS){
+//                        
+//                        if(![locDatabase addLookStock:stockinfo]){
+//                            alertMsg(@"操作失败");
+//                        }else{
+//                            //alertMsg(@"已添加");
+//                        }
+//                        
+//                        [tableView reloadData];
+//                    }else if(code == LOOK_STOCK_EXIST){
+//                        alertMsg(@"不能重复添加");
+//                    }else if(code == LOOK_STOCK_COUNT_OVER){
+//                        alertMsg(@"当前看多股票不能超过5支");
+//                    }else{
+//                        alertMsg(@"未知错误");
+//                    }
+//                } failed:^(NSError *error) {
+//                    [MBProgressHUD hideHUDForView:comTable.view animated:YES];
+//                    alertMsg(@"网络问题");
+//                }];
+//                
+//            }];
+//        }
+//        
+//        [alertController addAction:cancelAction];
+//        [alertController addAction:okAction];
+//        [comTable presentViewController:alertController animated:YES completion:nil];
+//    }
 }
 
 
@@ -322,6 +342,11 @@
                     marketInfoModel.price = [[element objectForKey:@"market_index_value_now"] floatValue];
                     marketInfoModel.fluctuate_value = [[element objectForKey:@"market_index_fluctuate_value"] floatValue];
                     marketInfoModel.fluctuate = [[element objectForKey:@"market_index_fluctuate"] floatValue];
+                    marketInfoModel.fluctuate_value = [[element objectForKey:@"market_index_fluctuate_value"] floatValue];
+                    
+                    marketInfoModel.open_price = [[element objectForKey:@"market_index_value_open"] floatValue];
+                    marketInfoModel.yesterday_price = [[element objectForKey:@"market_index_value_yesterday_close"] floatValue];
+                    marketInfoModel.volume = [[element objectForKey:@"market_index_trade_volume"] floatValue];
                     [marketIndexList addObject:marketInfoModel];
                 }
                 
@@ -388,10 +413,18 @@
                     if([stockData objectForKey:element.stock_code]){
                         
                         StockInfoModel* temp = [StockInfoModel yy_modelWithDictionary:[stockData objectForKey:element.stock_code]];
-                        
+                        element.fluctuate_value = temp.fluctuate_value;
                         element.price = temp.price;
                         element.fluctuate = temp.fluctuate;
                         element.stock_name = temp.stock_name;
+                        element.open_price = temp.open_price;
+                        element.yesterday_price = temp.yesterday_price;
+                        element.volume = temp.volume;
+                        element.amount = temp.amount;
+                        element.marketValue = temp.marketValue;
+                        element.flowMarketValue = temp.flowMarketValue;
+                        element.priceearning = temp.priceearning;
+                        element.pb = temp.pb;
                     }
                 }
                 

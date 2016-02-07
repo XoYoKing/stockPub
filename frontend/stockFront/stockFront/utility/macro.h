@@ -14,6 +14,7 @@
 
 
 #define fontName @"HelveticaNeue-Light"
+#define bigbigFont 46
 #define bigFont 32
 #define middleFont 24
 #define minMiddleFont 20

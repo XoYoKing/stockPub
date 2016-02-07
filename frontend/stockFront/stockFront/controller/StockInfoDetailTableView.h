@@ -1,5 +1,5 @@
 //
-//  MarketIndexDetailCell.h
+//  StockInfoDetailTableView.h
 //  stockFront
 //
 //  Created by wang jam on 2/7/16.
@@ -9,12 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "StockInfoModel.h"
 
+@interface StockInfoDetailTableView : UITableViewController
 
-@interface MarketIndexDetailCell : UITableViewCell
+@property StockInfoModel* stockInfoModel;
 
-- (void)configureCell:(StockInfoModel*)model;
-
-+ (CGFloat)cellHeight;
-
+@property BOOL ismarket;
 
 @end
