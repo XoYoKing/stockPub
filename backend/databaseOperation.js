@@ -52,7 +52,7 @@ exports.insertStockNow = function(stockCode, amount, date, time, price, yesterda
 	priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, fluctuate_value, callback){
 	var timestamp = Date.now()/1000;
 	var sql = "insert into stock_now_info (stock_code, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, fluctuate_value) "
-	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	conn.executeSql(sql, [stockCode, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, fluctuate_value], callback);
 
 	sql = "update stock_predict_info set last_price = ?, last_date_time = ? where stock_code = ?";
