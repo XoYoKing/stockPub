@@ -194,7 +194,15 @@ exports.getAllStockLook = function(callback){
     conn.executeSql(sql, [], callback);
 }
 
-//获取平均成交额
+
+//获取大盘平均成交额
+exports.getMarketAvgVolume = function(stock_code, day, callback){
+    var sql = 'SELECT `market_index_trade_volume`  FROM `market_index_day_info` ' +
+    ' WHERE `market_code`  = ? ORDER BY `market_index_date` desc LIMIT '+day;
+    conn.executeSql(sql, [stock_code], callback);
+}
+
+//获取股票平均成交额
 exports.getAvgVolume = function(stock_code, day, callback){
     var sql = 'SELECT `volume`  FROM `stock_amount_info` ' +
     ' WHERE `stock_code`  = ? ORDER BY `date` desc LIMIT '+day;

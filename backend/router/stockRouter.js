@@ -350,6 +350,22 @@ router.post('/now', function(req, res){
 });
 
 
+router.post('/getMarketAvgVolume', function(req, res){
+	stockOperation.getMarketAvgVolume(req.body.stock_code, req.body.day, function(flag, result){
+		if(flag){
+			var total = 0;
+			result.forEach(function(element){
+				total+=element.market_index_trade_volume;
+			});
+			var avg = total/result.length;
+			routerFunc.feedBack(constant.returnCode.SUCCESS, avg, res);
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
 router.post('/getAvgVolume', function(req, res){
 	stockOperation.getAvgVolume(req.body.stock_code, req.body.day, function(flag, result){
 		if(flag){

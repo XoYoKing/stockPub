@@ -44,27 +44,37 @@
     
     [self showRightItem];
     
-    [self get20AvgVolume];
-    [self get5AvgVolume];
-    
+
+    [self getStock20AvgVolume];
+    [self getStock5AvgVolume];
 }
 
 
-- (void)get20AvgVolume
+
+
+- (void)getStock20AvgVolume
 {
     
     
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[_stockInfoModel.stock_code,[[NSNumber alloc] initWithInteger:20]]
                              forKeys:@[@"stock_code", @"day"]];
+    NSString* childpath = @"";
+    if(_ismarket){
+        childpath = @"/stock/getMarketAvgVolume";
+    }else{
+        childpath = @"/stock/getAvgVolume";
+    }
     
-    [NetworkAPI callApiWithParam:message childpath:@"/stock/getAvgVolume" successed:^(NSDictionary *response) {
+    
+    [NetworkAPI callApiWithParam:message childpath:childpath successed:^(NSDictionary *response) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         
         if(code == SUCCESS){
             
             twentyAvVolume = [[response objectForKey:@"data"] floatValue];
+            [self.tableView reloadData];
             
         }else{
             alertMsg(@"未知错误");
@@ -79,20 +89,28 @@
 
 }
 
-- (void)get5AvgVolume
+- (void)getStock5AvgVolume
 {
+    NSString* childpath = @"";
+    if(_ismarket){
+        childpath = @"/stock/getMarketAvgVolume";
+    }else{
+        childpath = @"/stock/getAvgVolume";
+    }
+    
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[_stockInfoModel.stock_code,[[NSNumber alloc] initWithInteger:5]]
                              forKeys:@[@"stock_code", @"day"]];
     
-    [NetworkAPI callApiWithParam:message childpath:@"/stock/getAvgVolume" successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParam:message childpath:childpath successed:^(NSDictionary *response) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         
         if(code == SUCCESS){
             
             fiveAvVolume = [[response objectForKey:@"data"] floatValue];
-            
+            [self.tableView reloadData];
+
         }else{
             alertMsg(@"未知错误");
         }
@@ -393,7 +411,7 @@
         if (indexPath.row == 4) {
             cell.textLabel.text = @"1d/5d平均成交额比";
             cell.textLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
-            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f", 100*_stockInfoModel.volume/fiveAvVolume];
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f%%", 100*_stockInfoModel.volume/fiveAvVolume];
             
             
 //            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f万手", _stockInfoModel.amount/10000.0];
@@ -405,7 +423,7 @@
 
 //            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f万手", _stockInfoModel.amount/10000.0];
             
-            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f", 100*fiveAvVolume/twentyAvVolume];
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%.2f%%", 100*fiveAvVolume/twentyAvVolume];
         }
         
         
