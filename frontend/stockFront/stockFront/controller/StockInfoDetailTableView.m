@@ -65,8 +65,8 @@
                         marketInfoModel.fluctuate = [[element objectForKey:@"market_index_fluctuate"] floatValue];
                         marketInfoModel.open_price = [[element objectForKey:@"market_index_value_open"] floatValue];
                         marketInfoModel.yesterday_price = [[element objectForKey:@"market_index_value_yesterday_close"] floatValue];
-                        marketInfoModel.volume = [[element objectForKey:@"market_index_trade_volume"] floatValue]*10000;
-                        
+                        marketInfoModel.volume = [[element objectForKey:@"market_index_trade_volume"] floatValue];
+                        marketInfoModel.amount = [[element objectForKey:@"market_index_trade_amount"] floatValue];
                         
                         _stockInfoModel = marketInfoModel;
                     }
