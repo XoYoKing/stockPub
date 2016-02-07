@@ -172,6 +172,9 @@ exports.addCommentToLook = function(reqBody, callback){
 		reqBody.comment_to_user_id,
 		reqBody.comment_content,
 		timestamp, reqBody.to_look], callback);
+
+	sql = 'update stock_look_info set comment_count = comment_count+1 where look_id = ?';
+	conn.executeSql(sql, [reqBody.look_id], null);
 }
 
 
@@ -212,4 +215,28 @@ exports.getRankUser = function(look_duration, callback){
 	' and a.`look_status`  = 1'+
 	' ORDER BY b.total_yield desc';
 	conn.executeSql(sql, [look_duration], callback);
+}
+
+
+exports.getUnreadCommentCount = function(user_id, callback){
+	var sql = 'select count(*) as count from look_comment_info where comment_to_user_id = ? and comment_unread = 1';
+	conn.executeSql(sql, [user_id], callback);
+}
+
+exports.updateUnreadComment = function(user_id, callback){
+	var sql = 'update look_comment_info set comment_unread = 2 where comment_to_user_id = ?';
+	conn.executeSql(sql, [user_id], callback);
+}
+
+exports.getUnreadComment = function(user_id, comment_timestamp, callback){
+	var sql = 'select a.*, b.*, c.user_id as comment_user_id, ' +
+	' c.user_name as comment_user_name, c.user_facethumbnail as comment_user_facethumbnail, ' +
+	' d.stock_name from look_comment_info a, ' +
+	' stock_look_info b, user_base_info c, stock_base_info d ' +
+	' where a.comment_to_user_id = ? ' +
+	' and a.look_id = b.look_id and a.comment_user_id = c.user_id ' +
+	' and b.stock_code = d.stock_code ' +
+	' and a.comment_timestamp<? ' +
+	' order by a.comment_timestamp desc limit 12';
+	conn.executeSql(sql, [user_id, comment_timestamp], callback);
 }

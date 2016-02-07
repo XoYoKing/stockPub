@@ -71,7 +71,7 @@
         
         self.window.rootViewController = rootNav;
         
-        //signInView.view.hidden = YES;
+        signInView.view.hidden = YES;
         //rootNav.navigationController.view.backgroundColor = [UIColor whiteColor];
         [signInView sendLoginMessage:_myInfo];
         [self.window makeKeyAndVisible];

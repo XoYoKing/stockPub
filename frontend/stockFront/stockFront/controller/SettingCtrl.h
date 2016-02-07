@@ -13,4 +13,6 @@
 
 - (id)init:(UserInfoModel*)userInfo;
 
+- (void)getUnreadCommentCount;
+
 @end

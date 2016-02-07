@@ -25,6 +25,7 @@
 #import "UserTableView.h"
 #import "getFollowUserAction.h"
 #import "GetFansAction.h"
+#import "UnreadCommentTableView.h"
 
 @implementation SettingCtrl
 {
@@ -34,6 +35,7 @@
     LocDatabase* locDatabase;
     UserInfoModel* phoneUserInfo;
     BOOL isFollow;
+    NSInteger unreadCommentCount;
 }
 
 
@@ -42,6 +44,7 @@ typedef enum {
     followSection,
     lookInfoSection,
     hisLookInfoSection,
+    msgSection,
     logout
 } section;
 
@@ -70,6 +73,8 @@ typedef enum {
     NSLog(@"viewWillAppear");
     
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    
+    [self getUnreadCommentCount];
     
     [self.tableView reloadData];
     
@@ -159,6 +164,19 @@ typedef enum {
             [self.navigationController pushViewController:com animated:YES];
         }
         
+    }
+    
+    if(indexPath.section == msgSection){
+        if (indexPath.row == 0) {
+            //未读评论
+            UnreadCommentTableView* unreadCommentTableView = [[UnreadCommentTableView alloc] initWithStyle:UITableViewStyleGrouped];
+            unreadCommentTableView.hidesBottomBarWhenPushed = YES;
+            unreadCommentTableView.userInfo = myInfo;
+            
+            [self.navigationController pushViewController:unreadCommentTableView animated:YES];
+            
+            
+        }
     }
 }
 
@@ -253,10 +271,10 @@ typedef enum {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if(section == lookInfoSection||section == hisLookInfoSection){
-        return 6*minSpace;
-    }else{
+    if (section == hisLookInfoSection||section == faceSection||section == followSection) {
         return 0;
+    }else{
+        return 4*minSpace;
     }
 }
 
@@ -267,28 +285,55 @@ typedef enum {
     }
 
     if(section == hisLookInfoSection){
-        //当前看多
-        UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
-        sectionView.backgroundColor = [UIColor whiteColor];
-        
-        //股票名称
-        UILabel* label = [[UILabel alloc] init];
-        label.font = [UIFont fontWithName:fontName size:minFont];
-        label.textColor = [UIColor grayColor];
-        label.text = @"历史记录";
-        label.textAlignment = NSTextAlignmentCenter;
-        [sectionView addSubview:label];
-        
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(sectionView.mas_left);
-            make.centerY.mas_equalTo(sectionView.mas_centerY);
-            make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
-        }];
-        
-        return sectionView;
+//        //历史看多
+//        UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+//        sectionView.backgroundColor = [UIColor whiteColor];
+//        
+//        //股票名称
+//        UILabel* label = [[UILabel alloc] init];
+//        label.font = [UIFont fontWithName:fontName size:minFont];
+//        label.textColor = [UIColor grayColor];
+//        label.text = @"历史记录";
+//        label.textAlignment = NSTextAlignmentCenter;
+//        [sectionView addSubview:label];
+//        
+//        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.mas_equalTo(sectionView.mas_left);
+//            make.centerY.mas_equalTo(sectionView.mas_centerY);
+//            make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+//        }];
+//        
+//        return sectionView;
+        return nil;
     }
     
+//    if (section == msgSection) {
+//        return [self getSectionView:@"消息"];
+//    }
+    
     return nil;
+}
+
+
+- (UIView*)getSectionView:(NSString*)title
+{
+    UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
+    sectionView.backgroundColor = [UIColor whiteColor];
+    
+    //股票名称
+    UILabel* label = [[UILabel alloc] init];
+    label.font = [UIFont fontWithName:fontName size:minFont];
+    label.textColor = [UIColor grayColor];
+    label.text = title;
+    [sectionView addSubview:label];
+    
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sectionView.mas_left);
+        make.centerY.mas_equalTo(sectionView.mas_centerY);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
+    }];
+    
+    return sectionView;
 }
 
 - (UIView*)getStockSectionView
@@ -385,11 +430,50 @@ typedef enum {
 
 }
 
-- (void)pullDownAction
+- (void)getUnreadCommentCount
 {
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[myInfo.user_id]
+                             forKeys:@[@"user_id"]];
     
-    [self getUserBaseInfo];
-    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadCommentCount" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            
+            NSInteger unreadCount = [[response objectForKey:@"data"] integerValue];
+            unreadCommentCount = unreadCount;
+            
+            if (unreadCommentCount>0) {
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentCount]];
+                
+            }else{
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:nil];
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        //[self.refreshControl endRefreshing];
+        //self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    }];
+
+}
+
+
+- (void)getCurStockLook
+{
     //获取当前看多股票详情
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[myInfo.user_id]
@@ -429,45 +513,19 @@ typedef enum {
         [self.refreshControl endRefreshing];
         self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
         [self.tableView reloadData];
-
+        
     }];
+
+}
+
+- (void)pullDownAction
+{
     
-//    //获取历史
-//    message = [[NSDictionary alloc]
-//                             initWithObjects:@[myInfo.user_id,[[NSNumber alloc] initWithInteger:5]]
-//                             forKeys:@[@"user_id", @"limit"]];
-//    
-//    [NetworkAPI callApiWithParam:message childpath:@"/stock/getHisLookInfoByUser" successed:^(NSDictionary *response) {
-//        
-//        NSInteger code = [[response objectForKey:@"code"] integerValue];
-//        
-//        if(code == SUCCESS){
-//            
-//            [hisStockLookList removeAllObjects];
-//            
-//            NSArray* stockLookInfoArray = (NSArray*)[response objectForKey:@"data"];
-//            if(stockLookInfoArray!=nil){
-//                for (NSDictionary* element in stockLookInfoArray) {
-//                    StockLookInfoModel* temp = [StockLookInfoModel yy_modelWithDictionary:element];
-//                    [hisStockLookList addObject:temp];
-//                }
-//            }
-//            
-//        }else{
-//            alertMsg(@"未知错误");
-//        }
-//        
-//        [self.refreshControl endRefreshing];
-//        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-//        [self.tableView reloadData];
-//        
-//    } failed:^(NSError *error) {
-//        alertMsg(@"网络问题");
-//        [self.refreshControl endRefreshing];
-//        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-//        [self.tableView reloadData];
-//        
-//    }];
+    [self getUserBaseInfo];
+    [self getCurStockLook];
+    if ([myInfo.user_id isEqualToString:phoneUserInfo.user_id]) {
+        [self getUnreadCommentCount];
+    }
     
 }
 
@@ -594,6 +652,45 @@ typedef enum {
         return cell;
     }
     
+    if (indexPath.section == msgSection) {
+        //评论
+        if(indexPath.row == 0){
+            static NSString* cellIdentifier = @"msgcell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if (cell==nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+                NSLog(@"new cell");
+            }
+            
+            cell.textLabel.text = @"评论";
+            
+            
+            
+            if(unreadCommentCount != 0){
+                
+                UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
+                numberLabel.backgroundColor = [UIColor redColor];
+                numberLabel.text = [[NSString alloc] initWithFormat:@"%ld", unreadCommentCount];
+                numberLabel.textColor = [UIColor whiteColor];
+                numberLabel.layer.cornerRadius = 3*minSpace/2;
+                numberLabel.font = [UIFont fontWithName:fontName size:minFont];
+                numberLabel.textAlignment = NSTextAlignmentCenter;
+                numberLabel.layer.masksToBounds = YES;
+                cell.accessoryView = numberLabel;
+                
+            }else{
+                cell.detailTextLabel.text = @"";
+                cell.accessoryView = nil;
+            }
+
+            cell.textLabel.textColor = [UIColor grayColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.backgroundColor = [UIColor whiteColor];
+            return cell;
+        }
+        
+    }
+    
     return nil;
 }
 
@@ -605,8 +702,12 @@ typedef enum {
         return @"当前看多";
     }
     
-    if (section == hisLookInfoSection){
-        return @"历史记录";
+//    if (section == hisLookInfoSection){
+//        return @"历史记录";
+//    }
+    
+    if (section == msgSection) {
+        return @"";
     }
     
     return @"";
@@ -631,7 +732,11 @@ typedef enum {
         return 8*minSpace;
     }
     
-    return 0;
+    if(indexPath.section == msgSection){
+        return 6*minSpace;
+    }
+    
+    return 6*minSpace;
     
 }
 
@@ -662,6 +767,10 @@ typedef enum {
         return 1;
     }
     
+    if (section == msgSection) {
+        return 1;
+    }
+    
     return 0;
     
 }
@@ -673,7 +782,7 @@ typedef enum {
     UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
     
     if([myInfo.user_id isEqualToString:userInfo.user_id]){
-        return 5;
+        return 6;
     }else{
         return 4;
     }

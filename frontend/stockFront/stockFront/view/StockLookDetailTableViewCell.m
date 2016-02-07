@@ -192,7 +192,7 @@
     
     commentButton.titleLabel.font = [UIFont fontWithName:fontName size:minFont];
     [commentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [commentButton setTitle:@"评论" forState:UIControlStateNormal];
+    [commentButton setTitle:[[NSString alloc] initWithFormat:@"%@(%ld)", @"评论", myStockLookInfoModel.comment_count] forState:UIControlStateNormal];
     [commentButton setTintColor:[UIColor whiteColor]];
 }
 
@@ -269,7 +269,7 @@
     [commentButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
         make.top.mas_equalTo(finishTimeDateLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(8*minSpace, 4*minSpace));
+        make.size.mas_equalTo(CGSizeMake(10*minSpace, 4*minSpace));
     }];
     
 }
