@@ -517,7 +517,7 @@
         label.text = @"今日行情";
     }
     if (section == 2) {
-        label.text = @"公司基本面";
+        label.text = @"基本面";
     }
     return sectionView;
 }

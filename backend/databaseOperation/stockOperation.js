@@ -98,6 +98,8 @@ exports.insertMarketIndexDay = function(element, callback){
 
 exports.insertMarketIndexNow = function(element, callback){
     var timestamp = Date.now();
+    console.log(element.market_index_trade_amount);
+    
     var sql = 'insert into `market_index_now_info` (' +
             ' `market_code`, ' +
             ' `market_index_value_now`,' +
