@@ -44,9 +44,10 @@
     
     [self showRightItem];
     
-
+    
     [self getStock20AvgVolume];
     [self getStock5AvgVolume];
+    [self pullDownAction];
 }
 
 
@@ -290,6 +291,7 @@
     
     [NetworkAPI callApiWithParam:message childpath:@"/stock/getStockListInfo" successed:^(NSDictionary *response) {
         
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         
@@ -318,6 +320,7 @@
         
         
     } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         [Tools AlertBigMsg:@"网络问题"];
         [self.refreshControl endRefreshing];
         self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];

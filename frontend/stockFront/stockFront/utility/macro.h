@@ -27,6 +27,8 @@
 #define sepeartelineColor activeViewControllerbackgroundColor
 
 
+#define OurBlue [UIColor colorWithRed:49.0/255.0 green:117.0/255.0 blue:181.0/255.0 alpha:1.0]
+
 #define mygreen [UIColor colorWithRed:48/255.0 green:128/255.0 blue:20/255.0 alpha:1.0]
 
 

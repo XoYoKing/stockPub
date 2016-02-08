@@ -15,6 +15,7 @@
 #import "SettingCtrl.h"
 #import "ComTableViewCtrl.h"
 #import "CommentTableView.h"
+#import "StockInfoDetailTableView.h"
 
 @implementation StockLookDetailTableViewCell
 {
@@ -71,12 +72,27 @@
         faceImageView.userInteractionEnabled = YES;
         [faceImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(faceViewPress:)]];
 
+        stockNameLabel.userInteractionEnabled = YES;
+        [stockNameLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stockNamePress:)]];
+
+        
         [commentButton addTarget:self action:@selector(commentPress:) forControlEvents:UIControlEventTouchUpInside];
         
     }
     return self;
 }
 
+
+- (void)stockNamePress:(id)sender
+{
+    StockInfoDetailTableView* detail = [[StockInfoDetailTableView alloc] init];
+    detail.hidesBottomBarWhenPushed = YES;
+    detail.ismarket = false;
+    StockInfoModel* stockInfo = [[StockInfoModel alloc] init];
+    stockInfo.stock_code = myStockLookInfoModel.stock_code;
+    detail.stockInfoModel = stockInfo;
+    [[Tools curNavigator] pushViewController:detail animated:YES];
+}
 
 - (void)commentPress:(id)sender
 {
@@ -148,6 +164,7 @@
     
     stockNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     stockNameLabel.text = [[NSString alloc] initWithFormat:@"%@(%@)", stockLookInfoModel.stock_name, stockLookInfoModel.stock_code];
+    stockNameLabel.textColor = OurBlue;
     
     
     priceLabel.font = stockNameLabel.font;

@@ -55,7 +55,7 @@
     [stockPriceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.mas_left).offset(2*minSpace);
         make.top.mas_equalTo(stockNameLabel.mas_bottom).offset(2*minSpace);
-        make.size.mas_equalTo(CGSizeMake(size.width+2*minSpace, size.height));
+        make.size.mas_equalTo(CGSizeMake(size.width+3*minSpace, size.height));
     }];
     
     stockPriceLabel.textAlignment = NSTextAlignmentLeft;
