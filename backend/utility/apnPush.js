@@ -38,8 +38,8 @@ exports.pushMsgToUsers = function (userToken, msg) {
 	var pemkeyName = '';
 
 	if (process.env.STOCK_ENV === 'dev') {
-		//pemName = 'heretest.pem';
-		//pemkeyName = 'heretestkey.pem';
+		pemName = 'StockPub.pem';
+		pemkeyName = 'StockPubKey.pem';
 	}
 
 	if (process.env.STOCK_ENV === 'pro') {
