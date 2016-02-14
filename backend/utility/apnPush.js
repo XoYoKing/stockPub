@@ -58,7 +58,7 @@ exports.pushMsgToUsers = function (userToken, msg) {
 		key: path.join(__dirname, pemkeyName),
 		passphrase: '123456',
 		/* Key file path */
-		gateway: 'gateway.push.apple.com',
+		gateway: 'gateway.sandbox.push.apple.com',
 		/* gateway address */
 		port: 2195,
 		/* gateway port */
