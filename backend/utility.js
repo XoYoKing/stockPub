@@ -78,7 +78,7 @@ exports.executeSql = function(sql, para, callback) {
 		}
 		//modify by wanghan 20141007
 		else{
-			conn.query(sql, para, function(err, result){
+			var query = conn.query(sql, para, function(err, result){
 				if (err) {
 					logger.error(err, logger.getFileNameAndLineNum(__filename));
 					if(callback!=null){
@@ -91,6 +91,7 @@ exports.executeSql = function(sql, para, callback) {
 				//conn.end();
 				conn.release();
 			});
+			console.log(query.sql);
 		}
 	});
 }
