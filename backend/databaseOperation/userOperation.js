@@ -242,6 +242,8 @@ exports.getUnreadComment = function(user_id, comment_timestamp, callback){
 }
 
 exports.updateDeviceToken = function(user_id, device_token, callback){
+	console.log('user_id:'+user_id);
+	console.log('device_token:'+device_token);
 	var sql = 'update user_base_info set device_token = ? where user_id = ?';
 	conn.executeSql(sql, [device_token, user_id], callback);
 }
