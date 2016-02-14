@@ -116,11 +116,14 @@
         
         
         
-        NSDictionary* message = [[NSDictionary alloc]initWithObjects:@[_myInfo.user_id, _myInfo.device_token, @"/updateDeviceToken"]forKeys:@[@"user_id", @"device_token", @"childpath"]];
+        NSDictionary* message = [[NSDictionary alloc]initWithObjects:@[_myInfo.user_id, _myInfo.device_token]forKeys:@[@"user_id", @"device_token"]];
         
-        NetWork* netWork = [[NetWork alloc] init];
-        [netWork message:message images:nil feedbackcall:nil complete:^{
-        } callObject:nil];
+        [NetworkAPI callApiWithParam:message childpath:@"/user/updateDeviceToken" successed:^(NSDictionary *response) {
+            <#code#>
+        } failed:^(NSError *error) {
+            <#code#>
+        }];
+        
     }
 }
 

@@ -477,4 +477,16 @@ router.post('/updateUnreadComment', function(req, res){
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});
-})
+});
+
+
+router.post('/updateDeviceToken', function(req, res){
+	userMgmt.updateDeviceToken(req.body.user_id, req.body.device_token, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
