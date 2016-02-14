@@ -114,11 +114,11 @@
     
     _myInfo.device_token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     //注册成功，将deviceToken保存到应用服务器数据库中
-    if (_myInfo.user_id!=nil) {
+    if (_myInfo.user_phone!=nil) {
         
         
         
-        NSDictionary* message = [[NSDictionary alloc]initWithObjects:@[_myInfo.user_id, _myInfo.device_token]forKeys:@[@"user_id", @"device_token"]];
+        NSDictionary* message = [[NSDictionary alloc]initWithObjects:@[_myInfo.user_phone, _myInfo.device_token]forKeys:@[@"user_phone", @"device_token"]];
         
         [NetworkAPI callApiWithParam:message childpath:@"/user/updateDeviceToken" successed:^(NSDictionary *response) {
             NSInteger code = [[response objectForKey:@"code"] integerValue];

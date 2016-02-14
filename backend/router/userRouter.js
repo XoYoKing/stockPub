@@ -498,7 +498,7 @@ router.post('/updateUnreadComment', function(req, res){
 
 
 router.post('/updateDeviceToken', function(req, res){
-	userMgmt.updateDeviceToken(req.body.user_id, req.body.device_token, function(flag, result){
+	userMgmt.updateDeviceToken(req.body.user_phone, req.body.device_token, function(flag, result){
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else{
