@@ -10,6 +10,8 @@
 #import "startViewCtrl.h"
 #import "loginViewCtrl.h"
 #import "NetworkAPI.h"
+#import "macro.h"
+#import "returnCode.h"
 
 @interface AppDelegate ()
 
@@ -119,11 +121,17 @@
         NSDictionary* message = [[NSDictionary alloc]initWithObjects:@[_myInfo.user_id, _myInfo.device_token]forKeys:@[@"user_id", @"device_token"]];
         
         [NetworkAPI callApiWithParam:message childpath:@"/user/updateDeviceToken" successed:^(NSDictionary *response) {
-            <#code#>
+            NSInteger code = [[response objectForKey:@"code"] integerValue];
+            if (code == SUCCESS) {
+                
+            }else{
+                
+                [Tools AlertBigMsg:@"token更新失败"];
+            }
+            
         } failed:^(NSError *error) {
-            <#code#>
+            [Tools AlertBigMsg:@"token更新失败"];
         }];
-        
     }
 }
 
@@ -137,8 +145,6 @@
 {
     NSLog(@"Registfail%@",error);
 }
-
-
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

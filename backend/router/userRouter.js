@@ -314,6 +314,11 @@ router.post('/login', function(req, res) {
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));
 				res.send(returnData);
 
+				userMgmt.updateLoginStatus(data.user_id, 1, function(flag, result){
+					if(!flag){
+						log.error(result, log.getFileNameAndLineNum(__filename));
+					}
+				});
 			} else {
 				statusCode = constant.returnCode.LOGIN_FAIL;
 				var data = {
@@ -329,6 +334,18 @@ router.post('/login', function(req, res) {
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			returnData.code = constant.returnCode.ERROR;
 			res.send(returnData);
+		}
+	});
+});
+
+
+router.post('/logout', function(req, res){
+	userMgmt.updateLoginStatus(req.body.user_id, 0, function(flag, result){
+		if(!flag){
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}
 	});
 });
