@@ -5,7 +5,7 @@ var runner = require('./unitTestRunner.js');
 var Json = {
     childpath: '/user/updateDeviceToken',
     user_id: 'c186c03ba298bc3cc20490684010a353',
-    device_token: 'test device_token'
+    device_token: 'testdevice_token'
 };
 
 describe('updateDeviceToken', function(){
