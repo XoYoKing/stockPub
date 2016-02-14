@@ -56,7 +56,7 @@ exports.pushMsgToUsers = function (userToken, msg) {
 	var options = {
 		cert: path.join(__dirname, pemName),
 		key: path.join(__dirname, pemkeyName),
-		passphrase: '8888',
+		passphrase: '123456',
 		/* Key file path */
 		gateway: 'gateway.push.apple.com',
 		/* gateway address */
