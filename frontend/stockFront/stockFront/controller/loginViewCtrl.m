@@ -112,6 +112,7 @@
             [mySettingData setObject:app.myInfo.user_phone forKey:@"phone"];
             [mySettingData setObject:app.myInfo.user_password forKey:@"password"];
             [mySettingData synchronize];
+            app.isLogin = true;
             
             //本地库连接
             NSLog(@"%@", app.myInfo.user_id);

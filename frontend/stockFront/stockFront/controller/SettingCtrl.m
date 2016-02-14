@@ -257,11 +257,13 @@ typedef enum {
         [mySettingData removeObjectForKey:@"password"];
         [mySettingData synchronize];
         
+        
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [self dismissViewControllerAnimated:YES completion:nil];
             AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-            
+            app.isLogin = false;
             [app backToStartView];
             
         });

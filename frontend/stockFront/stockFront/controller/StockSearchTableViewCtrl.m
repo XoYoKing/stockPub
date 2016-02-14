@@ -17,6 +17,7 @@
 #import "LocDatabase.h"
 #import "UserInfoModel.h"
 #import "AppDelegate.h"
+#import "StockInfoDetailTableView.h"
 
 @implementation StockSearchTableViewCtrl
 {
@@ -165,31 +166,37 @@
 {
     if (indexPath.section == 1) {
         
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+//        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+//        
+//        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"添加到自选" preferredStyle:UIAlertControllerStyleAlert];
+//        
+//        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//            ;
+//        }];
+//        
+//        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            NSLog(@"add stock to coredata");
+//            
+//            StockInfoModel* stockModel = [stockList objectAtIndex:indexPath.row];
+//            if(![locDatabase addStock:stockModel]){
+//                alertMsg(@"添加自选失败");
+//            }else{
+//                alertMsg(@"已添加");
+//            }
+//        }];
+//        
+//        
+//        
+//        [alertController addAction:cancelAction];
+//        [alertController addAction:okAction];
+//        [self presentViewController:alertController animated:YES completion:nil];
         
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"添加到自选" preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            ;
-        }];
-        
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"add stock to coredata");
-            
-            StockInfoModel* stockModel = [stockList objectAtIndex:indexPath.row];
-            if(![locDatabase addStock:stockModel]){
-                alertMsg(@"添加自选失败");
-            }else{
-                alertMsg(@"已添加");
-            }
-        }];
-        
-        
-        
-        [alertController addAction:cancelAction];
-        [alertController addAction:okAction];
-        [self presentViewController:alertController animated:YES completion:nil];
-        
+        StockInfoModel* stockModel = [stockList objectAtIndex:indexPath.row];
+        StockInfoDetailTableView* detail = [[StockInfoDetailTableView alloc] init];
+        detail.ismarket = false;
+        detail.stockInfoModel = stockModel;
+        [self.navigationController pushViewController:detail animated:YES];
     }
 }
 

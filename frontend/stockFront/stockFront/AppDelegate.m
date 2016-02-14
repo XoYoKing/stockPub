@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "startViewCtrl.h"
 #import "loginViewCtrl.h"
+#import "NetworkAPI.h"
 
 @interface AppDelegate ()
 
@@ -49,6 +50,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    _isLogin = false;
     _myInfo = [[UserInfoModel alloc] init];
     
     _myInfo.user_phone = (NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
@@ -77,6 +80,14 @@
         [self.window makeKeyAndVisible];
 
     }
+    
+    
+    //通知系统应用接收推送
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes: (UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    
+    
     return YES;
 }
 
@@ -91,6 +102,41 @@
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     return app.myInfo;
 }
+
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSLog(@"regisger success:%@",deviceToken);
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    
+    
+    _myInfo.device_token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    //注册成功，将deviceToken保存到应用服务器数据库中
+    if (_myInfo.user_id!=nil) {
+        
+        
+        
+        NSDictionary* message = [[NSDictionary alloc]initWithObjects:@[_myInfo.user_id, _myInfo.device_token, @"/updateDeviceToken"]forKeys:@[@"user_id", @"device_token", @"childpath"]];
+        
+        NetWork* netWork = [[NetWork alloc] init];
+        [netWork message:message images:nil feedbackcall:nil complete:^{
+        } callObject:nil];
+    }
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    // 处理推送消息
+    NSLog(@"userinfo:%@",userInfo);
+    
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSLog(@"Registfail%@",error);
+}
+
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

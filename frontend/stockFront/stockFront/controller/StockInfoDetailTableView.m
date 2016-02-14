@@ -124,17 +124,66 @@
 
 - (void)showRightItem
 {
-    if (_ismarket == false) {
-        LocDatabase* loc = [AppDelegate getLocDatabase];
-        
-        
-        if ([loc isLookStock:_stockInfoModel]) {
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消看多" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLook:)];
-        }else{
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"看多" style:UIBarButtonItemStylePlain target:self action:@selector(addlook:)];
-        }
-    }
+    if(_ismarket == false){
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"更多" style:UIBarButtonItemStylePlain target:self action:@selector(more:)];
 
+    }
+    
+//    if (_ismarket == false) {
+//        LocDatabase* loc = [AppDelegate getLocDatabase];
+//        
+//        
+//        if ([loc isLookStock:_stockInfoModel]) {
+//            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消看多" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLook:)];
+//        }else{
+//            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"看多" style:UIBarButtonItemStylePlain target:self action:@selector(addlook:)];
+//        }
+//    }
+
+}
+
+- (void)more:(id)sender
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@""preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    
+    LocDatabase* loc = [AppDelegate getLocDatabase];
+    
+    if([loc isLookStock:_stockInfoModel]){
+        UIAlertAction* lookAction= [UIAlertAction actionWithTitle:@"取消看多" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [self cancelLook:nil];
+        }];
+        [alertController addAction:lookAction];
+    }else{
+        UIAlertAction* lookAction= [UIAlertAction actionWithTitle:@"看多" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self addlook:nil];
+        }];
+        [alertController addAction:lookAction];
+    }
+    
+    if ([loc isFollowStock:_stockInfoModel]) {
+        UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"取消关注" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [loc deleteStock:_stockInfoModel];
+            [Tools AlertBigMsg:@"已取消"];
+        }];
+        [alertController addAction:chooseAction];
+
+    }else{
+        UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"关注" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [loc addStock:_stockInfoModel];
+            [Tools AlertBigMsg:@"已关注"];
+            
+        }];
+        [alertController addAction:chooseAction];
+
+    }
+    
+    [alertController addAction:cancelAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)addlook:(id)sender
