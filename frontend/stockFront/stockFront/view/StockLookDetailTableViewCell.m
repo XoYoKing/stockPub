@@ -78,6 +78,8 @@
         
         [commentButton addTarget:self action:@selector(commentPress:) forControlEvents:UIControlEventTouchUpInside];
         
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
     }
     return self;
 }

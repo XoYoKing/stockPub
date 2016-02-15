@@ -127,6 +127,13 @@
             app.tabBarViewController = tabbarView;
             [self presentViewController:tabbarView animated:YES completion:nil];
             
+            
+            //更新device token
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes: (UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            
+            
         }else if(code == LOGIN_FAIL){
             alertMsg(@"用户或密码错误");
             self.view.hidden = NO;

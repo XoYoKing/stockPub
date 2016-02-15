@@ -74,6 +74,10 @@
         
         if(code == SUCCESS){
             
+            if((NSNull*)[response objectForKey:@"data"] == [NSNull null]){
+                return;
+            }
+            
             twentyAvVolume = [[response objectForKey:@"data"] floatValue];
             [self.tableView reloadData];
             
@@ -108,6 +112,11 @@
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         
         if(code == SUCCESS){
+            
+            if((NSNull*)[response objectForKey:@"data"] == [NSNull null]){
+                return;
+            }
+
             
             fiveAvVolume = [[response objectForKey:@"data"] floatValue];
             [self.tableView reloadData];
