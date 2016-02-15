@@ -251,17 +251,35 @@ typedef enum {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         // Do something...
-        //清理本地账户信息
-        NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
-        [mySettingData removeObjectForKey:@"phone"];
-        [mySettingData removeObjectForKey:@"password"];
-        [mySettingData synchronize];
+        
+        AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+        
+        NSDictionary* message = [[NSDictionary alloc]
+                                 initWithObjects:@[app.myInfo.user_id]
+                                 forKeys:@[@"user_id"]];
+        
+        [NetworkAPI callApiWithParam:message childpath:@"/user/logout" successed:^(NSDictionary *response) {
+            
+            if ([[response objectForKey:@"code"] integerValue] == SUCCESS) {
+                //清理本地账户信息
+                NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
+                [mySettingData removeObjectForKey:@"phone"];
+                [mySettingData removeObjectForKey:@"password"];
+                [mySettingData synchronize];
+            }else{
+                
+            }
+            
+        } failed:^(NSError *error) {
+            
+        }];
+        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [self dismissViewControllerAnimated:YES completion:nil];
             AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-            
+            app.isLogin = false;
             [app backToStartView];
             
         });

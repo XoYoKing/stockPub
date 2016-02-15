@@ -26,6 +26,8 @@
 
 - (BOOL)isFollow:(UserInfoModel*)userModel;
 
+- (BOOL)isFollowStock:(StockInfoModel*)stockmodel;
+
 - (BOOL)addStock:(StockInfoModel*)model;
 
 - (BOOL)deleteStock:(StockInfoModel*)model;

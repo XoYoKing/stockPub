@@ -45,6 +45,34 @@
     return YES;
 }
 
+
+- (BOOL)isFollowStock:(StockInfoModel*)stockmodel
+{
+    NSFetchRequest* fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"MyStock" inManagedObjectContext:context]];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:[[NSString alloc] initWithFormat:@"stock_code = '%@'",stockmodel.stock_code]];
+    
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor* sortDesc = [[NSSortDescriptor alloc] initWithKey:@"stock_code" ascending:NO];
+    NSArray* desc = [NSArray arrayWithObject:sortDesc];
+    [fetchRequest setSortDescriptors:desc];
+    
+    NSFetchedResultsController* fetchController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:@"Root"];
+    
+    NSError* error;
+    if (![fetchController performFetch:&error]) {
+        NSLog(@"Error %@", [error localizedDescription]);
+        return FALSE;
+    }
+    
+    if([fetchController.fetchedObjects count]>0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 - (BOOL)addStock:(StockInfoModel*)stockmodel
 {
     NSLog(@"addStock");

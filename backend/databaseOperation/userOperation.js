@@ -240,3 +240,16 @@ exports.getUnreadComment = function(user_id, comment_timestamp, callback){
 	' order by a.comment_timestamp desc limit 12';
 	conn.executeSql(sql, [user_id, comment_timestamp], callback);
 }
+
+exports.updateDeviceToken = function(user_phone, device_token, callback){
+	console.log('user_phone:'+user_phone);
+	console.log('device_token:'+device_token);
+	var sql = 'update user_base_info set device_token = ? where user_phone = ?';
+	conn.executeSql(sql, [device_token, user_phone], callback);
+}
+
+
+exports.updateLoginStatus = function(user_id, user_login_status, callback){
+	var sql = 'update user_base_info set user_login_status = ? where user_id = ?';
+	conn.executeSql(sql, [user_login_status, user_id], callback);
+}

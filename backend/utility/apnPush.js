@@ -36,15 +36,17 @@ exports.pushMsgToUsers = function (userToken, msg) {
 
 	var pemName = '';
 	var pemkeyName = '';
-
+	var gateway = '';
 	if (process.env.STOCK_ENV === 'dev') {
-		//pemName = 'heretest.pem';
-		//pemkeyName = 'heretestkey.pem';
+		pemName = 'StockPub.pem';
+		pemkeyName = 'StockPubKey.pem';
+		gateway = 'gateway.sandbox.push.apple.com';
 	}
 
 	if (process.env.STOCK_ENV === 'pro') {
 		//pemName = 'herepro.pem';
 		//pemkeyName = 'hereprokey.pem';
+		gateway = 'gateway.push.apple.com';
 	}
 
 
@@ -56,9 +58,9 @@ exports.pushMsgToUsers = function (userToken, msg) {
 	var options = {
 		cert: path.join(__dirname, pemName),
 		key: path.join(__dirname, pemkeyName),
-		passphrase: '8888',
+		passphrase: '123456',
 		/* Key file path */
-		gateway: 'gateway.push.apple.com',
+		gateway: gateway,
 		/* gateway address */
 		port: 2195,
 		/* gateway port */
