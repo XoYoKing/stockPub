@@ -44,8 +44,8 @@ exports.pushMsgToUsers = function (userToken, msg) {
 	}
 
 	if (process.env.STOCK_ENV === 'pro') {
-		//pemName = 'herepro.pem';
-		//pemkeyName = 'hereprokey.pem';
+		pemName = 'StockPubPro.pem';
+		pemkeyName = 'StockPubKey.pem';
 		gateway = 'gateway.push.apple.com';
 	}
 
