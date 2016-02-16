@@ -1,13 +1,12 @@
 var mysql = require('mysql');
 var config = require('./config');
 
-
 var pool = mysql.createPool({
-	host: config.mysql_dev.host,
-	user: config.mysql_dev.user,
-  	password: config.mysql_dev.password,
-	database: config.mysql_dev.database,
-	port: config.mysql_dev.port,
+	host: process.env.dbhost,
+	user: process.env.dbuser,
+  	password: process.env.dbpassword,
+	database: process.env.database,
+	port: process.env.dbport,
 	acquireTimeout: 10000
 });
 
