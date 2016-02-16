@@ -27,10 +27,7 @@ exports.weimi = {
 	cid: 'iHHPZMcJNFxD'
 };
 
-exports.bcsInfo = {
-	url : 'http://bcs.duapp.com',
-	flag: 'MBO'
-};
+
 
 exports.logLevel = {
 	DEBUG: 0,
