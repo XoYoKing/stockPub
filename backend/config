@@ -61,11 +61,3 @@ exports.stockServerInfo = {
     url: '112.74.102.178',
     port: 18000
 };
-
-exports.weimi = {
-	host: 'api.weimi.cc',
-	sendUrl: '/2/sms/send.html',
-	uid: 'FXcnjjtUwXSB',
-	pas: 'ybnnjpb2',
-	cid: 'iHHPZMcJNFxD'
-};
