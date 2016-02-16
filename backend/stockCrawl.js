@@ -1,16 +1,17 @@
 var databaseOperation = require('./databaseOperation');
 var logger = global.logger;
 var http = require('http');
-var redis = require("redis");
-var redisClient = redis.createClient({auth_pass:'here_dev'});
+//var redis = require("redis");
+//var redisClient = redis.createClient({auth_pass:'here_dev'});
 
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
-
-
-redisClient.on("error", function (err) {
-	logger.error(err, logger.getFileNameAndLineNum(__filename));
-});
+var stockOperation = require('./databaseOperation/stockOperation.js');
+var config = require('./config');
+var path = require('path');
+// redisClient.on("error", function (err) {
+// 	logger.error(err, logger.getFileNameAndLineNum(__filename));
+// });
 
 
 function isMarketOpenTime() {
@@ -90,6 +91,7 @@ function insertToDatabase(htmlData, isnow) {
 				var openPrice = dataArr[5];
 				var high_price = dataArr[33];
 				var low_price = dataArr[34];
+				var fluctuate_value = dataArr[31];
 
 				if (stockCode === undefined ||
 					amount === undefined ||
@@ -105,87 +107,35 @@ function insertToDatabase(htmlData, isnow) {
 				}
 
 				if (isnow === true) {
-
-					redisClient.get(stockCode+"_3day", function(err, data){
-						if (!err) {
-							if (data) {
-								var day4 = parseInt(data)+volume*conn.getPlusMinus(price - openPrice);
-								databaseOperation.insertStockNow(stockCode, amount, date, time,
-											price,
-											yesterday_price,
-											fluctuate,
-											priceearning,
-											marketValue,
-											flowMarketValue,
-											volume,
-											pb,
-											openPrice,
-											high_price,
-											day4,
-											function(flag, result) {
-												//logger.debug(stockCode+" now insert");
-												if (!flag) {
-													logger.error("insertStockNow err code "+result.errno);
-												}else{
-													//logger.info('insertStockNow ok');
-												}
-											});
-							}else{
-								databaseOperation.getDaysPrice(stockCode, 1, function(flag, result){
-									if (flag) {
-										var day4 = 0;
-										if (result.length<=0) {
-											redisClient.set(stockCode+"_3day", 0);
-											day4 = volume*conn.getPlusMinus(price - openPrice);
-										}else{
-											if (result[0].day3==null) {
-												result[0].day3 = 0;
-											}
-											if (conn.compareDay(result[0].date, date) >= 0) {
-												return;
-											}
-
-											redisClient.set(stockCode+"_3day", result[0].day3);
-											day4 = result[0].day3+volume*conn.getPlusMinus(price - openPrice);
-										}
-
-
-										databaseOperation.insertStockNow(stockCode, amount, date, time,
-											price,
-											yesterday_price,
-											fluctuate,
-											priceearning,
-											marketValue,
-											flowMarketValue,
-											volume,
-											pb,
-											openPrice,
-											high_price,
-											day4,
-											function(flag, result) {
-												//logger.debug(stockCode+" now insert");
-												if (!flag) {
-													logger.error("insertStockNow err code "+result.errno);
-
-												}else{
-													//logger.info('insertStockNow ok');
-
-
-
-												}
-											});
+					databaseOperation.insertStockNow(stockCode, amount, date, time,
+								price,
+								yesterday_price,
+								fluctuate,
+								priceearning,
+								marketValue,
+								flowMarketValue,
+								volume,
+								pb,
+								openPrice,
+								high_price,
+								fluctuate_value,
+								function(flag, result) {
+									//logger.debug(stockCode+" now insert");
+									if (!flag) {
+										logger.error("insertStockNow err code "+result.errno);
 									}else{
-										logger.error(result);
+										//logger.info('insertStockNow ok');
 									}
 								});
-							}
+					stockOperation.updateLookYield(stockCode, price, function(flag, result){
+						if(flag){
+
 						}else{
-							logger.error(err);
+							logger.error(result, logger.getFileNameAndLineNum(__filename));
 						}
 					});
 
 				} else {
-
 					databaseOperation.insertStockAmount(stockCode,
 						amount,
 						date,
@@ -210,8 +160,6 @@ function insertToDatabase(htmlData, isnow) {
 							}else{
 								logger.debug(stockCode+" day info insert");
 								updateStockBaseInfo(stockCode, priceearning, marketValue, flowMarketValue, pb, price);
-								caculateVolumeProportion(stockCode);
-								updateStockAvPrice(stockCode, date);
 							}
 						}
 					);
@@ -224,18 +172,18 @@ function insertToDatabase(htmlData, isnow) {
 
 
 
-exports.removeKeys = function(){
-	logger.info('enter removeKeys');
-	databaseOperation.getAllStockCode(function(flag, result){
-		if (flag) {
-			result.forEach(function(element){
-				redisClient.del(element.stock_code+"_3day");
-			});
-		}else{
-			logger.error('getAllStockCode error code '+result.errno);
-		}
-	});
-}
+// exports.removeKeys = function(){
+// 	logger.info('enter removeKeys');
+// 	databaseOperation.getAllStockCode(function(flag, result){
+// 		if (flag) {
+// 			result.forEach(function(element){
+// 				redisClient.del(element.stock_code+"_3day");
+// 			});
+// 		}else{
+// 			logger.error('getAllStockCode error code '+result.errno);
+// 		}
+// 	});
+// }
 
 function getMaxPrice(result){
 	var max = result[0].high_price;
@@ -428,6 +376,25 @@ function exitProgram(){
 	});
 }
 
+exports.emptyStockNowInfo = function(){
+	//delete the stock_now_info
+	databaseOperation.emptyStockNowInfo(function(flag, result){
+		if (!flag) {
+			logger.error(result);
+		}
+	});
+};
+
+
+exports.emptyMarketIndexNowInfo = function(){
+	stockOperation.emptyMarketNowInfo(function(flag, result){
+		if (!flag) {
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
+
 exports.startGetAllStockInfo = function(){
 
 	// var now = new Date();
@@ -443,12 +410,7 @@ exports.startGetAllStockInfo = function(){
 
 	//setTimeout(exitProgram, 1000*60*2);
 
-	//delete the stock_now_info
-	databaseOperation.emptyStockNowInfo(function(flag, result){
-		if (!flag) {
-			logger.error(result);
-		}
-	});
+
 
 
 	databaseOperation.getAllStockCode(function(flag, result) {
@@ -482,17 +444,94 @@ function formatDate(now){
 	return year+"-"+month+"-"+date;
 }
 
+function insertMarketIndexDayToDataBase(htmlData, market_code){
+	logger.debug('enter insertMarketIndexDayToDataBase', logger.getFileNameAndLineNum(__filename));
+	var common = require('./utility/commonFunc');
+	var element = common.analyzeMarketMessage(htmlData, market_code);
+	if(element == null){
+		logger.info('insertMarketIndexDayToDataBase element is null');
+	}else{
+		stockOperation.insertMarketIndexDay(element, function(flag, result){
+			if(flag){
 
+			}else{
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+	}
+}
 
+function insertMarketIndexNowToDataBase(htmlData, market_code){
+	logger.debug('enter insertMarketIndexNowToDataBase', logger.getFileNameAndLineNum(__filename));
+	var common = require('./utility/commonFunc');
+	var element = common.analyzeMarketMessage(htmlData, market_code);
+	if(element == null){
+		logger.info('insertMarketIndexNowToDataBase element is null');
+	}else{
+		stockOperation.insertMarketIndexNow(element, function(flag, result){
+			if(flag){
+
+			}else{
+				logger.error(result, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+	}
+}
+
+function getMarketIndexFromAPI(urlChild, market_code, insertAction){
+	logger.debug('enter getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
+	var stockAPI = config.stockDataInterface.url + urlChild;
+	logger.debug(stockAPI, logger.getFileNameAndLineNum(__filename));
+	http.get(stockAPI, function(res) {
+		if (res.statusCode == 200) {
+			logger.debug('getMarketIndexFromAPI success', logger.getFileNameAndLineNum(__filename));
+			var htmlData = "";
+			res.on('data', function(data) {
+				htmlData += data;
+			});
+			res.on('end', function() {
+				logger.debug('end getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
+				insertAction(htmlData, market_code);
+			});
+		}
+	}).on('error', function(e) {
+		logger.error("Got error: " + e.message, logger.getFileNameAndLineNum(__filename));
+	});
+}
+
+exports.startCrawlMarket = function(){
+	logger.info('enter startCrawlMarket');
+	stockOperation.getAllMarketIndexInfo(function(flag, result){
+		if(flag){
+			for (var i = 0; i < result.length; ++i) {
+				var urlChild = "";
+				urlChild = urlChild + "," + result[i].market_code;
+				logger.debug(urlChild, logger.getFileNameAndLineNum(__filename));
+				getMarketIndexFromAPI(urlChild, result[i].market_code, insertMarketIndexNowToDataBase);
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
+exports.startCrawlMarketDay = function(){
+	logger.info('enter startCrawlMarketDay');
+	stockOperation.getAllMarketIndexInfo(function(flag, result){
+		if(flag){
+			for (var i = 0; i < result.length; ++i) {
+				var urlChild = "";
+				urlChild = urlChild + "," + result[i].market_code;
+				logger.debug(urlChild, logger.getFileNameAndLineNum(__filename));
+				getMarketIndexFromAPI(urlChild, result[i].market_code, insertMarketIndexDayToDataBase);
+			}
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
+}
 
 exports.startCrawlStockNow = function(){
-	// if (!isMarketOpenTime()) {
-	// 	logger.debug("not market time");
-	// 	return;
-	// }
-
-	//setTimeout(exitProgram, 1000*60*2);
-
 
 	logger.info("enter getAllStockInfoNow");
 	databaseOperation.getAllStockCode(function(flag, result) {

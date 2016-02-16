@@ -2,6 +2,31 @@
 var domain = require('domain');
 var domainObj = domain.create();
 var log = global.logger;
+var userMgmt = require('../databaseOperation/userOperation.js');
+var path = require('path');
+
+exports.pushMsg = function(user_id, msg){
+	userMgmt.getUserTokenInfo(user_id, function(flag, result) {
+		if (flag) {
+			if (result.length > 0) {
+				var pushMsg = {
+					content: msg,
+					msgtype: 'msg',
+					badge: 1
+				};
+				// apn to user
+				var apnpush = require('./apnPush.js');
+				apnpush.pushMsgToUsers(result[0].device_token, pushMsg);
+			} else {
+				log.warn(user_id + ' has no device token', log.getFileNameAndLineNum(
+					__filename));
+			}
+		} else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
 
 exports.pushMsgToUsers = function (userToken, msg) {
 	if (userToken === undefined || userToken === '') {
@@ -9,17 +34,19 @@ exports.pushMsgToUsers = function (userToken, msg) {
 		return;
 	}
 
-	var pemName = null;
-	var pemkeyName = null;
-
+	var pemName = '';
+	var pemkeyName = '';
+	var gateway = '';
 	if (process.env.STOCK_ENV === 'dev') {
-		//pemName = 'heretest.pem';
-		//pemkeyName = 'heretestkey.pem';
+		pemName = 'StockPub.pem';
+		pemkeyName = 'StockPubKey.pem';
+		gateway = 'gateway.sandbox.push.apple.com';
 	}
 
 	if (process.env.STOCK_ENV === 'pro') {
-		//pemName = 'herepro.pem';
-		//pemkeyName = 'hereprokey.pem';
+		pemName = 'StockPubPro.pem';
+		pemkeyName = 'StockPubKey.pem';
+		gateway = 'gateway.push.apple.com';
 	}
 
 
@@ -31,9 +58,9 @@ exports.pushMsgToUsers = function (userToken, msg) {
 	var options = {
 		cert: path.join(__dirname, pemName),
 		key: path.join(__dirname, pemkeyName),
-		passphrase: '8888',
+		passphrase: '123456',
 		/* Key file path */
-		gateway: 'gateway.push.apple.com',
+		gateway: gateway,
 		/* gateway address */
 		port: 2195,
 		/* gateway port */

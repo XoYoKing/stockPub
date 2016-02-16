@@ -4,6 +4,51 @@ var http = require('http');
 var gs = require('nodegrass');
 
 
+exports.analyzeMarketMessage = function(htmlData, market_code){
+
+    var beginIndex = htmlData.indexOf("\"");
+    var endIndex = htmlData.lastIndexOf("\"");
+    var element = {};
+
+    if (beginIndex!=-1&&endIndex!=-1) {
+        var data = htmlData.substr(beginIndex + 1, endIndex - beginIndex - 1);
+        if (data != null) {
+            var dataArr = data.split("~");
+            if(dataArr.length<48){
+                logger.warn('elementArr is empty');
+                return;
+            }
+            var date = dataArr[30];
+            element.market_code = market_code;
+            element.market_index_date = date;
+            element.market_index_value_now   = dataArr[3];
+            element.market_index_fluctuate = dataArr[32];
+            element.market_index_fluctuate_value = dataArr[31];
+            element.market_index_trade_volume = dataArr[37];
+            element.market_index_value_high = dataArr[33];
+            element.market_index_value_low = dataArr[34];
+            element.market_index_value_open = dataArr[5];
+            element.market_index_value_yesterday_close = dataArr[4];
+            element.market_index_trade_amount = dataArr[36];
+
+            if (element.market_code === undefined ||
+                element.market_index_trade_volume === undefined ||
+                element.market_index_date === undefined ||
+                element.market_index_value_now === undefined ||
+                element.market_index_value_open === undefined) {
+                    //logger.warn('stockCode is undefined');
+                return null;
+            }
+        }else{
+            return null
+        }
+    }else{
+        return null;
+    }
+
+    return element;
+}
+
 exports.analyzeMessage = function(htmlData){
 
     var elementArr = htmlData.split(";");
@@ -36,6 +81,7 @@ exports.analyzeMessage = function(htmlData){
 				element.time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
 				element.price = dataArr[3];
 				element.fluctuate = dataArr[32];
+                element.fluctuate_value = dataArr[31];
 				element.priceearning = dataArr[39];
 				element.marketValue = dataArr[45];
 				element.pb = dataArr[46];
@@ -88,6 +134,7 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
         callback(false, e.message);
 	});
 }
+
 
 
 function getMarketDesc(stock_code) {

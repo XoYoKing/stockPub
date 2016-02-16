@@ -4,9 +4,9 @@ var runner = require('./unitTestRunner.js');
 
 var followUserJson = {
     childpath: '/user/followUser',
-    user_id: 'c186c03ba298bc3cc20490684010a353',
+    user_id: 'cbd41c6103064d3f0af848208c20ece2',
     user_name: 'jam',
-    followed_user_id: '7c497868c9e6d3e4cf2e87396372cd3b'
+    followed_user_id: 'c186c03ba298bc3cc20490684010a353'
 };
 
 describe('followUser', function(){

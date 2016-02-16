@@ -6,6 +6,11 @@ var constant = require('../utility/constant.js');
 var routerFunc = require('../utility/routeFunc.js');
 var common = require('../utility/commonFunc.js');
 var apn = require('../utility/apnPush.js');
+var config = require('../config');
+var formidable = require('formidable');
+var path = require('path');
+var apn = require('../utility/apnPush.js');
+
 
 module.exports = router;
 
@@ -13,6 +18,18 @@ module.exports = router;
 
 router.post('/cancelFollowUser', function(req, res){
 	userMgmt.cancelFollowUser(req.body, function(flag, result){
+		var returnData = {};
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+router.post('/getfollowUserAll', function(req, res){
+	userMgmt.getfollowUserAll(req.body, function(flag, result){
 		var returnData = {};
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
@@ -212,45 +229,281 @@ router.post('/confirmPhone', function(req, res) {
 });
 
 
+router.post('/checkNameExist', function(req, res) {
+	userMgmt.checkUserNameExist(req.body, function(flag, result) {
+		var returnData = {};
+		if (flag) {
+			if (result.length > 0) {
+				log.debug(req.body.user_name + ' USER_EXIST', log.getFileNameAndLineNum(
+					__filename));
+				returnData.code = constant.returnCode.USER_EXIST;
+			} else {
+				log.debug(req.body.user_name + ' USER_NOT_EXIST', log.getFileNameAndLineNum(
+					__filename));
+				returnData.code = constant.returnCode.USER_NOT_EXIST;
+			}
+		} else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
+//change face
+router.post('/changeFace', function(req, res){
+	log.debug('enter changeFace', log.getFileNameAndLineNum(__filename));
+
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		var returnData = {};
+
+		if (err) {
+			log.error('form.parse error', log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+			res.send(returnData);
+			return;
+		}
+
+		var fileName = files.user_image.path + Date.now();
+		var encrypt = require('../utility/encrypt.js');
+		fileName = encrypt.sha1Cryp(fileName);
+		var fs = require('fs');
+		fs.rename(files.user_image.path, path.join(process.env.HOME,
+			config.stockPubFaceDir.dir, fileName), function(err) {
+			if (err) {
+				log.error('fs.rename error ' + err, log.getFileNameAndLineNum(__filename));
+				returnData.code = constant.returnCode.ERROR;
+				res.send(returnData);
+			} else {
+				log.debug(fields.user_id+" "+fileName, log.getFileNameAndLineNum(__filename));
+				userMgmt.updateUserFace(fields.user_id, fileName,
+					function(flag, result) {
+						if (flag) {
+							returnData.code = constant.returnCode.SUCCESS;
+							returnData.data = {
+								'fileName':fileName
+							};
+						} else {
+							log.error('insertUserImageInfo error ' +
+								result, log.getFileNameAndLineNum(__filename));
+							returnData.code = constant.returnCode.ERROR;
+						}
+						res.send(returnData);
+					});
+			}
+		});
+	});
+});
+
+
 // login
 router.post('/login', function(req, res) {
 	userMgmt.login(req.body.user_phone, req.body.user_password, function(flag, result) {
 		var statusCode;
-		var returnData = {};
+		var returnData = {
+			data:'',
+			code:''
+		};
 		if (flag) {
 			if (result.length) {
 				statusCode = constant.returnCode.LOGIN_SUCCESS;
-
-				returnData = {
-					'user_phone': result[0].user_phone,
-					'user_id': result[0].user_id,
-					'user_password': result[0].user_password,
-					'user_name': result[0].user_name,
-					'user_facethumbnail': result[0].user_facethumbnail,
-					'user_face_image': result[0].user_face_image,
-					'fans_count': result[0].user_fans_count,
-					'user_follow_count': result[0].user_follow_count,
-					'code': statusCode
-				};
+				var data = result[0];
+				returnData.data = data;
+				returnData.code = statusCode;
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));
 				res.send(returnData);
 
+				userMgmt.updateLoginStatus(data.user_id, 1, function(flag, result){
+					if(!flag){
+						log.error(result, log.getFileNameAndLineNum(__filename));
+					}
+				});
 			} else {
 				statusCode = constant.returnCode.LOGIN_FAIL;
-				returnData = {
+				var data = {
 					'user_phone': req.body.user_phone,
-					'code': statusCode
 				};
+				returnData.code = statusCode;
+				returnData.data = data;
+
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));
 				res.send(returnData);
 			}
 		} else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
-			statusCode = constant.returnCode.ERROR;
-			returnData = {
-				'code': statusCode
-			};
+			returnData.code = constant.returnCode.ERROR;
 			res.send(returnData);
+		}
+	});
+});
+
+
+router.post('/logout', function(req, res){
+	userMgmt.updateLoginStatus(req.body.user_id, 0, function(flag, result){
+		if(!flag){
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}
+	});
+});
+
+
+//get user base info
+router.post('/userBaseInfo', function(req, res){
+	userMgmt.userBaseInfo(req.body.user_id, function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			if(result.length>0){
+				returnData.data = result[0];
+			}
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
+
+//search user
+router.post('/searchUser', function(req, res){
+	userMgmt.searchUser(req.body.user_id, req.body.user_name, function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			returnData.data = result;
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}
+		res.send(returnData);
+	});
+});
+
+
+
+//comment
+// add by wanghan 20160202 for add active comment
+router.post('/addCommentToLook', function(req, res) {
+	userMgmt.addCommentToLook(req.body, function(flag, result) {
+		if (flag) {
+			// apn
+			if (req.body.comment_user_id === req.body.comment_to_user_id) {
+				log.debug('not to apn', log.getFileNameAndLineNum(__filename));
+			} else {
+				var msg = req.body.comment_user_name + '评论了你';
+				apn.pushMsg(req.body.comment_to_user_id, msg);
+				//apnToUser(req.body.to_user_id, req.body.user_name + '评论了你');
+				//redisOper.increaseUnreadCommentCount(req.body.to_user_id);
+			}
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+
+	});
+});
+
+router.post('/getComments', function(req, res){
+	userMgmt.getComments(req.body.look_id, req.body.comment_timestamp, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/getRankUser', function(req, res){
+	userMgmt.getRankUser(req.body.look_duration, function(flag, result){
+		var userlist = {};
+		if(flag){
+			result.forEach(function(element){
+				if(userlist[element.user_id] == null){
+					userlist[element.user_id] =
+					{
+						user_id: element.user_id,
+						user_name: element.user_name,
+						user_facethumbnail: element.user_facethumbnail,
+						total_yield: element.total_yield,
+						stocklist: [{
+							stock_code: element.stock_code,
+							stock_name: element.stock_name
+						}]
+					};
+				}else{
+					userlist[element.user_id].stocklist.push({
+						stock_code: element.stock_code,
+						stock_name: element.stock_name
+					});
+				}
+			});
+
+			routerFunc.feedBack(constant.returnCode.SUCCESS, userlist, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/getUnreadCommentCount', function(req, res){
+	userMgmt.getUnreadCommentCount(req.body.user_id, function(flag, result){
+		if(flag){
+			var count = result[0].count;
+			log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.SUCCESS, count, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/getUnreadComment', function(req, res){
+	userMgmt.getUnreadComment(req.body.user_id, req.body.comment_timestamp, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+			userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
+				if(!flag){
+					log.error(result, log.getFileNameAndLineNum(__filename));
+				}
+			});
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+router.post('/updateUnreadComment', function(req, res){
+	userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/updateDeviceToken', function(req, res){
+	userMgmt.updateDeviceToken(req.body.user_phone, req.body.device_token, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});
 });
