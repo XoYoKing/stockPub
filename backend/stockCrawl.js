@@ -11,7 +11,7 @@ var userOperation = require('./databaseOperation/userOperation.js');
 var config = require('./config');
 var path = require('path');
 
-var apnPush = require('./utility/apnPush.js');
+var apn = require('./utility/apnPush.js');
 var moment = require('moment');
 // redisClient.on("error", function (err) {
 // 	logger.error(err, logger.getFileNameAndLineNum(__filename));
