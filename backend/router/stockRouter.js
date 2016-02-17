@@ -383,6 +383,6 @@ router.post('/getAvgVolume', function(req, res){
 });
 
 router.get('/testHighChart', function(req, res){
-	logger.debug(JSON.stringify(req.body), logger.getFileNameAndLineNum(__filename));
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
 	res.send('testHighChart');
 });
