@@ -10,6 +10,7 @@
 #import "macro.h"
 #import "returnCode.h"
 #import <Masonry.h>
+#import "ConfigAccess.h"
 
 
 @implementation KLineCell
@@ -52,7 +53,11 @@
 
 - (void)configureCell:(StockInfoModel*)model
 {
-    NSURL* url = [NSURL URLWithString:@"http://112.74.102.178:10808/eula"];//创建URL
+    NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/stock/testHighChart?stock_code=", model.stock_code];
+    
+    NSLog(@"%@", urlStr);
+    
+    NSURL* url = [NSURL URLWithString:urlStr];//创建URL
     NSURLRequest* request = [NSURLRequest requestWithURL:url];//创建NSURLRequest
     [webView loadRequest:request];//加载
 }
