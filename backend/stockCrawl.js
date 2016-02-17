@@ -9,6 +9,9 @@ var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
 var config = require('./config');
 var path = require('path');
+
+var apnPush = require('./utility/apnPush.js');
+
 // redisClient.on("error", function (err) {
 // 	logger.error(err, logger.getFileNameAndLineNum(__filename));
 // });
@@ -559,14 +562,35 @@ exports.pushMarketCloseMsg = function(){
 				result.forEach(function(e){
 					var date = e.market_index_date.substr(0, 8);
 					console.log(date);
-					
+					var nowDate = moment().format('YYYYMMDD');
+					if(date === nowDate){
+						msg = msg + e.market_name + '收盘报' + e.market_index_value_now +
+						'(' +e.market_index_fluctuate+');';
+					}
 				});
-			}
 
+				logger.info(msg, logger.getFileNameAndLineNum(__filename));
+
+				if(msg.length>0){
+					var pushMsg = {
+						content: msg,
+						msgtype: 'msg',
+						badge: 1
+					};
+
+					userOperation.getAllUser(function(flag, result){
+						if(flag){
+							result.forEach(function(e){
+								apn.pushMsgToUsers(e.device_token, pushMsg);
+							});
+						}else{
+							logger.error(result);
+						}
+					});
+				}
+			}
 		}else{
 			logger.error(result);
 		}
 	});
-
-
 }
