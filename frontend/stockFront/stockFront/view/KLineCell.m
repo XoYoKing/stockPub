@@ -64,7 +64,7 @@
 
 + (CGFloat)cellHeight
 {
-    return 22*minSpace;
+    return 24*minSpace;
 }
 
 @end
