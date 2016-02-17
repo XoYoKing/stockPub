@@ -566,7 +566,7 @@ exports.pushMarketCloseMsg = function(){
 					var nowDate = moment().format('YYYYMMDD');
 					if(date === nowDate){
 						msg = msg + e.market_name + '收盘报' + e.market_index_value_now +
-						'(' +e.market_index_fluctuate+');';
+						'(' +e.market_index_fluctuate+'%);';
 					}
 				});
 
