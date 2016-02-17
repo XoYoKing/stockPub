@@ -13,6 +13,6 @@
 
 - (void)configureCell:(StockInfoModel*)model;
 
-+ (CGFloat)cellHeight;
++ (NSInteger)cellHeight;
 
 @end

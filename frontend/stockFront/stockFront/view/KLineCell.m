@@ -16,6 +16,7 @@
 @implementation KLineCell
 {
     UIWebView* webView;
+    BOOL isLoad;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -23,6 +24,7 @@
     if(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]){
         webView = [[UIWebView alloc] init];
         webView.scalesPageToFit = YES;
+        isLoad = false;
         [self addSubview:webView];
     }
     return self;
@@ -53,16 +55,21 @@
 
 - (void)configureCell:(StockInfoModel*)model
 {
-    NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/stock/kline?stock_code=", model.stock_code];
-    
-    NSLog(@"%@", urlStr);
-    
-    NSURL* url = [NSURL URLWithString:urlStr];//创建URL
-    NSURLRequest* request = [NSURLRequest requestWithURL:url];//创建NSURLRequest
-    [webView loadRequest:request];//加载
+    if (isLoad == false) {
+        NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@%ld", [ConfigAccess serverDomain], @"/stock/kline?stock_code=&height=", model.stock_code, [KLineCell cellHeight]*3];
+        
+        NSLog(@"%@", urlStr);
+        
+        
+        NSURL* url = [NSURL URLWithString:urlStr];//创建URL
+        NSURLRequest* request = [NSURLRequest requestWithURL:url];//创建NSURLRequest
+        [webView loadRequest:request];//加载
+        isLoad = true;
+        webView.userInteractionEnabled = NO;
+    }
 }
 
-+ (CGFloat)cellHeight
++ (NSInteger)cellHeight
 {
     return 24*minSpace;
 }
