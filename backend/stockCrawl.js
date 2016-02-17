@@ -582,7 +582,9 @@ exports.pushMarketCloseMsg = function(){
 					userOperation.getAllUser(function(flag, result){
 						if(flag){
 							result.forEach(function(e){
-								apn.pushMsgToUsers(e.device_token, pushMsg);
+								if(e.device_token!=null){
+									apn.pushMsgToUsers(e.device_token, pushMsg);
+								}
 							});
 						}else{
 							logger.error(result);
