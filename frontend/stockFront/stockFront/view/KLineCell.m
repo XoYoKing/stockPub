@@ -53,7 +53,7 @@
 
 - (void)configureCell:(StockInfoModel*)model
 {
-    NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/stock/testHighChart?stock_code=", model.stock_code];
+    NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@", [ConfigAccess serverDomain], @"/stock/kline?stock_code=", model.stock_code];
     
     NSLog(@"%@", urlStr);
     

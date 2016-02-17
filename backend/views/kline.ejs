@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link href="http://static.hcharts.cn/code/favicon.ico" type="image/x-icon" rel="icon">
+        <link href="http://static.hcharts.cn/code/favicon.ico" type="image/x-icon" rel="shortcut icon">
+        <link rel="stylesheet" href="http://static.hcharts.cn/bootstrap/v3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://static.hcharts.cn/toastr/toastr.min.css">
+        <link rel="stylesheet" href="http://static.hcharts.cn/code/css/codemirror.css">
+        <link rel="stylesheet" href="http://static.hcharts.cn/code/css/style.css">
+        <link href="http://bdimg.share.baidu.com/static/css/bdsstyle.css?cdnversion=20131219" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <script>
+        $(function () {
+
+            $.getJSON('http://www.hcharts.cn/datas/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
+                    // Create the chart
+                    $('#container').highcharts('StockChart', {
+                        rangeSelector : {
+                            selected : 1
+                        },
+
+                        title : {
+                            text : 'AAPL Stock Price'
+                        },
+
+                        series : [{
+                            name : 'AAPL',
+                            data : data,
+                            tooltip: {
+                                valueDecimals: 2
+                            }
+                        }]
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
