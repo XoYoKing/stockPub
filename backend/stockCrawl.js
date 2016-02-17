@@ -7,6 +7,7 @@ var http = require('http');
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
+var userOperation = require('./databaseOperation/userOperation.js');
 var config = require('./config');
 var path = require('path');
 
