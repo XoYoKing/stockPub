@@ -549,3 +549,24 @@ exports.startCrawlStockNow = function(){
 		}
 	});
 }
+
+exports.pushMarketCloseMsg = function(){
+	logger.info('pushMarketCloseMsg');
+	stockOperation.getAllMarketIndexNow(function(flag, result){
+		if(flag){
+			if(result.length>0){
+				var msg = '';
+				result.forEach(function(e){
+					var date = e.market_index_date.substr(0, 8);
+					console.log(date);
+					
+				});
+			}
+
+		}else{
+			logger.error(result);
+		}
+	});
+
+
+}
