@@ -18,6 +18,7 @@
 #import "LocDatabase.h"
 #import <MBProgressHUD.h>
 #import "UserInfoModel.h"
+#import "KLineCell.h"
 
 @interface StockInfoDetailTableView ()
 {
@@ -27,6 +28,13 @@
 @end
 
 @implementation StockInfoDetailTableView
+
+typedef enum {
+    nowSection,
+    klineSection,
+    marketInfoSection,
+    baseSection
+} StockInfoDetailSection;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -405,15 +413,17 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
+    if (section == nowSection) {
         return 1;
-    }else if(section == 1){
+    }else if(section == klineSection){
+        return 1;
+    }else if(section == marketInfoSection){
         return 6;
-    }else if(section == 2){
+    }else if(section == baseSection){
         return 5;
     }else{
         return 0;
@@ -422,7 +432,7 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == 0){
+    if(indexPath.section == nowSection){
         static NSString* cellIdentifier = @"mainCell";
         MarketIndexDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
@@ -436,7 +446,7 @@
         
         [cell configureCell:_stockInfoModel];
         return cell;
-    }else if(indexPath.section == 1){
+    }else if(indexPath.section == marketInfoSection){
         static NSString* cellIdentifier = @"marketInfoCell";
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell==nil) {
@@ -489,7 +499,7 @@
         
         
         return cell;
-    }else if(indexPath.section == 2){
+    }else if(indexPath.section == baseSection){
         static NSString* cellIdentifier = @"baseInfoCell";
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell==nil) {
@@ -528,6 +538,22 @@
         }
         
         return cell;
+    }else if(indexPath.section == klineSection){
+        
+        static NSString* cellIdentifier = @"klineCell";
+        KLineCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        // Configure the cell...
+        // Configure the cell...
+        if (cell==nil) {
+            cell = [[KLineCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        
+        [cell configureCell:_stockInfoModel];
+        return cell;
+
     }
     
     return nil;
@@ -535,8 +561,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == 0){
+    if(indexPath.section == nowSection){
         return [MarketIndexDetailCell cellHeight];
+    }else if(indexPath.section == klineSection){
+        
+        return [KLineCell cellHeight];
     }else{
         return 8*minSpace;
     }
@@ -571,14 +600,17 @@
         make.size.mas_equalTo(CGSizeMake(ScreenWidth/3, sectionView.frame.size.height));
     }];
     
-    if(section == 0){
+    if(section == nowSection){
         label.text = @"";
     }
-    if(section == 1){
+    if(section == marketInfoSection){
         label.text = @"今日行情";
     }
-    if (section == 2) {
+    if (section == baseSection) {
         label.text = @"基本面";
+    }
+    if (section == klineSection) {
+        label.text = @"走势图";
     }
     return sectionView;
 }
