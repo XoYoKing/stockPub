@@ -18,6 +18,7 @@
             $.getJSON('<%- url%>', function (data) {
                     // Create the chart
                     if(data.code === 1002){
+                        console.log('success');
                         $('#container').highcharts('StockChart', {
                             // rangeSelector : {
                             //     selected : 1
@@ -40,6 +41,7 @@
                             }]
                         });
                     }else{
+                        console.log('error');
                         $("#container").html("<h1>ERROR</h1>");
                     }
 
