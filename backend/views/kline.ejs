@@ -15,7 +15,7 @@
         <script>
         $(function () {
             console.log('<%- url%>');
-            $.getJSON('<%- url%>', function (data) {
+            $.getJSON('http://112.74.102.178:18000/stock/getStockDayInfo?stock_code=300059&num_day=66&callback=?', function (data) {
                     // Create the chart
                     console.log(data);
                     if(data.code === 1002){
