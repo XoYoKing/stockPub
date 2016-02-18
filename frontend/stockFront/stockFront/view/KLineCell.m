@@ -56,8 +56,7 @@
 - (void)configureCell:(StockInfoModel*)model
 {
     if (isLoad == false) {
-        NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@%@%ld", [ConfigAccess serverDomain], @"/stock/kline?stock_code=&height=", model.stock_code, [KLineCell cellHeight]*3];
-        
+        NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@", [ConfigAccess serverDomain], [[NSString alloc] initWithFormat:@"/stock/kline?stock_code=%@&height=%ld", model.stock_code, [KLineCell cellHeight]*3]];
         NSLog(@"%@", urlStr);
         
         
