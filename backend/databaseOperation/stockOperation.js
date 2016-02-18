@@ -214,7 +214,9 @@ exports.getAvgVolume = function(stock_code, day, callback){
 
 //获取股票股价
 exports.getStockDayInfo = function(stock_code, num_day, callback){
-    var sql = 'SELECT a.timestamp_ms, a.price  FROM `stock_amount_info` a ' +
-    ' WHERE a.`stock_code` = ? GROUP BY a.`date`  ORDER BY a.`timestamp_ms` asc LIMIT '+num_day;
+    var sql = 'select t.* from ('+
+    ' SELECT timestamp_ms, price  FROM `stock_amount_info` a ' +
+    ' WHERE a.`stock_code` = ? GROUP BY a.`date`  ORDER BY a.`timestamp` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
     conn.executeSql(sql, [stock_code], callback);
 }
