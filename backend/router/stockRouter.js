@@ -422,6 +422,7 @@ router.get('/getStockDayInfo', function(req, res){
 				dataArr.push(arr);
 			});
 			returnData.data = dataArr;
+			console.log(JSON.stringify(returnData), logger.getFileNameAndLineNum(__filename));
 			res.send(returnData);
 		}else{
 			logger.error(result, logger.getFileNameAndLineNum(__filename));
