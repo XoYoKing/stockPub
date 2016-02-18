@@ -384,7 +384,26 @@ router.post('/getAvgVolume', function(req, res){
 
 router.get('/kline', function(req, res){
 	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
-	res.render('kline', {'stock_code':req.query.stock_code, 'height':req.query.height});
+
+	var url = '';
+	if(process.env.STOCK_ENV === 'dev'){
+		url = 'http://112.74.102.178:18000/stock/getStockDayInfo?stock_code='+
+		req.query.stock_code +
+		'&num_day='+req.query.num_day+'&callback=?';
+	}
+
+	if(process.env.STOCK_ENV === 'pro'){
+		url = 'http://123.57.229.67:18000/stock/getStockDayInfo?stock_code='+
+		req.query.stock_code +
+		'&num_day='+req.query.num_day+'&callback=?';
+	}
+
+	console.log(url);
+	res.render('kline',
+	{
+		'height':req.query.height,
+		'url':url
+	});
 });
 
 

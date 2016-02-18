@@ -15,20 +15,20 @@
         <script>
         $(function () {
 
-            $.getJSON('http://www.hcharts.cn/datas/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
+            $.getJSON(<%=url>, function (data) {
                     // Create the chart
                     $('#container').highcharts('StockChart', {
-                        rangeSelector : {
-                            selected : 1
-                        },
+                        // rangeSelector : {
+                        //     selected : 1
+                        // },
 
                         chart: {
                             height: <%=height%>
                         },
 
-                        title : {
-                            text : 'AAPL Stock Price'
-                        },
+                        // title : {
+                        //     text : 'AAPL Stock Price'
+                        // },
 
                         series : [{
                             name : 'AAPL',
