@@ -385,9 +385,6 @@ router.post('/getAvgVolume', function(req, res){
 router.get('/kline', function(req, res){
 	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
 
-
-
-	console.log(url);
 	res.render('kline',
 	{
 		'stock_code':req.query.stock_code,
