@@ -15,7 +15,7 @@
         <script>
         $(function () {
 
-            $.getJSON(<%=url>, function (data) {
+            $.getJSON(<%=url%>, function (data) {
                     // Create the chart
                     if(data.code === 1002){
                         $('#container').highcharts('StockChart', {
