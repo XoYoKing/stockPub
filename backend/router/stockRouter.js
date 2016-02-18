@@ -408,6 +408,8 @@ router.get('/kline', function(req, res){
 
 
 router.get('/getStockDayInfo', function(req, res){
+
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
 	stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
 		var returnData = {};
 		if(flag){
