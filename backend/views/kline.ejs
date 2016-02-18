@@ -41,11 +41,7 @@
                         $('#container').highcharts('StockChart', {
 
                             chart: {
-                                height: <%=height%>,
-                                style: {
-                                    fontFamily: '"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif', // default font
-	                                fontSize: '16px'
-                                }
+                                height: <%=height%>
                             },
                             navigator:{
                                 enabled: false
@@ -56,12 +52,10 @@
                             credits:{
                                 enabled: false
                             },
-                            rangeSelector : {
-                                selected : 1
+
+                            rangeSelector:{
+                                enabled: false
                             },
-                            // rangeSelector:{
-                            //     enabled: false
-                            // },
                             series : [{
                                 name : '股价',
                                 data : data.data,
