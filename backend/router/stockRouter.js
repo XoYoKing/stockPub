@@ -386,3 +386,15 @@ router.get('/kline', function(req, res){
 	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
 	res.render('kline', {'stock_code':req.query.stock_code, 'height':req.query.height});
 });
+
+
+router.get('/getStockDayInfo', function(req, res){
+	stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});

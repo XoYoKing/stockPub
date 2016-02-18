@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "StockInfoModel.h"
 
-@interface KLineCell : UITableViewCell
+@interface KLineCell : UITableViewCell<UIWebViewDelegate>
 
 - (void)configureCell:(StockInfoModel*)model;
 

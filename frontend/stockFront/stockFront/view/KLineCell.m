@@ -11,12 +11,14 @@
 #import "returnCode.h"
 #import <Masonry.h>
 #import "ConfigAccess.h"
+#import "Tools.h"
 
 
 @implementation KLineCell
 {
     UIWebView* webView;
     BOOL isLoad;
+    UIActivityIndicatorView* loadingView;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -26,6 +28,7 @@
         webView.scalesPageToFit = YES;
         isLoad = false;
         [self addSubview:webView];
+        webView.delegate = self;
     }
     return self;
 }
@@ -51,6 +54,29 @@
     }];
 }
 
+- (void)webViewDidStartLoad:(UIWebView *)webview
+{
+    loadingView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 4*minSpace, 4*minSpace)];
+    loadingView.center = webView.center;
+    loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [loadingView startAnimating];
+    [webView addSubview:loadingView];
+    
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [loadingView stopAnimating];
+    [loadingView removeFromSuperview];
+    
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error
+{
+    [loadingView stopAnimating];
+    [loadingView removeFromSuperview];
+    [Tools AlertBigMsg:error.domain];
+}
 
 
 - (void)configureCell:(StockInfoModel*)model
