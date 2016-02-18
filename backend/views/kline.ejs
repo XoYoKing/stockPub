@@ -15,11 +15,18 @@
         <script>
         $(function () {
             console.log('<%- url%>');
-            $.getJSON('http://112.74.102.178:18000/stock/getStockDayInfo?stock_code=300059&num_day=66&callback=?', function (data) {
-                    // Create the chart
+
+            $.ajax({
+                url:'/stock/getStockDayInfo',
+                data:{
+                    'stock_code':300059,
+                    'num_day':66
+                },
+                type:'get',
+                dataType: 'json',
+                success:function(data, status){
                     console.log(data);
-                    if(data.code === 1002){
-                        console.log('success');
+                    if(data.code == 1002){
                         $('#container').highcharts('StockChart', {
                             // rangeSelector : {
                             //     selected : 1
@@ -41,12 +48,14 @@
                                 }
                             }]
                         });
-                    }else{
-                        console.log('error');
-                        $("#container").html("<h1>ERROR</h1>");
-                    }
 
-                });
+                    }else{
+                        $("#container").html("<h1>ERROR:"+data.code+"</h1>");
+                    }
+                },
+                error : function() {
+                    $("#container").html("<h1>ERROR:"+status+"</h1>");
+                }
             });
         </script>
     </body>
