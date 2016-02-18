@@ -409,8 +409,18 @@ router.get('/kline', function(req, res){
 
 router.get('/getStockDayInfo', function(req, res){
 	stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
+		var returnData = {};
 		if(flag){
-			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+			returnData.code = constant.returnCode.SUCCESS;
+			var dataArr = [];
+			result.forEach(function(e){
+				var arr = [];
+				arr.push(e.timestamp_ms);
+				arr.push(e.price);
+				dataArr.push(arr);
+			});
+			returnData.data = dataArr;
+			res.send(returnData);
 		}else{
 			logger.error(result, logger.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
