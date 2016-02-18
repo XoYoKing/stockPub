@@ -14,7 +14,7 @@
 
         <script>
         $(function () {
-
+            console.log('<%=url%>');
             $.getJSON('<%=url%>', function (data) {
                     // Create the chart
                     if(data.code === 1002){
