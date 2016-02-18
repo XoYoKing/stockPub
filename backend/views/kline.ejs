@@ -19,8 +19,8 @@
             $.ajax({
                 url:'/stock/getStockDayInfo',
                 data:{
-                    'stock_code':300059,
-                    'num_day':66
+                    'stock_code':'<%=stock_code%>',
+                    'num_day':<%=num_day%>
                 },
                 type:'get',
                 dataType: 'json',
