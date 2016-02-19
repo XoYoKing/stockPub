@@ -381,3 +381,40 @@ router.post('/getAvgVolume', function(req, res){
 		}
 	});
 });
+
+router.get('/kline', function(req, res){
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
+
+	res.render('kline',
+	{
+		'stock_code': req.query.stock_code,
+		'height': req.query.height,
+		'num_day': req.query.num_day,
+		'width': req.query.width
+	});
+});
+
+
+router.get('/getStockDayInfo', function(req, res){
+
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
+	stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
+		var returnData = {};
+		if(flag){
+			returnData.code = constant.returnCode.SUCCESS;
+			// var dataArr = [];
+			// result.forEach(function(e){
+			// 	var arr = [];
+			// 	arr.push(e.timestamp_ms);
+			// 	arr.push(e.price);
+			// 	dataArr.push(arr);
+			// });
+			returnData.data = result;
+			console.log(JSON.stringify(returnData), logger.getFileNameAndLineNum(__filename));
+			res.send(returnData);
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});

@@ -99,7 +99,7 @@ exports.insertMarketIndexDay = function(element, callback){
 exports.insertMarketIndexNow = function(element, callback){
     var timestamp = Date.now();
     console.log(element.market_index_trade_amount);
-    
+
     var sql = 'insert into `market_index_now_info` (' +
             ' `market_code`, ' +
             ' `market_index_value_now`,' +
@@ -208,5 +208,15 @@ exports.getMarketAvgVolume = function(stock_code, day, callback){
 exports.getAvgVolume = function(stock_code, day, callback){
     var sql = 'SELECT `volume`  FROM `stock_amount_info` ' +
     ' WHERE `stock_code`  = ? ORDER BY `date` desc LIMIT '+day;
+    conn.executeSql(sql, [stock_code], callback);
+}
+
+
+//获取股票股价
+exports.getStockDayInfo = function(stock_code, num_day, callback){
+    var sql = 'select t.* from ('+
+    ' SELECT a.*  FROM `stock_amount_info` a ' +
+    ' WHERE a.`stock_code` = ? GROUP BY a.`date`  ORDER BY a.`timestamp` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
     conn.executeSql(sql, [stock_code], callback);
 }

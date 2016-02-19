@@ -1,0 +1,169 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    </head>
+    <body>
+        <div id="container">
+
+        </div>
+
+
+        <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+        <script src="http://cdn.hcharts.cn/highstock/highstock.js"></script>
+
+        <script>
+
+        Highcharts.setOptions({
+            lang:{
+                rangeSelectorFrom:'从',
+                rangeSelectorTo: '到',
+                months: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                shortMonths: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                weekdays: ['周末', '周一', '周二', '周三', '周四', '周五', '周六']
+            }
+        });
+
+        $(function () {
+
+            $.ajax({
+                url:'/stock/getStockDayInfo',
+                data:{
+                    'stock_code':'<%=stock_code%>',
+                    'num_day':<%=num_day%>
+                },
+                type:'get',
+                dataType: 'json',
+                success:function(data, status){
+                    if(data.code == 1002){
+                        var ohlc = [];
+                        var volume = [];
+                        var colors = [];
+                        var dataLength = data.data.length;
+                        for (i = 0; i < dataLength; i++) {
+                            ohlc.push([
+                                data.data[i].timestamp_ms, // the date
+                                data.data[i].open_price, // open
+                                data.data[i].high_price, // high
+                                data.data[i].low_price, // low
+                                data.data[i].price // close
+                            ]);
+
+                            volume.push([
+                                data.data[i].timestamp_ms, // the date
+                                data.data[i].amount // the volume
+                            ]);
+
+                            if(data.data[i].fluctuate<0){
+                                colors.push('#6aa84f');
+                            }else{
+                                colors.push('#ff0000');
+                            }
+                        }
+
+                        $('#container').highcharts('StockChart', {
+
+                            yAxis: [
+                                {
+                                    labels: {
+                                        style: {'fontSize':'28px'},
+                                        align: 'left',
+                                        //x: -3,
+                                        x:-<%=width%>+5,
+                                        step: 2
+                                    },
+
+                                    height: '65%',
+                                    lineWidth: 2
+                                },
+                                {
+                                    labels: {
+                                        enabled: false
+                                    },
+
+                                    top: '65%',
+                                    height: '35%',
+                                    offset: 0,
+                                    lineWidth: 2
+                                }
+                            ],
+
+                            xAxis: {
+                                labels: {
+                                    style: {'fontSize':'28px'},
+                                    step: 2
+                                }
+                            },
+
+                            chart: {
+                                height: <%=height%>
+                            },
+                            navigator:{
+                                enabled: false
+                            },
+                            scrollbar:{
+                                enabled: false
+                            },
+                            credits:{
+                                enabled: false
+                            },
+
+                            rangeSelector:{
+                                enabled: false
+                            },
+                            plotOptions: {
+                                candlestick: {
+                                    color: '#6aa84f', //下降块颜色
+                                    lineColor: '#6aa84f', //下降块线条颜色
+                                    upColor: '#ff0000', //上升块颜色
+                                    upLineColor: "#ff0000" //上升块线条颜色
+                                },
+                                column:{
+                                    colorByPoint: true,
+                                    colors: colors
+                                }
+                                // series: {
+                                //     marker: {
+                                //         enabled: false,
+                                //         states: {
+                                //             hover: {
+                                //                 enabled: false
+                                //             }
+                                //         }
+                                //     }
+                                // }
+                            },
+                            series : [
+                                {
+                                    type: 'candlestick',
+                                    name: '股价',
+                                    data: ohlc,
+                                    // dataGrouping: {
+                                    //     units: groupingUnits
+                                    // }
+                                },
+                                {
+                                    type: 'column',
+                                    name: '成交量',
+                                    data: volume,
+                                    yAxis: 1,
+                                    // dataGrouping: {
+                                    //     units: groupingUnits
+                                    // }
+                                }
+                            ]
+                        });
+                    }else{
+                        $("#container").html("<h1>ERROR:"+data.code+"</h1>");
+                    }
+                },
+                error: function(){
+                    $("#container").html("<h1>ERROR:"+status+"</h1>");
+                }
+            });
+        });
+        </script>
+    </body>
+</html>
