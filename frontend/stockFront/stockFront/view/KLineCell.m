@@ -96,7 +96,7 @@
 
 + (NSInteger)cellHeight
 {
-    return 24*minSpace;
+    return 28*minSpace;
 }
 
 @end
