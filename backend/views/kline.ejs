@@ -108,9 +108,27 @@
                             credits:{
                                 enabled: false
                             },
-                            colors: ['#FF33CC'],
+
                             rangeSelector:{
                                 enabled: false
+                            },
+                            plotOptions: {
+                                candlestick: {
+                                    color: '#DD2200', //下降块颜色
+                                    lineColor: '#DD2200', //下降块线条颜色
+                                    upColor: '#33AA11', //上升块颜色
+                                    upLineColor: "#33AA11" //上升块线条颜色
+                                },
+                                // series: {
+                                //     marker: {
+                                //         enabled: false,
+                                //         states: {
+                                //             hover: {
+                                //                 enabled: false
+                                //             }
+                                //         }
+                                //     }
+                                // }
                             },
                             series : [
                                 {
