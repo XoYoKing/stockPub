@@ -38,14 +38,52 @@
                 dataType: 'json',
                 success:function(data, status){
                     if(data.code == 1002){
+                        var ohlc = [];
+                        var volume = [];
+                        var dataLength = data.data.length;
+                        for (i = 0; i < dataLength; i++) {
+                            ohlc.push([
+                                data.data[i].timestamp_ms, // the date
+                                data.data[i].open_price, // open
+                                data.data[i].high_price, // high
+                                data.data[i].low_price, // low
+                                data.data[i].price // close
+                            ]);
+
+                            volume.push([
+                                data.data[i].timestamp_ms, // the date
+                                data.data[i].amount // the volume
+                            ]);
+                        }
+
                         $('#container').highcharts('StockChart', {
 
-                            yAxis: {
-                                labels: {
-                                    style: {'fontSize':'28px'},
-                                    step: 2
+                            yAxis: [
+                                {
+                                    labels: {
+                                        align: 'right',
+                                        x: -3
+                                    },
+                                    title: {
+                                        text: 'OHLC'
+                                    },
+                                    height: '60%',
+                                    lineWidth: 2
+                                },
+                                {
+                                    labels: {
+                                        align: 'right',
+                                        x: -3
+                                    },
+                                    title: {
+                                        text: 'Volume'
+                                    },
+                                    top: '65%',
+                                    height: '35%',
+                                    offset: 0,
+                                    lineWidth: 2
                                 }
-                            },
+                            ],
 
                             xAxis: {
                                 labels: {
@@ -70,13 +108,25 @@
                             rangeSelector:{
                                 enabled: false
                             },
-                            series : [{
-                                name : '股价',
-                                data : data.data,
-                                tooltip: {
-                                    valueDecimals: 2
+                            series : [
+                                {
+                                    type: 'candlestick',
+                                    name: 'AAPL',
+                                    data: ohlc,
+                                    dataGrouping: {
+                                        units: groupingUnits
+                                    }
+                                },
+                                {
+                                    type: 'column',
+                                    name: 'Volume',
+                                    data: volume,
+                                    yAxis: 1,
+                                    dataGrouping: {
+                                        units: groupingUnits
+                                    }
                                 }
-                            }]
+                            ]
                         });
                     }else{
                         $("#container").html("<h1>ERROR:"+data.code+"</h1>");
