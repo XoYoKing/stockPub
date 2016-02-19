@@ -40,6 +40,7 @@
                     if(data.code == 1002){
                         var ohlc = [];
                         var volume = [];
+                        var colors = [];
                         var dataLength = data.data.length;
                         for (i = 0; i < dataLength; i++) {
                             ohlc.push([
@@ -54,6 +55,12 @@
                                 data.data[i].timestamp_ms, // the date
                                 data.data[i].amount // the volume
                             ]);
+
+                            if(data.data[i].fluctuate<0){
+                                colors.push('#6aa84f');
+                            }else{
+                                colors.push('#ff0000');
+                            }
                         }
 
                         $('#container').highcharts('StockChart', {
@@ -113,6 +120,10 @@
                                     upColor: '#ff0000', //上升块颜色
                                     upLineColor: "#ff0000" //上升块线条颜色
                                 },
+                                column:{
+                                    colorByPoint: true,
+                                    colors: colors
+                                }
                                 // series: {
                                 //     marker: {
                                 //         enabled: false,
