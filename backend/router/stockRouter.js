@@ -401,14 +401,14 @@ router.get('/getStockDayInfo', function(req, res){
 		var returnData = {};
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
-			var dataArr = [];
-			result.forEach(function(e){
-				var arr = [];
-				arr.push(e.timestamp_ms);
-				arr.push(e.price);
-				dataArr.push(arr);
-			});
-			returnData.data = dataArr;
+			// var dataArr = [];
+			// result.forEach(function(e){
+			// 	var arr = [];
+			// 	arr.push(e.timestamp_ms);
+			// 	arr.push(e.price);
+			// 	dataArr.push(arr);
+			// });
+			returnData.data = result;
 			console.log(JSON.stringify(returnData), logger.getFileNameAndLineNum(__filename));
 			res.send(returnData);
 		}else{
