@@ -8,6 +8,7 @@ var email = require('./utility/emailTool');
 var caculate = require('./utility/caculate');
 
 var cronJob = require('cron').CronJob;
+var moment = require('moment');
 
 
 log.info("run CronJob", log.getFileNameAndLineNum(__filename));
@@ -68,19 +69,19 @@ new cronJob('00 6 15 * * 1-5', function(){
 //5日平均价
 new cronJob('00 10 15 * * 1-5', function(){
     log.info('5 av price caculate', log.getFileNameAndLineNum(__filename));
-    caculate.caculateAvPrice(5);
+    caculate.caculateAvPrice(5, moment().format('YYYY-MM-DD'));
 }, null, true);
 
 //10日平均价
 new cronJob('00 15 15 * * 1-5', function(){
     log.info('10 av price caculate', log.getFileNameAndLineNum(__filename));
-    caculate.caculateAvPrice(10);
+    caculate.caculateAvPrice(10, moment().format('YYYY-MM-DD'));
 }, null, true);
 
 //20日平均价
 new cronJob('00 20 15 * * 1-5', function(){
     log.info('20 av price caculate', log.getFileNameAndLineNum(__filename));
-    caculate.caculateAvPrice(20);
+    caculate.caculateAvPrice(20, moment().format('YYYY-MM-DD'));
 }, null, true);
 
 

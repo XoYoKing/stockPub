@@ -102,12 +102,12 @@ exports.caculateDurationYield = function(){
     });
 }
 
-exports.caculateAvPrice = function(day){
+exports.caculateAvPrice = function(day, nowday){
     console.log('enter caculateAvPrice for ' + day);
     stockOperation.getAllStockCode(function(flag, result){
         if(flag){
             result.forEach(function(e){
-                stockOperation.getStockDayInfo(e.stock_code, day, function(flag, result){
+                stockOperation.getStockDayInfoLessNowDay(e.stock_code, day, nowday, function(flag, result){
                     if(flag){
 
                         if(result.length>0){

@@ -221,6 +221,14 @@ exports.getStockDayInfo = function(stock_code, num_day, callback){
     conn.executeSql(sql, [stock_code], callback);
 }
 
+exports.getStockDayInfoLessNowDay = function(stock_code, num_day, nowDay, callback){
+    var sql = 'select t.* from ('+
+    ' SELECT a.*  FROM `stock_amount_info` a ' +
+    ' WHERE a.`stock_code` = ? and a.date <= ? ORDER BY a.`date` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
+    conn.executeSql(sql, [stock_code, nowDay], callback);
+}
+
 exports.getAllStockCode = function(callback){
 	var sql = "select stock_code from stock_base_info";
 	conn.executeSql(sql, [], callback);
