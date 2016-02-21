@@ -248,3 +248,9 @@ exports.update20AvPrice = function(stockCode, av_price, date, callback){
 	var sql = "update stock_amount_info set 20day_av_price = ? where stock_code = ? and date = ?";
 	conn.executeSql(sql, [av_price, stockCode, date], callback);
 }
+
+
+exports.getDate = function(callback){
+    var sql = 'SELECT date FROM `stock_amount_info` GROUP BY `date` ORDER BY `date` DESC ';
+    conn.executeSql(sql, [], callback);
+}
