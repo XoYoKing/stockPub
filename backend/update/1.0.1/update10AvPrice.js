@@ -10,7 +10,9 @@ var caculate = require('../../utility/caculate');
 stockOperation.getDate(function(flag, result){
     if(flag){
         result.forEach(function(e){
-            caculate.caculateAvPrice(10, e.date);
+            if(e.date > '2016-01-01'){
+                caculate.caculateAvPrice(10, e.date);
+            }
         });
     }else{
 
