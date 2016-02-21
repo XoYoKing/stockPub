@@ -11,9 +11,8 @@ stockOperation.getDate(function(flag, result){
     if(flag){
         result.forEach(function(e){
             if(e.date>'2015-11-01'){
-                caculate.caculateAvPrice(5, e.date);
+
                 caculate.caculateAvPrice(10, e.date);
-                caculate.caculateAvPrice(20, e.date);
             }
         });
     }else{
