@@ -102,6 +102,12 @@ exports.caculateDurationYield = function(){
     });
 }
 
+exports.caculateAvPrice = function(day){
+    console.log('enter caculateAvPrice for ' + day);
+    
+
+}
+
 //
 // exports.caculateUserRank = function(){
 //     userOperation.clearUserYieldRank(function(flag, result){

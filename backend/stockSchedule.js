@@ -65,6 +65,24 @@ new cronJob('00 6 15 * * 1-5', function(){
 }, null, true);
 
 
+//5日平均价
+new cronJob('00 10 15 * * 1-5', function(){
+    log.info('5 av price caculate', log.getFileNameAndLineNum(__filename));
+    caculate.caculateAvPrice(5);
+}, null, true);
+
+//10日平均价
+new cronJob('00 15 15 * * 1-5', function(){
+    log.info('10 av price caculate', log.getFileNameAndLineNum(__filename));
+    caculate.caculateAvPrice(10);
+}, null, true);
+
+//20日平均价
+new cronJob('00 20 15 * * 1-5', function(){
+    log.info('20 av price caculate', log.getFileNameAndLineNum(__filename));
+    caculate.caculateAvPrice(20);
+}, null, true);
+
 
 // //对最近一周，一月，一年收益进行排名
 // new cronJob('00 59 23 * * 1-5', function(){

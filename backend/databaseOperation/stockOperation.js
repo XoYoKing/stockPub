@@ -216,7 +216,7 @@ exports.getAvgVolume = function(stock_code, day, callback){
 exports.getStockDayInfo = function(stock_code, num_day, callback){
     var sql = 'select t.* from ('+
     ' SELECT a.*  FROM `stock_amount_info` a ' +
-    ' WHERE a.`stock_code` = ? GROUP BY a.`date`  ORDER BY a.`timestamp` DESC LIMIT '+num_day+') t'+
+    ' WHERE a.`stock_code` = ? ORDER BY a.`date` DESC LIMIT '+num_day+') t'+
     ' ORDER BY t.timestamp_ms asc';
     conn.executeSql(sql, [stock_code], callback);
 }
