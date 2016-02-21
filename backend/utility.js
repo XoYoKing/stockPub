@@ -7,7 +7,7 @@ var pool = mysql.createPool({
   	password: process.env.dbpassword,
 	database: process.env.database,
 	port: process.env.dbport,
-	acquireTimeout: 10000
+	acquireTimeout: 60000
 });
 
 var logger = global.logger;

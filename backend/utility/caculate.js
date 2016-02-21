@@ -104,7 +104,64 @@ exports.caculateDurationYield = function(){
 
 exports.caculateAvPrice = function(day){
     console.log('enter caculateAvPrice for ' + day);
-    
+    stockOperation.getAllStockCode(function(flag, result){
+        if(flag){
+            result.forEach(function(e){
+                stockOperation.getStockDayInfo(e.stock_code, day, function(flag, result){
+                    if(flag){
+
+                        if(result.length>0){
+                            var totalPrice = 0;
+                            var maxDate = result[0].date;
+                            var stock_code = result[0].stock_code;
+                            result.forEach(function(e){
+                                totalPrice+=e.price;
+                                if(maxDate<e.date){
+                                    maxDate = e.date;
+                                }
+                            });
+                            console.log(maxDate);
+                            var avPrice = totalPrice/result.length;
+                            if(day === 5){
+                                stockOperation.update5AvPrice(stock_code, avPrice, maxDate, function(flag, result){
+                                    if(flag){
+
+                                    }else{
+                                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                    }
+                                });
+                            }
+
+                            if (day === 10) {
+                                stockOperation.update10AvPrice(stock_code, avPrice, maxDate, function(flag, result){
+                                    if(flag){
+
+                                    }else{
+                                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                    }
+                                });
+                            }
+
+                            if (day === 20) {
+                                stockOperation.update20AvPrice(stock_code, avPrice, maxDate, function(flag, result){
+                                    if(flag){
+
+                                    }else{
+                                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                    }
+                                });
+                            }
+                        }
+                    }else{
+                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                    }
+                });
+            });
+
+        }else{
+            logger.error(result, logger.getFileNameAndLineNum(__filename));
+        }
+    });
 
 }
 

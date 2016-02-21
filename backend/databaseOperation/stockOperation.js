@@ -220,3 +220,23 @@ exports.getStockDayInfo = function(stock_code, num_day, callback){
     ' ORDER BY t.timestamp_ms asc';
     conn.executeSql(sql, [stock_code], callback);
 }
+
+exports.getAllStockCode = function(callback){
+	var sql = "select stock_code from stock_base_info";
+	conn.executeSql(sql, [], callback);
+}
+
+exports.update5AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update stock_amount_info set 5day_av_price = ? where stock_code = ? and date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.update10AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update stock_amount_info set 10day_av_price = ? where stock_code = ? and date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.update20AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update stock_amount_info set 20day_av_price = ? where stock_code = ? and date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
