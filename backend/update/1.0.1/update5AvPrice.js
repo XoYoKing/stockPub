@@ -6,14 +6,12 @@ log.SetLogFileName('update5AvPrice');
 global.logger = log; // 设置全局
 
 var caculate = require('../../utility/caculate');
-var sleep = require('sleep');
 
 stockOperation.getDate(function(flag, result){
     if(flag){
         result.forEach(function(e){
-            if(e.date>'2015-11-01'){
+            if(e.date>'2015-11-20'){
                 caculate.caculateAvPrice(5, e.date);
-                sleep.sleep(1);
             }
         });
     }else{
