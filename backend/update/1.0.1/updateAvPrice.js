@@ -10,13 +10,11 @@ var caculate = require('../../utility/caculate');
 stockOperation.getDate(function(flag, result){
     if(flag){
         result.forEach(function(e){
-            console.log(e.date);
+            caculate.caculateAvPrice(5, e.date);
+            caculate.caculateAvPrice(10, e.date);
+            caculate.caculateAvPrice(20, e.date);
         });
     }else{
 
     }
 });
-
-// caculate.caculateAvPrice(5, moment().format('YYYY-MM-DD'));
-// caculate.caculateAvPrice(10, moment().format('YYYY-MM-DD'));
-// caculate.caculateAvPrice(20, moment().format('YYYY-MM-DD'));
