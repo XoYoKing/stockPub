@@ -103,7 +103,6 @@ exports.caculateDurationYield = function(){
 }
 
 exports.caculateAvPrice = function(day, nowday){
-    console.log('enter caculateAvPrice for ' + day);
     stockOperation.getAllStockCode(function(flag, result){
         if(flag){
             result.forEach(function(e){
