@@ -2,7 +2,7 @@ var path = require('path');
 var log = require('../../log.js');
 var moment = require('moment');
 var stockOperation = require('../../databaseOperation/stockOperation');
-log.SetLogFileName('updateAvPrice');
+log.SetLogFileName('update10AvPrice');
 global.logger = log; // 设置全局
 
 var caculate = require('../../utility/caculate');
