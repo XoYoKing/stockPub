@@ -7,15 +7,48 @@ global.logger = log; // 设置全局
 
 var caculate = require('../../utility/caculate');
 var async = require('async');
+var conn = require('../utility.js');
 
-stockOperation.getDate(function(flag, result){
+stockOperation.getAllStockCode(function(flag, result){
     if(flag){
         result.forEach(function(e){
-            if(e.date > '2016-01-01'){
-                caculate.caculateAvPrice(5, e.date);
-            }
-        });
-    }else{
+            var sql = 'select *from stock_amount_info where stock_code = ? order by date desc';
+            conn.executeSql(sql, [e.stock_code], function(flag, result){
+                if(flag){
+                    var total = 0;
+                    for (var i = 0; i + 4 < result.length; i++) {
+                        if(i === 0){
+                            for (var j = 0; j < 5; j++) {
+                                total += result[i+j].price;
+                            }
+                            var avPrice = total/5;
+                            stockOperation.update5AvPrice(e.stock_code, avPrice, result[i].date, function(flag, result){
+                                if(flag){
 
+                                }else{
+                                    logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                }
+                            });
+                        }else{
+                            total-=result[i-1].price;
+                            total+=result[i+4].price;
+                            var avPrice = total/5;
+                            stockOperation.update5AvPrice(e.stock_code, avPrice, result[i].date, function(flag, result){
+                                if(flag){
+
+                                }else{
+                                    logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                }
+                            });
+                        }
+                    }
+                }else{
+                    logger.error(result, logger.getFileNameAndLineNum(__filename));
+                }
+            });
+        });
+
+    }else{
+        logger.error(result, logger.getFileNameAndLineNum(__filename));
     }
 });
