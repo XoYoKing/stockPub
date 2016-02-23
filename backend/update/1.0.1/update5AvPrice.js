@@ -11,13 +11,16 @@ var conn = require('../../utility.js');
 
 stockOperation.getAllStockCode(function(flag, result){
     if(flag){
-        result.forEach(function(e){
+        async.eachSeries(result, function(e, callback){
             var sql = 'select *from stock_amount_info where stock_code = ? order by date desc';
             conn.executeSql(sql, [e.stock_code], function(flag, result){
                 if(flag){
                     var total = 0;
                     var avPrice = 0;
                     var sql = "update stock_amount_info set 5day_av_price = ? where stock_code = ? and date = ?";
+
+
+
                     for (var i = 0; i + 4 < result.length; i++) {
                         if(i === 0){
                             for (var j = 0; j < 5; j++) {
@@ -45,6 +48,9 @@ stockOperation.getAllStockCode(function(flag, result){
                             });
                         }
                     }
+
+                    callback();
+
                 }else{
                     logger.error(result, logger.getFileNameAndLineNum(__filename));
                 }
