@@ -16,12 +16,13 @@ stockOperation.getAllStockCode(function(flag, result){
             conn.executeSql(sql, [e.stock_code], function(flag, result){
                 if(flag){
                     var total = 0;
+                    var avPrice = 0;
                     for (var i = 0; i + 4 < result.length; i++) {
                         if(i === 0){
                             for (var j = 0; j < 5; j++) {
                                 total += result[i+j].price;
                             }
-                            var avPrice = total/5;
+                            avPrice = total/5;
                             stockOperation.update5AvPrice(e.stock_code, avPrice, result[i].date, function(flag, result){
                                 if(flag){
 
@@ -32,7 +33,7 @@ stockOperation.getAllStockCode(function(flag, result){
                         }else{
                             total-=result[i-1].price;
                             total+=result[i+4].price;
-                            var avPrice = total/5;
+                            avPrice = total/5;
                             stockOperation.update5AvPrice(e.stock_code, avPrice, result[i].date, function(flag, result){
                                 if(flag){
 
