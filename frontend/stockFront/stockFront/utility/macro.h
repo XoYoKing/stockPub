@@ -29,10 +29,10 @@
 
 #define OurBlue [UIColor colorWithRed:49.0/255.0 green:117.0/255.0 blue:181.0/255.0 alpha:1.0]
 
-#define mygreen [UIColor colorWithRed:48/255.0 green:128/255.0 blue:20/255.0 alpha:1.0]
+#define mygreen [UIColor colorWithRed:50/255.0 green:166/255.0 blue:50/255.0 alpha:1.0]
 
 
-#define myred [UIColor colorWithRed:176/255.0 green:23/255.0 blue:31/255.0 alpha:1.0]
+#define myred [UIColor colorWithRed:255/255.0 green:68/255.0 blue:51/255.0 alpha:1.0]
 
 
 #define minSpace 8
