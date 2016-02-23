@@ -8,6 +8,8 @@ global.logger = log; // 设置全局
 var caculate = require('../../utility/caculate');
 var async = require('async');
 var conn = require('../../utility.js');
+var num_day = 5;
+
 
 stockOperation.getAllStockCode(function(flag, result){
     if(flag){
@@ -21,12 +23,12 @@ stockOperation.getAllStockCode(function(flag, result){
 
 
 
-                    for (var i = 0; i + 4 < result.length; i++) {
+                    for (var i = 0; i + num_day - 1 < result.length; i++) {
                         if(i === 0){
-                            for (var j = 0; j < 5; j++) {
+                            for (var j = 0; j < num_day; j++) {
                                 total += result[i+j].price;
                             }
-                            avPrice = total/5;
+                            avPrice = total/num_day;
 
                         	conn.executeSql(sql, [avPrice, e.stock_code, result[i].date], function(flag, result){
                                 if(flag){
@@ -37,8 +39,8 @@ stockOperation.getAllStockCode(function(flag, result){
                             });
                         }else{
                             total-=result[i-1].price;
-                            total+=result[i+4].price;
-                            avPrice = total/5;
+                            total+=result[i+num_day-1].price;
+                            avPrice = total/num_day;
                             conn.executeSql(sql, [avPrice, e.stock_code, result[i].date], function(flag, result){
                                 if(flag){
 
