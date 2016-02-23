@@ -17,13 +17,15 @@ stockOperation.getAllStockCode(function(flag, result){
                 if(flag){
                     var total = 0;
                     var avPrice = 0;
+                    var sql = "update stock_amount_info set 5day_av_price = ? where stock_code = ? and date = ?";
                     for (var i = 0; i + 4 < result.length; i++) {
                         if(i === 0){
                             for (var j = 0; j < 5; j++) {
                                 total += result[i+j].price;
                             }
                             avPrice = total/5;
-                            stockOperation.update5AvPrice(e.stock_code, avPrice, result[i].date, function(flag, result){
+
+                        	conn.executeSql(sql, [avPrice, e.stock_code, result[i].date], function(flag, result){
                                 if(flag){
 
                                 }else{
@@ -34,7 +36,7 @@ stockOperation.getAllStockCode(function(flag, result){
                             total-=result[i-1].price;
                             total+=result[i+4].price;
                             avPrice = total/5;
-                            stockOperation.update5AvPrice(e.stock_code, avPrice, result[i].date, function(flag, result){
+                            conn.executeSql(sql, [avPrice, e.stock_code, result[i].date], function(flag, result){
                                 if(flag){
 
                                 }else{
