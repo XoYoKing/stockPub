@@ -181,18 +181,18 @@ typedef enum {
     }
     
     if ([loc isFollowStock:_stockInfoModel]) {
-        UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"取消关注" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"取消自选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
             [loc deleteStock:_stockInfoModel];
-            [Tools AlertBigMsg:@"已取消"];
+            [Tools AlertBigMsg:@"完成"];
         }];
         [alertController addAction:chooseAction];
 
     }else{
-        UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"关注" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"添加到自选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
             [loc addStock:_stockInfoModel];
-            [Tools AlertBigMsg:@"已关注"];
+            [Tools AlertBigMsg:@"完成"];
             
         }];
         [alertController addAction:chooseAction];

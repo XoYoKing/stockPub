@@ -107,6 +107,9 @@
     [hud hide:YES afterDelay:2];
 }
 
+
+
+
 + (UINavigationController*)curNavigator
 {
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];

@@ -7,7 +7,7 @@ global.logger = log; // 设置全局
 
 var caculate = require('../../utility/caculate');
 var async = require('async');
-var conn = require('../utility.js');
+var conn = require('../../utility.js');
 
 stockOperation.getAllStockCode(function(flag, result){
     if(flag){
