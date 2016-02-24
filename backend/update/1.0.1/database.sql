@@ -43,3 +43,9 @@ ALTER TABLE `market_index_day_info`
 #38
 ALTER TABLE `market_index_day_info`
 	ADD COLUMN `market_index_twenty_av_value` float NULL;
+
+#38
+UPDATE `market_index_day_info` SET `market_index_date` = substr(`market_index_date`, 1, 8);
+
+#38
+UPDATE `market_index_now_info` SET `market_index_date` = substr(`market_index_date`, 1, 8);
