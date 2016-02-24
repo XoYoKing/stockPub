@@ -233,7 +233,7 @@ exports.getMarketDayInfo = function(market_code, num_day, callback){
     ' SELECT a.*  FROM `market_index_day_info` a ' +
     ' WHERE a.`market_code` = ? ORDER BY a.`market_index_date` DESC LIMIT '+num_day+') t'+
     ' ORDER BY t.timestamp_ms asc';
-    conn.executeSql(sql, [stock_code], callback);
+    conn.executeSql(sql, [market_code], callback);
 }
 
 exports.getStockDayInfoLessNowDay = function(stock_code, num_day, nowDay, callback){
