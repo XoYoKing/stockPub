@@ -431,6 +431,7 @@ router.get('/getStockDayInfo', function(req, res){
 				returnData.data = result[1];
 				returnData.now = result[0];
 				returnData.code = constant.returnCode.SUCCESS;
+				console.log(JSON.stringify(returnData));
 				res.send(returnData);
 			}
 		}
