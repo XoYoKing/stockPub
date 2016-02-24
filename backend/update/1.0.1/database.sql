@@ -27,3 +27,5 @@ ALTER TABLE `market_index_now_info`
 
 #38
 UPDATE `market_index_now_info` SET `timestamp_ms`  = `timestamp` *1000;
+
+UPDATE `market_index_now_info` SET `timestamp_ms` = `timestamp` ;
