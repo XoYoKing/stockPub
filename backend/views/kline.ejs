@@ -42,6 +42,8 @@
                         var volume = [];
                         var colors = [];
                         var fiveAvPrices = [];
+                        var tenAvPrices = [];
+                        var twentyAvPrices = [];
                         var dataLength = data.data.length;
                         for (i = 0; i < dataLength; i++) {
                             ohlc.push([
@@ -64,6 +66,8 @@
                             }
 
                             fiveAvPrices.push([data.data[i].timestamp_ms, data.data[i].fiveday_av_price]);
+                            tenAvPrices.push([data.data[i].timestamp_ms, data.data[i].tenday_av_price]);
+                            twentyAvPrices.push([data.data[i].timestamp_ms, data.data[i].twentyday_av_price]);
                         }
 
                         $('#container').highcharts('StockChart', {
@@ -161,8 +165,16 @@
                                     // }
                                 },
                                 {
-                                    name : '5av',
+                                    name : 'MA5',
                                     data : fiveAvPrices,
+                                },
+                                {
+                                    name : 'MA10',
+                                    data : tenAvPrices,
+                                },
+                                {
+                                    name : 'MA20',
+                                    data : twentyAvPrices,
                                 }
                             ]
                         });
