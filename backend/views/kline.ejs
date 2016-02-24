@@ -27,9 +27,14 @@
         });
 
         $(function () {
-
+            var url = '';
+            if(<%=is_market%> == 1){
+                url = '/stock/getMarketDayInfo';
+            }else{
+                url = '/stock/getStockDayInfo';
+            }
             $.ajax({
-                url:'/stock/getStockDayInfo',
+                url: url,
                 data:{
                     'stock_code':'<%=stock_code%>',
                     'num_day':<%=num_day%>

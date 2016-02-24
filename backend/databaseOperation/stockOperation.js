@@ -139,6 +139,11 @@ exports.emptyMarketNowInfo = function(callback){
     conn.executeSql(sql, [], callback);
 }
 
+exports.getMarketIndexNow = function(market_code, callback){
+    var sql = 'select* from market_index_now_info where market_code = ? order by timestamp_ms desc limit 1';
+    conn.executeSql(sql, [market_code], callback);
+}
+
 exports.getAllMarketIndexNow = function(callback){
     var sql = 'SELECT a.*, c.`market_name` FROM `market_index_now_info` a, ' +
     ' (SELECT market_code, MAX(`timestamp`) as timestamp  FROM `market_index_now_info` GROUP BY `market_code`) b, ' +
@@ -217,6 +222,16 @@ exports.getStockDayInfo = function(stock_code, num_day, callback){
     ' t.10day_av_price as tenday_av_price, t.20day_av_price as twentyday_av_price from ('+
     ' SELECT a.*  FROM `stock_amount_info` a ' +
     ' WHERE a.`stock_code` = ? ORDER BY a.`date` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
+    conn.executeSql(sql, [stock_code], callback);
+}
+
+//获取大盘每日信息
+exports.getMarketDayInfo = function(market_code, num_day, callback){
+    var sql = 'select t.* ' +
+    'from ('+
+    ' SELECT a.*  FROM `market_index_day_info` a ' +
+    ' WHERE a.`market_code` = ? ORDER BY a.`market_index_date` DESC LIMIT '+num_day+') t'+
     ' ORDER BY t.timestamp_ms asc';
     conn.executeSql(sql, [stock_code], callback);
 }
