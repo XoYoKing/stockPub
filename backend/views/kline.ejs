@@ -79,7 +79,7 @@
                                 &&data.data[i].twentyday_av_price!=null){
                                 twentyAvPrices.push([data.data[i].timestamp_ms, data.data[i].twentyday_av_price]);
                             }
-
+                            console.log(data.data[i].timestamp_ms);
                         }
 
                         if(now!=null){
@@ -95,6 +95,8 @@
                                 now.timestamp_ms, // the date
                                 now.amount // the volume
                             ]);
+
+                            console.log(now.timestamp_ms);
                         }
 
                         $('#container').highcharts('StockChart', {
