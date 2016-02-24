@@ -24,6 +24,7 @@
 {
     CGFloat fiveAvVolume;
     CGFloat twentyAvVolume;
+    UILabel *navTitle;
 }
 @end
 
@@ -56,8 +57,27 @@ typedef enum {
     [self getStock20AvgVolume];
     [self getStock5AvgVolume];
     [self pullDownAction];
+    
+    
+    
+    navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    [navTitle setFont:[UIFont fontWithName:fontName size:middleFont]];
+    navTitle.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = navTitle;
+    navTitle.alpha = 0;
+    
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView == self.tableView) {
+        if (scrollView.contentOffset.y<0) {
+            navTitle.alpha = 0;
+        }else{
+            navTitle.alpha = scrollView.contentOffset.y/ScreenHeight;
+        }
+    }
+}
 
 
 
@@ -317,6 +337,8 @@ typedef enum {
                         marketInfoModel.amount = [[element objectForKey:@"market_index_trade_amount"] floatValue];
                         
                         _stockInfoModel = marketInfoModel;
+                        [navTitle setText:_stockInfoModel.stock_name];
+                        navTitle.alpha = 0;
                     }
                 }
                 [self.refreshControl endRefreshing];
@@ -369,6 +391,8 @@ typedef enum {
                 if([stockData objectForKey:_stockInfoModel.stock_code]){
                     
                     _stockInfoModel = [StockInfoModel yy_modelWithDictionary:[stockData objectForKey:_stockInfoModel.stock_code]];
+                    [navTitle setText:_stockInfoModel.stock_name];
+                    navTitle.alpha = 0;
                 }
                 
                 [self.refreshControl endRefreshing];
