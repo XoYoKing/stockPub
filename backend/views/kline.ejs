@@ -101,6 +101,11 @@
                                 now.amount // the volume
                             ]);
 
+                            if(now.fluctuate<0){
+                                colors.push('#388e3c');
+                            }else{
+                                colors.push('#d32f2f');
+                            }
                             console.log(now.timestamp_ms);
                         }
 
