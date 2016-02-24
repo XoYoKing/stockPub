@@ -244,9 +244,37 @@ exports.getStockDayInfoLessNowDay = function(stock_code, num_day, nowDay, callba
     conn.executeSql(sql, [stock_code, nowDay], callback);
 }
 
+exports.getMarketDayInfoLessNowDay = function(stock_code, num_day, nowDay, callback){
+    var sql = 'select t.* from ('+
+    ' SELECT a.*  FROM `market_index_day_info` a ' +
+    ' WHERE a.`market_code` = ? and a.market_index_date <= ? ORDER BY a.`market_index_date` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
+    conn.executeSql(sql, [stock_code, nowDay], callback);
+}
+
 exports.getAllStockCode = function(callback){
 	var sql = "select stock_code from stock_base_info";
 	conn.executeSql(sql, [], callback);
+}
+
+exports.getAllMarketCode = function(callback){
+    var sql = "select market_code from market_index_base_info";
+	conn.executeSql(sql, [], callback);
+}
+
+exports.updateMarket5AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update market_index_day_info set market_index_five_av_value = ? where market_code = ? and market_index_date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.updateMarket10AvPrice = function(stockCode, av_price, date, callback){
+    var sql = "update market_index_day_info set market_index_ten_av_value = ? where market_code = ? and market_index_date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.updateMarket20AvPrice = function(stockCode, av_price, date, callback){
+    var sql = "update market_index_day_info set market_index_twenty_av_value = ? where market_code = ? and market_index_date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
 }
 
 exports.update5AvPrice = function(stockCode, av_price, date, callback){

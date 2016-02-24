@@ -103,6 +103,67 @@ exports.caculateDurationYield = function(){
 }
 
 exports.caculateAvPrice = function(day, nowday){
+
+    stockOperation.getAllMarketCode(function(flag, result){
+        if(flag){
+            result.forEach(function(e){
+                stockOperation.getMarketDayInfoLessNowDay(e.market_code, day, nowday, function(flag, result){
+                    if(flag){
+
+                        if(result.length>0){
+                            var totalPrice = 0;
+                            var maxDate = result[0].market_index_date;
+                            var stock_code = result[0].market_code;
+                            result.forEach(function(e){
+                                totalPrice+=e.market_index_value_now;
+                                if(maxDate<e.market_index_date){
+                                    maxDate = e.market_index_date;
+                                }
+                            });
+                            console.log(maxDate);
+                            var avPrice = totalPrice/result.length;
+                            if(day === 5){
+                                stockOperation.updateMarket5AvPrice(stock_code, avPrice, maxDate, function(flag, result){
+                                    if(flag){
+
+                                    }else{
+                                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                    }
+                                });
+                            }
+
+                            if (day === 10) {
+                                stockOperation.updateMarket10AvPrice(stock_code, avPrice, maxDate, function(flag, result){
+                                    if(flag){
+
+                                    }else{
+                                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                    }
+                                });
+                            }
+
+                            if (day === 20) {
+                                stockOperation.updateMarket20AvPrice(stock_code, avPrice, maxDate, function(flag, result){
+                                    if(flag){
+
+                                    }else{
+                                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                                    }
+                                });
+                            }
+                        }
+                    }else{
+                        logger.error(result, logger.getFileNameAndLineNum(__filename));
+                    }
+                });
+            });
+
+        }else{
+            logger.error(result, logger.getFileNameAndLineNum(__filename));
+        }
+    });
+
+
     stockOperation.getAllStockCode(function(flag, result){
         if(flag){
             result.forEach(function(e){
