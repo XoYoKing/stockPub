@@ -450,7 +450,7 @@ router.get('/getMarketDayInfo', function(req, res){
 						low_price: result[0][0].market_index_value_low,
 						price: result[0][0].market_index_value_now,
 						amount: result[0][0].market_index_trade_volume,
-						fluctuate: e.market_index_fluctuate
+						fluctuate: result[0][0].market_index_fluctuate
 					};
 				}
 				returnData.code = constant.returnCode.SUCCESS;
