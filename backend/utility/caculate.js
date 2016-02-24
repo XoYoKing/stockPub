@@ -102,8 +102,7 @@ exports.caculateDurationYield = function(){
     });
 }
 
-exports.caculateAvPrice = function(day, nowday){
-
+exports.caculateMarketAvPrice = function(day, nowday){
     stockOperation.getAllMarketCode(function(flag, result){
         if(flag){
             result.forEach(function(e){
@@ -162,7 +161,9 @@ exports.caculateAvPrice = function(day, nowday){
             logger.error(result, logger.getFileNameAndLineNum(__filename));
         }
     });
+}
 
+exports.caculateAvPrice = function(day, nowday){
 
     stockOperation.getAllStockCode(function(flag, result){
         if(flag){
