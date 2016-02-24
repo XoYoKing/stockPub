@@ -65,9 +65,16 @@
                                 colors.push('#d32f2f');
                             }
 
-                            fiveAvPrices.push([data.data[i].timestamp_ms, data.data[i].fiveday_av_price]);
-                            tenAvPrices.push([data.data[i].timestamp_ms, data.data[i].tenday_av_price]);
-                            twentyAvPrices.push([data.data[i].timestamp_ms, data.data[i].twentyday_av_price]);
+                            if(data.data[i].fiveday_av_price!=0){
+                                fiveAvPrices.push([data.data[i].timestamp_ms, data.data[i].fiveday_av_price]);
+                            }
+                            if(data.data[i].tenday_av_price!=0){
+                                tenAvPrices.push([data.data[i].timestamp_ms, data.data[i].tenday_av_price]);
+                            }
+                            if(data.data[i].twentyday_av_price!=0){
+                                twentyAvPrices.push([data.data[i].timestamp_ms, data.data[i].twentyday_av_price]);
+                            }
+
                         }
 
                         $('#container').highcharts('StockChart', {
