@@ -574,6 +574,11 @@ typedef enum {
             NSLog(@"new cell");
         }
         
+        if(_ismarket == true){
+            _stockInfoModel.is_market = 1;
+        }else{
+            _stockInfoModel.is_market = 0;
+        }
         
         [cell configureCell:_stockInfoModel];
         return cell;

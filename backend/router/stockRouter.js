@@ -387,6 +387,7 @@ router.get('/kline', function(req, res){
 
 	res.render('kline',
 	{
+		'is_market': req.query.is_market,
 		'stock_code': req.query.stock_code,
 		'height': req.query.height,
 		'num_day': req.query.num_day,
