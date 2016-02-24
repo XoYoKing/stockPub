@@ -123,6 +123,7 @@ function insertToDatabase(htmlData, isnow) {
 								openPrice,
 								high_price,
 								fluctuate_value,
+								low_price,
 								function(flag, result) {
 									//logger.debug(stockCode+" now insert");
 									if (!flag) {

@@ -45,6 +45,8 @@
                         var tenAvPrices = [];
                         var twentyAvPrices = [];
                         var dataLength = data.data.length;
+                        var now = data.now;
+
                         for (i = 0; i < dataLength; i++) {
                             ohlc.push([
                                 data.data[i].timestamp_ms, // the date
@@ -65,16 +67,34 @@
                                 colors.push('#d32f2f');
                             }
 
-                            if(data.data[i].fiveday_av_price!=0){
+                            if(data.data[i].fiveday_av_price!=0
+                                &&data.data[i].fiveday_av_price!=null){
                                 fiveAvPrices.push([data.data[i].timestamp_ms, data.data[i].fiveday_av_price]);
                             }
-                            if(data.data[i].tenday_av_price!=0){
+                            if(data.data[i].tenday_av_price!=0
+                                &&data.data[i].tenday_av_price!=null){
                                 tenAvPrices.push([data.data[i].timestamp_ms, data.data[i].tenday_av_price]);
                             }
-                            if(data.data[i].twentyday_av_price!=0){
+                            if(data.data[i].twentyday_av_price!=0
+                                &&data.data[i].twentyday_av_price!=null){
                                 twentyAvPrices.push([data.data[i].timestamp_ms, data.data[i].twentyday_av_price]);
                             }
 
+                        }
+
+                        if(now!=null){
+                            ohlc.push([
+                                now.timestamp_ms, // the date
+                                now.open_price, // open
+                                now.high_price, // high
+                                now.low_price, // low
+                                now.price // close
+                            ]);
+
+                            volume.push([
+                                data.data[i].timestamp_ms, // the date
+                                data.data[i].amount // the volume
+                            ]);
                         }
 
                         $('#container').highcharts('StockChart', {
