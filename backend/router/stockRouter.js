@@ -387,6 +387,7 @@ router.get('/kline', function(req, res){
 
 	res.render('kline',
 	{
+		'is_market': req.query.is_market,
 		'stock_code': req.query.stock_code,
 		'height': req.query.height,
 		'num_day': req.query.num_day,
@@ -395,26 +396,112 @@ router.get('/kline', function(req, res){
 });
 
 
+router.get('/getMarketDayInfo', function(req, res){
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
+
+	asyncClient.parallel(
+		[
+			function(callback){
+				stockOperation.getMarketIndexNow(req.query.stock_code, function(flag, result){
+					if(flag){
+						callback(null, result);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			},
+			function(callback){
+				stockOperation.getMarketDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
+					if(flag){
+						var transfer = [];
+						result.forEach(function(e){
+							var newData = {
+								timestamp_ms: e.timestamp_ms,
+                                open_price: e.market_index_value_open,
+                                high_price: e.market_index_value_high,
+                                low_price: e.market_index_value_low,
+                                price: e.market_index_value_now,
+								amount: e.market_index_trade_volume,
+								fluctuate: e.market_index_fluctuate
+							};
+							transfer.push(newData);
+						});
+						callback(null, transfer);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			}
+		],
+		function(err, result){
+			var returnData = {};
+			if(err){
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
+	            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			}else{
+				returnData.data = result[1];
+				if(result[0].length>0){
+					returnData.now = {
+						timestamp_ms: result[0][0].timestamp_ms,
+						open_price: result[0][0].market_index_value_open,
+						high_price: result[0][0].market_index_value_high,
+						low_price: result[0][0].market_index_value_low,
+						price: result[0][0].market_index_value_now,
+						amount: result[0][0].market_index_trade_volume,
+						fluctuate: result[0][0].market_index_fluctuate
+					};
+				}
+				returnData.code = constant.returnCode.SUCCESS;
+				console.log(JSON.stringify(returnData));
+				res.send(returnData);
+			}
+		}
+	);
+});
+
 router.get('/getStockDayInfo', function(req, res){
 
 	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
-	stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
-		var returnData = {};
-		if(flag){
-			returnData.code = constant.returnCode.SUCCESS;
-			// var dataArr = [];
-			// result.forEach(function(e){
-			// 	var arr = [];
-			// 	arr.push(e.timestamp_ms);
-			// 	arr.push(e.price);
-			// 	dataArr.push(arr);
-			// });
-			returnData.data = result;
-			console.log(JSON.stringify(returnData), logger.getFileNameAndLineNum(__filename));
-			res.send(returnData);
-		}else{
-			logger.error(result, logger.getFileNameAndLineNum(__filename));
-			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+
+	asyncClient.parallel(
+		[
+			function(callback){
+				stockOperation.getStockInfo(req.query, function(flag, result){
+					if(flag){
+						callback(null, result);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			},
+			function(callback){
+				stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
+					if(flag){
+						callback(null, result);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			}
+		],
+		function(err, result){
+			var returnData = {};
+			if(err){
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
+	            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			}else{
+				returnData.data = result[1];
+				if(result[0].length>0){
+					returnData.now = result[0][0];
+				}
+				returnData.code = constant.returnCode.SUCCESS;
+				console.log(JSON.stringify(returnData));
+				res.send(returnData);
+			}
 		}
-	});
+	);
 });

@@ -27,9 +27,14 @@
         });
 
         $(function () {
-
+            var url = '';
+            if(<%=is_market%> == 1){
+                url = '/stock/getMarketDayInfo';
+            }else{
+                url = '/stock/getStockDayInfo';
+            }
             $.ajax({
-                url:'/stock/getStockDayInfo',
+                url: url,
                 data:{
                     'stock_code':'<%=stock_code%>',
                     'num_day':<%=num_day%>
@@ -41,7 +46,12 @@
                         var ohlc = [];
                         var volume = [];
                         var colors = [];
+                        var fiveAvPrices = [];
+                        var tenAvPrices = [];
+                        var twentyAvPrices = [];
                         var dataLength = data.data.length;
+                        var now = data.now;
+
                         for (i = 0; i < dataLength; i++) {
                             ohlc.push([
                                 data.data[i].timestamp_ms, // the date
@@ -57,10 +67,46 @@
                             ]);
 
                             if(data.data[i].fluctuate<0){
-                                colors.push('#6aa84f');
+                                colors.push('#388e3c');
                             }else{
-                                colors.push('#ff0000');
+                                colors.push('#d32f2f');
                             }
+
+                            if(data.data[i].fiveday_av_price!=0
+                                &&data.data[i].fiveday_av_price!=null){
+                                fiveAvPrices.push([data.data[i].timestamp_ms, data.data[i].fiveday_av_price]);
+                            }
+                            if(data.data[i].tenday_av_price!=0
+                                &&data.data[i].tenday_av_price!=null){
+                                tenAvPrices.push([data.data[i].timestamp_ms, data.data[i].tenday_av_price]);
+                            }
+                            if(data.data[i].twentyday_av_price!=0
+                                &&data.data[i].twentyday_av_price!=null){
+                                twentyAvPrices.push([data.data[i].timestamp_ms, data.data[i].twentyday_av_price]);
+                            }
+                            console.log(data.data[i].timestamp_ms);
+                        }
+
+                        if(now!=null){
+                            ohlc.push([
+                                now.timestamp_ms, // the date
+                                now.open_price, // open
+                                now.high_price, // high
+                                now.low_price, // low
+                                now.price // close
+                            ]);
+
+                            volume.push([
+                                now.timestamp_ms, // the date
+                                now.amount // the volume
+                            ]);
+
+                            if(now.fluctuate<0){
+                                colors.push('#388e3c');
+                            }else{
+                                colors.push('#d32f2f');
+                            }
+                            console.log(now.timestamp_ms);
                         }
 
                         $('#container').highcharts('StockChart', {
@@ -113,17 +159,18 @@
                             rangeSelector:{
                                 enabled: false
                             },
+                            colors:['#E91E63', '#FFC107', '#2196F3'],
                             plotOptions: {
                                 candlestick: {
-                                    color: '#6aa84f', //下降块颜色
-                                    lineColor: '#6aa84f', //下降块线条颜色
-                                    upColor: '#ff0000', //上升块颜色
-                                    upLineColor: "#ff0000" //上升块线条颜色
+                                    color: '#388e3c', //下降块颜色
+                                    lineColor: '#388e3c', //下降块线条颜色
+                                    upColor: '#d32f2f', //上升块颜色
+                                    upLineColor: "#d32f2f" //上升块线条颜色
                                 },
                                 column:{
                                     colorByPoint: true,
                                     colors: colors
-                                }
+                                },
                                 // series: {
                                 //     marker: {
                                 //         enabled: false,
@@ -134,6 +181,8 @@
                                 //         }
                                 //     }
                                 // }
+
+
                             },
                             series : [
                                 {
@@ -152,6 +201,27 @@
                                     // dataGrouping: {
                                     //     units: groupingUnits
                                     // }
+                                },
+                                {
+                                    name : 'MA5',
+                                    data : fiveAvPrices,
+                                    tooltip: {
+                                        valueDecimals: 2
+                                    }
+                                },
+                                {
+                                    name : 'MA10',
+                                    data : tenAvPrices,
+                                    tooltip: {
+                                        valueDecimals: 2
+                                    }
+                                },
+                                {
+                                    name : 'MA20',
+                                    data : twentyAvPrices,
+                                    tooltip: {
+                                        valueDecimals: 2
+                                    }
                                 }
                             ]
                         });
