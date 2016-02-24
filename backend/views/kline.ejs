@@ -63,7 +63,7 @@
                                 colors.push('#d32f2f');
                             }
 
-                            fiveAvPrices.push(data.data[i].timestamp_ms, data.data[i].5day_av_price);
+                            fiveAvPrices.push([data.data[i].timestamp_ms, data.data[i].5day_av_price]);
                         }
 
                         $('#container').highcharts('StockChart', {
