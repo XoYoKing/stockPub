@@ -428,6 +428,7 @@
                         element.flowMarketValue = temp.flowMarketValue;
                         element.priceearning = temp.priceearning;
                         element.pb = temp.pb;
+                        element.is_stop = temp.is_stop;
                     }
                 }
                 

@@ -225,14 +225,27 @@ router.post('/getStockListInfo', function(req, res){
 						if(flag){
 							var stockInfoArr = common.analyzeMessage(htmlData);
 							if(stockInfoArr == false||stockInfoArr.length == 0){
+								//停牌
+								stockOperation.getStockDayInfo(reqbody.stock_code, 1, function(flag, result){
+									if(flag){
+										if(result.length>0){
+											stockInfo[item] = result[0];
+											stockInfo[item].is_stop = 1;
+										}
+									}else{
+										logger.error(result, logger.getFileNameAndLineNum(__filename));
+									}
+									callback();
+								});
 
 							}else{
 								stockInfo[item] = stockInfoArr[0];
+								callback();
 							}
 						}else{
 							logger.error(result, logger.getFileNameAndLineNum(__filename));
+							callback();
 						}
-						callback();
 					});
 				}
 			}else{
@@ -254,7 +267,7 @@ router.post('/getStockListInfo', function(req, res){
 
 //获取股票信息
 router.post('/getStock', function(req, res){
-	stockOperation.getStockInfo(req.body, function(flag, result){
+	stockOperation.getStockBaseInfoByCode(req.body.stock_code, function(flag, result){
 		var returnData = {};
 		if(flag){
 			logger.debug(result, logger.getFileNameAndLineNum(__filename));

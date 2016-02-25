@@ -40,6 +40,10 @@
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
 
+#define IS_IPHONE_4_OR_LESS (ScreenHeight < 568.0)
+#define IS_IPHONE_5 (ScreenHeight == 568.0)
+#define IS_IPHONE_6 (ScreenHeight == 667.0)
+#define IS_IPHONE_6P (ScreenHeight == 736.0)
 
 
 #define alertMsg(x) [Tools AlertBigMsg:x];;

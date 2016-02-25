@@ -45,6 +45,9 @@
     loginButton.titleLabel.font = [UIFont fontWithName:fontName size:middleFont];
     [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(loginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    
     [self.view addSubview:loginButton];
     
 }
