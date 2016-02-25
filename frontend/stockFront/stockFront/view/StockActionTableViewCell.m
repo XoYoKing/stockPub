@@ -76,6 +76,13 @@
         priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
     }
     
+    
+    if (stockInfo.is_stop == 1) {
+        priceLabel.textColor = [UIColor grayColor];
+        priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(停牌)", stockInfo.price];
+    }
+    
+    
     CGSize labelSize = [Tools getTextArrange:priceLabel.text maxRect:CGSizeMake(ScreenWidth, 8*minSpace) fontSize:middleFont];
     
     priceLabel.frame = CGRectMake(0, 0, labelSize.width, labelSize.height);
