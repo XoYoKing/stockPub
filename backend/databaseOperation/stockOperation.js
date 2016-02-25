@@ -300,3 +300,9 @@ exports.getDate = function(callback){
     var sql = 'SELECT date FROM `stock_amount_info` GROUP BY `date` ORDER BY `date` DESC ';
     conn.executeSql(sql, [], callback);
 }
+
+
+exports.getStockBaseInfoByCode = function(stock_code, callback){
+    var sql = 'select *from stock_base_info where stock_code = ?';
+    conn.executeSql(sql, [stock_code], callback);
+}

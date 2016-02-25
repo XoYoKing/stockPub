@@ -254,7 +254,7 @@ router.post('/getStockListInfo', function(req, res){
 
 //获取股票信息
 router.post('/getStock', function(req, res){
-	stockOperation.getStockInfo(req.body, function(flag, result){
+	stockOperation.getStockBaseInfoByCode(req.body.stock_code, function(flag, result){
 		var returnData = {};
 		if(flag){
 			logger.debug(result, logger.getFileNameAndLineNum(__filename));
