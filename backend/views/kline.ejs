@@ -88,25 +88,29 @@
                         }
 
                         if(now!=null){
-                            ohlc.push([
-                                now.timestamp_ms, // the date
-                                now.open_price, // open
-                                now.high_price, // high
-                                now.low_price, // low
-                                now.price // close
-                            ]);
+                            if(dataLength>0&&now.date === data.data[dataLength- 1].date){
+                                
+                            }else {
+                                ohlc.push([
+                                    now.timestamp_ms, // the date
+                                    now.open_price, // open
+                                    now.high_price, // high
+                                    now.low_price, // low
+                                    now.price // close
+                                ]);
 
-                            volume.push([
-                                now.timestamp_ms, // the date
-                                now.amount // the volume
-                            ]);
+                                volume.push([
+                                    now.timestamp_ms, // the date
+                                    now.amount // the volume
+                                ]);
 
-                            if(now.fluctuate<0){
-                                colors.push('#388e3c');
-                            }else{
-                                colors.push('#d32f2f');
+                                if(now.fluctuate<0){
+                                    colors.push('#388e3c');
+                                }else{
+                                    colors.push('#d32f2f');
+                                }
+                                console.log(now.timestamp_ms);
                             }
-                            console.log(now.timestamp_ms);
                         }
 
                         $('#container').highcharts('StockChart', {

@@ -509,13 +509,7 @@ router.get('/getStockDayInfo', function(req, res){
 			}else{
 				returnData.data = result[1];
 				if(result[0].length>0){
-					if(returnData.data.length>0){
-						if (returnData.data[returnData.data.length - 1].date === result[0][0].date) {
-							returnData.now = null;
-						}else{
-							returnData.now = result[0][0];
-						}
-					}
+					returnData.now = result[0][0];
 				}
 				returnData.code = constant.returnCode.SUCCESS;
 				console.log(JSON.stringify(returnData));
