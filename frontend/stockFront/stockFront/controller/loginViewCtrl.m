@@ -112,6 +112,7 @@
             [mySettingData setObject:app.myInfo.user_phone forKey:@"phone"];
             [mySettingData setObject:app.myInfo.user_password forKey:@"password"];
             [mySettingData synchronize];
+            app.isLogin = true;
             
             //本地库连接
             NSLog(@"%@", app.myInfo.user_id);
@@ -126,15 +127,28 @@
             app.tabBarViewController = tabbarView;
             [self presentViewController:tabbarView animated:YES completion:nil];
             
+            
+            //更新device token
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes: (UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound) categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            
+            
         }else if(code == LOGIN_FAIL){
             alertMsg(@"用户或密码错误");
+            self.view.hidden = NO;
+
         }else{
             alertMsg(@"未知错误");
+            self.view.hidden = NO;
+
         }
         
         
     } failed:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        self.view.hidden = NO;
         alertMsg(@"网络问题");
     }];
 

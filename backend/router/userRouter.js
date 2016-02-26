@@ -314,6 +314,11 @@ router.post('/login', function(req, res) {
 				log.debug(returnData, log.getFileNameAndLineNum(__filename));
 				res.send(returnData);
 
+				userMgmt.updateLoginStatus(data.user_id, 1, function(flag, result){
+					if(!flag){
+						log.error(result, log.getFileNameAndLineNum(__filename));
+					}
+				});
 			} else {
 				statusCode = constant.returnCode.LOGIN_FAIL;
 				var data = {
@@ -329,6 +334,18 @@ router.post('/login', function(req, res) {
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			returnData.code = constant.returnCode.ERROR;
 			res.send(returnData);
+		}
+	});
+});
+
+
+router.post('/logout', function(req, res){
+	userMgmt.updateLoginStatus(req.body.user_id, 0, function(flag, result){
+		if(!flag){
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}else{
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}
 	});
 });
@@ -385,6 +402,7 @@ router.post('/addCommentToLook', function(req, res) {
 			}
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 
@@ -396,6 +414,7 @@ router.post('/getComments', function(req, res){
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});
@@ -429,6 +448,61 @@ router.post('/getRankUser', function(req, res){
 
 			routerFunc.feedBack(constant.returnCode.SUCCESS, userlist, res);
 		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/getUnreadCommentCount', function(req, res){
+	userMgmt.getUnreadCommentCount(req.body.user_id, function(flag, result){
+		if(flag){
+			var count = result[0].count;
+			log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.SUCCESS, count, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/getUnreadComment', function(req, res){
+	userMgmt.getUnreadComment(req.body.user_id, req.body.comment_timestamp, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+			userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
+				if(!flag){
+					log.error(result, log.getFileNameAndLineNum(__filename));
+				}
+			});
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+router.post('/updateUnreadComment', function(req, res){
+	userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+
+router.post('/updateDeviceToken', function(req, res){
+	userMgmt.updateDeviceToken(req.body.user_phone, req.body.device_token, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});

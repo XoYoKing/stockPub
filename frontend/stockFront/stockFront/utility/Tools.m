@@ -107,6 +107,9 @@
     [hud hide:YES afterDelay:2];
 }
 
+
+
+
 + (UINavigationController*)curNavigator
 {
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -121,7 +124,7 @@
     hud.mode = MBProgressHUDModeText;
     hud.labelText = msg;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:2];
+    [hud hide:YES afterDelay:1.5];
 }
 
 + (CGSize)getTextArrange:(NSString*)text maxRect:(CGSize)maxRect fontSize:(int)fontSize

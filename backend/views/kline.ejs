@@ -1,0 +1,243 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    </head>
+    <body>
+        <div id="container">
+
+        </div>
+
+
+        <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+        <script src="http://cdn.hcharts.cn/highstock/highstock.js"></script>
+
+        <script>
+
+        Highcharts.setOptions({
+            lang:{
+                rangeSelectorFrom:'从',
+                rangeSelectorTo: '到',
+                months: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                shortMonths: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                weekdays: ['周末', '周一', '周二', '周三', '周四', '周五', '周六']
+            }
+        });
+
+        $(function () {
+            var url = '';
+            if(<%=is_market%> == 1){
+                url = '/stock/getMarketDayInfo';
+            }else{
+                url = '/stock/getStockDayInfo';
+            }
+            $.ajax({
+                url: url,
+                data:{
+                    'stock_code':'<%=stock_code%>',
+                    'num_day':<%=num_day%>
+                },
+                type:'get',
+                dataType: 'json',
+                success:function(data, status){
+                    if(data.code == 1002){
+                        var ohlc = [];
+                        var volume = [];
+                        var colors = [];
+                        var fiveAvPrices = [];
+                        var tenAvPrices = [];
+                        var twentyAvPrices = [];
+                        var dataLength = data.data.length;
+                        var now = data.now;
+
+                        for (i = 0; i < dataLength; i++) {
+                            ohlc.push([
+                                data.data[i].timestamp_ms, // the date
+                                data.data[i].open_price, // open
+                                data.data[i].high_price, // high
+                                data.data[i].low_price, // low
+                                data.data[i].price // close
+                            ]);
+
+                            volume.push([
+                                data.data[i].timestamp_ms, // the date
+                                data.data[i].amount // the volume
+                            ]);
+
+                            if(data.data[i].open_price - data.data[i].price > 0){
+                                colors.push('#388e3c');
+                            }else{
+                                colors.push('#d32f2f');
+                            }
+
+                            if(data.data[i].fiveday_av_price!=0
+                                &&data.data[i].fiveday_av_price!=null){
+                                fiveAvPrices.push([data.data[i].timestamp_ms, data.data[i].fiveday_av_price]);
+                            }
+                            if(data.data[i].tenday_av_price!=0
+                                &&data.data[i].tenday_av_price!=null){
+                                tenAvPrices.push([data.data[i].timestamp_ms, data.data[i].tenday_av_price]);
+                            }
+                            if(data.data[i].twentyday_av_price!=0
+                                &&data.data[i].twentyday_av_price!=null){
+                                twentyAvPrices.push([data.data[i].timestamp_ms, data.data[i].twentyday_av_price]);
+                            }
+                            console.log(data.data[i].timestamp_ms);
+                        }
+
+                        if(now!=null){
+                            if(dataLength>0&&now.date === data.data[dataLength- 1].date){
+
+                            }else {
+                                ohlc.push([
+                                    now.timestamp_ms, // the date
+                                    now.open_price, // open
+                                    now.high_price, // high
+                                    now.low_price, // low
+                                    now.price // close
+                                ]);
+
+                                volume.push([
+                                    now.timestamp_ms, // the date
+                                    now.amount // the volume
+                                ]);
+
+                                if(now.open_price - now.price > 0){
+                                    colors.push('#388e3c');
+                                }else{
+                                    colors.push('#d32f2f');
+                                }
+                                console.log(now.timestamp_ms);
+                            }
+                        }
+
+                        $('#container').highcharts('StockChart', {
+
+                            yAxis: [
+                                {
+                                    labels: {
+                                        style: {'fontSize':'28px'},
+                                        align: 'left',
+                                        //x: -3,
+                                        x:-<%=width%>+5,
+                                        step: 2
+                                    },
+
+                                    height: '65%',
+                                    lineWidth: 2
+                                },
+                                {
+                                    labels: {
+                                        enabled: false
+                                    },
+
+                                    top: '65%',
+                                    height: '35%',
+                                    offset: 0,
+                                    lineWidth: 2
+                                }
+                            ],
+
+                            xAxis: {
+                                labels: {
+                                    style: {'fontSize':'28px'},
+                                    step: 2
+                                }
+                            },
+
+                            chart: {
+                                height: <%=height%>
+                            },
+                            navigator:{
+                                enabled: false
+                            },
+                            scrollbar:{
+                                enabled: false
+                            },
+                            credits:{
+                                enabled: false
+                            },
+
+                            rangeSelector:{
+                                enabled: false
+                            },
+                            colors:['#E91E63', '#FFC107', '#2196F3'],
+                            plotOptions: {
+                                candlestick: {
+                                    color: '#388e3c', //下降块颜色
+                                    lineColor: '#388e3c', //下降块线条颜色
+                                    upColor: '#d32f2f', //上升块颜色
+                                    upLineColor: "#d32f2f" //上升块线条颜色
+                                },
+                                column:{
+                                    colorByPoint: true,
+                                    colors: colors
+                                },
+                                // series: {
+                                //     marker: {
+                                //         enabled: false,
+                                //         states: {
+                                //             hover: {
+                                //                 enabled: false
+                                //             }
+                                //         }
+                                //     }
+                                // }
+
+
+                            },
+                            series : [
+                                {
+                                    type: 'candlestick',
+                                    name: '股价',
+                                    data: ohlc,
+                                    // dataGrouping: {
+                                    //     units: groupingUnits
+                                    // }
+                                },
+                                {
+                                    type: 'column',
+                                    name: '成交量',
+                                    data: volume,
+                                    yAxis: 1,
+                                    // dataGrouping: {
+                                    //     units: groupingUnits
+                                    // }
+                                },
+                                {
+                                    name : 'MA5',
+                                    data : fiveAvPrices,
+                                    tooltip: {
+                                        valueDecimals: 2
+                                    }
+                                },
+                                {
+                                    name : 'MA10',
+                                    data : tenAvPrices,
+                                    tooltip: {
+                                        valueDecimals: 2
+                                    }
+                                },
+                                {
+                                    name : 'MA20',
+                                    data : twentyAvPrices,
+                                    tooltip: {
+                                        valueDecimals: 2
+                                    }
+                                }
+                            ]
+                        });
+                    }else{
+                        $("#container").html("<h1>ERROR:"+data.code+"</h1>");
+                    }
+                },
+                error: function(){
+                    $("#container").html("<h1>ERROR:"+status+"</h1>");
+                }
+            });
+        });
+        </script>
+    </body>
+</html>

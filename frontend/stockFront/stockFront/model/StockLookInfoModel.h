@@ -26,5 +26,6 @@
 @property NSInteger look_update_timestamp;
 @property NSInteger look_cur_price_timestamp;
 @property NSString* look_id;
+@property NSInteger comment_count;
 
 @end

@@ -1,14 +1,13 @@
 var mysql = require('mysql');
 var config = require('./config');
 
-
 var pool = mysql.createPool({
-	host: config.mysql_dev.host,
-	user: config.mysql_dev.user,
-  	password: config.mysql_dev.password,
-	database: config.mysql_dev.database,
-	port: config.mysql_dev.port,
-	acquireTimeout: 10000
+	host: process.env.dbhost,
+	user: process.env.dbuser,
+  	password: process.env.dbpassword,
+	database: process.env.database,
+	port: process.env.dbport,
+	acquireTimeout: 60000
 });
 
 var logger = global.logger;
@@ -78,7 +77,7 @@ exports.executeSql = function(sql, para, callback) {
 		}
 		//modify by wanghan 20141007
 		else{
-			conn.query(sql, para, function(err, result){
+			var query = conn.query(sql, para, function(err, result){
 				if (err) {
 					logger.error(err, logger.getFileNameAndLineNum(__filename));
 					if(callback!=null){
@@ -91,6 +90,7 @@ exports.executeSql = function(sql, para, callback) {
 				//conn.end();
 				conn.release();
 			});
+			console.log(query.sql);
 		}
 	});
 }

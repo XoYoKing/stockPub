@@ -19,6 +19,9 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+
+@property BOOL isLogin;
+
 @property UserInfoModel* myInfo;
 @property LocDatabase* locDatabase;
 @property UITabBarController* tabBarViewController;

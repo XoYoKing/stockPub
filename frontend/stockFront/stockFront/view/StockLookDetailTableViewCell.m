@@ -15,6 +15,7 @@
 #import "SettingCtrl.h"
 #import "ComTableViewCtrl.h"
 #import "CommentTableView.h"
+#import "StockInfoDetailTableView.h"
 
 @implementation StockLookDetailTableViewCell
 {
@@ -71,12 +72,29 @@
         faceImageView.userInteractionEnabled = YES;
         [faceImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(faceViewPress:)]];
 
+        stockNameLabel.userInteractionEnabled = YES;
+        [stockNameLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stockNamePress:)]];
+
+        
         [commentButton addTarget:self action:@selector(commentPress:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         
     }
     return self;
 }
 
+
+- (void)stockNamePress:(id)sender
+{
+    StockInfoDetailTableView* detail = [[StockInfoDetailTableView alloc] init];
+    detail.hidesBottomBarWhenPushed = YES;
+    detail.ismarket = false;
+    StockInfoModel* stockInfo = [[StockInfoModel alloc] init];
+    stockInfo.stock_code = myStockLookInfoModel.stock_code;
+    detail.stockInfoModel = stockInfo;
+    [[Tools curNavigator] pushViewController:detail animated:YES];
+}
 
 - (void)commentPress:(id)sender
 {
@@ -148,6 +166,7 @@
     
     stockNameLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
     stockNameLabel.text = [[NSString alloc] initWithFormat:@"%@(%@)", stockLookInfoModel.stock_name, stockLookInfoModel.stock_code];
+    stockNameLabel.textColor = OurBlue;
     
     
     priceLabel.font = stockNameLabel.font;
@@ -192,7 +211,7 @@
     
     commentButton.titleLabel.font = [UIFont fontWithName:fontName size:minFont];
     [commentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [commentButton setTitle:@"评论" forState:UIControlStateNormal];
+    [commentButton setTitle:[[NSString alloc] initWithFormat:@"%@(%ld)", @"评论", myStockLookInfoModel.comment_count] forState:UIControlStateNormal];
     [commentButton setTintColor:[UIColor whiteColor]];
 }
 
@@ -269,7 +288,7 @@
     [commentButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-2*minSpace);
         make.top.mas_equalTo(finishTimeDateLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(8*minSpace, 4*minSpace));
+        make.size.mas_equalTo(CGSizeMake(10*minSpace, 4*minSpace));
     }];
     
 }

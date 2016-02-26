@@ -1,17 +1,21 @@
 var databaseOperation = require('./databaseOperation');
 var logger = global.logger;
 var http = require('http');
-var redis = require("redis");
-var redisClient = redis.createClient({auth_pass:'here_dev'});
+//var redis = require("redis");
+//var redisClient = redis.createClient({auth_pass:'here_dev'});
 
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
+var userOperation = require('./databaseOperation/userOperation.js');
 var config = require('./config');
 var path = require('path');
-redisClient.on("error", function (err) {
-	logger.error(err, logger.getFileNameAndLineNum(__filename));
-});
+
+var apn = require('./utility/apnPush.js');
+var moment = require('moment');
+// redisClient.on("error", function (err) {
+// 	logger.error(err, logger.getFileNameAndLineNum(__filename));
+// });
 
 
 function isMarketOpenTime() {
@@ -91,6 +95,7 @@ function insertToDatabase(htmlData, isnow) {
 				var openPrice = dataArr[5];
 				var high_price = dataArr[33];
 				var low_price = dataArr[34];
+				var fluctuate_value = dataArr[31];
 
 				if (stockCode === undefined ||
 					amount === undefined ||
@@ -117,6 +122,8 @@ function insertToDatabase(htmlData, isnow) {
 								pb,
 								openPrice,
 								high_price,
+								fluctuate_value,
+								low_price,
 								function(flag, result) {
 									//logger.debug(stockCode+" now insert");
 									if (!flag) {
@@ -170,18 +177,18 @@ function insertToDatabase(htmlData, isnow) {
 
 
 
-exports.removeKeys = function(){
-	logger.info('enter removeKeys');
-	databaseOperation.getAllStockCode(function(flag, result){
-		if (flag) {
-			result.forEach(function(element){
-				redisClient.del(element.stock_code+"_3day");
-			});
-		}else{
-			logger.error('getAllStockCode error code '+result.errno);
-		}
-	});
-}
+// exports.removeKeys = function(){
+// 	logger.info('enter removeKeys');
+// 	databaseOperation.getAllStockCode(function(flag, result){
+// 		if (flag) {
+// 			result.forEach(function(element){
+// 				redisClient.del(element.stock_code+"_3day");
+// 			});
+// 		}else{
+// 			logger.error('getAllStockCode error code '+result.errno);
+// 		}
+// 	});
+// }
 
 function getMaxPrice(result){
 	var max = result[0].high_price;
@@ -543,6 +550,50 @@ exports.startCrawlStockNow = function(){
 				getStockInfo(stockCodeArr, true);
 			}
 		} else {
+			logger.error(result);
+		}
+	});
+}
+
+exports.pushMarketCloseMsg = function(){
+	logger.info('pushMarketCloseMsg');
+	stockOperation.getAllMarketIndexNow(function(flag, result){
+		if(flag){
+			if(result.length>0){
+				var msg = '';
+				result.forEach(function(e){
+					var date = e.market_index_date.substr(0, 8);
+					console.log(date);
+					var nowDate = moment().format('YYYYMMDD');
+					if(date === nowDate){
+						msg = msg + e.market_name + '收盘报' + e.market_index_value_now +
+						'(' +e.market_index_fluctuate+'%);';
+					}
+				});
+
+				logger.info(msg, logger.getFileNameAndLineNum(__filename));
+
+				if(msg.length>0){
+					var pushMsg = {
+						content: msg,
+						msgtype: 'msg',
+						badge: 1
+					};
+
+					userOperation.getAllUser(function(flag, result){
+						if(flag){
+							result.forEach(function(e){
+								if(e.device_token!=null){
+									apn.pushMsgToUsers(e.device_token, pushMsg);
+								}
+							});
+						}else{
+							logger.error(result);
+						}
+					});
+				}
+			}
+		}else{
 			logger.error(result);
 		}
 	});

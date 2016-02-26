@@ -225,14 +225,27 @@ router.post('/getStockListInfo', function(req, res){
 						if(flag){
 							var stockInfoArr = common.analyzeMessage(htmlData);
 							if(stockInfoArr == false||stockInfoArr.length == 0){
+								//停牌
+								stockOperation.getStockDayInfo(reqbody.stock_code, 1, function(flag, result){
+									if(flag){
+										if(result.length>0){
+											stockInfo[item] = result[0];
+											stockInfo[item].is_stop = 1;
+										}
+									}else{
+										logger.error(result, logger.getFileNameAndLineNum(__filename));
+									}
+									callback();
+								});
 
 							}else{
 								stockInfo[item] = stockInfoArr[0];
+								callback();
 							}
 						}else{
 							logger.error(result, logger.getFileNameAndLineNum(__filename));
+							callback();
 						}
-						callback();
 					});
 				}
 			}else{
@@ -254,7 +267,7 @@ router.post('/getStockListInfo', function(req, res){
 
 //获取股票信息
 router.post('/getStock', function(req, res){
-	stockOperation.getStockInfo(req.body, function(flag, result){
+	stockOperation.getStockBaseInfoByCode(req.body.stock_code, function(flag, result){
 		var returnData = {};
 		if(flag){
 			logger.debug(result, logger.getFileNameAndLineNum(__filename));
@@ -347,4 +360,163 @@ router.post('/now', function(req, res){
             routerFunc.feedBack(constant.returnCode.ERROR, result, res);
         }
     });
+});
+
+
+router.post('/getMarketAvgVolume', function(req, res){
+	stockOperation.getMarketAvgVolume(req.body.stock_code, req.body.day, function(flag, result){
+		if(flag){
+			var total = 0;
+			result.forEach(function(element){
+				total+=element.market_index_trade_volume;
+			});
+			var avg = total/result.length;
+			routerFunc.feedBack(constant.returnCode.SUCCESS, avg, res);
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+router.post('/getAvgVolume', function(req, res){
+	stockOperation.getAvgVolume(req.body.stock_code, req.body.day, function(flag, result){
+		if(flag){
+			var total = 0;
+			result.forEach(function(element){
+				total+=element.volume;
+			});
+			var avg = total/result.length;
+			routerFunc.feedBack(constant.returnCode.SUCCESS, avg, res);
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+router.get('/kline', function(req, res){
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
+
+	res.render('kline',
+	{
+		'is_market': req.query.is_market,
+		'stock_code': req.query.stock_code,
+		'height': req.query.height,
+		'num_day': req.query.num_day,
+		'width': req.query.width
+	});
+});
+
+
+router.get('/getMarketDayInfo', function(req, res){
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
+
+	asyncClient.parallel(
+		[
+			function(callback){
+				stockOperation.getMarketIndexNow(req.query.stock_code, function(flag, result){
+					if(flag){
+						callback(null, result);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			},
+			function(callback){
+				stockOperation.getMarketDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
+					if(flag){
+						var transfer = [];
+						result.forEach(function(e){
+							var newData = {
+								timestamp_ms: e.timestamp_ms,
+                                open_price: e.market_index_value_open,
+                                high_price: e.market_index_value_high,
+                                low_price: e.market_index_value_low,
+                                price: e.market_index_value_now,
+								amount: e.market_index_trade_volume,
+								fluctuate: e.market_index_fluctuate,
+								date: e.market_index_date
+							};
+							transfer.push(newData);
+						});
+						callback(null, transfer);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			}
+		],
+		function(err, result){
+			var returnData = {};
+			if(err){
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
+	            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			}else{
+				returnData.data = result[1];
+				if(result[0].length>0){
+					returnData.now = {
+						timestamp_ms: result[0][0].timestamp_ms,
+						open_price: result[0][0].market_index_value_open,
+						high_price: result[0][0].market_index_value_high,
+						low_price: result[0][0].market_index_value_low,
+						price: result[0][0].market_index_value_now,
+						amount: result[0][0].market_index_trade_volume,
+						fluctuate: result[0][0].market_index_fluctuate,
+						date: result[0][0].market_index_date
+					};
+				}
+				returnData.code = constant.returnCode.SUCCESS;
+				console.log(JSON.stringify(returnData));
+				res.send(returnData);
+			}
+		}
+	);
+});
+
+router.get('/getStockDayInfo', function(req, res){
+
+	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
+
+	asyncClient.parallel(
+		[
+			function(callback){
+				stockOperation.getStockInfo(req.query, function(flag, result){
+					if(flag){
+						callback(null, result);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			},
+			function(callback){
+				stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
+					if(flag){
+						callback(null, result);
+					}else{
+						logger.error(result, logger.getFileNameAndLineNum(__filename));
+						callback(result, result);
+					}
+				});
+			}
+		],
+		function(err, result){
+			var returnData = {};
+			if(err){
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
+	            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			}else{
+				returnData.data = result[1];
+				if(result[0].length>0){
+					returnData.now = result[0][0];
+				}
+				returnData.code = constant.returnCode.SUCCESS;
+				console.log(JSON.stringify(returnData));
+				res.send(returnData);
+			}
+		}
+	);
 });
