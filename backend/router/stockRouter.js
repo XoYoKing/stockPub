@@ -277,27 +277,31 @@ router.post('/getStock', function(req, res){
 				res.send(returnData);
 			}else{
 				//表中未找到记录
-				common.getStockInfoFromAPI(req.body.stock_alpha_info, function(flag, htmlData){
-					if(flag){
-						var stockInfoArr = common.analyzeMessage(htmlData);
-						if(stockInfoArr == false||stockInfoArr.length == 0){
-							routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
-						}else{
-							routerFunc.feedBack(constant.returnCode.SUCCESS, [stockInfoArr[0]], res);
-							//insert to stock base info
-							databaseOper.insertStockBaseInfo(stockInfoArr[0], function(flag, result){
-								if(!flag){
-									logger.error(result, logger.getFileNameAndLineNum(__filename));
-								}
-							});
-						}
+				if(req.body.stock_alpha_info.length == 6){
+					common.getStockInfoFromAPI(req.body.stock_alpha_info, function(flag, htmlData){
+						if(flag){
+							var stockInfoArr = common.analyzeMessage(htmlData);
+							if(stockInfoArr == false||stockInfoArr.length == 0){
+								routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
+							}else{
+								routerFunc.feedBack(constant.returnCode.SUCCESS, [stockInfoArr[0]], res);
+								//insert to stock base info
+								databaseOper.insertStockBaseInfo(stockInfoArr[0], function(flag, result){
+									if(!flag){
+										logger.error(result, logger.getFileNameAndLineNum(__filename));
+									}
+								});
+							}
 
-					}else{
-						logger.error(result, logger.getFileNameAndLineNum(__filename));
-						returnData.code = constant.returnCode.ERROR;
-						res.send(returnData);
-					}
-				});
+						}else{
+							logger.error(result, logger.getFileNameAndLineNum(__filename));
+							returnData.code = constant.returnCode.ERROR;
+							res.send(returnData);
+						}
+					});
+				}else{
+					routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
+				}
 			}
 
 		}else{
