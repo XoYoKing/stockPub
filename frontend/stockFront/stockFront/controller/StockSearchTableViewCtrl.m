@@ -24,6 +24,7 @@
     NSMutableArray* stockList;
     UITextField* stockSearchTextField;
     LocDatabase* locDatabase;
+    BOOL searching;
 }
 
 - (void)viewDidLoad
@@ -39,8 +40,7 @@
     stockSearchTextField.frame = CGRectMake(0, 0, ScreenWidth - 4*minSpace, 6*minSpace);
     stockSearchTextField.textAlignment = NSTextAlignmentLeft;
     stockSearchTextField.font = [UIFont fontWithName:fontName size:minFont];
-    stockSearchTextField.placeholder = @"请输入股票代码";
-    stockSearchTextField.keyboardType = UIKeyboardTypeNumberPad;
+    stockSearchTextField.placeholder = @"请输入股票名称或代码";
     stockSearchTextField.delegate = self;
     [stockSearchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
@@ -60,6 +60,8 @@
     self.tableView.delegate = self;
     [self.tableView setDataSource:self];
     [self.tableView reloadData];
+    
+    searching = false;
 
 }
 
@@ -86,6 +88,12 @@
     }
     
     return 0;
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [stockSearchTextField resignFirstResponder];
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -124,30 +132,29 @@
         cell.textLabel.font = [UIFont fontWithName:fontName size:middleFont];
         cell.textLabel.text = stockInfo.stock_name;
         cell.detailTextLabel.text = stockInfo.stock_code;
-        UILabel* priceLabel = [[UILabel alloc] init];
-        priceLabel.font = [UIFont fontWithName:fontName size:middleFont];
+//        UILabel* priceLabel = [[UILabel alloc] init];
+//        priceLabel.font = [UIFont fontWithName:fontName size:middleFont];
+//        
+//        if (stockInfo.fluctuate>0) {
+//            priceLabel.textColor = myred;
+//            priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(+%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
+//        }
+//        
+//        if(stockInfo.fluctuate<0){
+//            priceLabel.textColor = mygreen;
+//            priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
+//        }
+//        
+//        if(stockInfo.fluctuate == 0){
+//            priceLabel.textColor = [UIColor blackColor];
+//            priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
+//        }
+//        
+//        CGSize labelSize = [Tools getTextArrange:priceLabel.text maxRect:CGSizeMake(ScreenWidth, 8*minSpace) fontSize:middleFont];
+//        
+//        priceLabel.frame = CGRectMake(ScreenWidth - labelSize.width - 10, 0, labelSize.width+10, labelSize.height);
         
-        if (stockInfo.fluctuate>0) {
-            priceLabel.textColor = myred;
-            priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(+%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
-        }
         
-        if(stockInfo.fluctuate<0){
-            priceLabel.textColor = mygreen;
-            priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
-        }
-        
-        if(stockInfo.fluctuate == 0){
-            priceLabel.textColor = [UIColor blackColor];
-            priceLabel.text = [[NSString alloc] initWithFormat:@"%.2lf(%.2lf%%)", stockInfo.price, stockInfo.fluctuate];
-        }
-        
-        CGSize labelSize = [Tools getTextArrange:priceLabel.text maxRect:CGSizeMake(ScreenWidth, 8*minSpace) fontSize:middleFont];
-        
-        priceLabel.frame = CGRectMake(ScreenWidth - labelSize.width - 10, 0, labelSize.width+10, labelSize.height);
-        
-        
-        cell.accessoryView = priceLabel;
         
         
         
@@ -202,48 +209,47 @@
 
 - (void)textFieldDidChange:(UITextField*)textField
 {
-    if(textField.text.length == 6){
-        NSLog(@"search stock code: %@", textField.text);
-        NSString* stockCode = textField.text;
+    if(textField.text.length >= 2&&searching == false){
+        
+        searching = true;
+        
+        NSLog(@"search stock str: %@", textField.text);
         
         
         //发送搜索消息
         NSDictionary* message = [[NSDictionary alloc]
-                                 initWithObjects:@[stockCode]
-                                 forKeys:@[@"stock_code"]];
+                                 initWithObjects:@[textField.text]
+                                 forKeys:@[@"stock_alpha_info"]];
         
         [NetworkAPI callApiWithParam:message childpath:@"/stock/getStock" successed:^(NSDictionary *response) {
             
+            [stockList removeAllObjects];
             NSInteger code = [[response objectForKey:@"code"] integerValue];
             
             if(code == SUCCESS){
                 
-                [self loadStockInfo:[response objectForKey:@"data"]];
+                NSArray* list = [response objectForKey:@"data"];
+                for (NSDictionary* element in list) {
+                    StockInfoModel* stockInfo = [StockInfoModel yy_modelWithDictionary:element];
+                    [stockList addObject:stockInfo];
+                }
+                
                 
             }else if(code == STOCK_NOT_EXIST){
-                [stockList removeAllObjects];
-                [self.tableView reloadData];
-                
+                alertMsg(@"未找到记录");
             }else{
                 alertMsg(@"未知错误");
             }
             
             
+            [self.tableView reloadData];
+            searching = false;
+            
         } failed:^(NSError *error) {
             alertMsg(@"网络问题");
+            searching = false;
         }];
-
-        
     }
-}
-
-
-- (void)loadStockInfo:(NSDictionary*)data
-{
-    StockInfoModel* stockInfo = [StockInfoModel yy_modelWithDictionary:data];
-    [stockList removeAllObjects];
-    [stockList addObject:stockInfo];
-    [self.tableView reloadData];
 }
 
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

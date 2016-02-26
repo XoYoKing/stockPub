@@ -267,23 +267,23 @@ router.post('/getStockListInfo', function(req, res){
 
 //获取股票信息
 router.post('/getStock', function(req, res){
-	stockOperation.getStockBaseInfoByCode(req.body.stock_code, function(flag, result){
+	stockOperation.getStockBaseInfoByAlpha(req.body.stock_alpha_info, function(flag, result){
 		var returnData = {};
 		if(flag){
 			logger.debug(result, logger.getFileNameAndLineNum(__filename));
 			if(result.length >= 1){
-				returnData.data = result[0];
+				returnData.data = result;
 				returnData.code = constant.returnCode.SUCCESS;
 				res.send(returnData);
 			}else{
 				//表中未找到记录
-				common.getStockInfoFromAPI(req.body.stock_code, function(flag, htmlData){
+				common.getStockInfoFromAPI(req.body.stock_alpha_info, function(flag, htmlData){
 					if(flag){
 						var stockInfoArr = common.analyzeMessage(htmlData);
 						if(stockInfoArr == false||stockInfoArr.length == 0){
 							routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
 						}else{
-							routerFunc.feedBack(constant.returnCode.SUCCESS, stockInfoArr[0], res);
+							routerFunc.feedBack(constant.returnCode.SUCCESS, [stockInfoArr[0]], res);
 							//insert to stock base info
 							databaseOper.insertStockBaseInfo(stockInfoArr[0], function(flag, result){
 								if(!flag){
