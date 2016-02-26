@@ -353,7 +353,7 @@
                     [marketIndexList addObject:marketInfoModel];
                 }
                 
-                [comTable.tableView reloadData];
+                //[comTable.tableView reloadData];
             }
             
         }else{
