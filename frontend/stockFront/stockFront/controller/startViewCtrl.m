@@ -14,9 +14,11 @@
 
 @implementation startViewCtrl
 {
+    UILabel* detailLabel;
     UILabel* appNamelabel;
     UIButton* loginButton;
     UIButton* registerButton;
+    UIImageView* startIcon;
 }
 
 - (void)viewDidLoad
@@ -30,6 +32,14 @@
 //    NSString *app_Name = [infoDictionary objectForKey:@"CFBundleDisplayName"];
     appNamelabel.text = @"懒人股票";
     [self.view addSubview:appNamelabel];
+    
+    detailLabel = [[UILabel alloc] init];
+    detailLabel.font = [UIFont fontWithName:fontName size:minFont];
+    detailLabel.textColor = [UIColor grayColor];
+    detailLabel.textAlignment = NSTextAlignmentCenter;
+    detailLabel.text = @"跟着牛人学炒股";
+    [self.view addSubview:detailLabel];
+    
     
     
     registerButton = [[UIButton alloc] init];
@@ -48,7 +58,13 @@
     
     
     
+    startIcon = [[UIImageView alloc] initWithFrame:CGRectMake((ScreenWidth - ScreenWidth/2)/2, 6*minSpace, ScreenWidth/2, ScreenWidth/2)];
+    startIcon.clipsToBounds = YES;
+    startIcon.contentMode = UIViewContentModeScaleAspectFit;
+    startIcon.image = [UIImage imageNamed:@"startView.png"];
+    
     [self.view addSubview:loginButton];
+    [self.view addSubview:startIcon];
     
 }
 
@@ -84,12 +100,25 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.hidden = YES;
 
+    
+//    [startIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.mas_equalTo(self.view.mas_centerX);
+//        make.top.mas_equalTo(self.view.mas_top).offset(ScreenHeight/4);
+//    }];
+    
     //layout views
     [appNamelabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.view.mas_left).offset(4*minSpace);
         make.right.mas_equalTo(self.view.mas_right).offset(-4*minSpace);
-        make.top.mas_equalTo(self.view.mas_top).offset(ScreenHeight/3);
-        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 8*minSpace, 8*minSpace));
+        make.top.mas_equalTo(startIcon.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 8*minSpace, 7*minSpace));
+    }];
+    
+    [detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.view.mas_left).offset(4*minSpace);
+        make.right.mas_equalTo(self.view.mas_right).offset(-4*minSpace);
+        make.top.mas_equalTo(appNamelabel.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 8*minSpace, 2*minSpace));
     }];
     
     
