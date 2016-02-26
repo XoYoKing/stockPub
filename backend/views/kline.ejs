@@ -66,7 +66,7 @@
                                 data.data[i].amount // the volume
                             ]);
 
-                            if(data.data[i].fluctuate<0){
+                            if(data.data[i].open_price - data.data[i].price > 0){
                                 colors.push('#388e3c');
                             }else{
                                 colors.push('#d32f2f');
@@ -88,25 +88,29 @@
                         }
 
                         if(now!=null){
-                            ohlc.push([
-                                now.timestamp_ms, // the date
-                                now.open_price, // open
-                                now.high_price, // high
-                                now.low_price, // low
-                                now.price // close
-                            ]);
+                            if(dataLength>0&&now.date === data.data[dataLength- 1].date){
 
-                            volume.push([
-                                now.timestamp_ms, // the date
-                                now.amount // the volume
-                            ]);
+                            }else {
+                                ohlc.push([
+                                    now.timestamp_ms, // the date
+                                    now.open_price, // open
+                                    now.high_price, // high
+                                    now.low_price, // low
+                                    now.price // close
+                                ]);
 
-                            if(now.fluctuate<0){
-                                colors.push('#388e3c');
-                            }else{
-                                colors.push('#d32f2f');
+                                volume.push([
+                                    now.timestamp_ms, // the date
+                                    now.amount // the volume
+                                ]);
+
+                                if(now.open_price - now.price > 0){
+                                    colors.push('#388e3c');
+                                }else{
+                                    colors.push('#d32f2f');
+                                }
+                                console.log(now.timestamp_ms);
                             }
-                            console.log(now.timestamp_ms);
                         }
 
                         $('#container').highcharts('StockChart', {
