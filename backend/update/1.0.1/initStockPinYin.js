@@ -18,6 +18,8 @@ stockOperation.getAllStockInfo(function(flag, result){
             });
             alphaStr = alphaStr.replace('*', '');
             alphaStr = alphaStr.replace(' ', '');
+            alphaStr = alphaStr.toLowerCase();
+            
             console.log(e.stock_name+":"+alphaStr);
         });
     }else{
