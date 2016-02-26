@@ -98,6 +98,8 @@
         fluctuateLabel.text = @"停牌";
     }
     
+    priceLabel.textColor = [UIColor grayColor];
+
     
     CGSize labelSize = [Tools getTextArrange:priceLabel.text maxRect:CGSizeMake(ScreenWidth, 8*minSpace) fontSize:middleFont];
     
