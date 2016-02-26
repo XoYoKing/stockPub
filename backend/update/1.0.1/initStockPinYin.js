@@ -12,7 +12,11 @@ stockOperation.getAllStockInfo(function(flag, result){
             var alpha = pinyin(e.stock_name, {
                 style: pinyin.STYLE_FIRST_LETTER
             });
-            console.log(alpha);
+            var alphaStr = '';
+            alpha.forEach(function(e){
+                alphaStr+=e[0];
+            });
+            console.log(alphaStr);
         });
     }else{
         log.error(result, log.getFileNameAndLineNum(__filename));
