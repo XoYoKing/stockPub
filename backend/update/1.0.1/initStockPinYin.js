@@ -17,7 +17,8 @@ stockOperation.getAllStockInfo(function(flag, result){
                 alphaStr+=e[0];
             });
             alphaStr = alphaStr.replace('*', '');
-            console.log(alphaStr);
+            alphaStr = alphaStr.replace(' ', '');
+            console.log(e.stock_name+":"+alphaStr);
         });
     }else{
         log.error(result, log.getFileNameAndLineNum(__filename));
