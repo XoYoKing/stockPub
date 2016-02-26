@@ -436,7 +436,8 @@ router.get('/getMarketDayInfo', function(req, res){
                                 low_price: e.market_index_value_low,
                                 price: e.market_index_value_now,
 								amount: e.market_index_trade_volume,
-								fluctuate: e.market_index_fluctuate
+								fluctuate: e.market_index_fluctuate,
+								date: e.market_index_date
 							};
 							transfer.push(newData);
 						});
@@ -463,7 +464,8 @@ router.get('/getMarketDayInfo', function(req, res){
 						low_price: result[0][0].market_index_value_low,
 						price: result[0][0].market_index_value_now,
 						amount: result[0][0].market_index_trade_volume,
-						fluctuate: result[0][0].market_index_fluctuate
+						fluctuate: result[0][0].market_index_fluctuate,
+						date: result[0][0].market_index_date
 					};
 				}
 				returnData.code = constant.returnCode.SUCCESS;
