@@ -58,7 +58,7 @@
     
     
     
-    startIcon = [[UIImageView alloc] initWithFrame:CGRectMake((ScreenWidth - ScreenWidth/2)/2, 6*minSpace, ScreenWidth/2, ScreenWidth/2)];
+    startIcon = [[UIImageView alloc] initWithFrame:CGRectMake((ScreenWidth - ScreenWidth/2)/2, 7*minSpace, ScreenWidth/2, ScreenWidth/2)];
     startIcon.clipsToBounds = YES;
     startIcon.contentMode = UIViewContentModeScaleAspectFit;
     startIcon.image = [UIImage imageNamed:@"startView.png"];
