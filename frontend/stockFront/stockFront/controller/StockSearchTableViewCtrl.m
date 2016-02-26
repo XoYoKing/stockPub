@@ -210,7 +210,7 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if(textField.text.length >= 2&&searching == false){
+    if(textField.text.length >= 1&&searching == false){
         
         searching = true;
         
