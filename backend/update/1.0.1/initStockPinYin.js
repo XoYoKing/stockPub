@@ -19,8 +19,17 @@ stockOperation.getAllStockInfo(function(flag, result){
             alphaStr = alphaStr.replace('*', '');
             alphaStr = alphaStr.replace(' ', '');
             alphaStr = alphaStr.toLowerCase();
-            
+
             console.log(e.stock_name+":"+alphaStr);
+
+            stockOperation.updateStockAlpha(e.stock_code, alphaStr, function(flag, result){
+                if(flag){
+
+                }else{
+                    log.error(result, log.getFileNameAndLineNum(__filename));
+                }
+            });
+
         });
     }else{
         log.error(result, log.getFileNameAndLineNum(__filename));
