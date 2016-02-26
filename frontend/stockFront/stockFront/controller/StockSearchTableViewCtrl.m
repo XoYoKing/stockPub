@@ -234,6 +234,7 @@
                     [stockList addObject:stockInfo];
                 }
                 
+                [self.tableView reloadData];
                 
             }else if(code == STOCK_NOT_EXIST){
                 alertMsg(@"未找到记录");
@@ -242,7 +243,6 @@
             }
             
             
-            [self.tableView reloadData];
             searching = false;
             
         } failed:^(NSError *error) {
