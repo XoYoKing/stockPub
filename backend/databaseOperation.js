@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var conn = require('./utility.js');
+var pinyin = require("pinyin");
 
 var logger = global.logger;
 
@@ -29,8 +30,20 @@ exports.updateStockBaseInfo = function(stockCode, priceearning, marketValue, flo
 }
 
 exports.insertStockBaseInfo = function(stockInfo, callback){
-	var sql = "insert into stock_base_info(stock_code, stock_name, market) values(?, ?, ?)";
-	conn.executeSql(sql, [stockInfo.stock_code, stockInfo.stock_name, stockInfo.market], callback);
+
+	var alpha = pinyin(stockInfo.stock_name, {
+		style: pinyin.STYLE_FIRST_LETTER
+	});
+	var alphaStr = '';
+	alpha.forEach(function(e){
+		alphaStr+=e[0];
+	});
+	alphaStr = alphaStr.replace('*', '');
+	alphaStr = alphaStr.replace(' ', '');
+	alphaStr = alphaStr.toLowerCase();
+
+	var sql = "insert into stock_base_info(stock_code, stock_name, market, stock_alpha_info) values(?, ?, ?, ?)";
+	conn.executeSql(sql, [stockInfo.stock_code, stockInfo.stock_name, stockInfo.market, alphaStr], callback);
 };
 
 
