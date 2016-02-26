@@ -41,6 +41,8 @@ exports.insertStockBaseInfo = function(stockInfo, callback){
 	alphaStr = alphaStr.replace('*', '');
 	alphaStr = alphaStr.replace(' ', '');
 	alphaStr = alphaStr.toLowerCase();
+	alphaStr+=stockInfo.stock_name;
+	alphaStr+=stockInfo.stock_code;
 
 	var sql = "insert into stock_base_info(stock_code, stock_name, market, stock_alpha_info) values(?, ?, ?, ?)";
 	conn.executeSql(sql, [stockInfo.stock_code, stockInfo.stock_name, stockInfo.market, alphaStr], callback);
