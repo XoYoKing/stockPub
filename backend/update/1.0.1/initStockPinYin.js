@@ -16,6 +16,7 @@ stockOperation.getAllStockInfo(function(flag, result){
             alpha.forEach(function(e){
                 alphaStr+=e[0];
             });
+            alphaStr = alphaStr.replace('*', '');
             console.log(alphaStr);
         });
     }else{
