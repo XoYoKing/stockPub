@@ -39,10 +39,11 @@
     stockSearchTextField = [[UITextField alloc] init];
     stockSearchTextField.frame = CGRectMake(0, 0, ScreenWidth - 4*minSpace, 6*minSpace);
     stockSearchTextField.textAlignment = NSTextAlignmentLeft;
+    stockSearchTextField.returnKeyType = UIReturnKeySearch;
     stockSearchTextField.font = [UIFont fontWithName:fontName size:minFont];
     stockSearchTextField.placeholder = @"请输入股票名称或代码";
     stockSearchTextField.delegate = self;
-    [stockSearchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+//    [stockSearchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
     
     
@@ -207,7 +208,7 @@
     }
 }
 
-- (void)textFieldDidChange:(UITextField*)textField
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if(textField.text.length >= 2&&searching == false){
         
@@ -250,7 +251,54 @@
             searching = false;
         }];
     }
+    
+    return YES;
 }
+
+//- (void)textFieldDidChange:(UITextField*)textField
+//{
+//    if(textField.text.length >= 2&&searching == false){
+//        
+//        searching = true;
+//        
+//        NSLog(@"search stock str: %@", textField.text);
+//        
+//        
+//        //发送搜索消息
+//        NSDictionary* message = [[NSDictionary alloc]
+//                                 initWithObjects:@[textField.text]
+//                                 forKeys:@[@"stock_alpha_info"]];
+//        
+//        [NetworkAPI callApiWithParam:message childpath:@"/stock/getStock" successed:^(NSDictionary *response) {
+//            
+//            [stockList removeAllObjects];
+//            NSInteger code = [[response objectForKey:@"code"] integerValue];
+//            
+//            if(code == SUCCESS){
+//                
+//                NSArray* list = [response objectForKey:@"data"];
+//                for (NSDictionary* element in list) {
+//                    StockInfoModel* stockInfo = [StockInfoModel yy_modelWithDictionary:element];
+//                    [stockList addObject:stockInfo];
+//                }
+//                
+//                [self.tableView reloadData];
+//                
+//            }else if(code == STOCK_NOT_EXIST){
+//                alertMsg(@"未找到记录");
+//            }else{
+//                alertMsg(@"未知错误");
+//            }
+//            
+//            
+//            searching = false;
+//            
+//        } failed:^(NSError *error) {
+//            alertMsg(@"网络问题");
+//            searching = false;
+//        }];
+//    }
+//}
 
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {

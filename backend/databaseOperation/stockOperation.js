@@ -321,6 +321,6 @@ exports.updateStockAlpha = function(stock_code, stock_alpha_info, callback){
 }
 
 exports.getStockBaseInfoByAlpha = function(stock_alpha_info, callback){
-    var sql = 'select *from stock_base_info where stock_alpha_info like \'%?%\' limit 8';
-    conn.executeSql(sql, [stock_alpha_info], callback);
+    var sql = 'select *from stock_base_info where stock_alpha_info like \'%'+stock_alpha_info+'%\' limit 8';
+    conn.executeSql(sql, [], callback);
 }
