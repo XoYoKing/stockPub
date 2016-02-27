@@ -10,6 +10,7 @@ var email = require('./utility/emailTool');
 var cronJob = require('cron').CronJob;
 var child_process = require('child_process');
 
+log.info("run sys cron job", log.getFileNameAndLineNum(__filename));
 
 //当日日志打包
 new cronJob('00 59 23 * * *', function(){
@@ -22,6 +23,10 @@ new cronJob('00 59 23 * * *', function(){
         }
     });
 }, null, true);
+
+
+
+//重启所有应用
 
 
 
