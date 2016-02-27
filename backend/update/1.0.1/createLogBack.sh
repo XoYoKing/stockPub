@@ -1,3 +1,3 @@
 cd $HOME
-rm -r stocklogs_back
+rm -rf stocklogs_back
 mkdir stocklogs_back
