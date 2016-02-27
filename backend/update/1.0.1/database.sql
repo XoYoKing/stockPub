@@ -53,3 +53,7 @@ UPDATE `market_index_now_info` SET `market_index_date` = substr(`market_index_da
 #38
 ALTER TABLE `market_index_day_info`
 	ADD COLUMN `market_index_trade_amount` int NULL;
+
+#48
+ALTER TABLE `stock_base_info`
+	ADD COLUMN `stock_alpha_info` varchar(32) NULL COMMENT '首字母缩写';

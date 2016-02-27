@@ -308,3 +308,19 @@ exports.getStockBaseInfoByCode = function(stock_code, callback){
     var sql = 'select *from stock_base_info where stock_code = ?';
     conn.executeSql(sql, [stock_code], callback);
 }
+
+
+exports.getAllStockInfo = function(callback){
+    var sql = 'select *from stock_base_info';
+    conn.executeSql(sql, [], callback);
+}
+
+exports.updateStockAlpha = function(stock_code, stock_alpha_info, callback){
+    var sql = 'update stock_base_info set stock_alpha_info = ? where stock_code = ?';
+    conn.executeSql(sql, [stock_alpha_info, stock_code], callback);
+}
+
+exports.getStockBaseInfoByAlpha = function(stock_alpha_info, callback){
+    var sql = 'select *from stock_base_info where stock_alpha_info like \'%'+stock_alpha_info+'%\' limit 8';
+    conn.executeSql(sql, [], callback);
+}
