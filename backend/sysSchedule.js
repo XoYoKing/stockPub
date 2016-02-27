@@ -25,7 +25,7 @@ new cronJob('00 59 23 * * *', function(){
 }, null, true);
 
 
-//重启应用
+//重启所有应用
 new cronJob('00 00 4 * * *', function(){
     log.info('restart all app', log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/startAll.sh', null, {}, function(err, stdout, stderr){
@@ -37,9 +37,10 @@ new cronJob('00 00 4 * * *', function(){
     });
 }, null, true);
 
+//错误日志扫描发送邮件
 
+//统计upv，pv
 
-//重启所有应用
 
 
 
