@@ -7,7 +7,7 @@ var child_process = require('child_process');
 
 
 log.info('zip everyday log', log.getFileNameAndLineNum(__filename));
-child_process.execFile('./sh_script/zipLog.sh', null, {}, function(err, stdout, stderr){
+child_process.execFile('../../sh_script/zipLog.sh', null, {}, function(err, stdout, stderr){
     if(err!=null){
         log.error(err, log.getFileNameAndLineNum(__filename));
     }else{
