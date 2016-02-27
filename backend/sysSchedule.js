@@ -8,7 +8,20 @@ global.logger = log; // 设置全局
 
 var email = require('./utility/emailTool');
 var cronJob = require('cron').CronJob;
+var child_process = require('child_process');
 
+
+//当日日志打包
+new cronJob('00 59 23 * * *', function(){
+    log.info('zip everyday log', log.getFileNameAndLineNum(__filename));
+    child_process.execFile(__dirname + '/sh_script/zipLog.sh', null, {}, function(err, stdout, stderr){
+        if(err!=null){
+            log.error(err, log.getFileNameAndLineNum(__filename));
+        }else{
+            log.info("zipLog finish", log.getFileNameAndLineNum(__filename));
+        }
+    });
+}, null, true);
 
 
 
