@@ -39,7 +39,7 @@ new cronJob('00 00 4 * * *', function(){
 
 //错误日志扫描发送邮件
 //日志错误统计
-schedule.scheduleJob('59 23 * * *', function(){
+new cronJob('59 23 * * *', function(){
     log.info("errorLogReport start", log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err, stdout, stderr){
         if(err!=null){
