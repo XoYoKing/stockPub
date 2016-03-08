@@ -7,8 +7,12 @@ var http = require('http');
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
 var stockOperation = require('./databaseOperation/stockOperation.js');
+var userOperation = require('./databaseOperation/userOperation.js');
 var config = require('./config');
 var path = require('path');
+
+var apn = require('./utility/apnPush.js');
+var moment = require('moment');
 // redisClient.on("error", function (err) {
 // 	logger.error(err, logger.getFileNameAndLineNum(__filename));
 // });
@@ -119,6 +123,7 @@ function insertToDatabase(htmlData, isnow) {
 								openPrice,
 								high_price,
 								fluctuate_value,
+								low_price,
 								function(flag, result) {
 									//logger.debug(stockCode+" now insert");
 									if (!flag) {
@@ -545,6 +550,50 @@ exports.startCrawlStockNow = function(){
 				getStockInfo(stockCodeArr, true);
 			}
 		} else {
+			logger.error(result);
+		}
+	});
+}
+
+exports.pushMarketCloseMsg = function(){
+	logger.info('pushMarketCloseMsg');
+	stockOperation.getAllMarketIndexNow(function(flag, result){
+		if(flag){
+			if(result.length>0){
+				var msg = '';
+				result.forEach(function(e){
+					var date = e.market_index_date.substr(0, 8);
+					console.log(date);
+					var nowDate = moment().format('YYYYMMDD');
+					if(date === nowDate){
+						msg = msg + e.market_name + '收盘报' + e.market_index_value_now +
+						'(' +e.market_index_fluctuate+'%);';
+					}
+				});
+
+				logger.info(msg, logger.getFileNameAndLineNum(__filename));
+
+				if(msg.length>0){
+					var pushMsg = {
+						content: msg,
+						msgtype: 'msg',
+						badge: 1
+					};
+
+					userOperation.getAllUser(function(flag, result){
+						if(flag){
+							result.forEach(function(e){
+								if(e.device_token!=null){
+									apn.pushMsgToUsers(e.device_token, pushMsg);
+								}
+							});
+						}else{
+							logger.error(result);
+						}
+					});
+				}
+			}
+		}else{
 			logger.error(result);
 		}
 	});

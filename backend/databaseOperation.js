@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var conn = require('./utility.js');
+var pinyin = require("pinyin");
 
 var logger = global.logger;
 
@@ -29,8 +30,22 @@ exports.updateStockBaseInfo = function(stockCode, priceearning, marketValue, flo
 }
 
 exports.insertStockBaseInfo = function(stockInfo, callback){
-	var sql = "insert into stock_base_info(stock_code, stock_name, market) values(?, ?, ?)";
-	conn.executeSql(sql, [stockInfo.stock_code, stockInfo.stock_name, stockInfo.market], callback);
+
+	var alpha = pinyin(stockInfo.stock_name, {
+		style: pinyin.STYLE_FIRST_LETTER
+	});
+	var alphaStr = '';
+	alpha.forEach(function(e){
+		alphaStr+=e[0];
+	});
+	alphaStr = alphaStr.replace('*', '');
+	alphaStr = alphaStr.replace(' ', '');
+	alphaStr = alphaStr.toLowerCase();
+	alphaStr+=stockInfo.stock_name;
+	alphaStr+=stockInfo.stock_code;
+
+	var sql = "insert into stock_base_info(stock_code, stock_name, market, stock_alpha_info) values(?, ?, ?, ?)";
+	conn.executeSql(sql, [stockInfo.stock_code, stockInfo.stock_name, stockInfo.market, alphaStr], callback);
 };
 
 
@@ -49,11 +64,13 @@ exports.getStockNowByCode = function(stock_code, callback){
 }
 
 exports.insertStockNow = function(stockCode, amount, date, time, price, yesterday_price, fluctuate,
-	priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, fluctuate_value, callback){
+	priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, fluctuate_value, low_price, callback){
 	var timestamp = Date.now()/1000;
-	var sql = "insert into stock_now_info (stock_code, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, fluctuate_value) "
-	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	conn.executeSql(sql, [stockCode, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, fluctuate_value], callback);
+	var sql = "insert into stock_now_info (stock_code, amount, price, yesterday_price, date, time, timestamp, " +
+	" fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, fluctuate_value, low_price, timestamp_ms) "
+	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	conn.executeSql(sql, [stockCode, amount, price, yesterday_price, date, time, timestamp, fluctuate, priceearning, marketValue,
+		flowMarketValue, volume, pb, openPrice, high_price, fluctuate_value, low_price, Date.now()], callback);
 
 	sql = "update stock_predict_info set last_price = ?, last_date_time = ? where stock_code = ?";
 	conn.executeSql(sql, [price, date+" "+time, stockCode], null);
@@ -62,9 +79,9 @@ exports.insertStockNow = function(stockCode, amount, date, time, price, yesterda
 exports.insertStockAmount = function(stock_code, amount, date, time, price, fluctuate, priceearning,
 	marketValue, flowMarketValue, volume, pb, openPrice, high_price, low_price, callback){
 	var timestamp = Date.now()/1000;
-	var sql = "insert into stock_amount_info (stock_code, amount, price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, low_price) "
-	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	conn.executeSql(sql, [stock_code, amount, price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, low_price], callback);
+	var sql = "insert into stock_amount_info (stock_code, amount, price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, open_price, high_price, low_price, timestamp_ms) "
+	+" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	conn.executeSql(sql, [stock_code, amount, price, date, time, timestamp, fluctuate, priceearning, marketValue, flowMarketValue, volume, pb, openPrice, high_price, low_price, Date.now()], callback);
 }
 
 exports.getLastStockDate = function(callback){

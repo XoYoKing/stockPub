@@ -111,10 +111,17 @@
         self.backgroundColor = [UIColor grayColor];
     }
     
+
+    
     
     stockFluctuateLabel.text = [[NSString alloc] initWithFormat:@"%.2f%%, %.2f", model.fluctuate, model.fluctuate_value];
     stockFluctuateLabel.textColor = [UIColor whiteColor];
     stockFluctuateLabel.font = [UIFont fontWithName:fontName size:minMiddleFont];
+    
+    if (model.is_stop == 1) {
+        self.backgroundColor = [UIColor grayColor];
+        stockFluctuateLabel.text = [[NSString alloc] initWithFormat:@"%.2f%%, 停牌", model.fluctuate];
+    }
     
 //    stockFluctuateValueLabel.text = [[NSString alloc] initWithFormat:@"%.2f", model.fluctuate_value];
 //    stockFluctuateValueLabel.textColor = [UIColor whiteColor];

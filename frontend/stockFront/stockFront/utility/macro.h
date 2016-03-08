@@ -24,15 +24,16 @@
 
 #define activeViewControllerbackgroundColor [UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1.0]
 
+
 #define sepeartelineColor activeViewControllerbackgroundColor
 
 
 #define OurBlue [UIColor colorWithRed:49.0/255.0 green:117.0/255.0 blue:181.0/255.0 alpha:1.0]
 
-#define mygreen [UIColor colorWithRed:48/255.0 green:128/255.0 blue:20/255.0 alpha:1.0]
+#define mygreen [UIColor colorWithRed:56/255.0 green:142/255.0 blue:60/255.0 alpha:1.0]
 
 
-#define myred [UIColor colorWithRed:176/255.0 green:23/255.0 blue:31/255.0 alpha:1.0]
+#define myred [UIColor colorWithRed:211/255.0 green:47/255.0 blue:47/255.0 alpha:1.0]
 
 
 #define minSpace 8
@@ -40,6 +41,10 @@
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
 
+#define IS_IPHONE_4_OR_LESS (ScreenHeight < 568.0)
+#define IS_IPHONE_5 (ScreenHeight == 568.0)
+#define IS_IPHONE_6 (ScreenHeight == 667.0)
+#define IS_IPHONE_6P (ScreenHeight == 736.0)
 
 
 #define alertMsg(x) [Tools AlertBigMsg:x];;

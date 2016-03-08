@@ -75,8 +75,8 @@ exports.insertMarketIndexDay = function(element, callback){
             ' `market_index_value_low`,' +
             ' `timestamp`, ' +
             ' `market_index_date`,' +
-            ' market_index_trade_amount)' +
-            ' values(?,?,?,?,?,?,?,?,?,?,?,?)';
+            ' market_index_trade_amount, `timestamp_ms`)' +
+            ' values(?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     var parm = [
         element.market_code,
@@ -90,7 +90,8 @@ exports.insertMarketIndexDay = function(element, callback){
         element.market_index_value_low,
         timestamp,
         element.market_index_date,
-        element.market_index_trade_amount
+        element.market_index_trade_amount,
+        timestamp
     ];
     conn.executeSql(sql, parm, callback);
 }
@@ -99,7 +100,7 @@ exports.insertMarketIndexDay = function(element, callback){
 exports.insertMarketIndexNow = function(element, callback){
     var timestamp = Date.now();
     console.log(element.market_index_trade_amount);
-    
+
     var sql = 'insert into `market_index_now_info` (' +
             ' `market_code`, ' +
             ' `market_index_value_now`,' +
@@ -112,9 +113,10 @@ exports.insertMarketIndexNow = function(element, callback){
             ' `market_index_value_low`,' +
             ' `timestamp`, ' +
             ' `market_index_date`,' +
-            ' market_index_trade_amount '+
+            ' market_index_trade_amount, '+
+            ' timestamp_ms ' +
             ')' +
-            ' values(?,?,?,?,?,?,?,?,?,?,?,?)';
+            ' values(?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     var parm = [
         element.market_code,
@@ -128,7 +130,8 @@ exports.insertMarketIndexNow = function(element, callback){
         element.market_index_value_low,
         timestamp,
         element.market_index_date,
-        element.market_index_trade_amount
+        element.market_index_trade_amount,
+        timestamp
     ];
     conn.executeSql(sql, parm, callback);
 }
@@ -137,6 +140,11 @@ exports.insertMarketIndexNow = function(element, callback){
 exports.emptyMarketNowInfo = function(callback){
     var sql = 'delete from market_index_now_info';
     conn.executeSql(sql, [], callback);
+}
+
+exports.getMarketIndexNow = function(market_code, callback){
+    var sql = 'select* from market_index_now_info where market_code = ? order by timestamp_ms desc limit 1';
+    conn.executeSql(sql, [market_code], callback);
 }
 
 exports.getAllMarketIndexNow = function(callback){
@@ -179,7 +187,6 @@ exports.insertStockLookYield = function(element, callback){
         element.user_id], callback);
 }
 
-
 exports.getStockDayInfoByDate = function(stock_code, date, callback){
     var sql = 'select* from stock_amount_info where stock_code = ? and date>=? order by date asc limit 1';
     conn.executeSql(sql, [stock_code, date], callback);
@@ -209,4 +216,111 @@ exports.getAvgVolume = function(stock_code, day, callback){
     var sql = 'SELECT `volume`  FROM `stock_amount_info` ' +
     ' WHERE `stock_code`  = ? ORDER BY `date` desc LIMIT '+day;
     conn.executeSql(sql, [stock_code], callback);
+}
+
+
+//获取股票股价
+exports.getStockDayInfo = function(stock_code, num_day, callback){
+    var sql = 'select x.stock_name, t.*, t.5day_av_price as fiveday_av_price, ' +
+    ' t.10day_av_price as tenday_av_price, t.20day_av_price as twentyday_av_price from ('+
+    ' SELECT a.*  FROM `stock_amount_info` a ' +
+    ' WHERE a.`stock_code` = ? ORDER BY a.`date` DESC LIMIT '+num_day+') t, stock_base_info x where t.stock_code = x.stock_code '+
+    ' ORDER BY t.timestamp_ms asc';
+    conn.executeSql(sql, [stock_code], callback);
+}
+
+//获取大盘每日信息
+exports.getMarketDayInfo = function(market_code, num_day, callback){
+    var sql = 'select t.* ' +
+    'from ('+
+    ' SELECT a.*  FROM `market_index_day_info` a ' +
+    ' WHERE a.`market_code` = ? ORDER BY a.`market_index_date` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
+    conn.executeSql(sql, [market_code], callback);
+}
+
+exports.getStockDayInfoLessNowDay = function(stock_code, num_day, nowDay, callback){
+    var sql = 'select t.* from ('+
+    ' SELECT a.*  FROM `stock_amount_info` a ' +
+    ' WHERE a.`stock_code` = ? and a.date <= ? ORDER BY a.`date` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
+    conn.executeSql(sql, [stock_code, nowDay], callback);
+}
+
+exports.getMarketDayInfoLessNowDay = function(stock_code, num_day, nowDay, callback){
+    var sql = 'select t.* from ('+
+    ' SELECT a.*  FROM `market_index_day_info` a ' +
+    ' WHERE a.`market_code` = ? and a.market_index_date <= ? ORDER BY a.`market_index_date` DESC LIMIT '+num_day+') t'+
+    ' ORDER BY t.timestamp_ms asc';
+    conn.executeSql(sql, [stock_code, nowDay], callback);
+}
+
+exports.getAllStockCode = function(callback){
+	var sql = "select stock_code from stock_base_info";
+	conn.executeSql(sql, [], callback);
+}
+
+exports.getAllMarketCode = function(callback){
+    var sql = "select market_code from market_index_base_info";
+	conn.executeSql(sql, [], callback);
+}
+
+exports.updateMarket5AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update market_index_day_info set market_index_five_av_value = ? where market_code = ? and market_index_date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.updateMarket10AvPrice = function(stockCode, av_price, date, callback){
+    var sql = "update market_index_day_info set market_index_ten_av_value = ? where market_code = ? and market_index_date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.updateMarket20AvPrice = function(stockCode, av_price, date, callback){
+    var sql = "update market_index_day_info set market_index_twenty_av_value = ? where market_code = ? and market_index_date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.update5AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update stock_amount_info set 5day_av_price = ? where stock_code = ? and date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.update10AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update stock_amount_info set 10day_av_price = ? where stock_code = ? and date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+exports.update20AvPrice = function(stockCode, av_price, date, callback){
+	var sql = "update stock_amount_info set 20day_av_price = ? where stock_code = ? and date = ?";
+	conn.executeSql(sql, [av_price, stockCode, date], callback);
+}
+
+
+
+
+exports.getDate = function(callback){
+    var sql = 'SELECT date FROM `stock_amount_info` GROUP BY `date` ORDER BY `date` DESC ';
+    conn.executeSql(sql, [], callback);
+}
+
+
+exports.getStockBaseInfoByCode = function(stock_code, callback){
+    var sql = 'select *from stock_base_info where stock_code = ?';
+    conn.executeSql(sql, [stock_code], callback);
+}
+
+
+exports.getAllStockInfo = function(callback){
+    var sql = 'select *from stock_base_info';
+    conn.executeSql(sql, [], callback);
+}
+
+exports.updateStockAlpha = function(stock_code, stock_alpha_info, callback){
+    var sql = 'update stock_base_info set stock_alpha_info = ? where stock_code = ?';
+    conn.executeSql(sql, [stock_alpha_info, stock_code], callback);
+}
+
+exports.getStockBaseInfoByAlpha = function(stock_alpha_info, callback){
+    var sql = 'select *from stock_base_info where stock_alpha_info like \'%'+stock_alpha_info+'%\' limit 8';
+    conn.executeSql(sql, [], callback);
 }

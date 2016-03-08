@@ -27,6 +27,8 @@
 @property NSInteger volume;
 @property CGFloat pb;
 @property CGFloat high_price;
+@property NSInteger is_market;
+@property NSInteger is_stop;
 
 
 @end

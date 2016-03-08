@@ -36,6 +36,7 @@
     UserInfoModel* phoneUserInfo;
     BOOL isFollow;
     NSInteger unreadCommentCount;
+    UILabel *navTitle;
 }
 
 
@@ -74,7 +75,10 @@ typedef enum {
     
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
     
-    [self getUnreadCommentCount];
+    
+    if ([myInfo.user_id isEqualToString:phoneUserInfo.user_id]) {
+        [self getUnreadCommentCount];
+    }
     
     [self.tableView reloadData];
     
@@ -86,8 +90,7 @@ typedef enum {
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UILabel *navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-    [navTitle setText:myInfo.user_name];
+    navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
     [navTitle setFont:[UIFont fontWithName:fontName size:middleFont]];
     navTitle.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = navTitle;
@@ -333,6 +336,17 @@ typedef enum {
 }
 
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (self.tableView == scrollView) {
+        if (scrollView.contentOffset.y<0) {
+            navTitle.alpha = 0;
+        }else{
+            navTitle.alpha = scrollView.contentOffset.y/ScreenHeight;
+        }
+    }
+}
+
 - (UIView*)getSectionView:(NSString*)title
 {
     UIView* sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 6*minSpace)];
@@ -428,6 +442,8 @@ typedef enum {
             if(userBaseInfo!=nil){
                 
                 myInfo = [UserInfoModel yy_modelWithDictionary:userBaseInfo];
+                [navTitle setText:myInfo.user_name];
+                navTitle.alpha = 0;
             }
             
         }else{

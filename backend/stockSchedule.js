@@ -8,6 +8,7 @@ var email = require('./utility/emailTool');
 var caculate = require('./utility/caculate');
 
 var cronJob = require('cron').CronJob;
+var moment = require('moment');
 
 
 log.info("run CronJob", log.getFileNameAndLineNum(__filename));
@@ -54,6 +55,37 @@ new cronJob('00 50 23 * * 1-5', function(){
 new cronJob('00 55 23 * * 1-5', function(){
     log.info('caculate yield for one week, one month, one year', log.getFileNameAndLineNum(__filename));
     caculate.caculateDurationYield();
+}, null, true);
+
+
+
+//收盘后播报
+new cronJob('00 1 15 * * 1-5', function(){
+    log.info('push market close msg to users', log.getFileNameAndLineNum(__filename));
+    crawl.pushMarketCloseMsg();
+}, null, true);
+
+
+//5日平均价
+new cronJob('00 10 15 * * 1-5', function(){
+    log.info('5 av price caculate', log.getFileNameAndLineNum(__filename));
+    caculate.caculateAvPrice(5, moment().format('YYYY-MM-DD'));
+    caculate.caculateMarketAvPrice(5, moment().format('YYYYMMDD'));
+}, null, true);
+
+//10日平均价
+new cronJob('00 15 15 * * 1-5', function(){
+    log.info('10 av price caculate', log.getFileNameAndLineNum(__filename));
+    caculate.caculateAvPrice(10, moment().format('YYYY-MM-DD'));
+    caculate.caculateMarketAvPrice(10, moment().format('YYYYMMDD'));
+
+}, null, true);
+
+//20日平均价
+new cronJob('00 20 15 * * 1-5', function(){
+    log.info('20 av price caculate', log.getFileNameAndLineNum(__filename));
+    caculate.caculateAvPrice(20, moment().format('YYYY-MM-DD'));
+    caculate.caculateMarketAvPrice(20, moment().format('YYYYMMDD'));
 }, null, true);
 
 

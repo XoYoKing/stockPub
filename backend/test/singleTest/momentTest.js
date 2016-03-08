@@ -3,3 +3,5 @@ var timestamp = Date.now();
 console.log(moment(timestamp).format('YYYY-MM-DD'));
 
 console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+
+console.log(moment().format('YYYYMMDD'));

@@ -353,7 +353,7 @@
                     [marketIndexList addObject:marketInfoModel];
                 }
                 
-                [comTable.tableView reloadData];
+                //[comTable.tableView reloadData];
             }
             
         }else{
@@ -428,6 +428,7 @@
                         element.flowMarketValue = temp.flowMarketValue;
                         element.priceearning = temp.priceearning;
                         element.pb = temp.pb;
+                        element.is_stop = temp.is_stop;
                     }
                 }
                 
