@@ -16,4 +16,4 @@ print $subject."\n";
 
 $filePath = "$HOME/lastday_stock_err_report.txt";
 
-`node $HOME/stockPub/backEnd/utility/sendEmail.js $subject $filePath &`
+`node $HOME/stockPub/backend/utility/sendEmail.js $subject $filePath &`
