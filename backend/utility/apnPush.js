@@ -15,8 +15,7 @@ exports.pushMsg = function(user_id, msg){
 					badge: 1
 				};
 				// apn to user
-				var apnpush = require('./apnPush.js');
-				apnpush.pushMsgToUsers(result[0].device_token, pushMsg);
+				pushMsgToUsers(result[0].device_token, pushMsg);
 			} else {
 				log.warn(user_id + ' has no device token', log.getFileNameAndLineNum(
 					__filename));
@@ -28,8 +27,11 @@ exports.pushMsg = function(user_id, msg){
 }
 
 
-exports.pushMsgToUsers = function (userToken, msg) {
-	if (userToken === undefined || userToken === '') {
+
+exports.pushMsgToUsers = pushMsgToUsers;
+
+function pushMsgToUsers(userToken, msg) {
+	if (userToken == undefined || userToken == ''||userToken == null) {
 		log.warn('userToken is null', log.getFileNameAndLineNum(__filename));
 		return;
 	}
