@@ -29,7 +29,7 @@
     //TextFieldView* textField;
     UITableView* tableview;
     UITextField* nickNameTextField;
-
+    UILabel* noticeLabel;
 }
 @end
 
@@ -65,25 +65,28 @@
     [tableview setDataSource:self];
     tableview.scrollEnabled = NO;
     [self.view addSubview: tableview];
+    
+    noticeLabel = [[UILabel alloc] init];
+    
+    
+    [self.view addSubview:noticeLabel];
+    noticeLabel.text = @"注册即表示同意《懒人股票用户协议》";
+    noticeLabel.textColor = OurBlue;
+    noticeLabel.font = [UIFont fontWithName:fontName size:microFont];
+    noticeLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    noticeLabel.numberOfLines = 0;
+    noticeLabel.textAlignment = NSTextAlignmentCenter;
+    noticeLabel.userInteractionEnabled = YES;
+    [noticeLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickNotice:)]];
 
     
-    
-//    UIView* textfieldBack = [[UIView alloc] initWithFrame:CGRectMake(textview_x, textview_y, ScreenWidth, textview_height)];
-//    textfieldBack.backgroundColor = [UIColor whiteColor];
-//    
-//    textField = [[TextFieldView alloc] initWithFrame:CGRectMake(30, 0, ScreenWidth-30, textview_height)];
-//    textField.placeholder = @"请输入名称";
-//    [textfieldBack addSubview:textField];
-//    
-//    UIImageView* nickNameIcon = [[UIImageView alloc ] initWithFrame:CGRectMake(0, 5, 32, 32)];
-//    nickNameIcon.image = [UIImage imageNamed:@"nickname64px.png"];
-//    
-//    [textfieldBack addSubview:nickNameIcon];
-//    
-//    [self.view addSubview:textfieldBack];
 }
 
 
+- (void)clickNotice:(id)sender
+{
+    
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -93,6 +96,12 @@
         make.left.mas_equalTo(self.view.mas_left);
         make.top.mas_equalTo(self.view.mas_top).offset(4*minSpace);
         make.size.mas_equalTo(CGSizeMake(ScreenWidth, 3*[RegisterCellViewTableViewCell cellHeight]));
+    }];
+    
+    [noticeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(tableview.mas_bottom);
+        make.centerX.mas_equalTo(self.view.mas_centerX);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 2*minSpace, 2*minSpace));
     }];
     
     //[nickNameTextField becomeFirstResponder];
