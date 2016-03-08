@@ -38,8 +38,25 @@ new cronJob('00 00 4 * * *', function(){
 }, null, true);
 
 //错误日志扫描发送邮件
+//日志错误统计
+new cronJob('59 23 * * *', function(){
+    log.info("errorLogReport start", log.getFileNameAndLineNum(__filename));
+    child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err, stdout, stderr){
+        if(err!=null){
+            log.error(err, log.getFileNameAndLineNum(__filename));
+        }else{
+            log.info("errorLogReport finish", log.getFileNameAndLineNum(__filename));
+        }
+    });
+});
+
 
 //统计upv，pv
+//统计pv和upv
+// schedule.scheduleJob('57 23 * * *', function(){
+//     log.info("pv count start", log.getFileNameAndLineNum(__filename));
+//     pvCountRprt.start();
+// });
 
 
 
