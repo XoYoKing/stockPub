@@ -50,7 +50,13 @@ schedule.scheduleJob('59 23 * * *', function(){
     });
 });
 
+
 //统计upv，pv
+//统计pv和upv
+// schedule.scheduleJob('57 23 * * *', function(){
+//     log.info("pv count start", log.getFileNameAndLineNum(__filename));
+//     pvCountRprt.start();
+// });
 
 
 
