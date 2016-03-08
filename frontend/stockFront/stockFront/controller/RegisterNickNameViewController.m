@@ -23,6 +23,7 @@
 #import "returnCode.h"
 #import "AppDelegate.h"
 #import "RegisterPhoneNumViewController.h"
+#import "webViewCtrl.h"
 
 @interface RegisterNickNameViewController ()
 {
@@ -85,7 +86,8 @@
 
 - (void)clickNotice:(id)sender
 {
-    
+    webViewCtrl* eula = [[webViewCtrl alloc] initWithUrl:@"http://112.74.102.178:10808/eula" title:@"用户协议"];
+    [self.navigationController pushViewController:eula animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
