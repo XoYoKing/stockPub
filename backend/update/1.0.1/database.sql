@@ -57,3 +57,9 @@ ALTER TABLE `market_index_day_info`
 #48
 ALTER TABLE `stock_base_info`
 	ADD COLUMN `stock_alpha_info` varchar(32) NULL COMMENT '首字母缩写';
+
+#48
+#dev stock_amount_info 导入pro
+
+#48
+#dev stock_base_info 导入pro
