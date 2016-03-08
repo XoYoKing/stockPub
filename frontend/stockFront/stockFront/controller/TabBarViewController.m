@@ -190,31 +190,27 @@
     self.viewControllers = controllers;
     
     UITabBarItem *tabItem = [[self.tabBar items] objectAtIndex:0];
-    //UIImage* image = [UIImage imageNamed:@"nearbylocation.png"];
-    //[tabItem setImage:image];
+    UIImage* image = [UIImage imageNamed:@"watch.png"];
+    [tabItem setImage:image];
     tabItem.tag = 0;
     
     
-    //[tabItem setTitle:@"活动"]
     
     tabItem = [[self.tabBar items] objectAtIndex:1];
-    //image = [UIImage imageNamed:@"hot.png"];
-    //[tabItem setImage:image];
+    image = [UIImage imageNamed:@"rank.png"];
+    [tabItem setImage:image];
     tabItem.tag = 1;
     
-    //tabItem
-    //[tabItem setTitle:@"附近"]
     
     tabItem = [[self.tabBar items] objectAtIndex:2];
-    //image = [UIImage imageNamed:@"message.png"];
+    image = [UIImage imageNamed:@"stockChoose.png"];
     
-    //[tabItem setImage:image];
+    [tabItem setImage:image];
     tabItem.tag = 2;
-    //[tabItem setTitle:@"消息"]
     
     tabItem = [[self.tabBar items] objectAtIndex:3];
-    //image = [UIImage imageNamed:@"setting.png"];
-    //[tabItem setImage:image];
+    image = [UIImage imageNamed:@"me.png"];
+    [tabItem setImage:image];
     tabItem.tag = 3;
     
     

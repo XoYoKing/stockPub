@@ -385,6 +385,11 @@ router.post('/searchUser', function(req, res){
 });
 
 
+router.get('/eula', function(req, res){
+	res.render('eula');
+});
+
+
 
 //comment
 // add by wanghan 20160202 for add active comment
