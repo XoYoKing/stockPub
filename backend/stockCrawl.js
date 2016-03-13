@@ -80,6 +80,7 @@ function insertToDatabase(htmlData, isnow) {
 					return;
 				}
 				var stockCode = dataArr[2];
+				var stock_name = dataArr[1];
 				var amount = dataArr[6];
 				var yesterday_price = dataArr[4];
 				var date = dataArr[30];
@@ -117,6 +118,7 @@ function insertToDatabase(htmlData, isnow) {
 				var key = stockCode;
 				var value = {
 					'stock_code': stockCode,
+					'stock_name': stock_name,
 					'amount': amount,
 					'open_price': openPrice,
 					'price': price,
