@@ -85,7 +85,7 @@ function insertToDatabase(htmlData, isnow) {
 				var stockCode = dataArr[2];
 				var stock_name = dataArr[1];
 
-				var buf = iconv.decode(dataArr[1], 'utf8');
+				var buf = iconv.decode(dataArr[1], 'gbk');
 				stock_name = buf;
 				console.log(stock_name);
 
