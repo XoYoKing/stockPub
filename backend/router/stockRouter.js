@@ -10,6 +10,12 @@ var stockOperation = require('../databaseOperation/stockOperation.js');
 var userOperation = require('../databaseOperation/userOperation.js');
 var apn = require('../utility/apnPush.js');
 var asyncClient = require('async');
+var redis = require("redis");
+var redisClient = redis.createClient({auth_pass:'here_dev'});
+redisClient.on("error", function (err) {
+	logger.error(err, logger.getFileNameAndLineNum(__filename));
+});
+
 
 module.exports = router;
 
@@ -214,45 +220,59 @@ router.post('/getStockListInfo', function(req, res){
 		var reqbody = {};
 		reqbody.stock_code = item;
 		logger.debug(reqbody.stock_code, logger.getFileNameAndLineNum(__filename));
-		stockOperation.getStockInfo(reqbody, function(flag, result){
-			logger.debug(item+' '+result, logger.getFileNameAndLineNum(__filename));
-			if(flag){
-				if(result.length>=1){
-					stockInfo[item] = result[0];
-					callback();
-				}else{
-					common.getStockInfoFromAPI(reqbody.stock_code, function(flag, htmlData){
-						if(flag){
-							var stockInfoArr = common.analyzeMessage(htmlData);
-							if(stockInfoArr == false||stockInfoArr.length == 0){
-								//停牌
-								stockOperation.getStockDayInfo(reqbody.stock_code, 1, function(flag, result){
-									if(flag){
-										if(result.length>0){
-											stockInfo[item] = result[0];
-											stockInfo[item].is_stop = 1;
-										}
-									}else{
-										logger.error(result, logger.getFileNameAndLineNum(__filename));
-									}
-									callback();
-								});
-
-							}else{
-								stockInfo[item] = stockInfoArr[0];
-								callback();
-							}
-						}else{
-							logger.error(result, logger.getFileNameAndLineNum(__filename));
-							callback();
-						}
-					});
-				}
-			}else{
+		redisClient.hget(config.hash.stockCurPriceHash, reqbody.stock_code, function(err, reply){
+			if(err){
 				logger.error(result, logger.getFileNameAndLineNum(__filename));
+				callback();
+			}else{
+				if(reply!=null){
+					reply = JSON.parse(reply);
+					stockInfo[reqbody.stock_code] = reply;
+				}
 				callback();
 			}
 		});
+
+
+		// stockOperation.getStockInfo(reqbody, function(flag, result){
+		// 	logger.debug(item+' '+result, logger.getFileNameAndLineNum(__filename));
+		// 	if(flag){
+		// 		if(result.length>=1){
+		// 			stockInfo[item] = result[0];
+		// 			callback();
+		// 		}else{
+		// 			common.getStockInfoFromAPI(reqbody.stock_code, function(flag, htmlData){
+		// 				if(flag){
+		// 					var stockInfoArr = common.analyzeMessage(htmlData);
+		// 					if(stockInfoArr == false||stockInfoArr.length == 0){
+		// 						//停牌
+		// 						stockOperation.getStockDayInfo(reqbody.stock_code, 1, function(flag, result){
+		// 							if(flag){
+		// 								if(result.length>0){
+		// 									stockInfo[item] = result[0];
+		// 									stockInfo[item].is_stop = 1;
+		// 								}
+		// 							}else{
+		// 								logger.error(result, logger.getFileNameAndLineNum(__filename));
+		// 							}
+		// 							callback();
+		// 						});
+		//
+		// 					}else{
+		// 						stockInfo[item] = stockInfoArr[0];
+		// 						callback();
+		// 					}
+		// 				}else{
+		// 					logger.error(result, logger.getFileNameAndLineNum(__filename));
+		// 					callback();
+		// 				}
+		// 			});
+		// 		}
+		// 	}else{
+		// 		logger.error(result, logger.getFileNameAndLineNum(__filename));
+		// 		callback();
+		// 	}
+		// });
 
 	}, function done (){
 		var returnData = {};

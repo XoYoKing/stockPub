@@ -75,6 +75,8 @@ function insertToDatabase(htmlData, isnow) {
 				if(dataArr.length<48){
 					logger.warn('elementArr is empty');
 
+
+
 					return;
 				}
 				var stockCode = dataArr[2];
