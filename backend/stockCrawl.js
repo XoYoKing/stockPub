@@ -60,13 +60,14 @@ function getStockInfo(stockCodeArr, isnow) {
 
 function insertToDatabase(htmlData, isnow) {
 
+	htmlData = iconv.decode(htmlData, 'GBK');
+
 	var elementArr = htmlData.split(";");
 	if (elementArr.length == 0) {
 		logger.warn('elementArr is empty');
 		return;
 	}
 
-	elementStr = iconv.decode(elementStr, 'GBK');
 
 	elementArr.forEach(function(elementStr){
 		var beginIndex = elementStr.indexOf("\"");
