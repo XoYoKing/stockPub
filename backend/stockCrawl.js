@@ -109,44 +109,6 @@ function insertToDatabase(htmlData, isnow) {
 				var low_price = dataArr[34];
 				var fluctuate_value = dataArr[31];
 
-				if (stockCode === undefined ||
-					amount === undefined ||
-					date === undefined ||
-					time === undefined ||
-					price === undefined ||
-					openPrice === undefined||
-					yesterday_price === undefined||
-					amount == 0||
-					price == 0) {
-						//logger.warn('stockCode is undefined');
-					//可能停盘
-					//update redis for current price
-					var key = stockCode;
-					var value = {
-						'stock_code': stockCode,
-						'stock_name': stock_name,
-						'price': yesterday_price,
-						'yesterday_price': yesterday_price,
-						'date': date,
-						'time': time,
-						'fluctuate': fluctuate,
-						'high_price': high_price,
-						'low_price': low_price,
-						'fluctuate_value': fluctuate_value,
-						'is_stop': 1
-					};
-
-					value = JSON.stringify(value);
-
-					redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
-						if(err){
-							logger.error(reply, logger.getFileNameAndLineNum(__filename));
-						}
-					});
-
-
-					return;
-				}
 
 				//update redis for current price
 				var key = stockCode;
@@ -166,6 +128,12 @@ function insertToDatabase(htmlData, isnow) {
 					'is_stop': 0
 				};
 
+				if(price == 0&&amount == 0){
+					//停牌
+					value.is_stop = 1;
+					value.price = yesterday_price;
+				}
+
 				value = JSON.stringify(value);
 
 				redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
@@ -173,6 +141,19 @@ function insertToDatabase(htmlData, isnow) {
 						logger.error(reply, logger.getFileNameAndLineNum(__filename));
 					}
 				});
+
+				if (stockCode === undefined ||
+					amount === undefined ||
+					date === undefined ||
+					time === undefined ||
+					price === undefined ||
+					openPrice === undefined||
+					yesterday_price === undefined||
+					amount == 0||
+					price == 0) {
+						//logger.warn('stockCode is undefined');
+					return;
+				}
 
 				if (isnow === true) {
 					databaseOperation.insertStockNow(stockCode, amount, date, time,
