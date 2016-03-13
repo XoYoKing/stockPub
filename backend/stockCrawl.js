@@ -1,8 +1,8 @@
 var databaseOperation = require('./databaseOperation');
 var logger = global.logger;
 var http = require('http');
-//var redis = require("redis");
-//var redisClient = redis.createClient({auth_pass:'here_dev'});
+var redis = require("redis");
+var redisClient = redis.createClient({auth_pass:'here_dev'});
 
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
@@ -13,9 +13,10 @@ var path = require('path');
 
 var apn = require('./utility/apnPush.js');
 var moment = require('moment');
-// redisClient.on("error", function (err) {
-// 	logger.error(err, logger.getFileNameAndLineNum(__filename));
-// });
+
+redisClient.on("error", function (err) {
+	logger.error(err, logger.getFileNameAndLineNum(__filename));
+});
 
 
 function isMarketOpenTime() {
@@ -110,6 +111,27 @@ function insertToDatabase(htmlData, isnow) {
 					return;
 				}
 
+				//update redis for current price
+				var key = stockCode;
+				var value = {
+					'amount': amount,
+					'open_price': openPrice,
+					'price': price,
+					'yesterday_price': yesterday_price,
+					'date': date,
+					'time': time,
+					'fluctuate': fluctuate,
+					'high_price': high_price,
+					'low_price': low_price,
+					'fluctuate_value': fluctuate_value
+				};
+
+				redisClient.hset(config.stockCurPriceHash, key, value, function(err, reply){
+					if(err){
+						logger.error(reply, logger.getFileNameAndLineNum(__filename));
+					}
+				});
+
 				if (isnow === true) {
 					databaseOperation.insertStockNow(stockCode, amount, date, time,
 								price,
@@ -127,7 +149,7 @@ function insertToDatabase(htmlData, isnow) {
 								function(flag, result) {
 									//logger.debug(stockCode+" now insert");
 									if (!flag) {
-										logger.error("insertStockNow err code "+result.errno);
+										logger.error("insertStockNow err code "+result.errno, logger.getFileNameAndLineNum(__filename));
 									}else{
 										//logger.info('insertStockNow ok');
 									}
@@ -139,6 +161,10 @@ function insertToDatabase(htmlData, isnow) {
 							logger.error(result, logger.getFileNameAndLineNum(__filename));
 						}
 					});
+
+
+
+
 
 				} else {
 					databaseOperation.insertStockAmount(stockCode,
