@@ -126,7 +126,7 @@ function insertToDatabase(htmlData, isnow) {
 					'fluctuate_value': fluctuate_value
 				};
 
-				redisClient.hset(config.stockCurPriceHash, key, value, function(err, reply){
+				redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
 					if(err){
 						logger.error(reply, logger.getFileNameAndLineNum(__filename));
 					}
