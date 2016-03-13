@@ -60,7 +60,6 @@ function getStockInfo(stockCodeArr, isnow) {
 
 function insertToDatabase(htmlData, isnow) {
 
-	htmlData = iconv.decode(htmlData, 'GBK');
 
 	var elementArr = htmlData.split(";");
 	if (elementArr.length == 0) {
@@ -84,7 +83,7 @@ function insertToDatabase(htmlData, isnow) {
 					return;
 				}
 				var stockCode = dataArr[2];
-				var stock_name = dataArr[1];
+				var stock_name = iconv.decode(dataArr[1], 'GBK');
 				var amount = dataArr[6];
 				var yesterday_price = dataArr[4];
 				var date = dataArr[30];
