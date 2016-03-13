@@ -13,6 +13,7 @@ var path = require('path');
 
 var apn = require('./utility/apnPush.js');
 var moment = require('moment');
+var iconv = require('iconv-lite');
 
 redisClient.on("error", function (err) {
 	logger.error(err, logger.getFileNameAndLineNum(__filename));
@@ -64,6 +65,8 @@ function insertToDatabase(htmlData, isnow) {
 		logger.warn('elementArr is empty');
 		return;
 	}
+
+	elementStr = iconv.decode(elementStr, 'GBK');
 
 	elementArr.forEach(function(elementStr){
 		var beginIndex = elementStr.indexOf("\"");
