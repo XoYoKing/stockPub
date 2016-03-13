@@ -116,6 +116,7 @@ function insertToDatabase(htmlData, isnow) {
 				//update redis for current price
 				var key = stockCode;
 				var value = {
+					'stock_code': stockCode,
 					'amount': amount,
 					'open_price': openPrice,
 					'price': price,
