@@ -83,7 +83,10 @@ function insertToDatabase(htmlData, isnow) {
 					return;
 				}
 				var stockCode = dataArr[2];
-				var stock_name = iconv.decode(dataArr[1], 'GBK');
+				var buf = iconv.decode(dataArr[1], 'GBK');
+				var stock_name = iconv.encode(buf, 'utf-8');
+				console.log(stock_name);
+
 				var amount = dataArr[6];
 				var yesterday_price = dataArr[4];
 				var date = dataArr[30];
