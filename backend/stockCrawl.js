@@ -85,8 +85,8 @@ function insertToDatabase(htmlData, isnow) {
 				var stockCode = dataArr[2];
 				var stock_name = dataArr[1];
 
-				var buf = iconv.decode(dataArr[1], 'gbk');
-				stock_name = buf;
+				// var buf = iconv.decode(dataArr[1], 'gbk');
+				// stock_name = buf;
 				console.log(stock_name);
 
 				var amount = dataArr[6];
@@ -399,6 +399,7 @@ function getStockInfoFromAPI(urlChild, isnow) {
 		if (res.statusCode == 200) {
 			var htmlData = "";
 			res.on('data', function(data) {
+				data = iconv.decode(data, 'GBK');
 				htmlData += data;
 			});
 
