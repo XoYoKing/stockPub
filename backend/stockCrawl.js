@@ -126,11 +126,11 @@ function insertToDatabase(htmlData, isnow) {
 					'fluctuate_value': fluctuate_value
 				};
 
+				value = JSON.stringify(value);
+
 				redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
 					if(err){
 						logger.error(reply, logger.getFileNameAndLineNum(__filename));
-					}else{
-						logger.debug('set '+config.hash.stockCurPriceHash);
 					}
 				});
 
