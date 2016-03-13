@@ -119,6 +119,32 @@ function insertToDatabase(htmlData, isnow) {
 					amount == 0||
 					price == 0) {
 						//logger.warn('stockCode is undefined');
+					//可能停盘
+					//update redis for current price
+					var key = stockCode;
+					var value = {
+						'stock_code': stockCode,
+						'stock_name': stock_name,
+						'price': yesterday_price,
+						'yesterday_price': yesterday_price,
+						'date': date,
+						'time': time,
+						'fluctuate': fluctuate,
+						'high_price': high_price,
+						'low_price': low_price,
+						'fluctuate_value': fluctuate_value,
+						'is_stop': 1
+					};
+
+					value = JSON.stringify(value);
+
+					redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
+						if(err){
+							logger.error(reply, logger.getFileNameAndLineNum(__filename));
+						}
+					});
+
+
 					return;
 				}
 
@@ -136,7 +162,8 @@ function insertToDatabase(htmlData, isnow) {
 					'fluctuate': fluctuate,
 					'high_price': high_price,
 					'low_price': low_price,
-					'fluctuate_value': fluctuate_value
+					'fluctuate_value': fluctuate_value,
+					'is_stop': 0
 				};
 
 				value = JSON.stringify(value);
