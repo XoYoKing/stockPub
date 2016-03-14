@@ -158,10 +158,9 @@ router.post('/getAllMarketIndexNow', function(req, res){
 			returnData.code = constant.returnCode.ERROR;
 		}else{
 			returnData.code = constant.returnCode.SUCCESS;
-			reply = JSON.parse(reply);
 			var marketInfoArr = [];
 			for (var marketCode in reply) {
-				marketInfoArr.push(reply[marketCode]);
+				marketInfoArr.push(JSON.parse(reply[marketCode]));
 			}
 			returnData.data = marketInfoArr;
 		}
