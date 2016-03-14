@@ -400,7 +400,7 @@ function caculateVolumeProportion(stockCode){
 
 
 function getStockInfoFromAPI(urlChild, isnow) {
-	var stockAPI = "http://qt.gtimg.cn/q=" + urlChild;
+	var stockAPI = config.stockDataInterface.url + urlChild;
 	//logger.debug(stockAPI);
 
 	http.get(stockAPI, function(res) {
@@ -549,7 +549,10 @@ function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 			logger.debug('getMarketIndexFromAPI success', logger.getFileNameAndLineNum(__filename));
 			var htmlData = "";
 			res.on('data', function(data) {
+
+				data = iconv.decode(data, 'GBK');
 				htmlData += data;
+
 			});
 			res.on('end', function() {
 				logger.debug('end getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
