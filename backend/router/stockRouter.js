@@ -152,7 +152,7 @@ router.post('/addlook', function(req, res){
 router.post('/getAllMarketIndexNow', function(req, res){
 
 	var returnData = {};
-	redisClient.getall(config.hash.marketCurPriceHash, function(err, reply){
+	redisClient.hgetall(config.hash.marketCurPriceHash, function(err, reply){
 		if(err){
 			logger.error(err, logger.getFileNameAndLineNum(__filename));
 			returnData.code = constant.returnCode.ERROR;
