@@ -150,17 +150,34 @@ router.post('/addlook', function(req, res){
 
 //获取当前大盘指数
 router.post('/getAllMarketIndexNow', function(req, res){
-	stockOperation.getAllMarketIndexNow(function(flag, result){
-		var returnData = {};
-		if(flag){
-			returnData.code = constant.returnCode.SUCCESS;
-			returnData.data = result;
-		}else{
-			logger.error(result, logger.getFileNameAndLineNum(__filename));
+
+	var returnData = {};
+	redisClient.getall(config.hash.marketCurPriceHash, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
 			returnData.code = constant.returnCode.ERROR;
+		}else{
+			returnData.code = constant.returnCode.SUCCESS;
+			var marketInfoArr = [];
+			for (var marketCode in reply) {
+				marketInfoArr.push(reply[marketCode]);
+			}
+			returnData.data = marketInfoArr;
 		}
 		res.send(returnData);
 	});
+
+	// stockOperation.getAllMarketIndexNow(function(flag, result){
+	// 	var returnData = {};
+	// 	if(flag){
+	// 		returnData.code = constant.returnCode.SUCCESS;
+	// 		returnData.data = result;
+	// 	}else{
+	// 		logger.error(result, logger.getFileNameAndLineNum(__filename));
+	// 		returnData.code = constant.returnCode.ERROR;
+	// 	}
+	// 	res.send(returnData);
+	// });
 })
 
 //获取特定人的当前看多
