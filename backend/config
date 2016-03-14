@@ -63,5 +63,6 @@ exports.stockServerInfo = {
 };
 
 exports.hash = {
-    stockCurPriceHash: 'stockCurPriceHash'
+    stockCurPriceHash: 'stockCurPriceHash',
+    marketCurPriceHash: 'marketCurPriceHash'
 };

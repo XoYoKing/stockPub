@@ -523,6 +523,13 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 	if(element == null){
 		logger.info('insertMarketIndexNowToDataBase element is null');
 	}else{
+
+		redisClient.hset(config.hash.marketCurPriceHash, element.market_code, JSON.stringify(element), function(err, reply){
+			if(err){
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+
 		stockOperation.insertMarketIndexNow(element, function(flag, result){
 			if(flag){
 
