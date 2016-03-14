@@ -61,3 +61,8 @@ exports.stockServerInfo = {
     url: '112.74.102.178',
     port: 18000
 };
+
+exports.hash = {
+    stockCurPriceHash: 'stockCurPriceHash',
+    marketCurPriceHash: 'marketCurPriceHash'
+};

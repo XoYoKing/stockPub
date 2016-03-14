@@ -1,8 +1,8 @@
 var databaseOperation = require('./databaseOperation');
 var logger = global.logger;
 var http = require('http');
-//var redis = require("redis");
-//var redisClient = redis.createClient({auth_pass:'here_dev'});
+var redis = require("redis");
+var redisClient = redis.createClient({auth_pass:'here_dev'});
 
 var conn = require('./utility');
 var stockDay3AmountHash = "stockday3hash";
@@ -13,9 +13,11 @@ var path = require('path');
 
 var apn = require('./utility/apnPush.js');
 var moment = require('moment');
-// redisClient.on("error", function (err) {
-// 	logger.error(err, logger.getFileNameAndLineNum(__filename));
-// });
+var iconv = require('iconv-lite');
+
+redisClient.on("error", function (err) {
+	logger.error(err, logger.getFileNameAndLineNum(__filename));
+});
 
 
 function isMarketOpenTime() {
@@ -58,11 +60,13 @@ function getStockInfo(stockCodeArr, isnow) {
 
 function insertToDatabase(htmlData, isnow) {
 
+
 	var elementArr = htmlData.split(";");
 	if (elementArr.length == 0) {
 		logger.warn('elementArr is empty');
 		return;
 	}
+
 
 	elementArr.forEach(function(elementStr){
 		var beginIndex = elementStr.indexOf("\"");
@@ -74,9 +78,17 @@ function insertToDatabase(htmlData, isnow) {
 				if(dataArr.length<48){
 					logger.warn('elementArr is empty');
 
+
+
 					return;
 				}
 				var stockCode = dataArr[2];
+				var stock_name = dataArr[1];
+
+				// var buf = iconv.decode(dataArr[1], 'gbk');
+				// stock_name = buf;
+				console.log(stock_name);
+
 				var amount = dataArr[6];
 				var yesterday_price = dataArr[4];
 				var date = dataArr[30];
@@ -96,6 +108,39 @@ function insertToDatabase(htmlData, isnow) {
 				var high_price = dataArr[33];
 				var low_price = dataArr[34];
 				var fluctuate_value = dataArr[31];
+
+
+				//update redis for current price
+				var key = stockCode;
+				var value = {
+					'stock_code': stockCode,
+					'stock_name': stock_name,
+					'amount': amount,
+					'open_price': openPrice,
+					'price': price,
+					'yesterday_price': yesterday_price,
+					'date': date,
+					'time': time,
+					'fluctuate': fluctuate,
+					'high_price': high_price,
+					'low_price': low_price,
+					'fluctuate_value': fluctuate_value,
+					'is_stop': 0
+				};
+
+				if(price == 0&&amount == 0){
+					//停牌
+					value.is_stop = 1;
+					value.price = yesterday_price;
+				}
+
+				value = JSON.stringify(value);
+
+				redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
+					if(err){
+						logger.error(reply, logger.getFileNameAndLineNum(__filename));
+					}
+				});
 
 				if (stockCode === undefined ||
 					amount === undefined ||
@@ -127,7 +172,7 @@ function insertToDatabase(htmlData, isnow) {
 								function(flag, result) {
 									//logger.debug(stockCode+" now insert");
 									if (!flag) {
-										logger.error("insertStockNow err code "+result.errno);
+										logger.error("insertStockNow err code "+result.errno, logger.getFileNameAndLineNum(__filename));
 									}else{
 										//logger.info('insertStockNow ok');
 									}
@@ -139,6 +184,10 @@ function insertToDatabase(htmlData, isnow) {
 							logger.error(result, logger.getFileNameAndLineNum(__filename));
 						}
 					});
+
+
+
+
 
 				} else {
 					databaseOperation.insertStockAmount(stockCode,
@@ -351,13 +400,14 @@ function caculateVolumeProportion(stockCode){
 
 
 function getStockInfoFromAPI(urlChild, isnow) {
-	var stockAPI = "http://qt.gtimg.cn/q=" + urlChild;
+	var stockAPI = config.stockDataInterface.url + urlChild;
 	//logger.debug(stockAPI);
 
 	http.get(stockAPI, function(res) {
 		if (res.statusCode == 200) {
 			var htmlData = "";
 			res.on('data', function(data) {
+				data = iconv.decode(data, 'GBK');
 				htmlData += data;
 			});
 
@@ -473,6 +523,13 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 	if(element == null){
 		logger.info('insertMarketIndexNowToDataBase element is null');
 	}else{
+
+		redisClient.hset(config.hash.marketCurPriceHash, element.market_code, JSON.stringify(element), function(err, reply){
+			if(err){
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
+			}
+		});
+
 		stockOperation.insertMarketIndexNow(element, function(flag, result){
 			if(flag){
 
@@ -492,7 +549,10 @@ function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 			logger.debug('getMarketIndexFromAPI success', logger.getFileNameAndLineNum(__filename));
 			var htmlData = "";
 			res.on('data', function(data) {
+
+				data = iconv.decode(data, 'GBK');
 				htmlData += data;
+
 			});
 			res.on('end', function() {
 				logger.debug('end getMarketIndexFromAPI', logger.getFileNameAndLineNum(__filename));
