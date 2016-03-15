@@ -263,8 +263,8 @@ exports.addCommentToStock = function(reqBody, callback){
 
 	var sql = 'insert into stock_talk_base_info(talk_id, talk_stock_code, ' +
 		' talk_user_id, talk_to_user_id, talk_content, talk_date_time, talk_timestamp_ms) ' +
-		' values(?,?,?,?,?,?,?)';
+		' values(?,?,?,?,?,NOW(),?)';
 	conn.executeSql(sql, [talk_id, reqBody.talk_stock_code,
 		reqBody.talk_user_id, reqBody.talk_to_user_id, reqBody.talk_content,
-		'NOW()', talk_timestamp_ms], callback);
+		, talk_timestamp_ms], callback);
 }
