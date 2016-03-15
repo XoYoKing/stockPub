@@ -10,6 +10,7 @@ var config = require('../config');
 var formidable = require('formidable');
 var path = require('path');
 var apn = require('../utility/apnPush.js');
+var md5 = require('MD5');
 
 
 module.exports = router;
@@ -131,7 +132,6 @@ router.post('/register', function(req, res) {
 
 			if (certificateInfo.certificate_code === fields.user_certificate_code) {
 				var user_info = {};
-				var md5 = require('MD5');
 				user_info.user_id = md5(fields.user_phone);
 				user_info.user_phone = fields.user_phone;
 				user_info.user_name = fields.user_name;
@@ -511,4 +511,23 @@ router.post('/updateDeviceToken', function(req, res){
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 		}
 	});
+});
+
+
+router.post('/addCommentToStock', function(req, res){
+	//插入数据库
+	userMgmt.addCommentToStock(req.body, function(flag, result){
+		if (flag) {
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+
+	//推送
+	if(req.body.talk_to_user_id!=null){
+		var msg = req.body.user_name + '评论了你';
+		apn.pushMsg(req.body.talk_to_user_id, msg);
+	}
 });

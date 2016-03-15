@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var conn = require('../utility.js');
 
 var logger = global.logger;
+var md5 = require('MD5');
 
 exports.followUser = function(reqbody, callback){
 	var follow_timestamp = Date.now();
@@ -252,4 +253,18 @@ exports.updateDeviceToken = function(user_phone, device_token, callback){
 exports.updateLoginStatus = function(user_id, user_login_status, callback){
 	var sql = 'update user_base_info set user_login_status = ? where user_id = ?';
 	conn.executeSql(sql, [user_login_status, user_id], callback);
+}
+
+
+exports.addCommentToStock = function(reqBody, callback){
+
+	var talk_timestamp_ms = Date.now();
+	var talk_id = md5(reqBody.talk_user_id+reqBody.talk_stock_code+talk_timestamp_ms);
+
+	var sql = 'insert into stock_talk_base_info(talk_id, talk_stock_code, ' +
+		' talk_user_id, talk_to_user_id, talk_content, talk_date_time, talk_timestamp_ms) ' +
+		' values(?,?,?,?,?,?,?)';
+	conn.executeSql(sql, [talk_id, reqBody.talk_stock_code,
+		reqBody.talk_user_id, reqBody.talk_to_user_id, reqBody.talk_content,
+		'NOW()', talk_timestamp_ms], callback);
 }
