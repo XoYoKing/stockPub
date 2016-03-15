@@ -268,3 +268,11 @@ exports.addCommentToStock = function(reqBody, callback){
 		reqBody.talk_user_id, reqBody.talk_to_user_id, reqBody.talk_content,
 		talk_timestamp_ms], callback);
 }
+
+
+exports.getCommentToStock(talk_stock_code, talk_timestamp_ms, callback){
+	var sql = 'select a.*, b.user_name, b.user_facethumbnail from stock_talk_base_info a, user_base_info b' +
+	' where a.talk_stock_code = ? and a.talk_timestamp_ms<? ' +
+	' and a.talk_user_id = b.user_id order by talk_timestamp_ms desc limit 36';
+	conn.executeSql(sql, [talk_stock_code, talk_timestamp_ms], callback);
+}

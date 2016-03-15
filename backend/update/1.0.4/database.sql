@@ -9,3 +9,8 @@ CREATE TABLE `stock_talk_base_info` (
 	`talk_timestamp_ms` bigint(32) NOT NULL,
 	PRIMARY KEY (`talk_id`)
 ) ENGINE=InnoDB;
+
+ALTER TABLE `stock_talk_base_info`
+	ADD COLUMN `talk_to_user_name` varchar(32) NULL
+
+    

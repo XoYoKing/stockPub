@@ -514,6 +514,18 @@ router.post('/updateDeviceToken', function(req, res){
 });
 
 
+
+router.post('/getCommentToStock', function(req, res){
+	userMgmt.getCommentToStock(req.body.talk_stock_code, req.body.talk_timestamp_ms, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
 router.post('/addCommentToStock', function(req, res){
 	//插入数据库
 	userMgmt.addCommentToStock(req.body, function(flag, result){
