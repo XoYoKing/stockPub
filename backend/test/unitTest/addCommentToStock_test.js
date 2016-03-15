@@ -6,7 +6,7 @@ var Json = {
     childpath: '/user/addCommentToStock',
     talk_stock_code: '300027',
     talk_user_id: '11223344',
-    talk_to_user_id: null,
+    user_name: 'jam',
     talk_content: '我不是很看好哦'
 };
 
