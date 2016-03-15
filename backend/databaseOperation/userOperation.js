@@ -266,5 +266,5 @@ exports.addCommentToStock = function(reqBody, callback){
 		' values(?,?,?,?,?,NOW(),?)';
 	conn.executeSql(sql, [talk_id, reqBody.talk_stock_code,
 		reqBody.talk_user_id, reqBody.talk_to_user_id, reqBody.talk_content,
-		, talk_timestamp_ms], callback);
+		talk_timestamp_ms], callback);
 }
