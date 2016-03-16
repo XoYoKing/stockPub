@@ -564,7 +564,7 @@ function increaseUnreadStockCommentCount(user_id){
 			if(reply == null){
 				reply = 1;
 			}else{
-				reply+=1;
+				reply=parseInt(reply)+1;
 			}
 			redisClient.hset(config.hash.stockUnreadCommentCountHash, user_id, reply, function(err, reply){
 				if(err){
