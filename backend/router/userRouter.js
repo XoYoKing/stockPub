@@ -518,6 +518,20 @@ router.post('/updateDeviceToken', function(req, res){
 });
 
 
+router.post('/getCommentToStockByUser', function(req, res){
+	userMgmt.getCommentToStockByUser(req.body.user_id, req.body.talk_timestamp_ms, function(flag, result){
+		if(flag){
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+
+	//remove redis count
+	clearUnreadStockCommentCount(req.body.user_id);
+});
+
 
 router.post('/getCommentToStock', function(req, res){
 	userMgmt.getCommentToStock(req.body.talk_stock_code, req.body.talk_timestamp_ms, function(flag, result){
@@ -555,6 +569,13 @@ router.post('/addCommentToStock', function(req, res){
 });
 
 
+function clearUnreadStockCommentCount(user_id){
+	redisClient.hset(config.hash.stockUnreadCommentCountHash, user_id, 0, function(err, reply){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+		}
+	});
+}
 
 function increaseUnreadStockCommentCount(user_id){
 	redisClient.hget(config.hash.stockUnreadCommentCountHash, user_id, function(err, reply){

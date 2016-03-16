@@ -260,7 +260,7 @@ exports.addCommentToStock = function(reqBody, callback){
 
 	var talk_timestamp_ms = Date.now();
 	var talk_id = md5(reqBody.talk_user_id+reqBody.talk_stock_code+talk_timestamp_ms);
-	
+
 
 	var sql = 'insert into stock_talk_base_info(talk_id, talk_stock_code, ' +
 		' talk_user_id, talk_to_user_id, talk_content, talk_date_time, talk_timestamp_ms, talk_to_user_name, to_stock) ' +
@@ -274,6 +274,13 @@ exports.addCommentToStock = function(reqBody, callback){
 exports.getCommentToStock = function(talk_stock_code, talk_timestamp_ms, callback){
 	var sql = 'select a.*, b.user_name, b.user_facethumbnail from stock_talk_base_info a, user_base_info b' +
 	' where a.talk_stock_code = ? and a.talk_timestamp_ms<? ' +
-	' and a.talk_user_id = b.user_id order by talk_timestamp_ms desc limit 36';
+	' and a.talk_user_id = b.user_id order by talk_timestamp_ms desc limit 18';
 	conn.executeSql(sql, [talk_stock_code, talk_timestamp_ms], callback);
+}
+
+exports.getCommentToStockByUser = function(user_id, talk_timestamp_ms, callback){
+	var sql = 'select a.*, b.user_name, b.user_facethumbnail from stock_talk_base_info a, user_base_info b' +
+	' where a.talk_to_user_id = ? and a.talk_timestamp_ms<? ' +
+	' and a.talk_user_id = b.user_id  and a.to_stock = 0 order by talk_timestamp_ms desc limit 8';
+	conn.executeSql(sql, [user_id, talk_timestamp_ms], callback);
 }
