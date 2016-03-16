@@ -260,6 +260,7 @@ exports.addCommentToStock = function(reqBody, callback){
 
 	var talk_timestamp_ms = Date.now();
 	var talk_id = md5(reqBody.talk_user_id+reqBody.talk_stock_code+talk_timestamp_ms);
+	
 
 	var sql = 'insert into stock_talk_base_info(talk_id, talk_stock_code, ' +
 		' talk_user_id, talk_to_user_id, talk_content, talk_date_time, talk_timestamp_ms, talk_to_user_name, to_stock) ' +

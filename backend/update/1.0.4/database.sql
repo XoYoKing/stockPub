@@ -19,3 +19,6 @@ ALTER TABLE `stock_talk_base_info`
 
 ALTER TABLE `stock_talk_base_info`
 	ADD COLUMN `to_stock` int(32) NOT NULL COMMENT '0, 对人评论， 1 对股票评论';
+
+ALTER TABLE `stock_talk_base_info`
+    MODIFY COLUMN `talk_content` varchar(1024) CHARACTER SET utf8mb4 NOT NULL;
