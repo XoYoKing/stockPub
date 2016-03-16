@@ -7,7 +7,8 @@ var Json = {
     talk_stock_code: '300027',
     talk_user_id: '11223344',
     user_name: 'jam',
-    talk_content: '我很看好这只股票'
+    talk_content: '我很看好这只股票',
+    to_stock: 1
 };
 
 

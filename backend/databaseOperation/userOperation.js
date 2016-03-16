@@ -262,11 +262,11 @@ exports.addCommentToStock = function(reqBody, callback){
 	var talk_id = md5(reqBody.talk_user_id+reqBody.talk_stock_code+talk_timestamp_ms);
 
 	var sql = 'insert into stock_talk_base_info(talk_id, talk_stock_code, ' +
-		' talk_user_id, talk_to_user_id, talk_content, talk_date_time, talk_timestamp_ms, talk_to_user_name) ' +
-		' values(?,?,?,?,?,NOW(),?,?)';
+		' talk_user_id, talk_to_user_id, talk_content, talk_date_time, talk_timestamp_ms, talk_to_user_name, to_stock) ' +
+		' values(?,?,?,?,?,NOW(),?,?,?)';
 	conn.executeSql(sql, [talk_id, reqBody.talk_stock_code,
 		reqBody.talk_user_id, reqBody.talk_to_user_id, reqBody.talk_content,
-		talk_timestamp_ms,reqBody.talk_to_user_name], callback);
+		talk_timestamp_ms,reqBody.talk_to_user_name, reqBody.to_stock], callback);
 }
 
 

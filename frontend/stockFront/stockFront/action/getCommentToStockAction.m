@@ -52,10 +52,9 @@
                     temp.comment_content = [element objectForKey:@"talk_content"];
                     temp.comment_user_name = [element objectForKey:@"user_name"];
                     temp.comment_user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
-                    if(![[element objectForKey:@"talk_to_user_id"] isEqual:[NSNull null]]){
-                        temp.comment_to_user_id = [element objectForKey:@"talk_to_user_id"];
-                        temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
-                    }
+                    
+                    temp.comment_to_user_id = [element objectForKey:@"talk_to_user_id"];
+                    temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
                     
                     [list addObject:temp];
                 }
@@ -110,10 +109,9 @@
                     temp.comment_content = [element objectForKey:@"talk_content"];
                     temp.comment_user_name = [element objectForKey:@"user_name"];
                     temp.comment_user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
-                    if(![[element objectForKey:@"talk_to_user_id"] isEqual:[NSNull null]]){
-                        temp.comment_to_user_id = [element objectForKey:@"talk_to_user_id"];
-                        temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
-                    }
+                    
+                    temp.comment_to_user_id = [element objectForKey:@"talk_to_user_id"];
+                    temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
                     
                     [list addObject:temp];
                 }
