@@ -19,6 +19,8 @@
 #import <MBProgressHUD.h>
 #import "UserInfoModel.h"
 #import "KLineCell.h"
+#import "StockCommentTableView.h"
+#import "getCommentToStockAction.h"
 
 @interface StockInfoDetailTableView ()
 {
@@ -166,6 +168,10 @@ typedef enum {
 
     }
     
+    if(_ismarket == true){
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"评论" style:UIBarButtonItemStylePlain target:self action:@selector(commentAction:)];
+    }
+    
 //    if (_ismarket == false) {
 //        LocDatabase* loc = [AppDelegate getLocDatabase];
 //        
@@ -219,9 +225,33 @@ typedef enum {
 
     }
     
+    //评论
+    UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"评论" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        
+        [self commentAction:nil];
+        
+    }];
+    [alertController addAction:chooseAction];
+
+    
+    
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
+
+- (void)commentAction:(id)sender
+{
+    getCommentToStockAction* pullAction = [[getCommentToStockAction alloc] initWithStockCode:_stockInfoModel.stock_code];
+    
+    StockCommentTableView* stockCommentTableview = [[StockCommentTableView alloc] initWithStock:_stockInfoModel pullAction:pullAction];
+    
+    ComTableViewCtrl* comTable = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:stockCommentTableview];
+    
+    [self.navigationController pushViewController:comTable animated:YES];
+}
+
 
 - (void)addlook:(id)sender
 {

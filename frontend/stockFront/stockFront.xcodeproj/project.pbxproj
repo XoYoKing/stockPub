@@ -111,6 +111,8 @@
 		B2ABA5CC1C8E624000552C27 /* 120-1px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C71C8E624000552C27 /* 120-1px.png */; };
 		B2ABA5CD1C8E624000552C27 /* 180-1px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C81C8E624000552C27 /* 180-1px.png */; };
 		B2ACC2291C796407003D3ADC /* appIcon1024*1024.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ACC2281C796407003D3ADC /* appIcon1024*1024.png */; };
+		B2E708C31C98F5DD00779B38 /* getCommentToStockAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E708C21C98F5DD00779B38 /* getCommentToStockAction.m */; };
+		B2E708C61C99046000779B38 /* StockCommentTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E708C51C99046000779B38 /* StockCommentTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,6 +317,10 @@
 		B2ABA5C71C8E624000552C27 /* 120-1px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "120-1px.png"; sourceTree = "<group>"; };
 		B2ABA5C81C8E624000552C27 /* 180-1px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "180-1px.png"; sourceTree = "<group>"; };
 		B2ACC2281C796407003D3ADC /* appIcon1024*1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appIcon1024*1024.png"; sourceTree = "<group>"; };
+		B2E708C11C98F5DD00779B38 /* getCommentToStockAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = getCommentToStockAction.h; sourceTree = "<group>"; };
+		B2E708C21C98F5DD00779B38 /* getCommentToStockAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = getCommentToStockAction.m; sourceTree = "<group>"; };
+		B2E708C41C99046000779B38 /* StockCommentTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockCommentTableView.h; sourceTree = "<group>"; };
+		B2E708C51C99046000779B38 /* StockCommentTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockCommentTableView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +425,8 @@
 		B227F3D41C64A1E200235B64 /* action */ = {
 			isa = PBXGroup;
 			children = (
+				B2E708C11C98F5DD00779B38 /* getCommentToStockAction.h */,
+				B2E708C21C98F5DD00779B38 /* getCommentToStockAction.m */,
 				B227F3E01C64A1E200235B64 /* FollowAction.h */,
 				B227F3E11C64A1E200235B64 /* FollowAction.m */,
 				B227F3D51C64A1E200235B64 /* GetFansAction.h */,
@@ -438,6 +446,8 @@
 				B227F4C41C6723D200235B64 /* StockInfoDetailTableView.m */,
 				B227F4BD1C66151500235B64 /* UnreadCommentTableView.h */,
 				B227F4BE1C66151500235B64 /* UnreadCommentTableView.m */,
+				B2E708C41C99046000779B38 /* StockCommentTableView.h */,
+				B2E708C51C99046000779B38 /* StockCommentTableView.m */,
 				B227F3DA1C64A1E200235B64 /* CommentTableView.h */,
 				B227F3DB1C64A1E200235B64 /* CommentTableView.m */,
 				B227F3DC1C64A1E200235B64 /* ComTableViewCtrl.h */,
@@ -908,6 +918,7 @@
 				B227F4741C64A1E200235B64 /* loginViewCtrl.m in Sources */,
 				B227F4761C64A1E200235B64 /* RegisterConfirmViewController.m in Sources */,
 				B227F3AC1C64A0C200235B64 /* stockFront.xcdatamodeld in Sources */,
+				B2E708C61C99046000779B38 /* StockCommentTableView.m in Sources */,
 				B227F4B61C64A1E200235B64 /* StockLookDetailTableViewCell.m in Sources */,
 				B227F4A91C64A1E200235B64 /* YYFrameImage.m in Sources */,
 				B227F4711C64A1E200235B64 /* FaceImageViewController.m in Sources */,
@@ -929,6 +940,7 @@
 				B227F4A71C64A1E200235B64 /* UIImageView+YYWebImage.m in Sources */,
 				B227F4B21C64A1E200235B64 /* InputToolbar.m in Sources */,
 				B227F47E1C64A1E200235B64 /* StockSearchTableViewCtrl.m in Sources */,
+				B2E708C31C98F5DD00779B38 /* getCommentToStockAction.m in Sources */,
 				B227F4901C64A1E200235B64 /* RankModel.m in Sources */,
 				B227F4A51C64A1E200235B64 /* UIButton+YYWebImage.m in Sources */,
 				B227F49E1C64A1E200235B64 /* YYCache.m in Sources */,
