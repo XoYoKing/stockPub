@@ -531,6 +531,12 @@ router.post('/addCommentToStock', function(req, res){
 	userMgmt.addCommentToStock(req.body, function(flag, result){
 		if (flag) {
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+
+			//更新未读评论数
+			if(req.body.to_stock == 0){
+				increaseUnreadStockCommentCount(req.body.talk_to_user_id);
+			}
+
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
@@ -541,11 +547,6 @@ router.post('/addCommentToStock', function(req, res){
 	if(req.body.to_stock == 0){
 		var msg = req.body.user_name + '评论了你';
 		apn.pushMsg(req.body.talk_to_user_id, msg);
-	}
-
-	//更新未读评论数
-	if(req.body.to_stock == 0){
-		//increaseUnreadStockCommentCount(req.body.talk_to_user_id);
 	}
 });
 
