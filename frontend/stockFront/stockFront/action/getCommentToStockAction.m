@@ -46,7 +46,7 @@
             if(commentlist!=nil){
                 for (NSDictionary* element in commentlist) {
                     CommentModel* temp = [[CommentModel alloc] init];
-                    temp.look_id = [element objectForKey:@"talk_id"];
+                    temp.talk_id = [element objectForKey:@"talk_id"];
                     temp.comment_user_id = [element objectForKey:@"talk_user_id"];
                     temp.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue];
                     temp.comment_content = [element objectForKey:@"talk_content"];
@@ -55,6 +55,12 @@
                     
                     temp.comment_to_user_id = [element objectForKey:@"talk_to_user_id"];
                     temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
+                    temp.to_stock = [[element objectForKey:@"to_stock"] integerValue];
+                    
+                    if(temp.to_stock == 0){
+                        temp.comment_content = [[NSString alloc] initWithFormat:@"回复%@:%@", temp.comment_to_user_name, temp.comment_content];
+                    }
+                    
                     
                     [list addObject:temp];
                 }
@@ -103,7 +109,7 @@
             if(commentlist!=nil){
                 for (NSDictionary* element in commentlist) {
                     CommentModel* temp = [[CommentModel alloc] init];
-                    temp.look_id = [element objectForKey:@"talk_id"];
+                    temp.talk_id = [element objectForKey:@"talk_id"];
                     temp.comment_user_id = [element objectForKey:@"talk_user_id"];
                     temp.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue];
                     temp.comment_content = [element objectForKey:@"talk_content"];
@@ -112,7 +118,12 @@
                     
                     temp.comment_to_user_id = [element objectForKey:@"talk_to_user_id"];
                     temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
+                    temp.to_stock = [[element objectForKey:@"to_stock"] integerValue];
                     
+                    if(temp.to_stock == 0){
+                        temp.comment_content = [[NSString alloc] initWithFormat:@"回复%@:%@", temp.comment_to_user_name, temp.comment_content];
+                    }
+                
                     [list addObject:temp];
                 }
                 

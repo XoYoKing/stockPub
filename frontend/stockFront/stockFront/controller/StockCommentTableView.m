@@ -118,16 +118,22 @@
 
 - (void)sendStockDetailComment:(NSString*)msg
 {
-    NSDictionary* message = nil;
+    NSInteger to_stock = 0;
+    NSString* talk_to_user_id = @"";
+    NSString* talk_to_user_name = @"";
+    
     if(toUserInfo == nil){
-        message = [[NSDictionary alloc]
-                   initWithObjects:@[stockmodel.stock_code, phoneUser.user_id, phoneUser.user_name, msg]
-                   forKeys:@[@"talk_stock_code", @"talk_user_id", @"user_name", @"talk_content"]];
+        to_stock = 1;
     }else{
-        message = [[NSDictionary alloc]
-                   initWithObjects:@[stockmodel.stock_code, phoneUser.user_id, phoneUser.user_name, msg, toUserInfo.user_id, toUserInfo.user_name]
-                   forKeys:@[@"talk_stock_code", @"talk_user_id", @"user_name", @"talk_content", @"talk_to_user_id", @"talk_to_user_name"]];
+        to_stock = 0;
+        talk_to_user_id = toUserInfo.user_id;
+        talk_to_user_name = toUserInfo.user_name;
     }
+    
+    
+    NSDictionary* message = [[NSDictionary alloc]
+               initWithObjects:@[stockmodel.stock_code, phoneUser.user_id, phoneUser.user_name, msg, talk_to_user_id, talk_to_user_name, [[NSNumber alloc] initWithInteger:to_stock]]
+               forKeys:@[@"talk_stock_code", @"talk_user_id", @"user_name", @"talk_content", @"talk_to_user_id", @"talk_to_user_name", @"to_stock"]];
     
     
     [NetworkAPI callApiWithParam:message childpath:@"/user/addCommentToStock" successed:^(NSDictionary *response) {
@@ -144,7 +150,9 @@
             commentModel.comment_timestamp = [[NSDate date] timeIntervalSince1970]*1000;
             commentModel.comment_to_user_name = toUserInfo.user_name;
             commentModel.comment_to_user_id = toUserInfo.user_id;
-            if(toUserInfo != nil){
+            commentModel.to_stock = to_stock;
+            
+            if(to_stock == 0){
                 commentModel.comment_content = [[NSString alloc] initWithFormat:@"回复%@:%@", commentModel.comment_to_user_name, msg];
             }else{
                 commentModel.comment_content = msg;
