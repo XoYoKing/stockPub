@@ -542,4 +542,30 @@ router.post('/addCommentToStock', function(req, res){
 		var msg = req.body.user_name + '评论了你';
 		apn.pushMsg(req.body.talk_to_user_id, msg);
 	}
+
+	//更新未读评论数
+	if(req.body.to_stock == 0){
+		increaseUnreadStockCommentCount(req.body.talk_to_user_id);
+	}
 });
+
+
+
+function increaseUnreadStockCommentCount(user_id){
+	redisClient.hget(config.hash.stockUnreadCommentCountHash, user_id, function(err, reply){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+		}else{
+			if(reply == null){
+				reply = 1;
+			}else{
+				reply+=1;
+			}
+			redisClient.hset(config.hash.stockUnreadCommentCountHash, user_id, reply, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+				}
+			});
+		}
+	});
+}
