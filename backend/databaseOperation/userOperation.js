@@ -279,8 +279,8 @@ exports.getCommentToStock = function(talk_stock_code, talk_timestamp_ms, callbac
 }
 
 exports.getCommentToStockByUser = function(user_id, talk_timestamp_ms, callback){
-	var sql = 'select a.*, b.user_name, b.user_facethumbnail, c.stock_code, c.stock_name from stock_talk_base_info a, user_base_info b, stock_base_info c ' +
-	' where a.talk_to_user_id = ? and a.talk_timestamp_ms<?  and a.talk_stock_code = c.stock_code ' +
+	var sql = 'select a.*, b.user_name, b.user_facethumbnail from stock_talk_base_info a, user_base_info b' +
+	' where a.talk_to_user_id = ? and a.talk_timestamp_ms<?  ' +
 	' and a.talk_user_id = b.user_id  and a.to_stock = 0 order by talk_timestamp_ms desc limit 8';
 	conn.executeSql(sql, [user_id, talk_timestamp_ms], callback);
 }

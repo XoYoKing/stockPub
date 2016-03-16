@@ -16,6 +16,8 @@ var redisClient = redis.createClient({auth_pass:'here_dev'});
 redisClient.on("error", function (err) {
 	logger.error(err, logger.getFileNameAndLineNum(__filename));
 });
+var asyncClient = require('async');
+
 
 module.exports = router;
 
@@ -521,7 +523,36 @@ router.post('/updateDeviceToken', function(req, res){
 router.post('/getCommentToStockByUser', function(req, res){
 	userMgmt.getCommentToStockByUser(req.body.user_id, req.body.talk_timestamp_ms, function(flag, result){
 		if(flag){
-			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+
+			//获取当前股票股价
+			asyncClient.each(result, function(item, callback){
+				var hash = null;
+				if(item.talk_stock_code.indexOf('sz')!=-1||
+				item.talk_stock_code.indexOf('sh')!=-1){
+					hash = config.hash.marketCurPriceHash;
+				}else{
+					hash = config.hash.stockCurPriceHash;
+				}
+
+				redisClient.hget(hash, item.talk_stock_code, function(err, reply){
+					if(err){
+						log.error(result, log.getFileNameAndLineNum(__filename));
+						callback(err);
+					}else{
+						item.stockInfo = reply;
+						callback(null);
+					}
+				});
+
+			}, function done(err){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+					routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+				}else{
+					routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+				}
+			});
+
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
