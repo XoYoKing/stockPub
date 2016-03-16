@@ -36,6 +36,7 @@
     UserInfoModel* phoneUserInfo;
     BOOL isFollow;
     NSInteger unreadCommentCount;
+    NSInteger unreadCommentToStockCount;
     UILabel *navTitle;
 }
 

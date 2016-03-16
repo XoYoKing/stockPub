@@ -467,14 +467,39 @@ router.post('/getRankUser', function(req, res){
 
 
 router.post('/getUnreadCommentCount', function(req, res){
-	userMgmt.getUnreadCommentCount(req.body.user_id, function(flag, result){
-		if(flag){
-			var count = result[0].count;
-			log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
-			routerFunc.feedBack(constant.returnCode.SUCCESS, count, res);
+
+	asyncClient.parallel([
+		unreadCommentCount: function(callback){
+			userMgmt.getUnreadCommentCount(req.body.user_id, function(flag, result){
+				if(flag){
+					var count = result[0].count;
+					log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
+					callback(null, count);
+				}else{
+					log.error(result, log.getFileNameAndLineNum(__filename));
+					callback(result);
+				}
+			});
+		},
+		unreadCommentToStockCount: function(callback){
+			redisClient.hget(config.hash.stockUnreadCommentCountHash, req.body.user_id, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+					callback(err);
+				}else{
+					if(reply == null){
+						reply = 0;
+					}
+					callback(null, reply);
+				}
+			});
+		}
+	],function(err, results){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
 		}else{
-			log.error(result, log.getFileNameAndLineNum(__filename));
-			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			routerFunc.feedBack(constant.returnCode.SUCCESS, results, res);
 		}
 	});
 });
