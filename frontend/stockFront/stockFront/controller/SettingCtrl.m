@@ -478,11 +478,13 @@ typedef enum {
         if(code == SUCCESS){
             
             
-            NSInteger unreadCount = [[response objectForKey:@"data"] integerValue];
-            unreadCommentCount = unreadCount;
+            NSDictionary* data = [response objectForKey:@"data"];
             
-            if (unreadCommentCount>0) {
-                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentCount]];
+            unreadCommentCount = [[data objectForKey:@"unreadCommentCount"] integerValue];
+            unreadCommentToStockCount = [[data objectForKey:@"unreadCommentToStockCount"] integerValue];
+            
+            if (unreadCommentToStockCount+unreadCommentCount>0) {
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount+unreadCommentCount]];
                 
             }else{
                 [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:nil];
@@ -737,23 +739,23 @@ typedef enum {
             
             
             
-//            if(unreadCommentCount != 0){
-//                
-//                UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
-//                numberLabel.backgroundColor = [UIColor redColor];
-//                numberLabel.text = [[NSString alloc] initWithFormat:@"%ld", unreadCommentCount];
-//                numberLabel.textColor = [UIColor whiteColor];
-//                numberLabel.layer.cornerRadius = 3*minSpace/2;
-//                numberLabel.font = [UIFont fontWithName:fontName size:minFont];
-//                numberLabel.textAlignment = NSTextAlignmentCenter;
-//                numberLabel.layer.masksToBounds = YES;
-//                cell.accessoryView = numberLabel;
-//                
-//            }else{
-//                cell.detailTextLabel.text = @"";
-//                cell.accessoryView = nil;
-//            }
-//            
+            if(unreadCommentToStockCount != 0){
+                
+                UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
+                numberLabel.backgroundColor = [UIColor redColor];
+                numberLabel.text = [[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount];
+                numberLabel.textColor = [UIColor whiteColor];
+                numberLabel.layer.cornerRadius = 3*minSpace/2;
+                numberLabel.font = [UIFont fontWithName:fontName size:minFont];
+                numberLabel.textAlignment = NSTextAlignmentCenter;
+                numberLabel.layer.masksToBounds = YES;
+                cell.accessoryView = numberLabel;
+                
+            }else{
+                cell.detailTextLabel.text = @"";
+                cell.accessoryView = nil;
+            }
+//
             cell.textLabel.textColor = [UIColor grayColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.backgroundColor = [UIColor whiteColor];
