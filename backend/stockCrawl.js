@@ -130,7 +130,8 @@ function insertToDatabase(htmlData, isnow) {
 					'high_price': high_price,
 					'low_price': low_price,
 					'fluctuate_value': fluctuate_value,
-					'is_stop': 0
+					'is_stop': 0,
+					'is_market': 0
 				};
 
 				if(price == 0&&amount == 0){
@@ -528,7 +529,8 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 	if(element == null){
 		logger.info('insertMarketIndexNowToDataBase element is null');
 	}else{
-
+		element.is_market = 1;
+		
 		redisClient.hset(config.hash.marketCurPriceHash, element.market_code, JSON.stringify(element), function(err, reply){
 			if(err){
 				logger.error(err, logger.getFileNameAndLineNum(__filename));
