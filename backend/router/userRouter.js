@@ -538,7 +538,7 @@ router.post('/addCommentToStock', function(req, res){
 	});
 
 	//推送
-	if(req.body.talk_to_user_id!=null){
+	if(req.body.to_stock == 0){
 		var msg = req.body.user_name + '评论了你';
 		apn.pushMsg(req.body.talk_to_user_id, msg);
 	}
