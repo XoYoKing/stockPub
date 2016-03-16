@@ -11,7 +11,11 @@ var formidable = require('formidable');
 var path = require('path');
 var apn = require('../utility/apnPush.js');
 var md5 = require('MD5');
-
+var redis = require("redis");
+var redisClient = redis.createClient({auth_pass:'here_dev'});
+redisClient.on("error", function (err) {
+	logger.error(err, logger.getFileNameAndLineNum(__filename));
+});
 
 module.exports = router;
 
