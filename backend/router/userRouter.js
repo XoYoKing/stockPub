@@ -545,7 +545,7 @@ router.post('/addCommentToStock', function(req, res){
 
 	//更新未读评论数
 	if(req.body.to_stock == 0){
-		increaseUnreadStockCommentCount(req.body.talk_to_user_id);
+		//increaseUnreadStockCommentCount(req.body.talk_to_user_id);
 	}
 });
 
