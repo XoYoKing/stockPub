@@ -71,18 +71,21 @@ function insertToDatabase(htmlData, isnow) {
 	elementArr.forEach(function(elementStr){
 		var beginIndex = elementStr.indexOf("\"");
 		var endIndex = elementStr.lastIndexOf("\"");
-		if (beginIndex!=-1&&endIndex!=-1) {
+		if (beginIndex!==-1 && endIndex!==-1) {
 			var data = elementStr.substr(beginIndex + 1, endIndex - beginIndex - 1);
-			if (data != null) {
+			if (data !== null) {
 				var dataArr = data.split("~");
 				if(dataArr.length<48){
-					logger.warn('elementArr is empty');
-
-
-
+					logger.warn('elementArr is error '+ data);
 					return;
 				}
 				var stockCode = dataArr[2];
+
+				if(stockCode.length!==6){
+					logger.warn('stockCode.length!==6 '+ data);
+					return;
+				}
+
 				var stock_name = dataArr[1];
 
 				// var buf = iconv.decode(dataArr[1], 'gbk');
@@ -530,7 +533,7 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 		logger.info('insertMarketIndexNowToDataBase element is null');
 	}else{
 		element.is_market = 1;
-		
+
 		redisClient.hset(config.hash.marketCurPriceHash, element.market_code, JSON.stringify(element), function(err, reply){
 			if(err){
 				logger.error(err, logger.getFileNameAndLineNum(__filename));
