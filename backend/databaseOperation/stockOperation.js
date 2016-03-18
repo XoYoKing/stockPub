@@ -115,7 +115,7 @@ exports.insertMarketIndexNow = function(element, callback){
             ' `market_index_date`,' +
             ' market_index_trade_amount, '+
             ' timestamp_ms, ' +
-            ' market_index_time '
+            ' market_index_time ' +
             ')' +
             ' values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
