@@ -22,3 +22,6 @@ ALTER TABLE `stock_talk_base_info`
 
 ALTER TABLE `stock_talk_base_info`
     MODIFY COLUMN `talk_content` varchar(1024) CHARACTER SET utf8mb4 NOT NULL;
+
+ALTER TABLE `market_index_now_info`
+    	ADD COLUMN `market_index_time` varchar(32) NULL;

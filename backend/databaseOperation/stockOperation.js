@@ -114,9 +114,10 @@ exports.insertMarketIndexNow = function(element, callback){
             ' `timestamp`, ' +
             ' `market_index_date`,' +
             ' market_index_trade_amount, '+
-            ' timestamp_ms ' +
+            ' timestamp_ms, ' +
+            ' market_index_time '
             ')' +
-            ' values(?,?,?,?,?,?,?,?,?,?,?,?,?)';
+            ' values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     var parm = [
         element.market_code,
@@ -131,7 +132,8 @@ exports.insertMarketIndexNow = function(element, callback){
         timestamp,
         element.market_index_date,
         element.market_index_trade_amount,
-        timestamp
+        timestamp,
+        element.market_index_time
     ];
     conn.executeSql(sql, parm, callback);
 }
