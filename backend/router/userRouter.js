@@ -595,6 +595,7 @@ router.post('/getCommentToStockByUser', function(req, res){
 router.post('/getCommentToStock', function(req, res){
 	userMgmt.getCommentToStock(req.body.talk_stock_code, req.body.talk_timestamp_ms, function(flag, result){
 		if(flag){
+			log.debug(JSON.stringify(result), log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
