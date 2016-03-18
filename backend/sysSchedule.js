@@ -41,7 +41,7 @@ new cronJob('00 00 4 * * *', function(){
 //日志错误统计
 new cronJob('59 23 * * *', function(){
     log.info("errorLogReport start", log.getFileNameAndLineNum(__filename));
-    child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err, stdout, stderr){
+    child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err){
         if(err!=null){
             log.error(err, log.getFileNameAndLineNum(__filename));
         }else{

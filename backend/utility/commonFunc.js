@@ -22,6 +22,11 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
             element.market_code = market_code;
             element.market_name = dataArr[1];
             element.market_index_date = date.substr(0, 8);
+
+            var time = dataArr[30];
+            time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
+            element.market_index_time = time;
+
             element.market_index_value_now   = dataArr[3];
             element.market_index_fluctuate = dataArr[32];
             element.market_index_fluctuate_value = dataArr[31];

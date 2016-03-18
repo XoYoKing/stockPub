@@ -1,0 +1,8 @@
+{
+  	"undef": true,  // 所有的非全局变量，在使用前必须都被声明
+    "eqeqeq": true,
+    "asi": true,
+    "laxbreak": false,
+    "predef": ["require", "console", "__filename",
+        "process", "module", "global", "exports", "__dirname"]
+}

@@ -1,6 +1,7 @@
 var path = require('path');
 var log4js = require('log4js');
 var logger;
+var config = require('./config');
 
 exports.SetLogFileName = function(fileName) {
     log4js.configure({

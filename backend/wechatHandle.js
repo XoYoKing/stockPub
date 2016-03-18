@@ -5,7 +5,7 @@ var config = require('./config');
 var conn = require('./utility');
 var xml2js = require('xml2js');
 var databaseOperation = require('./databaseOperation');
-var gs = require('nodegrass');
+//var gs = require('nodegrass');
 var constant = require('./utility/constant');
 var http = require('http');
 var wechatFeedbackStr =
@@ -222,13 +222,13 @@ function handleStock(stockCode, req, res) {
 	});
 }
 
-function getWord(volume) {
-	if (volume >= 0) {
-		return "净流入" + Math.abs(volume) + "亿";
-	} else {
-		return "净流出" + Math.abs(volume) + "亿";
-	}
-}
+// function getWord(volume) {
+// 	if (volume >= 0) {
+// 		return "净流入" + Math.abs(volume) + "亿";
+// 	} else {
+// 		return "净流出" + Math.abs(volume) + "亿";
+// 	}
+// }
 
 function analyzeMessage(msg, req, res) {
 	logger.info(msg);

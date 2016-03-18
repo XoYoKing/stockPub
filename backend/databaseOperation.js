@@ -8,18 +8,18 @@ var logger = global.logger;
 
 exports.endPool = function(callback){
 	conn.endPool(callback);
-}
+};
 
 exports.getAllStockCode = function(callback){
 	var sql = "select stock_code from stock_base_info";
 	conn.executeSql(sql, [], callback);
-}
+};
 
 exports.updateVolumeProportion = function(stockCode, day2, day3, day4, callback){
 	var sql = "update stock_amount_info set day2 = ?, day3 = ?, day4 = ? "
-	+" where stock_code = ? and date = "
-	+"(select xx.date from "
-	+"(select date from stock_amount_info aa where aa.stock_code = ? order by date DESC limit 1) xx)";
+	+ " where stock_code = ? and date = "
+	+ "(select xx.date from "
+	+ "(select date from stock_amount_info aa where aa.stock_code = ? order by date DESC limit 1) xx)";
 	conn.executeSql(sql, [day2, day3, day4, stockCode, stockCode], callback);
 }
 

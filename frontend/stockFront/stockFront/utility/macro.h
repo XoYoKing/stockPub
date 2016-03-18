@@ -35,6 +35,7 @@
 
 #define myred [UIColor colorWithRed:211/255.0 green:47/255.0 blue:47/255.0 alpha:1.0]
 
+#define noticeRed [UIColor colorWithRed:238/255.0 green:90/255.0 blue:68/255.0 alpha:1.0]
 
 #define minSpace 8
 
