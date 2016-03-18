@@ -240,10 +240,10 @@ router.post('/getStockListInfo', function(req, res){
 		logger.debug(reqbody.stock_code, logger.getFileNameAndLineNum(__filename));
 		redisClient.hget(config.hash.stockCurPriceHash, reqbody.stock_code, function(err, reply){
 			if(err){
-				logger.error(result, logger.getFileNameAndLineNum(__filename));
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
 				callback();
 			}else{
-				if(reply!=null){
+				if(reply!==null){
 					reply = JSON.parse(reply);
 					stockInfo[reqbody.stock_code] = reply;
 				}

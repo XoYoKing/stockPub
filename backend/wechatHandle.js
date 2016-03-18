@@ -28,7 +28,7 @@ router.get('/test', function(req, res) {
 router.get('/checkwechat', function(req, res) {
 	logger.debug("enter wechat to check signature");
 
-	if (req.query.echostr != undefined) {
+	if (req.query.echostr !== undefined) {
 		checkToken(req, res);
 	} else {
 		logger.debug("undefined signature");
@@ -50,7 +50,7 @@ router.get('/insertRecommandStock', function(req, res) {
 
 	databaseOperation.checkExistRecommandStock(function(flag, result) {
 		if (flag) {
-			if (result.length == 0) {
+			if (result.length === 0) {
 				databaseOperation.insertRecommandStock("60", function(flag, result) {
 					if (!flag) {
 						logger.error(result);
@@ -84,18 +84,18 @@ router.get('/validatePredict', function(req, res) {
 	databaseOperation.getPredict(function(flag, result) {
 		if (flag) {
 			result.forEach(function(element) {
-				if (element.actual_high_price == null) {
+				if (element.actual_high_price === null) {
 					databaseOperation.getStockInfo(element.stock_code, element.date,
 						function(flag, result) {
 							if (flag) {
-								if (result.length == 5) {
+								if (result.length === 5) {
 									var high_price = 0;
 									result.forEach(function(stockElement) {
 										if (stockElement.high_price > high_price) {
 											high_price = stockElement.high_price;
 										}
 									});
-									if (high_price != 0) {
+									if (high_price !== 0) {
 										var fluctuate = ((high_price - element.price) / element.price)
 											.toFixed(2);
 										databaseOperation.updatePredict(element.stock_code, element.date,
@@ -144,7 +144,7 @@ router.post('/checkwechat', function(req, res) {
 function checkDigit(str) {
 	var letters = "0123456789";
 	for (var i = 0; i < str.length; i++) {
-		if (letters.indexOf(str[i]) == -1) {
+		if (letters.indexOf(str[i]) === -1) {
 			return false;
 		}
 
@@ -174,7 +174,7 @@ function getStockInfoFromAPI(stockCode, callback) {
 	var req = http.request(opt, function(res) {
 		console.log("Got response: " + res.statusCode);
 		var body = '';
-		if(res.statusCode!=200){
+		if(res.statusCode!==200){
 			logger.error(data, logger.getFileNameAndLineNum(__filename));
 			callback(false, data);
 		}
@@ -197,7 +197,7 @@ function handleStock(stockCode, req, res) {
 	var feedbackStr = "";
 	getStockInfoFromAPI(stockCode, function(flag, result) {
 		if (flag) {
-			if (result.code == constant.returnCode.SUCCESS) {
+			if (result.code === constant.returnCode.SUCCESS) {
 				var nowElement = result.data;
 				feedbackStr = "实时数据\n";
 				feedbackStr += nowElement.date + " " + nowElement.time + "\n";
@@ -209,7 +209,7 @@ function handleStock(stockCode, req, res) {
 						nowElement.volume / 10000.0).toFixed(2) + "亿\n");
 				feedbackToWechat(req, res, feedbackStr);
 
-			} else if (result.code == constant.returnCode.STOCK_NOT_EXIST) {
+			} else if (result.code === constant.returnCode.STOCK_NOT_EXIST) {
 				feedbackToWechat(req, res, "无此股票代码");
 			} else {
 				feedbackToWechat(req, res, "异常错误");
@@ -233,20 +233,20 @@ function handleStock(stockCode, req, res) {
 function analyzeMessage(msg, req, res) {
 	logger.info(msg);
 
-	if (msg == null) {
+	if (msg === null) {
 		feedbackToWechat(req, res, wechatFeedbackStr);
 		return;
 	}
 
 	var msgStr = msg.toString();
-	if (msgStr == "help") {
+	if (msgStr === "help") {
 		feedbackToWechat(req, res, wechatFeedbackStr);
 		return;
 	} else if (checkDigit(msgStr)) {
 		logger.info('is stock code');
 		handleStock(msgStr, req, res);
 		return;
-	} else if (msgStr.indexOf('+') != -1) {
+	} else if (msgStr.indexOf('+') !== -1) {
 		var missedStockCode = msgStr.substr(1, msgStr.length - 1);
 		logger.info('add missed stockCode ' + missedStockCode);
 
@@ -260,14 +260,14 @@ function analyzeMessage(msg, req, res) {
 
 		feedbackToWechat(req, res, "已经通知后台添加股票代码:" + missedStockCode +
 			"\n 感谢您参与股票数据完善计划");
-	} else if (msgStr == 'tj') {
+	} else if (msgStr === 'tj') {
 		databaseOperation.getTodayRecommand(function(flag, result) {
 			if (flag) {
 				if (result.length > 0) {
 					var feedbackStr = result[0].date + "\n";
 					feedbackStr += ("本周关注" + "\n");
 					result.forEach(function(elementStr) {
-						if (elementStr.last_price == null) {
+						if (elementStr.last_price === null) {
 							feedbackStr += (elementStr.stock_name + "(" + elementStr.stock_code +
 								")" + "0%" + "\n" + elementStr.industry + "\n");
 						} else {
@@ -288,7 +288,7 @@ function analyzeMessage(msg, req, res) {
 			}
 		});
 
-	} else if (msgStr == 'tjnow1') {
+	} else if (msgStr === 'tjnow1') {
 		if (conn.isMarketOpenTime()) {
 			logger.info('enter tjnow');
 			databaseOperation.getTodayRecommandNow('60', function(flag, result) {
@@ -315,7 +315,7 @@ function analyzeMessage(msg, req, res) {
 			feedbackToWechat(req, res, '当前未开市');
 		}
 
-	} else if (msgStr == 'tjnow2') {
+	} else if (msgStr === 'tjnow2') {
 		if (conn.isMarketOpenTime()) {
 			logger.info('enter tjnow');
 			databaseOperation.getTodayRecommandNow('00', function(flag, result) {
@@ -341,7 +341,7 @@ function analyzeMessage(msg, req, res) {
 		} else {
 			feedbackToWechat(req, res, '当前未开市');
 		}
-	} else if (msgStr == 'tjnow3') {
+	} else if (msgStr === 'tjnow3') {
 		if (conn.isMarketOpenTime()) {
 			logger.info('enter tjnow');
 			databaseOperation.getTodayRecommandNow('30', function(flag, result) {
@@ -367,7 +367,7 @@ function analyzeMessage(msg, req, res) {
 		} else {
 			feedbackToWechat(req, res, '当前未开市');
 		}
-	} else if (msgStr == 'jg') {
+	} else if (msgStr === 'jg') {
 		logger.info('enter getPredictResult');
 		databaseOperation.getPredictResult(function(flag, result) {
 			if (flag) {
@@ -391,7 +391,7 @@ function analyzeMessage(msg, req, res) {
 
 			}
 		});
-	} else if (msgStr == 'jg2') {
+	} else if (msgStr === 'jg2') {
 		logger.info('enter getPredictResultTwoWeeks');
 		databaseOperation.getPredictResultTwoWeeks(function(flag, result) {
 			if (flag) {
@@ -448,7 +448,7 @@ function checkToken(req, res) {
 	arrStr = conn.sha1Cryp(arrStr);
 	console.log(arrStr);
 	console.log(signature);
-	if (arrStr == signature) {
+	if (arrStr === signature) {
 		res.send(echoStr);
 		logger.info('check ok');
 	} else {

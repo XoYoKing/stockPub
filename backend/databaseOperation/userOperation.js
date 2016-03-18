@@ -193,7 +193,7 @@ exports.getComments = function (look_id, comment_timestamp, callback) {
 	conn.executeSql(sql, [look_id, comment_timestamp], callback);
 };
 
-exports.clearUserYieldRank = function(){
+exports.clearUserYieldRank = function(callback){
 	var sql = 'TRUNCATE `user_yield_rank`';
     conn.executeSql(sql, [], callback);
 }

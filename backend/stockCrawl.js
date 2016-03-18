@@ -23,23 +23,23 @@ redisClient.on("error", function (err) {
 function isMarketOpenTime() {
 	var now = new Date();
 	var day = now.getDay();
-	if (day == 6 || day == 7) {
+	if (day === 6 || day === 7) {
 		return false;
 	}
 
 	var hour = now.getHours();
 	var min = now.getMinutes();
-	if (hour < 9 || hour > 15 || (hour == 9 && min < 30) || (hour == 15 && min > 0)) {
+	if (hour < 9 || hour > 15 || (hour === 9 && min < 30) || (hour === 15 && min > 0)) {
 		return false;
 	}
 	return true;
 }
 
 function getMarketDesc(stock_code) {
-	if (stock_code.indexOf("3") == 0 || stock_code.indexOf("0") == 0) {
+	if (stock_code.indexOf("3") === 0 || stock_code.indexOf("0") === 0) {
 		return "sz";
 	}
-	if (stock_code.indexOf("6") == 0) {
+	if (stock_code.indexOf("6") === 0) {
 		return "sh";
 	}
 	return "";
@@ -50,7 +50,7 @@ function getStockInfo(stockCodeArr, isnow) {
 	var urlChild = "";
 	for (var i = 0; i < stockCodeArr.length; ++i) {
 		urlChild = urlChild + "," + getMarketDesc(stockCodeArr[i]) + stockCodeArr[i];
-		if (i % 30 == 0 || i + 1 >= stockCodeArr.length) {
+		if (i % 30 === 0 || i + 1 >= stockCodeArr.length) {
 			getStockInfoFromAPI(urlChild, isnow);
 			urlChild = "";
 		}
@@ -62,7 +62,7 @@ function insertToDatabase(htmlData, isnow) {
 
 
 	var elementArr = htmlData.split(";");
-	if (elementArr.length == 0) {
+	if (elementArr.length === 0) {
 		logger.warn('elementArr is empty');
 		return;
 	}
@@ -137,7 +137,7 @@ function insertToDatabase(htmlData, isnow) {
 					'is_market': 0
 				};
 
-				if(price == 0&&amount == 0){
+				if(price === 0 && amount === 0){
 					//停牌
 					value.is_stop = 1;
 					value.price = yesterday_price;
@@ -158,8 +158,8 @@ function insertToDatabase(htmlData, isnow) {
 					price === undefined ||
 					openPrice === undefined||
 					yesterday_price === undefined||
-					amount == 0||
-					price == 0) {
+					amount === 0||
+					price === 0) {
 						//logger.warn('stockCode is undefined');
 					return;
 				}
@@ -216,7 +216,7 @@ function insertToDatabase(htmlData, isnow) {
 						function(flag, result) {
 							logger.debug(stockCode +" insertStockAmount pb "+pb);
 							if (!flag) {
-								if (result.errno != 1062) {
+								if (result.errno !== 1062) {
 									//不是主键冲突
 									logger.error(result);
 								}
@@ -276,7 +276,7 @@ function updateStockAvPrice(stockCode, date){
 	logger.info(stockCode+" updateStockAvPrice");
 	databaseOperation.getDaysPrice(stockCode, 5, function(flag, result){
 		if(flag){
-			if(result.length == 5){
+			if(result.length === 5){
 				var av_price = 0;
 				result.forEach(function(element){
 					av_price+=element.price;
@@ -284,7 +284,7 @@ function updateStockAvPrice(stockCode, date){
 				av_price/=5;
 
 				var day_fluctuate = 0;
-				if (result[0].price!=0&&result[4].open_price!=0) {
+				if (result[0].price !== 0&&result[4].open_price !== 0) {
 					var min = getMinPrice(result);
 					var max = getMaxPrice(result);
 
@@ -309,7 +309,7 @@ function updateStockAvPrice(stockCode, date){
 
 	databaseOperation.getDaysPrice(stockCode, 10, function(flag, result){
 		if(flag){
-			if(result.length == 10){
+			if(result.length === 10){
 				var av_price = 0;
 				result.forEach(function(element){
 					av_price+=element.price;
@@ -317,7 +317,7 @@ function updateStockAvPrice(stockCode, date){
 				av_price/=10;
 
 				var day_fluctuate = 0;
-				if (result[0].price!=0&&result[9].open_price!=0) {
+				if (result[0].price !== 0&&result[9].open_price !== 0) {
 					day_fluctuate = ((result[0].price - result[9].open_price)/result[9].open_price).toFixed(2);
 				}
 				databaseOperation.update10AvPrice(stockCode, av_price, date, day_fluctuate, function(flag, result){
@@ -344,7 +344,7 @@ function updateStockAvPrice(stockCode, date){
 function getPlusMinus(num){
 	if (num>0) {
 		return 1;
-	}else if (num == 0) {
+	}else if (num === 0) {
 		return 0
 	}else{
 		return -1
@@ -354,8 +354,8 @@ function getPlusMinus(num){
 function updateStockBaseInfo(stockCode, priceearning, marketValue, flowMarketValue, pb, price){
 
 	var roe = 0;
-	if (priceearning!=0&&pb!=0
-		&&priceearning!=null&&pb!=null) {
+	if (priceearning !== 0&&pb !== 0 &&
+		priceearning !== null && pb !== null) {
 		roe = (pb*100/priceearning).toFixed(2);
 	}
 
@@ -376,22 +376,22 @@ function caculateVolumeProportion(stockCode){
 				var element3 = result[3];
 				var element4 = result[4];
 
-				if(element1.open_price == null
-					||element2.open_price == null
-					||element3.open_price == null
-					||element4.open_price == null){
+				if(element1.open_price === null||
+					element2.open_price === null||
+					element3.open_price === null||
+					element4.open_price === null){
 					return;
 				}
 
 				var day2 = element0.volume*getPlusMinus(element0.price - element0.open_price)+element1.volume*getPlusMinus(element1.price - element1.open_price);
 
-				var day3 = element0.volume*getPlusMinus(element0.price - element0.open_price)+element1.volume*getPlusMinus(element1.price - element1.open_price)
-				+element2.volume*getPlusMinus(element2.price - element2.open_price)
-				+element3.volume*getPlusMinus(element3.price - element3.open_price);
+				var day3 = element0.volume*getPlusMinus(element0.price - element0.open_price)+element1.volume*getPlusMinus(element1.price - element1.open_price)+
+				element2.volume*getPlusMinus(element2.price - element2.open_price)+
+				element3.volume*getPlusMinus(element3.price - element3.open_price);
 
-				var day4 = element0.volume*getPlusMinus(element0.price - element0.open_price)+element1.volume*getPlusMinus(element1.price - element1.open_price)
-				+element2.volume*getPlusMinus(element2.price - element2.open_price)+element3.volume*getPlusMinus(element3.price - element3.open_price)
-				+element4.volume*getPlusMinus(element4.price - element4.open_price);
+				var day4 = element0.volume*getPlusMinus(element0.price - element0.open_price)+element1.volume*getPlusMinus(element1.price - element1.open_price)+
+				element2.volume*getPlusMinus(element2.price - element2.open_price)+element3.volume*getPlusMinus(element3.price - element3.open_price)+
+				element4.volume*getPlusMinus(element4.price - element4.open_price);
 
 				databaseOperation.updateVolumeProportion(stockCode, day2, day3, day4, function(flag, result){
 					if (!flag) {
@@ -413,7 +413,7 @@ function getStockInfoFromAPI(urlChild, isnow) {
 	//logger.debug(stockAPI);
 
 	http.get(stockAPI, function(res) {
-		if (res.statusCode == 200) {
+		if (res.statusCode === 200) {
 			var htmlData = "";
 			res.on('data', function(data) {
 				data = iconv.decode(data, 'GBK');
@@ -512,7 +512,7 @@ function insertMarketIndexDayToDataBase(htmlData, market_code){
 	logger.debug('enter insertMarketIndexDayToDataBase', logger.getFileNameAndLineNum(__filename));
 	var common = require('./utility/commonFunc');
 	var element = common.analyzeMarketMessage(htmlData, market_code);
-	if(element == null){
+	if(element === null){
 		logger.info('insertMarketIndexDayToDataBase element is null');
 	}else{
 		stockOperation.insertMarketIndexDay(element, function(flag, result){
@@ -529,7 +529,7 @@ function insertMarketIndexNowToDataBase(htmlData, market_code){
 	logger.debug('enter insertMarketIndexNowToDataBase', logger.getFileNameAndLineNum(__filename));
 	var common = require('./utility/commonFunc');
 	var element = common.analyzeMarketMessage(htmlData, market_code);
-	if(element == null){
+	if(element === null){
 		logger.info('insertMarketIndexNowToDataBase element is null');
 	}else{
 		element.is_market = 1;
@@ -555,7 +555,7 @@ function getMarketIndexFromAPI(urlChild, market_code, insertAction){
 	var stockAPI = config.stockDataInterface.url + urlChild;
 	logger.debug(stockAPI, logger.getFileNameAndLineNum(__filename));
 	http.get(stockAPI, function(res) {
-		if (res.statusCode == 200) {
+		if (res.statusCode === 200) {
 			logger.debug('getMarketIndexFromAPI success', logger.getFileNameAndLineNum(__filename));
 			var htmlData = "";
 			res.on('data', function(data) {
@@ -653,7 +653,7 @@ exports.pushMarketCloseMsg = function(){
 					userOperation.getAllUser(function(flag, result){
 						if(flag){
 							result.forEach(function(e){
-								if(e.device_token!=null){
+								if(e.device_token !== null){
 									apn.pushMsgToUsers(e.device_token, pushMsg);
 								}
 							});

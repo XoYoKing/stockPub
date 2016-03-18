@@ -83,7 +83,7 @@ function pushMsgToUsers(userToken, msg) {
 		apnsConnection.sendNotification(note);
 		log.debug('send notification to ' + userToken, log.getFileNameAndLineNum(__filename));
 	});
-};
+}
 
 // exports.apnPushTo = function(user_id, msg, badgeCount){
 

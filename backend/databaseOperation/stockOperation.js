@@ -17,7 +17,7 @@ exports.addlookStock = function(reqbody, callback){
 exports.dellookStock = function(reqbody, callback){
     var look_finish_timestamp = Date.now();
 
-    sql = 'update stock_look_info set look_finish_timestamp = ?, look_update_timestamp = ?,  look_finish_time = NOW(), look_status = 2  ' +
+    var sql = 'update stock_look_info set look_finish_timestamp = ?, look_update_timestamp = ?,  look_finish_time = NOW(), look_status = 2  ' +
     ' where user_id = ? and stock_code = ? and look_status = 1';
 
     conn.executeSql(sql, [look_finish_timestamp, look_finish_timestamp, reqbody.user_id, reqbody.stock_code], callback);

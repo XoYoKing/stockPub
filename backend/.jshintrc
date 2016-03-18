@@ -3,6 +3,9 @@
     "eqeqeq": true,
     "asi": true,
     "laxbreak": false,
+    "strict": false,
+    "onevar": false,
+    "shadow": true,
     "predef": ["require", "console", "__filename",
         "process", "module", "global", "exports", "__dirname"]
 }
