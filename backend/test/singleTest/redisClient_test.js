@@ -12,8 +12,6 @@ setInterval(function(){
             console.log('key:test1 value:'+reply);
         }
     });
-}, 500);
-setInterval(function(){
     redisClient.get('test2', function(err, reply){
         if(err){
             console.log(err);
@@ -21,8 +19,6 @@ setInterval(function(){
             console.log('key:test2 value:'+reply);
         }
     });
-}, 1000);
-setInterval(function(){
     redisClient.get('test3', function(err, reply){
         if (err) {
             console.log(err);
@@ -30,4 +26,4 @@ setInterval(function(){
             console.log('key:test3 value:'+reply);
         }
     });
-}, 1000);
+}, 500);
