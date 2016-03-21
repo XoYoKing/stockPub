@@ -91,7 +91,7 @@ router.post('/addlook', function(req, res){
 				common.getStockInfoFromAPI(req.body.stock_code, function(flag, htmlData){
 					if(flag){
 						var stockInfoArr = common.analyzeMessage(htmlData);
-						if(stockInfoArr == false||stockInfoArr.length == 0){
+						if(stockInfoArr === false||stockInfoArr.length === 0){
 							returnData.code = constant.returnCode.STOCK_NOT_EXIST;
 							res.send(returnData);
 						}else{
@@ -108,7 +108,7 @@ router.post('/addlook', function(req, res){
 										if(flag){
 											result.forEach(function(element){
 												var msg = '';
-												if(req.body.look_direct == 1){
+												if(req.body.look_direct === 1){
 													msg = req.body.user_name+"看多"+req.body.stock_name+"("+
 													req.body.stock_code+")";
 												}
@@ -121,7 +121,7 @@ router.post('/addlook', function(req, res){
 									});
 
 								}else{
-									if(result.code == 'ER_DUP_ENTRY'){
+									if(result.code === 'ER_DUP_ENTRY'){
 										logger.warn('主键冲突', logger.getFileNameAndLineNum(__filename));
 										returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
 									}else{
@@ -208,7 +208,7 @@ router.post('/getHisLookInfoByUser', function(req, res){
 	stockOperation.getLookInfoByUser(req.body.user_id, 2, function(flag, result){
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
-			if(req.body.limit != null){
+			if(req.body.limit !== null){
 				returnData.data = result.slice(0, req.body.limit);
 			}else{
 				returnData.data = result;
@@ -237,7 +237,7 @@ router.post('/getFollowLookInfo', function(req, res){
 //获取股票列表信息
 router.post('/getStockListInfo', function(req, res){
 	var stockInfo = {};
-	var stocklist = new Array();
+	var stocklist = [];
 	stocklist = req.body['stocklist[]'].slice(0);
 
 	asyncClient.each(stocklist, function(item, callback){
@@ -321,11 +321,11 @@ router.post('/getStock', function(req, res){
 				res.send(returnData);
 			}else{
 				//表中未找到记录
-				if(req.body.stock_alpha_info.length == 6){
+				if(req.body.stock_alpha_info.length === 6){
 					common.getStockInfoFromAPI(req.body.stock_alpha_info, function(flag, htmlData){
 						if(flag){
 							var stockInfoArr = common.analyzeMessage(htmlData);
-							if(stockInfoArr == false||stockInfoArr.length == 0){
+							if(stockInfoArr === false||stockInfoArr.length === 0){
 								routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
 							}else{
 								routerFunc.feedBack(constant.returnCode.SUCCESS, [stockInfoArr[0]], res);
@@ -378,7 +378,7 @@ router.post('/now', function(req, res){
                                 if(flag){
                                     //analyze html data
                                     var stockInfoArr = common.analyzeMessage(htmlData);
-                                    if(stockInfoArr == false||stockInfoArr.length == 0){
+                                    if(stockInfoArr === false||stockInfoArr.length === 0){
                                         routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
                                     }else{
                                         routerFunc.feedBack(constant.returnCode.SUCCESS, stockInfoArr[0], res);

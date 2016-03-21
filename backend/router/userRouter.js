@@ -439,7 +439,7 @@ router.post('/getRankUser', function(req, res){
 		var userlist = {};
 		if(flag){
 			result.forEach(function(element){
-				if(userlist[element.user_id] == null){
+				if(userlist[element.user_id] === null){
 					userlist[element.user_id] =
 					{
 						user_id: element.user_id,
@@ -489,7 +489,7 @@ router.post('/getUnreadCommentCount', function(req, res){
 					log.error(err, log.getFileNameAndLineNum(__filename));
 					callback(err);
 				}else{
-					if(reply == null){
+					if(reply === null){
 						reply = 0;
 					}
 					callback(null, reply);
@@ -554,8 +554,8 @@ router.post('/getCommentToStockByUser', function(req, res){
 			//获取当前股票股价
 			asyncClient.each(result, function(item, callback){
 				var hash = null;
-				if(item.talk_stock_code.indexOf('sz')!=-1||
-				item.talk_stock_code.indexOf('sh')!=-1){
+				if(item.talk_stock_code.indexOf('sz')!==-1||
+				item.talk_stock_code.indexOf('sh')!==-1){
 					hash = config.hash.marketCurPriceHash;
 				}else{
 					hash = config.hash.stockCurPriceHash;
@@ -611,7 +611,7 @@ router.post('/addCommentToStock', function(req, res){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 
 			//更新未读评论数
-			if(req.body.to_stock == 0){
+			if(req.body.to_stock === 0){
 				increaseUnreadStockCommentCount(req.body.talk_to_user_id);
 			}
 
@@ -622,7 +622,7 @@ router.post('/addCommentToStock', function(req, res){
 	});
 
 	//推送
-	if(req.body.to_stock == 0){
+	if(req.body.to_stock === 0){
 		var msg = req.body.user_name + '评论了你';
 		apn.pushMsg(req.body.talk_to_user_id, msg);
 	}
@@ -642,7 +642,7 @@ function increaseUnreadStockCommentCount(user_id){
 		if(err){
 			log.error(err, log.getFileNameAndLineNum(__filename));
 		}else{
-			if(reply == null){
+			if(reply === null){
 				reply = 1;
 			}else{
 				reply=parseInt(reply)+1;
