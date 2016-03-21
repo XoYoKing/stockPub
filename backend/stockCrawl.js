@@ -620,6 +620,26 @@ exports.startCrawlStockNow = function(){
 	});
 }
 
+
+exports.updateStockName = function(){
+	stockOperation.getAllStockCode(function(flag, result){
+        if (flag) {
+            result.forEach(function(e){
+                redisClient.hget(config.hash.stockCurPriceHash, e.stock_code, function(err, reply){
+                    if(err){
+                        logger.error(err, log.getFileNameAndLineNum(__filename));
+                    }else{
+                        reply = JSON.parse(reply);
+                        console.log(reply.stock_name);
+                    }
+                });
+            });
+        }else{
+            logger.error(result, log.getFileNameAndLineNum(__filename));
+        }
+    });
+};
+
 exports.pushMarketCloseMsg = function(){
 	logger.info('pushMarketCloseMsg');
 	stockOperation.getAllMarketIndexNow(function(flag, result){
