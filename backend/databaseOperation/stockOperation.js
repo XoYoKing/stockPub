@@ -320,6 +320,12 @@ exports.updateStockAlpha = function(stock_code, stock_alpha_info, callback){
     conn.executeSql(sql, [stock_alpha_info, stock_code], callback);
 }
 
+exports.updateStockName = function(stock_code, stock_name, stock_alpha_info, callback){
+    var sql = 'update stock_base_info set stock_alpha_info = ?, stock_name = ? where stock_code = ?';
+    conn.executeSql(sql, [stock_alpha_info, stock_name, stock_code], callback);
+}
+
+
 exports.getStockBaseInfoByAlpha = function(stock_alpha_info, callback){
     var sql = 'select *from stock_base_info where stock_alpha_info like \'%'+stock_alpha_info+'%\' limit 8';
     conn.executeSql(sql, [], callback);
