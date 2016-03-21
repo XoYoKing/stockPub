@@ -439,7 +439,7 @@ router.post('/getRankUser', function(req, res){
 		var userlist = {};
 		if(flag){
 			result.forEach(function(element){
-				if(userlist[element.user_id] === null){
+				if(userlist[element.user_id] === undefined){
 					userlist[element.user_id] =
 					{
 						user_id: element.user_id,
