@@ -429,6 +429,8 @@
                         element.priceearning = temp.priceearning;
                         element.pb = temp.pb;
                         element.is_stop = temp.is_stop;
+                        element.time = temp.time;
+                        element.date = temp.date;
                     }
                 }
                 

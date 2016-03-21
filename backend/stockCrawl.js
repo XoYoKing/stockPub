@@ -92,25 +92,25 @@ function insertToDatabase(htmlData, isnow) {
 				// stock_name = buf;
 				console.log(stock_name);
 
-				var amount = dataArr[6];
-				var yesterday_price = dataArr[4];
+				var amount = parseInt(dataArr[6]);
+				var yesterday_price = parseFloat(dataArr[4]);
 				var date = dataArr[30];
 				date = date.substr(0, 4)+"-"+date.substr(4, 2)+"-"+date.substr(6, 2);
 
 				var time = dataArr[30];
 				time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
-				var price = dataArr[3];
+				var price = parseFloat(dataArr[3]);
 
-				var fluctuate = dataArr[32];
-				var priceearning = dataArr[39];
-				var marketValue = dataArr[45];
-				var pb = dataArr[46];
-				var flowMarketValue = dataArr[44];
-				var volume = dataArr[37];
-				var openPrice = dataArr[5];
-				var high_price = dataArr[33];
-				var low_price = dataArr[34];
-				var fluctuate_value = dataArr[31];
+				var fluctuate = parseFloat(dataArr[32]);
+				var priceearning = parseFloat(dataArr[39]);
+				var marketValue = parseFloat(dataArr[45]);
+				var pb = parseFloat(dataArr[46]);
+				var flowMarketValue = parseFloat(dataArr[44]);
+				var volume = parseInt(dataArr[37]);
+				var openPrice = parseFloat(dataArr[5]);
+				var high_price = parseFloat(dataArr[33]);
+				var low_price = parseFloat(dataArr[34]);
+				var fluctuate_value = parseFloat(dataArr[31]);
 
 
 				//update redis for current price
@@ -137,7 +137,7 @@ function insertToDatabase(htmlData, isnow) {
 					'is_market': 0
 				};
 
-				if(price === 0 && amount === 0){
+				if(price === 0.00 && amount === 0){
 					//停牌
 					value.is_stop = 1;
 					value.price = yesterday_price;
