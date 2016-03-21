@@ -14,6 +14,8 @@ var path = require('path');
 var apn = require('./utility/apnPush.js');
 var moment = require('moment');
 var iconv = require('iconv-lite');
+var pinyin = require("pinyin");
+
 
 redisClient.on("error", function (err) {
 	logger.error(err, logger.getFileNameAndLineNum(__filename));
@@ -632,6 +634,21 @@ exports.updateStockName = function(){
 						if(reply !== null){
 							reply = JSON.parse(reply);
 	                        console.log(reply.stock_name);
+
+							var alpha = pinyin(reply.stock_name, {
+								style: pinyin.STYLE_FIRST_LETTER
+							});
+							var alphaStr = '';
+							alpha.forEach(function(e){
+								alphaStr+=e[0];
+							});
+							alphaStr = alphaStr.replace('*', '');
+							alphaStr = alphaStr.replace(' ', '');
+							alphaStr = alphaStr.toLowerCase();
+							alphaStr+=reply.stock_name;
+							alphaStr+=e.stock_code;
+							console.log(alphaStr);
+
 						}
                     }
                 });
