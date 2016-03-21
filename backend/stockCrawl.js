@@ -629,8 +629,10 @@ exports.updateStockName = function(){
                     if(err){
                         logger.error(err, log.getFileNameAndLineNum(__filename));
                     }else{
-                        reply = JSON.parse(reply);
-                        console.log(reply.stock_name);
+						if(reply !== null){
+							reply = JSON.parse(reply);
+	                        console.log(reply.stock_name);
+						}
                     }
                 });
             });
