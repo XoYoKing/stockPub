@@ -12,7 +12,7 @@ setInterval(function(){
             console.log('key:test1 value:'+reply);
         }
     });
-}, 1000);
+}, 500);
 setInterval(function(){
     redisClient.get('test2', function(err, reply){
         if(err){
