@@ -649,6 +649,11 @@ exports.updateStockName = function(){
 							alphaStr+=e.stock_code;
 							console.log(alphaStr);
 
+							stockOperation.updateStockName(e.stock_code, reply.stock_name, alphaStr, function(flag, result){
+								if(!flag){
+									logger.error(result, log.getFileNameAndLineNum(__filename));
+								}
+							});
 						}
                     }
                 });
