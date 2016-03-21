@@ -22,7 +22,7 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
             date = date.substr(0, 4)+"-"+date.substr(4, 2)+"-"+date.substr(6, 2);
             element.market_code = market_code;
             element.market_name = dataArr[1];
-            element.market_index_date = date.substr(0, 8);
+            element.market_index_date = date;
 
             var time = dataArr[30];
             time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
