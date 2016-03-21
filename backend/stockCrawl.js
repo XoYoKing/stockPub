@@ -14,6 +14,8 @@ var path = require('path');
 var apn = require('./utility/apnPush.js');
 var moment = require('moment');
 var iconv = require('iconv-lite');
+var pinyin = require("pinyin");
+
 
 redisClient.on("error", function (err) {
 	logger.error(err, logger.getFileNameAndLineNum(__filename));
@@ -624,6 +626,48 @@ exports.startCrawlStockNow = function(){
 		}
 	});
 }
+
+
+exports.updateStockName = function(){
+	stockOperation.getAllStockCode(function(flag, result){
+        if (flag) {
+            result.forEach(function(e){
+                redisClient.hget(config.hash.stockCurPriceHash, e.stock_code, function(err, reply){
+                    if(err){
+                        logger.error(err, log.getFileNameAndLineNum(__filename));
+                    }else{
+						if(reply !== null){
+							reply = JSON.parse(reply);
+	                        console.log(reply.stock_name);
+
+							var alpha = pinyin(reply.stock_name, {
+								style: pinyin.STYLE_FIRST_LETTER
+							});
+							var alphaStr = '';
+							alpha.forEach(function(e){
+								alphaStr+=e[0];
+							});
+							alphaStr = alphaStr.replace('*', '');
+							alphaStr = alphaStr.replace(' ', '');
+							alphaStr = alphaStr.toLowerCase();
+							alphaStr+=reply.stock_name;
+							alphaStr+=e.stock_code;
+							console.log(alphaStr);
+
+							stockOperation.updateStockName(e.stock_code, reply.stock_name, alphaStr, function(flag, result){
+								if(!flag){
+									logger.error(result, log.getFileNameAndLineNum(__filename));
+								}
+							});
+						}
+                    }
+                });
+            });
+        }else{
+            logger.error(result, log.getFileNameAndLineNum(__filename));
+        }
+    });
+};
 
 exports.pushMarketCloseMsg = function(){
 	logger.info('pushMarketCloseMsg');
