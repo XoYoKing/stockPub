@@ -366,6 +366,7 @@ typedef enum {
                         marketInfoModel.volume = [[element objectForKey:@"market_index_trade_volume"] floatValue];
                         marketInfoModel.amount = [[element objectForKey:@"market_index_trade_amount"] floatValue];
                         
+                        
                         _stockInfoModel = marketInfoModel;
                         [navTitle setText:_stockInfoModel.stock_name];
                         navTitle.alpha = 0;

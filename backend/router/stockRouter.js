@@ -148,7 +148,25 @@ router.post('/addlook', function(req, res){
 });
 
 
-//获取当前大盘指数
+//获取当前指定大盘指数
+router.post('/getAllMarketIndexNowByCode', function(req, res){
+
+	var returnData = {};
+	redisClient.hget(config.hash.marketCurPriceHash, req.body.stock_code, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}else{
+			returnData.code = constant.returnCode.SUCCESS;
+			returnData.data = JSON.parse(reply);
+		}
+		logger.debug(returnData, logger.getFileNameAndLineNum(__filename));
+		res.send(returnData);
+	});
+})
+
+
+//获取当前所有大盘指数
 router.post('/getAllMarketIndexNow', function(req, res){
 
 	var returnData = {};
@@ -167,18 +185,6 @@ router.post('/getAllMarketIndexNow', function(req, res){
 		logger.debug(returnData, logger.getFileNameAndLineNum(__filename));
 		res.send(returnData);
 	});
-
-	// stockOperation.getAllMarketIndexNow(function(flag, result){
-	// 	var returnData = {};
-	// 	if(flag){
-	// 		returnData.code = constant.returnCode.SUCCESS;
-	// 		returnData.data = result;
-	// 	}else{
-	// 		logger.error(result, logger.getFileNameAndLineNum(__filename));
-	// 		returnData.code = constant.returnCode.ERROR;
-	// 	}
-	// 	res.send(returnData);
-	// });
 })
 
 //获取特定人的当前看多
