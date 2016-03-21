@@ -501,6 +501,7 @@ router.post('/getUnreadCommentCount', function(req, res){
 			log.error(err, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
 		}else{
+			log.debug(JSON.stringify(results), log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.SUCCESS, results, res);
 		}
 	});
