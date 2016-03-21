@@ -19,6 +19,7 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
                 return;
             }
             var date = dataArr[30];
+            date = date.substr(0, 4)+"-"+date.substr(4, 2)+"-"+date.substr(6, 2);
             element.market_code = market_code;
             element.market_name = dataArr[1];
             element.market_index_date = date.substr(0, 8);

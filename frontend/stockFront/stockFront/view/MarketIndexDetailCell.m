@@ -77,7 +77,7 @@
     [dateTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-minSpace);
         make.bottom.mas_equalTo(stockFluctuateLabel.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(12*minSpace, 2*minSpace));
+        make.size.mas_equalTo(CGSizeMake(11*minSpace, 2*minSpace));
     }];
     
     
