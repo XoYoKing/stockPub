@@ -13,7 +13,7 @@ var moment = require('moment');
 var redis = require("redis");
 var redisClient = redis.createClient({auth_pass:'here_dev'});
 redisClient.on("error", function (err) {
-	log.error(err, logger.getFileNameAndLineNum(__filename));
+	log.error(err, log.getFileNameAndLineNum(__filename));
 });
 var stockOperation = require('./databaseOperation/stockOperation');
 var config = require('./config');
