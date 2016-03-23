@@ -63,13 +63,15 @@ global.app.use(function(req, res, next) {
 });
 
 
-global.app.use('/', function(req, res, next){
-    res.send(process.env.STOCK_ENV);
-});
+
 
 global.app.use('/stock', stockRouter);
 global.app.use('/user', userRouter);
 global.app.use('/image', imageRouter);
+global.app.use('/', function(req, res, next){
+    res.send(process.env.STOCK_ENV);
+});
+
 
 global.app.listen(port); //设置监听http请求的端口号
 log.info("stockServer started on port " + port);
