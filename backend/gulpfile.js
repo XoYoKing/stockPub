@@ -12,7 +12,7 @@ gulp.task('default', function() {
       }
     }));
 });
-sss
+
 gulp.task('lint', function() {
     return gulp.src(['./*.js', './utility/*.js', './router/*.js', './databaseOperation/*.js'])
        .pipe(jshint())
