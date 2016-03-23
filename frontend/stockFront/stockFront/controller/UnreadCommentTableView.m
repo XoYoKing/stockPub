@@ -47,7 +47,7 @@ static int bottomActiveHeight = 30;
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     UILabel *navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-    [navTitle setText:@"评论"];
+    [navTitle setText:@"看多评论"];
     [navTitle setFont:[UIFont fontWithName:fontName size:middleFont]];
     navTitle.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = navTitle;

@@ -348,7 +348,9 @@
                     marketInfoModel.yesterday_price = [[element objectForKey:@"market_index_value_yesterday_close"] floatValue];
                     marketInfoModel.volume = [[element objectForKey:@"market_index_trade_volume"] floatValue];
                     marketInfoModel.amount = [[element objectForKey:@"market_index_trade_amount"] floatValue];
-
+                    marketInfoModel.date = [element objectForKey:@"market_index_date"];
+                    marketInfoModel.time = [element objectForKey:@"market_index_time"];
+                    
                     
                     [marketIndexList addObject:marketInfoModel];
                 }
@@ -429,6 +431,8 @@
                         element.priceearning = temp.priceearning;
                         element.pb = temp.pb;
                         element.is_stop = temp.is_stop;
+                        element.time = temp.time;
+                        element.date = temp.date;
                     }
                 }
                 

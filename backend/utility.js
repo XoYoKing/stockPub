@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-var config = require('./config');
+//var config = require('./config');
 
 var pool = mysql.createPool({
 	host: process.env.dbhost,
@@ -15,7 +15,7 @@ var logger = global.logger;
 exports.getPlusMinus = function(num){
 	if (num>0) {
 		return 1;
-	}else if (num == 0) {
+	}else if (num === 0) {
 		return 0
 	}else{
 		return -1
@@ -43,13 +43,13 @@ exports.endPool = function(callback){
 exports.isMarketOpenTime = function() {
 	var now = new Date();
 	var day = now.getDay();
-	if (day == 6 || day == 7) {
+	if (day === 6 || day === 7) {
 		return false;
 	}
 
 	var hour = now.getHours();
 	var min = now.getMinutes();
-	if (hour < 9 || hour > 15 || (hour == 9 && min < 30) || (hour == 15 && min > 0)) {
+	if (hour < 9 || hour > 15 || (hour === 9 && min < 30) || (hour === 15 && min > 0)) {
 		return false;
 	}
 	return true;
@@ -71,7 +71,7 @@ exports.executeSql = function(sql, para, callback) {
 		//logger.debug('enter getConnection', logger.getFileNameAndLineNum(__filename));
 		if (err) {
 			logger.error(err, logger.getFileNameAndLineNum(__filename));
-			if(callback!=null){
+			if(callback !== null){
 				callback(false, err);
 			}
 		}
@@ -80,7 +80,7 @@ exports.executeSql = function(sql, para, callback) {
 			var query = conn.query(sql, para, function(err, result){
 				if (err) {
 					logger.error(err, logger.getFileNameAndLineNum(__filename));
-					if(callback!=null){
+					if(callback !== null){
 						callback(false, err);
 					}
 				} else{
@@ -119,7 +119,7 @@ exports.executeTwoStepTransaction = function(sqlArray, paraArray, callback){
 			callback(false, err);
 		}else {
 			var queues = require('mysql-queues');
-			const DEBUG = true;
+			var DEBUG = true;
 			queues(conn, DEBUG);
 			var trans = conn.startTransaction();
 			trans.query(sqlArray[0], paraArray[0], function(err, result) {

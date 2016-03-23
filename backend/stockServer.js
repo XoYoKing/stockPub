@@ -18,7 +18,7 @@ var fileStreamRotator = require('file-stream-rotator');
 
 
 process.on('uncaughtException', function(err) {
-    logger.error('worker exception: ' + err.stack);
+    log.error('worker exception: ' + err.stack);
     email.sendMail('Caught exception: ' + err.stack,
         'stockServer process Caught exception');
 });
@@ -68,4 +68,4 @@ global.app.use('/user', userRouter);
 global.app.use('/image', imageRouter);
 
 global.app.listen(port); //设置监听http请求的端口号
-logger.info("stockServer started on port " + port);
+log.info("stockServer started on port " + port);

@@ -91,7 +91,7 @@ router.post('/addlook', function(req, res){
 				common.getStockInfoFromAPI(req.body.stock_code, function(flag, htmlData){
 					if(flag){
 						var stockInfoArr = common.analyzeMessage(htmlData);
-						if(stockInfoArr == false||stockInfoArr.length == 0){
+						if(stockInfoArr === false||stockInfoArr.length === 0){
 							returnData.code = constant.returnCode.STOCK_NOT_EXIST;
 							res.send(returnData);
 						}else{
@@ -108,7 +108,7 @@ router.post('/addlook', function(req, res){
 										if(flag){
 											result.forEach(function(element){
 												var msg = '';
-												if(req.body.look_direct == 1){
+												if(req.body.look_direct === 1){
 													msg = req.body.user_name+"看多"+req.body.stock_name+"("+
 													req.body.stock_code+")";
 												}
@@ -121,7 +121,7 @@ router.post('/addlook', function(req, res){
 									});
 
 								}else{
-									if(result.code == 'ER_DUP_ENTRY'){
+									if(result.code === 'ER_DUP_ENTRY'){
 										logger.warn('主键冲突', logger.getFileNameAndLineNum(__filename));
 										returnData.code = constant.returnCode.LOOK_STOCK_EXIST;
 									}else{
@@ -148,7 +148,25 @@ router.post('/addlook', function(req, res){
 });
 
 
-//获取当前大盘指数
+//获取当前指定大盘指数
+router.post('/getAllMarketIndexNowByCode', function(req, res){
+
+	var returnData = {};
+	redisClient.hget(config.hash.marketCurPriceHash, req.body.stock_code, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+		}else{
+			returnData.code = constant.returnCode.SUCCESS;
+			returnData.data = JSON.parse(reply);
+		}
+		logger.debug(returnData, logger.getFileNameAndLineNum(__filename));
+		res.send(returnData);
+	});
+})
+
+
+//获取当前所有大盘指数
 router.post('/getAllMarketIndexNow', function(req, res){
 
 	var returnData = {};
@@ -167,18 +185,6 @@ router.post('/getAllMarketIndexNow', function(req, res){
 		logger.debug(returnData, logger.getFileNameAndLineNum(__filename));
 		res.send(returnData);
 	});
-
-	// stockOperation.getAllMarketIndexNow(function(flag, result){
-	// 	var returnData = {};
-	// 	if(flag){
-	// 		returnData.code = constant.returnCode.SUCCESS;
-	// 		returnData.data = result;
-	// 	}else{
-	// 		logger.error(result, logger.getFileNameAndLineNum(__filename));
-	// 		returnData.code = constant.returnCode.ERROR;
-	// 	}
-	// 	res.send(returnData);
-	// });
 })
 
 //获取特定人的当前看多
@@ -202,7 +208,7 @@ router.post('/getHisLookInfoByUser', function(req, res){
 	stockOperation.getLookInfoByUser(req.body.user_id, 2, function(flag, result){
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
-			if(req.body.limit != null){
+			if(req.body.limit !== null){
 				returnData.data = result.slice(0, req.body.limit);
 			}else{
 				returnData.data = result;
@@ -231,7 +237,7 @@ router.post('/getFollowLookInfo', function(req, res){
 //获取股票列表信息
 router.post('/getStockListInfo', function(req, res){
 	var stockInfo = {};
-	var stocklist = new Array();
+	var stocklist = [];
 	stocklist = req.body['stocklist[]'].slice(0);
 
 	asyncClient.each(stocklist, function(item, callback){
@@ -240,10 +246,10 @@ router.post('/getStockListInfo', function(req, res){
 		logger.debug(reqbody.stock_code, logger.getFileNameAndLineNum(__filename));
 		redisClient.hget(config.hash.stockCurPriceHash, reqbody.stock_code, function(err, reply){
 			if(err){
-				logger.error(result, logger.getFileNameAndLineNum(__filename));
+				logger.error(err, logger.getFileNameAndLineNum(__filename));
 				callback();
 			}else{
-				if(reply!=null){
+				if(reply!==null){
 					reply = JSON.parse(reply);
 					stockInfo[reqbody.stock_code] = reply;
 				}
@@ -315,11 +321,11 @@ router.post('/getStock', function(req, res){
 				res.send(returnData);
 			}else{
 				//表中未找到记录
-				if(req.body.stock_alpha_info.length == 6){
+				if(req.body.stock_alpha_info.length === 6){
 					common.getStockInfoFromAPI(req.body.stock_alpha_info, function(flag, htmlData){
 						if(flag){
 							var stockInfoArr = common.analyzeMessage(htmlData);
-							if(stockInfoArr == false||stockInfoArr.length == 0){
+							if(stockInfoArr === false||stockInfoArr.length === 0){
 								routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
 							}else{
 								routerFunc.feedBack(constant.returnCode.SUCCESS, [stockInfoArr[0]], res);
@@ -372,7 +378,7 @@ router.post('/now', function(req, res){
                                 if(flag){
                                     //analyze html data
                                     var stockInfoArr = common.analyzeMessage(htmlData);
-                                    if(stockInfoArr == false||stockInfoArr.length == 0){
+                                    if(stockInfoArr === false||stockInfoArr.length === 0){
                                         routerFunc.feedBack(constant.returnCode.STOCK_NOT_EXIST, null, res);
                                     }else{
                                         routerFunc.feedBack(constant.returnCode.SUCCESS, stockInfoArr[0], res);

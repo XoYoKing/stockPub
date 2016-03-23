@@ -36,6 +36,7 @@
     UserInfoModel* phoneUserInfo;
     BOOL isFollow;
     NSInteger unreadCommentCount;
+    NSInteger unreadCommentToStockCount;
     UILabel *navTitle;
 }
 
@@ -477,11 +478,13 @@ typedef enum {
         if(code == SUCCESS){
             
             
-            NSInteger unreadCount = [[response objectForKey:@"data"] integerValue];
-            unreadCommentCount = unreadCount;
+            NSDictionary* data = [response objectForKey:@"data"];
             
-            if (unreadCommentCount>0) {
-                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentCount]];
+            unreadCommentCount = [[data objectForKey:@"unreadCommentCount"] integerValue];
+            unreadCommentToStockCount = [[data objectForKey:@"unreadCommentToStockCount"] integerValue];
+            
+            if (unreadCommentToStockCount+unreadCommentCount>0) {
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount+unreadCommentCount]];
                 
             }else{
                 [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:nil];
@@ -687,7 +690,7 @@ typedef enum {
     }
     
     if (indexPath.section == msgSection) {
-        //评论
+        //看多评论
         if(indexPath.row == 0){
             static NSString* cellIdentifier = @"msgcell";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -696,7 +699,7 @@ typedef enum {
                 NSLog(@"new cell");
             }
             
-            cell.textLabel.text = @"评论";
+            cell.textLabel.text = @"看多评论";
             
             
             
@@ -722,6 +725,43 @@ typedef enum {
             cell.backgroundColor = [UIColor whiteColor];
             return cell;
         }
+        
+        //个股评论
+        if(indexPath.row == 1){
+            static NSString* cellIdentifier = @"msgcell";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if (cell==nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+                NSLog(@"new cell");
+            }
+            
+            cell.textLabel.text = @"个股评论";
+            
+            
+            
+            if(unreadCommentToStockCount != 0){
+                
+                UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
+                numberLabel.backgroundColor = [UIColor redColor];
+                numberLabel.text = [[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount];
+                numberLabel.textColor = [UIColor whiteColor];
+                numberLabel.layer.cornerRadius = 3*minSpace/2;
+                numberLabel.font = [UIFont fontWithName:fontName size:minFont];
+                numberLabel.textAlignment = NSTextAlignmentCenter;
+                numberLabel.layer.masksToBounds = YES;
+                cell.accessoryView = numberLabel;
+                
+            }else{
+                cell.detailTextLabel.text = @"";
+                cell.accessoryView = nil;
+            }
+//
+            cell.textLabel.textColor = [UIColor grayColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.backgroundColor = [UIColor whiteColor];
+            return cell;
+        }
+
         
     }
     
@@ -802,7 +842,7 @@ typedef enum {
     }
     
     if (section == msgSection) {
-        return 1;
+        return 2;
     }
     
     return 0;

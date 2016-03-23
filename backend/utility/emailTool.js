@@ -26,12 +26,12 @@ exports.sendMail = function (text, emailSubject) {
 	smtpTrans.sendMail(mailOptions, function (err, info) {
 		if (err) {
 			console.log(err);
-			if(log!=null){
+			if(log !== null){
 				log.error(err, log.getFileNameAndLineNum(__filename));
 			}
 		}else {
 			console.log('message sent:' + info.response);
-			if(log!=null){
+			if(log !== null){
 				log.info('message sent:' + info.response, log.getFileNameAndLineNum(__filename));
 			}
 		}

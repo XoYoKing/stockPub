@@ -31,7 +31,7 @@ exports.pushMsg = function(user_id, msg){
 exports.pushMsgToUsers = pushMsgToUsers;
 
 function pushMsgToUsers(userToken, msg) {
-	if (userToken == undefined || userToken == ''||userToken == null) {
+	if (userToken === undefined || userToken === ''||userToken === null) {
 		log.warn('userToken is null', log.getFileNameAndLineNum(__filename));
 		return;
 	}
@@ -83,7 +83,7 @@ function pushMsgToUsers(userToken, msg) {
 		apnsConnection.sendNotification(note);
 		log.debug('send notification to ' + userToken, log.getFileNameAndLineNum(__filename));
 	});
-};
+}
 
 // exports.apnPushTo = function(user_id, msg, badgeCount){
 

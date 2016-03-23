@@ -18,6 +18,9 @@ typedef void(^pullCompleted)();
 - (void)pullUpAction:(pullCompleted)completedBlock list:(NSMutableArray*)list tableview:(UITableView*)tableview; //上拉响应函数
 - (void)pullDownAction:(pullCompleted)completedBlock list:(NSMutableArray*)list tableview:(UITableView*)tableview; //下拉响应函数
 
+- (void)pullUpAction:(pullCompleted)completedBlock list:(NSMutableArray*)list tableview:(UITableView*)tableview paramter:(NSDictionary*)paramter; //上拉响应函数
+- (void)pullDownAction:(pullCompleted)completedBlock list:(NSMutableArray*)list tableview:(UITableView*)tableview paramter:(NSDictionary*)paramter; //下拉响应函数
+
 @end
 
 @protocol ComTableViewDelegate <NSObject>

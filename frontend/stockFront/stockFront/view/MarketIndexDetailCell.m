@@ -17,6 +17,7 @@
     UILabel* stockNameLabel;
     UILabel* stockPriceLabel;
     UILabel* stockFluctuateLabel;
+    UILabel* dateTimeLabel;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -26,11 +27,12 @@
         stockNameLabel = [[UILabel alloc] init];
         stockPriceLabel = [[UILabel alloc] init];
         stockFluctuateLabel = [[UILabel alloc] init];
-        
+        dateTimeLabel = [[UILabel alloc] init];
         
         [self addSubview:stockNameLabel];
         [self addSubview:stockPriceLabel];
         [self addSubview:stockFluctuateLabel];
+        [self addSubview:dateTimeLabel];
         
     }
     return self;
@@ -70,6 +72,14 @@
     }];
     
     stockFluctuateLabel.textAlignment = NSTextAlignmentLeft;
+    
+    
+    [dateTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.mas_right).offset(-minSpace);
+        make.bottom.mas_equalTo(stockFluctuateLabel.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(11*minSpace, 2*minSpace));
+    }];
+    
     
 //    [stockFluctuateValueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.mas_equalTo(stockFluctuateLabel.mas_right);
@@ -122,6 +132,13 @@
         self.backgroundColor = [UIColor grayColor];
         stockFluctuateLabel.text = [[NSString alloc] initWithFormat:@"%.2f%%, 停牌", model.fluctuate];
     }
+    
+    NSString* shortDate = [myModel.date substringFromIndex:5];
+    
+    dateTimeLabel.text = [[NSString alloc] initWithFormat:@"%@ %@", shortDate, myModel.time];
+    dateTimeLabel.textColor = [UIColor whiteColor];
+    dateTimeLabel.font = [UIFont fontWithName:fontName size:microFont];
+    
     
 //    stockFluctuateValueLabel.text = [[NSString alloc] initWithFormat:@"%.2f", model.fluctuate_value];
 //    stockFluctuateValueLabel.textColor = [UIColor whiteColor];

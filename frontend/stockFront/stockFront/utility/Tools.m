@@ -53,6 +53,11 @@
 
 + (NSString*)showTime:(long)timeStamp
 {
+    if (timeStamp>9999999999) {
+        //可能是毫秒单位
+        timeStamp = timeStamp/1000;
+    }
+    
     long nowTimeStamp = [[NSDate date] timeIntervalSince1970];
     int intervals = abs((int)timeStamp - (int)nowTimeStamp);
     int mins;
