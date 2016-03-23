@@ -12,8 +12,8 @@
 #import "macro.h"
 #import "ConfigAccess.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-
-
+#import "SettingCtrl.h"
+#import "AppDelegate.h"
 @implementation CommentTableViewCell
 {
     UIImageView* faceImageView;
@@ -47,7 +47,19 @@
 
 - (void)faceViewPress:(id)sender
 {
-
+    UserInfoModel* userInfo = [[UserInfoModel alloc] init];
+    UserInfoModel* phoneUserInfo = [AppDelegate getMyUserInfo];
+    
+    userInfo.user_id = myCommentModel.comment_user_id;
+    if([userInfo.user_id isEqualToString:phoneUserInfo.user_id]){
+        return;
+    }
+    
+    userInfo.user_facethumbnail = myCommentModel.comment_user_facethumbnail;
+    
+    SettingCtrl* settingViewController = [[SettingCtrl alloc] init:userInfo];
+    settingViewController.hidesBottomBarWhenPushed = YES;
+    [[Tools curNavigator] pushViewController:settingViewController animated:YES];
 }
 
 - (void)awakeFromNib {
