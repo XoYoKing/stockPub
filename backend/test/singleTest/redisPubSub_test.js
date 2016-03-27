@@ -6,6 +6,9 @@ client.on("error", function (err) {
 });
 
 var pub = redis.createClient({auth_pass:'here_dev'});
+pub.on('error', function(err){
+    console.log("Error " + err);
+})
 
 //对发布消息的响应
 client.on('message', function(channel, message){
