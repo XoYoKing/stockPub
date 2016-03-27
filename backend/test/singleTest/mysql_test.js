@@ -13,5 +13,7 @@ connection.connect(function(err) {
             console.log('The solution is: ', rows[0].solution);
             connection.end();
         });
+    }else{
+        throw err;
     }
 });
