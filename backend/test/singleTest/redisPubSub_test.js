@@ -1,5 +1,5 @@
 var redis = require("redis"),
-client = redis.createClient();
+client = redis.createClient({auth_pass:'here_dev'});
 client.on("error", function (err) {
     console.log("Error " + err);
 });
