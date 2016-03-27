@@ -18,5 +18,8 @@ client.on("subscribe", function (channel, count) {
     pub.publish("first", "I am sending a message."); //向频道first发布信息
 });
 
+client.on('reconnecting', function(err, data){
+    console.log('reconnecting');
+});
 
 client.subscribe("first");
