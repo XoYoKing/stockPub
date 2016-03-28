@@ -120,11 +120,10 @@ static int bottomActiveHeight = 30;
 - (void)pullUpAction
 {
     CommentModel* commentModel = [commentlist lastObject];
-    
-    
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
     
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[_userInfo.user_id, [[NSNumber alloc] initWithInteger:commentModel.comment_timestamp]]
+                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:commentModel.comment_timestamp]]
                              forKeys:@[@"user_id", @"comment_timestamp"]];
     
     [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadComment" successed:^(NSDictionary *response) {
@@ -169,8 +168,10 @@ static int bottomActiveHeight = 30;
 
 - (void)pullDownAction
 {
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[_userInfo.user_id, [[NSNumber alloc] initWithInteger:[[NSDate date] timeIntervalSince1970]*1000]]
+                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:[[NSDate date] timeIntervalSince1970]*1000]]
                              forKeys:@[@"user_id", @"comment_timestamp"]];
     
     [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadComment" successed:^(NSDictionary *response) {
@@ -277,12 +278,10 @@ static int bottomActiveHeight = 30;
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
     return [commentlist count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
     return 2;
 }
 
