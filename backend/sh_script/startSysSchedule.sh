@@ -1,3 +1,2 @@
-forever stop $HOME/stockPub/backend/sysSchedule.js
 
-forever start $HOME/stockPub/backend/sysSchedule.js
+pm2 restart $HOME/stockPub/backend/sysSchedule.js

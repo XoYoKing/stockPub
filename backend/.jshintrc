@@ -8,5 +8,5 @@
     "shadow": true,
     "predef": ["require", "console", "__filename",
         "process", "module", "global", "exports",
-        "__dirname", "describe", "it", "setInterval"]
+        "__dirname", "describe", "it", "setInterval", "Buffer"]
 }

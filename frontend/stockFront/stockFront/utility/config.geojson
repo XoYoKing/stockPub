@@ -1,9 +1,9 @@
 {
     "pro" : {
-           "ServerDomain" : "http://123.57.229.67:18000"
+           'ServerDomain' :'http://123.57.229.67:18000'
     },
-    
+
     "dev" : {
-           "ServerDomain" : "http://112.74.102.178:18000"
+           'ServerDomain' :'http://112.74.102.178:18000'
     }
 }

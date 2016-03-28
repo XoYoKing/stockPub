@@ -23,7 +23,7 @@ exports.runTest = function(jsonObject, childpath, callback){
 
     var req = http.request(options, function(res) {
         console.log("Got response: " + res.statusCode);
-        if(res.statusCode!=200){
+        if(res.statusCode!==200){
             callback(res.statusCode, 'error code: '+res.statusCode);
         }
         res.on('data', function(d) {

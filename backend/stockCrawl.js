@@ -634,7 +634,7 @@ exports.updateStockName = function(){
             result.forEach(function(e){
                 redisClient.hget(config.hash.stockCurPriceHash, e.stock_code, function(err, reply){
                     if(err){
-                        logger.error(err, log.getFileNameAndLineNum(__filename));
+                        logger.error(err, logger.getFileNameAndLineNum(__filename));
                     }else{
 						if(reply !== null){
 							reply = JSON.parse(reply);
@@ -656,7 +656,7 @@ exports.updateStockName = function(){
 
 							stockOperation.updateStockName(e.stock_code, reply.stock_name, alphaStr, function(flag, result){
 								if(!flag){
-									logger.error(result, log.getFileNameAndLineNum(__filename));
+									logger.error(result, logger.getFileNameAndLineNum(__filename));
 								}
 							});
 						}
@@ -664,7 +664,7 @@ exports.updateStockName = function(){
                 });
             });
         }else{
-            logger.error(result, log.getFileNameAndLineNum(__filename));
+            logger.error(result, logger.getFileNameAndLineNum(__filename));
         }
     });
 };

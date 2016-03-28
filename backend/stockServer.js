@@ -53,7 +53,7 @@ global.app.use(morgan('short', {
     stream: accessLogStream
 }));
 
-// 该路由使用的中间件
+// 该路由使用的中间件,打印请求包
 global.app.use(function(req, res, next) {
     req.body.sq = Date.now();
     log.info(JSON.stringify(req.body), log.getFileNameAndLineNum(
@@ -63,9 +63,15 @@ global.app.use(function(req, res, next) {
 });
 
 
+
+
 global.app.use('/stock', stockRouter);
 global.app.use('/user', userRouter);
 global.app.use('/image', imageRouter);
+global.app.use('/', function(req, res, next){
+    res.send(process.env.STOCK_ENV);
+});
+
 
 global.app.listen(port); //设置监听http请求的端口号
 log.info("stockServer started on port " + port);
