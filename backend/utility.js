@@ -79,7 +79,7 @@ exports.executeSql = function(sql, para, callback) {
 		else{
 			var query = conn.query(sql, para, function(err, result){
 				if (err) {
-					logger.error(err, logger.getFileNameAndLineNum(__filename));
+					logger.error(err+' sql:'+query.sql, logger.getFileNameAndLineNum(__filename));
 					if(callback !== null){
 						callback(false, err);
 					}
