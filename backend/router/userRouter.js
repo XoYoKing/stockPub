@@ -661,6 +661,7 @@ function clearUnreadStockCommentCount(user_id){
 }
 
 function increaseUnreadStockCommentCount(user_id){
+	log.debug('increaseUnreadStockCommentCount', log.getFileNameAndLineNum(__filename));
 	redisClient.hget(config.hash.stockUnreadCommentCountHash, user_id, function(err, reply){
 		if(err){
 			log.error(err, log.getFileNameAndLineNum(__filename));
