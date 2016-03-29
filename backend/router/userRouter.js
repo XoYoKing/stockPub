@@ -118,6 +118,22 @@ router.post('/followUser', function(req, res){
 				}
 			});
 
+			//更新unreadFollowCountHash
+			redisClient.hget(config.hash.unreadFollowCountHash, req.body.followed_user_id, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+				}else{
+					if(reply === null){
+						reply = 0;
+					}
+					reply = parseInt(reply)+1;
+					redisClient.hset(config.hash.unreadFollowCountHash, req.body.followed_user_id, reply, function(err, reply){
+						if(err){
+							log.error(err, log.getFileNameAndLineNum(__filename));
+						}
+					});
+				}
+			});
 		}
 		res.send(returnData);
 	});
@@ -492,6 +508,19 @@ router.post('/getUnreadCommentCount', function(req, res){
 		},
 		unreadCommentToStockCount: function(callback){
 			redisClient.hget(config.hash.stockUnreadCommentCountHash, req.body.user_id, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+					callback(err);
+				}else{
+					if(reply === null){
+						reply = 0;
+					}
+					callback(null, reply);
+				}
+			});
+		},
+		unreadFollowCount: function(callback){
+			redisClient.hget(config.hash.unreadFollowCountHash, req.body.user_id, function(err, reply){
 				if(err){
 					log.error(err, log.getFileNameAndLineNum(__filename));
 					callback(err);

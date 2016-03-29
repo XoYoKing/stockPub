@@ -38,6 +38,7 @@
     BOOL isFollow;
     NSInteger unreadCommentCount;
     NSInteger unreadCommentToStockCount;
+    NSInteger unreadFollowCount;
     UILabel *navTitle;
 }
 
@@ -491,9 +492,11 @@ typedef enum {
             
             unreadCommentCount = [[data objectForKey:@"unreadCommentCount"] integerValue];
             unreadCommentToStockCount = [[data objectForKey:@"unreadCommentToStockCount"] integerValue];
+            unreadFollowCount = [[data objectForKey:@"unreadFollowCount"] integerValue];
             
-            if (unreadCommentToStockCount+unreadCommentCount>0) {
-                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount+unreadCommentCount]];
+            
+            if (unreadCommentToStockCount+unreadCommentCount+unreadFollowCount>0) {
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount+unreadCommentCount+unreadFollowCount]];
                 
             }else{
                 [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:nil];
@@ -631,7 +634,25 @@ typedef enum {
 
             }
 
-            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_fans_count];
+            
+            
+            if(unreadFollowCount != 0){
+                
+                UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
+                numberLabel.backgroundColor = [UIColor redColor];
+                numberLabel.text = [[NSString alloc] initWithFormat:@"%ld", unreadFollowCount];
+                numberLabel.textColor = [UIColor whiteColor];
+                numberLabel.layer.cornerRadius = 3*minSpace/2;
+                numberLabel.font = [UIFont fontWithName:fontName size:minFont];
+                numberLabel.textAlignment = NSTextAlignmentCenter;
+                numberLabel.layer.masksToBounds = YES;
+                cell.accessoryView = numberLabel;
+                
+            }else{
+                cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_fans_count];
+                cell.accessoryView = nil;
+            }
+            
         }
         
         if(indexPath.row == 2){

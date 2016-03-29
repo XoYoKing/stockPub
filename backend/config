@@ -63,6 +63,7 @@ exports.stockServerInfo = {
 };
 
 exports.hash = {
+    unreadFollowCountHash: 'unreadFollowCountHash',
     stockCurPriceHash: 'stockCurPriceHash',
     marketCurPriceHash: 'marketCurPriceHash',
     stockUnreadCommentCountHash: 'stockUnreadCommentCountHash' //key-user_srno, value-unread comment count
