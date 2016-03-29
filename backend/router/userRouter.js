@@ -558,8 +558,10 @@ router.post('/getCommentToStockByUser', function(req, res){
 				if(item.talk_stock_code.indexOf('sz')!==-1||
 				item.talk_stock_code.indexOf('sh')!==-1){
 					hash = config.hash.marketCurPriceHash;
+					item.is_market = 1;
 				}else{
 					hash = config.hash.stockCurPriceHash;
+					item.is_market = 0;
 				}
 
 				redisClient.hget(hash, item.talk_stock_code, function(err, reply){
