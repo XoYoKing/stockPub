@@ -124,7 +124,7 @@ static int bottomActiveHeight = 30;
                     commentModel.comment_user_name = [element objectForKey:@"user_name"];
                     commentModel.comment_user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
                     commentModel.comment_content = [element objectForKey:@"talk_content"];
-                    commentModel.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue]/1000;
+                    commentModel.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue];
                     
                     [stocklist addObject:stockInfo];
                     [commentlist addObject:commentModel];
@@ -155,7 +155,7 @@ static int bottomActiveHeight = 30;
     UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
     
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:commentModel.comment_timestamp*1000]]
+                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:commentModel.comment_timestamp]]
                              forKeys:@[@"user_id", @"talk_timestamp_ms"]];
     
     [NetworkAPI callApiWithParam:message childpath:@"/user/getCommentToStockByUser" successed:^(NSDictionary *response) {
@@ -177,7 +177,7 @@ static int bottomActiveHeight = 30;
                     commentModel.comment_user_name = [element objectForKey:@"user_name"];
                     commentModel.comment_user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
                     commentModel.comment_content = [element objectForKey:@"talk_content"];
-                    commentModel.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue]/1000;
+                    commentModel.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue];
                     
                     
                     [stocklist addObject:stockInfo];
@@ -385,24 +385,30 @@ static int bottomActiveHeight = 30;
     comment_to_user_name = toUserInfo.user_name;
     
     UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
+    // Create NSData object
+    NSData *nsdata = [msg dataUsingEncoding:NSUTF8StringEncoding];
     
+    // Get NSString from NSData object in Base64
+    NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
     
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[toStock.stock_code,
                                                phoneUser.user_id,
                                                phoneUser.user_name,
                                                comment_to_user_id,
-                                               msg,
+                                               comment_to_user_name,
+                                               base64Encoded,
                                                [[NSNumber alloc] initWithInteger:to_stock]]
                              forKeys:@[@"talk_stock_code",
                                        @"talk_user_id",
                                        @"user_name",
-                                       @"comment_to_user_id",
+                                       @"talk_to_user_id",
+                                       @"talk_to_user_name",
                                        @"talk_content",
                                        @"to_stock"]];
     
     
-    [NetworkAPI callApiWithParam:message childpath:@"/user/addCommentToLook" successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParam:message childpath:@"/user/addCommentToStock" successed:^(NSDictionary *response) {
         
         
         NSInteger code = [[response objectForKey:@"code"] integerValue];
