@@ -415,6 +415,7 @@ router.post('/addstock', function(req, res){
 	redisClient.hget(config.hash.stockChooseHash, req.body.user_id, function(err, reply){
 		if(err){
 			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
 		}else{
 			reply = JSON.parse(reply);
 			if(reply === null){
@@ -425,6 +426,9 @@ router.post('/addstock', function(req, res){
 			redisClient.hset(config.hash.stockChooseHash, req.body.user_id, reply, function(err, reply){
 				if(err){
 					logger.error(err, logger.getFileNameAndLineNum(__filename));
+					routerFunc.feedBack(constant.returnCode.ERROR, err, res);
+				}else{
+					routerFunc.feedBack(constant.returnCode.SUCCESS, null, res);
 				}
 			});
 		}
@@ -435,6 +439,7 @@ router.post('/delstock', function(req, res){
 	redisClient.hget(config.hash.stockChooseHash, req.body.user_id, function(err, reply){
 		if(err){
 			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
 		}else{
 			reply = JSON.parse(reply);
 			if(reply === null){
@@ -445,6 +450,9 @@ router.post('/delstock', function(req, res){
 			redisClient.hset(config.hash.stockChooseHash, req.body.user_id, reply, function(err, reply){
 				if(err){
 					logger.error(err, logger.getFileNameAndLineNum(__filename));
+					routerFunc.feedBack(constant.returnCode.ERROR, err, res);
+				}else{
+					routerFunc.feedBack(constant.returnCode.SUCCESS, null, res);
 				}
 			});
 		}
