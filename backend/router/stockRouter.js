@@ -417,12 +417,12 @@ router.post('/addstock', function(req, res){
 			logger.error(err, logger.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
 		}else{
-			//reply = JSON.parse(reply);
+			reply = JSON.parse(reply);
 			if(reply === null){
 				reply = {};
 			}
 			reply[req.body.stock_code] = Date.now();
-			//reply = JSON.stringify(reply);
+			reply = JSON.stringify(reply);
 			redisClient.hset(config.hash.stockChooseHash, req.body.user_id, reply, function(err, reply){
 				if(err){
 					logger.error(err, logger.getFileNameAndLineNum(__filename));
