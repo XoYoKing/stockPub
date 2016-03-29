@@ -104,10 +104,11 @@ function insertToDatabase(htmlData, isnow) {
 				var price = parseFloat(dataArr[3]);
 
 				var fluctuate = parseFloat(dataArr[32]);
-				var priceearning = parseFloat(dataArr[39]);
-				if(isNaN(priceearning) === true){
-					priceearning = -1;
+				var priceearning = -1;
+				if(dataArr[39] !== null){
+					priceearning = parseFloat(dataArr[39]);
 				}
+				
 
 				var marketValue = parseFloat(dataArr[45]);
 				var pb = parseFloat(dataArr[46]);
