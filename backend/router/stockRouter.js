@@ -410,6 +410,47 @@ router.post('/now', function(req, res){
     });
 });
 
+//股票自选
+router.post('/addstock', function(req, res){
+	redisClient.hget(config.hash.stockChooseHash, req.body.user_id, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+		}else{
+			reply = JSON.parse(reply);
+			if(reply === null){
+				reply = {};
+			}
+			reply[req.body.stock_code] = Date.now();
+			reply = JSON.stringify(reply);
+			redisClient.hset(config.hash.stockChooseHash, req.body.user_id, reply, function(err, reply){
+				if(err){
+					logger.error(err, logger.getFileNameAndLineNum(__filename));
+				}
+			});
+		}
+	});
+});
+
+router.post('/delstock', function(req, res){
+	redisClient.hget(config.hash.stockChooseHash, req.body.user_id, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+		}else{
+			reply = JSON.parse(reply);
+			if(reply === null){
+				reply = {};
+			}
+			delete reply[req.body.stock_code];
+			reply = JSON.stringify(reply);
+			redisClient.hset(config.hash.stockChooseHash, req.body.user_id, reply, function(err, reply){
+				if(err){
+					logger.error(err, logger.getFileNameAndLineNum(__filename));
+				}
+			});
+		}
+	});
+});
+
 
 router.post('/getMarketAvgVolume', function(req, res){
 	stockOperation.getMarketAvgVolume(req.body.stock_code, req.body.day, function(flag, result){

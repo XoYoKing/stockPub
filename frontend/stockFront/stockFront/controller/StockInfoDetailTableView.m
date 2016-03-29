@@ -218,6 +218,8 @@ typedef enum {
         UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"添加到自选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
             [loc addStock:_stockInfoModel];
+            
+            
             [Tools AlertBigMsg:@"完成"];
             
         }];
