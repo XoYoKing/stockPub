@@ -636,7 +636,8 @@ typedef enum {
             }
 
             
-            
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@""];
+
             if(unreadFollowCount != 0){
                 
                 UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
