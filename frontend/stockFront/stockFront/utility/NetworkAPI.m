@@ -20,7 +20,15 @@
     NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@", [ConfigAccess serverDomain], childpath];
     NSLog(@"%@", urlStr);
     
-    [session POST:urlStr parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    //添加版本号
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_build = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    
+    NSMutableDictionary* par = [[NSMutableDictionary alloc] initWithDictionary:param];
+    [par setObject:app_build forKey:@"version"];
+    
+    
+    [session POST:urlStr parameters:par success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 
         successedBlock((NSDictionary*)responseObject);
         
@@ -36,7 +44,13 @@
     NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@", [ConfigAccess serverDomain], childpath];
     NSLog(@"%@", urlStr);
     
-    [session POST:urlStr parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    //添加版本号
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_build = [infoDictionary objectForKey:@"CFBundleVersion"];
+    NSMutableDictionary* par = [[NSMutableDictionary alloc] initWithDictionary:param];
+    [par setObject:app_build forKey:@"version"];
+    
+    [session POST:urlStr parameters:par constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         for (NSString* key in imageDatas) {
             UIImage* image = [imageDatas objectForKey:key];
