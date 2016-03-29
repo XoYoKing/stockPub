@@ -162,6 +162,7 @@ typedef enum {
         
         if(indexPath.row == 1){
             //关注我的人
+            unreadFollowCount = 0;
             GetFansAction* getFansAction = [[GetFansAction alloc] init:myInfo.user_id];
             UserTableView* userTable = [[UserTableView alloc] init:@"被关注"];
             userTable.pullAction = getFansAction;

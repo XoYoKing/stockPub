@@ -66,6 +66,12 @@ router.post('/getFansUser', function(req, res){
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 
+			redisClient.hset(config.hash.unreadFollowCountHash, req.body.user_id, 0, function(err, reply){
+				if(err){
+					log.error(result, log.getFileNameAndLineNum(__filename));
+				}
+			});
+
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
 			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
