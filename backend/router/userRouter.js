@@ -569,7 +569,7 @@ router.post('/getCommentToStockByUser', function(req, res){
 						log.error(result, log.getFileNameAndLineNum(__filename));
 						callback(err);
 					}else{
-						item.stockInfo = reply;
+						item.stockInfo = JSON.parse(reply);
 						callback(null);
 					}
 				});
