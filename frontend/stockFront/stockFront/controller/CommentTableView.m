@@ -123,14 +123,10 @@
         comment_to_user_id = toUserInfo.user_id;
         comment_to_user_name = toUserInfo.user_name;
     }
-    // Create NSData object
-    NSData *nsdata = [msg dataUsingEncoding:NSUTF8StringEncoding];
-    
-    // Get NSString from NSData object in Base64
-    NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
+
     
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[_stockLookInfo.look_id, phoneUser.user_id, phoneUser.user_name, comment_to_user_id, base64Encoded, [[NSNumber alloc] initWithInteger:to_look]]
+                             initWithObjects:@[_stockLookInfo.look_id, phoneUser.user_id, phoneUser.user_name, comment_to_user_id, msg, [[NSNumber alloc] initWithInteger:to_look]]
                              forKeys:@[@"look_id", @"comment_user_id", @"comment_user_name", @"comment_to_user_id", @"comment_content", @"to_look"]];
     
     

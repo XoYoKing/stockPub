@@ -130,15 +130,11 @@
         talk_to_user_name = toUserInfo.user_name;
     }
     
-    // Create NSData object
-    NSData *nsdata = [msg dataUsingEncoding:NSUTF8StringEncoding];
-    
-    // Get NSString from NSData object in Base64
-    NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
+
     
     
     NSDictionary* message = [[NSDictionary alloc]
-               initWithObjects:@[stockmodel.stock_code, phoneUser.user_id, phoneUser.user_name, base64Encoded, talk_to_user_id, talk_to_user_name, [[NSNumber alloc] initWithInteger:to_stock]]
+               initWithObjects:@[stockmodel.stock_code, phoneUser.user_id, phoneUser.user_name, msg, talk_to_user_id, talk_to_user_name, [[NSNumber alloc] initWithInteger:to_stock]]
                forKeys:@[@"talk_stock_code", @"talk_user_id", @"user_name", @"talk_content", @"talk_to_user_id", @"talk_to_user_name", @"to_stock"]];
     
     

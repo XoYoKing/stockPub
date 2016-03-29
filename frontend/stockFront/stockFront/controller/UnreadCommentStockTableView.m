@@ -385,11 +385,7 @@ static int bottomActiveHeight = 30;
     comment_to_user_name = toUserInfo.user_name;
     
     UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
-    // Create NSData object
-    NSData *nsdata = [msg dataUsingEncoding:NSUTF8StringEncoding];
-    
-    // Get NSString from NSData object in Base64
-    NSString *base64Encoded = [nsdata base64EncodedStringWithOptions:0];
+
     
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[toStock.stock_code,
@@ -397,7 +393,7 @@ static int bottomActiveHeight = 30;
                                                phoneUser.user_name,
                                                comment_to_user_id,
                                                comment_to_user_name,
-                                               base64Encoded,
+                                               msg,
                                                [[NSNumber alloc] initWithInteger:to_stock]]
                              forKeys:@[@"talk_stock_code",
                                        @"talk_user_id",

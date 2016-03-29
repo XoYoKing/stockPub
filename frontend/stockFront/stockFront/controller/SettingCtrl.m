@@ -184,7 +184,7 @@ typedef enum {
         
         if (indexPath.row == 1) {
             //未读个股评论
-            UnreadCommentStockTableView* unreadTableview = [[UnreadCommentStockTableView alloc] init];
+            UnreadCommentStockTableView* unreadTableview = [[UnreadCommentStockTableView alloc] initWithStyle:UITableViewStyleGrouped];
             unreadTableview.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:unreadTableview animated:YES];
 
