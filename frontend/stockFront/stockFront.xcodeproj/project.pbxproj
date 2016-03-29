@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		35E49CC09B1106411DD25DE5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681CAA04F6CE391EBE1BB08 /* libPods.a */; };
+		B222A70D1CA8FFE1006586E2 /* UnreadCommentStockTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */; };
 		B227E80B1C745C5A005BA113 /* KLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B227E80A1C745C5A005BA113 /* KLineCell.m */; };
 		B227F3A01C64A0C200235B64 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B227F39F1C64A0C200235B64 /* main.m */; };
 		B227F3A31C64A0C200235B64 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B227F3A21C64A0C200235B64 /* AppDelegate.m */; };
@@ -111,6 +112,8 @@
 		B2ABA5CC1C8E624000552C27 /* 120-1px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C71C8E624000552C27 /* 120-1px.png */; };
 		B2ABA5CD1C8E624000552C27 /* 180-1px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C81C8E624000552C27 /* 180-1px.png */; };
 		B2ACC2291C796407003D3ADC /* appIcon1024*1024.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ACC2281C796407003D3ADC /* appIcon1024*1024.png */; };
+		B2E708C31C98F5DD00779B38 /* getCommentToStockAction.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E708C21C98F5DD00779B38 /* getCommentToStockAction.m */; };
+		B2E708C61C99046000779B38 /* StockCommentTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E708C51C99046000779B38 /* StockCommentTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +137,8 @@
 		4DB2923420FC4BE03A26B9AF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		6681CAA04F6CE391EBE1BB08 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		67492CFD7A2989C33C5B372D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B222A70B1CA8FFE0006586E2 /* UnreadCommentStockTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnreadCommentStockTableView.h; sourceTree = "<group>"; };
+		B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnreadCommentStockTableView.m; sourceTree = "<group>"; };
 		B227E8091C745C5A005BA113 /* KLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineCell.h; sourceTree = "<group>"; };
 		B227E80A1C745C5A005BA113 /* KLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineCell.m; sourceTree = "<group>"; };
 		B227F39B1C64A0C200235B64 /* stockFront.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stockFront.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -315,6 +320,10 @@
 		B2ABA5C71C8E624000552C27 /* 120-1px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "120-1px.png"; sourceTree = "<group>"; };
 		B2ABA5C81C8E624000552C27 /* 180-1px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "180-1px.png"; sourceTree = "<group>"; };
 		B2ACC2281C796407003D3ADC /* appIcon1024*1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "appIcon1024*1024.png"; sourceTree = "<group>"; };
+		B2E708C11C98F5DD00779B38 /* getCommentToStockAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = getCommentToStockAction.h; sourceTree = "<group>"; };
+		B2E708C21C98F5DD00779B38 /* getCommentToStockAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = getCommentToStockAction.m; sourceTree = "<group>"; };
+		B2E708C41C99046000779B38 /* StockCommentTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockCommentTableView.h; sourceTree = "<group>"; };
+		B2E708C51C99046000779B38 /* StockCommentTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockCommentTableView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -419,6 +428,8 @@
 		B227F3D41C64A1E200235B64 /* action */ = {
 			isa = PBXGroup;
 			children = (
+				B2E708C11C98F5DD00779B38 /* getCommentToStockAction.h */,
+				B2E708C21C98F5DD00779B38 /* getCommentToStockAction.m */,
 				B227F3E01C64A1E200235B64 /* FollowAction.h */,
 				B227F3E11C64A1E200235B64 /* FollowAction.m */,
 				B227F3D51C64A1E200235B64 /* GetFansAction.h */,
@@ -436,8 +447,12 @@
 				B265742E1C8E75AB00A6B75C /* webViewCtrl.m */,
 				B227F4C31C6723D200235B64 /* StockInfoDetailTableView.h */,
 				B227F4C41C6723D200235B64 /* StockInfoDetailTableView.m */,
+				B222A70B1CA8FFE0006586E2 /* UnreadCommentStockTableView.h */,
+				B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */,
 				B227F4BD1C66151500235B64 /* UnreadCommentTableView.h */,
 				B227F4BE1C66151500235B64 /* UnreadCommentTableView.m */,
+				B2E708C41C99046000779B38 /* StockCommentTableView.h */,
+				B2E708C51C99046000779B38 /* StockCommentTableView.m */,
 				B227F3DA1C64A1E200235B64 /* CommentTableView.h */,
 				B227F3DB1C64A1E200235B64 /* CommentTableView.m */,
 				B227F3DC1C64A1E200235B64 /* ComTableViewCtrl.h */,
@@ -888,6 +903,7 @@
 				B227F46F1C64A1E200235B64 /* CommentTableView.m in Sources */,
 				B227F4A41C64A1E200235B64 /* MKAnnotationView+YYWebImage.m in Sources */,
 				B227F49D1C64A1E200235B64 /* Tools.m in Sources */,
+				B222A70D1CA8FFE1006586E2 /* UnreadCommentStockTableView.m in Sources */,
 				B227F4AA1C64A1E200235B64 /* YYImage.m in Sources */,
 				B227F47A1C64A1E200235B64 /* startViewCtrl.m in Sources */,
 				B265742F1C8E75AB00A6B75C /* webViewCtrl.m in Sources */,
@@ -908,6 +924,7 @@
 				B227F4741C64A1E200235B64 /* loginViewCtrl.m in Sources */,
 				B227F4761C64A1E200235B64 /* RegisterConfirmViewController.m in Sources */,
 				B227F3AC1C64A0C200235B64 /* stockFront.xcdatamodeld in Sources */,
+				B2E708C61C99046000779B38 /* StockCommentTableView.m in Sources */,
 				B227F4B61C64A1E200235B64 /* StockLookDetailTableViewCell.m in Sources */,
 				B227F4A91C64A1E200235B64 /* YYFrameImage.m in Sources */,
 				B227F4711C64A1E200235B64 /* FaceImageViewController.m in Sources */,
@@ -929,6 +946,7 @@
 				B227F4A71C64A1E200235B64 /* UIImageView+YYWebImage.m in Sources */,
 				B227F4B21C64A1E200235B64 /* InputToolbar.m in Sources */,
 				B227F47E1C64A1E200235B64 /* StockSearchTableViewCtrl.m in Sources */,
+				B2E708C31C98F5DD00779B38 /* getCommentToStockAction.m in Sources */,
 				B227F4901C64A1E200235B64 /* RankModel.m in Sources */,
 				B227F4A51C64A1E200235B64 /* UIButton+YYWebImage.m in Sources */,
 				B227F49E1C64A1E200235B64 /* YYCache.m in Sources */,

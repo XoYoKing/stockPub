@@ -10,17 +10,24 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
     var endIndex = htmlData.lastIndexOf("\"");
     var element = {};
 
-    if (beginIndex!=-1&&endIndex!=-1) {
+    if (beginIndex !== -1 && endIndex !== -1) {
         var data = htmlData.substr(beginIndex + 1, endIndex - beginIndex - 1);
-        if (data != null) {
+        if (data !== null) {
             var dataArr = data.split("~");
             if(dataArr.length<48){
                 logger.warn('elementArr is empty');
                 return;
             }
             var date = dataArr[30];
+            date = date.substr(0, 4)+"-"+date.substr(4, 2)+"-"+date.substr(6, 2);
             element.market_code = market_code;
-            element.market_index_date = date.substr(0, 8);
+            element.market_name = dataArr[1];
+            element.market_index_date = date;
+
+            var time = dataArr[30];
+            time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
+            element.market_index_time = time;
+
             element.market_index_value_now   = dataArr[3];
             element.market_index_fluctuate = dataArr[32];
             element.market_index_fluctuate_value = dataArr[31];
@@ -52,7 +59,7 @@ exports.analyzeMarketMessage = function(htmlData, market_code){
 exports.analyzeMessage = function(htmlData){
 
     var elementArr = htmlData.split(";");
-	if (elementArr.length == 0) {
+	if (elementArr.length === 0) {
 		logger.warn('elementArr is empty');
 		return false;
 	}
@@ -61,9 +68,9 @@ exports.analyzeMessage = function(htmlData){
 	elementArr.forEach(function(elementStr){
 		var beginIndex = elementStr.indexOf("\"");
 		var endIndex = elementStr.lastIndexOf("\"");
-		if (beginIndex!=-1&&endIndex!=-1) {
+		if (beginIndex !== -1 && endIndex !== -1) {
 			var data = elementStr.substr(beginIndex + 1, endIndex - beginIndex - 1);
-			if (data != null) {
+			if (data !== null) {
 				var dataArr = data.split("~");
 				if(dataArr.length<48){
 					logger.warn('elementArr is empty');
@@ -73,23 +80,23 @@ exports.analyzeMessage = function(htmlData){
                 var element = {};
                 element.stock_name = dataArr[1];
 				element.stock_code = dataArr[2];
-				element.amount = dataArr[6];
+				element.amount = parseInt(dataArr[6]);
 				var date = dataArr[30];
 				element.date = date.substr(0, 4)+"-"+date.substr(4, 2)+"-"+date.substr(6, 2);
-
 				var time = dataArr[30];
 				element.time = time.substr(8, 2)+":"+time.substr(10, 2)+":"+time.substr(12, 2);
-				element.price = dataArr[3];
-				element.fluctuate = dataArr[32];
-                element.fluctuate_value = dataArr[31];
-				element.priceearning = dataArr[39];
-				element.marketValue = dataArr[45];
-				element.pb = dataArr[46];
-				element.flowMarketValue = dataArr[44];
-				element.volume = dataArr[37];
-				element.openPrice = dataArr[5];
-				element.high_price = dataArr[33];
-				element.low_price = dataArr[34];
+
+                element.price = parseFloat(dataArr[3]);
+				element.fluctuate = parseFloat(dataArr[32]);
+                element.fluctuate_value = parseFloat(dataArr[31]);
+				element.priceearning = parseFloat(dataArr[39]);
+				element.marketValue = parseFloat(dataArr[45]);
+				element.pb = parseFloat(dataArr[46]);
+				element.flowMarketValue = parseFloat(dataArr[44]);
+				element.volume = parseFloat(dataArr[37]);
+				element.openPrice = parseFloat(dataArr[5]);
+				element.high_price = parseFloat(dataArr[33]);
+				element.low_price = parseFloat(dataArr[34]);
                 element.market = getMarketDesc(element.stock_code);
 
 				if (element.stock_code === undefined ||
@@ -98,8 +105,8 @@ exports.analyzeMessage = function(htmlData){
 					element.time === undefined ||
 					element.price === undefined ||
 					element.openPrice === undefined||
-					element.amount == 0||
-					element.price == 0) {
+					element.amount === 0||
+					element.price === 0.00) {
 						//logger.warn('stockCode is undefined');
 					return;
 				}
@@ -119,7 +126,7 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
 	logger.debug(stockAPI);
 
 	gs.get(stockAPI, function(data, status, headers) {
-        if(status == 200){
+        if(status === 200){
             callback(true, data);
         }else{
             callback(false, data);
@@ -138,10 +145,10 @@ exports.getStockInfoFromAPI = function(stock_code, callback) {
 
 
 function getMarketDesc(stock_code) {
-	if (stock_code.indexOf("3") == 0 || stock_code.indexOf("0") == 0) {
+	if (stock_code.indexOf("3") === 0 || stock_code.indexOf("0") === 0) {
 		return "sz";
 	}
-	if (stock_code.indexOf("6") == 0) {
+	if (stock_code.indexOf("6") === 0) {
 		return "sh";
 	}
 	return "";

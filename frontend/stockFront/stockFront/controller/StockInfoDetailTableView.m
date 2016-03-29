@@ -19,6 +19,8 @@
 #import <MBProgressHUD.h>
 #import "UserInfoModel.h"
 #import "KLineCell.h"
+#import "StockCommentTableView.h"
+#import "getCommentToStockAction.h"
 
 @interface StockInfoDetailTableView ()
 {
@@ -166,6 +168,10 @@ typedef enum {
 
     }
     
+    if(_ismarket == true){
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"评论" style:UIBarButtonItemStylePlain target:self action:@selector(commentAction:)];
+    }
+    
 //    if (_ismarket == false) {
 //        LocDatabase* loc = [AppDelegate getLocDatabase];
 //        
@@ -219,9 +225,33 @@ typedef enum {
 
     }
     
+    //评论
+    UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"评论" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        
+        [self commentAction:nil];
+        
+    }];
+    [alertController addAction:chooseAction];
+
+    
+    
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
+
+- (void)commentAction:(id)sender
+{
+    getCommentToStockAction* pullAction = [[getCommentToStockAction alloc] initWithStockCode:_stockInfoModel.stock_code];
+    
+    StockCommentTableView* stockCommentTableview = [[StockCommentTableView alloc] initWithStock:_stockInfoModel pullAction:pullAction];
+    
+    ComTableViewCtrl* comTable = [[ComTableViewCtrl alloc] init:YES allowPullUp:YES initLoading:YES comDelegate:stockCommentTableview];
+    
+    [self.navigationController pushViewController:comTable animated:YES];
+}
+
 
 - (void)addlook:(id)sender
 {
@@ -309,38 +339,40 @@ typedef enum {
 - (void)refreshMarketInfo
 {
     
-    NSDictionary* msg = [[NSDictionary alloc] init];
-    [NetworkAPI callApiWithParam:msg childpath:@"/stock/getAllMarketIndexNow" successed:^(NSDictionary *response) {
+    
+    NSDictionary* msg = [[NSDictionary alloc] initWithObjects:@[_stockInfoModel.stock_code] forKeys:@[@"stock_code"]];
+    
+    
+    [NetworkAPI callApiWithParam:msg childpath:@"/stock/getAllMarketIndexNowByCode" successed:^(NSDictionary *response) {
         
         NSInteger code = [[response objectForKey:@"code"] integerValue];
         
         if(code == SUCCESS){
             
             
-            NSArray* marketData = (NSArray*)[response objectForKey:@"data"];
+            NSDictionary* element = (NSDictionary*)[response objectForKey:@"data"];
             
             
-            if(marketData!=nil){
+            if(element!=nil){
                 
-                for (NSDictionary* element in marketData) {
-                    
-                    if ([_stockInfoModel.stock_code isEqualToString:[element objectForKey:@"market_code"]]) {
-                        StockInfoModel* marketInfoModel = [[StockInfoModel alloc] init];
-                        marketInfoModel.stock_code = [element objectForKey:@"market_code"];
-                        marketInfoModel.stock_name = [element objectForKey:@"market_name"];
-                        marketInfoModel.price = [[element objectForKey:@"market_index_value_now"] floatValue];
-                        marketInfoModel.fluctuate_value = [[element objectForKey:@"market_index_fluctuate_value"] floatValue];
-                        marketInfoModel.fluctuate = [[element objectForKey:@"market_index_fluctuate"] floatValue];
-                        marketInfoModel.open_price = [[element objectForKey:@"market_index_value_open"] floatValue];
-                        marketInfoModel.yesterday_price = [[element objectForKey:@"market_index_value_yesterday_close"] floatValue];
-                        marketInfoModel.volume = [[element objectForKey:@"market_index_trade_volume"] floatValue];
-                        marketInfoModel.amount = [[element objectForKey:@"market_index_trade_amount"] floatValue];
-                        
-                        _stockInfoModel = marketInfoModel;
-                        [navTitle setText:_stockInfoModel.stock_name];
-                        navTitle.alpha = 0;
-                    }
-                }
+                StockInfoModel* marketInfoModel = [[StockInfoModel alloc] init];
+                marketInfoModel.stock_code = [element objectForKey:@"market_code"];
+                marketInfoModel.stock_name = [element objectForKey:@"market_name"];
+                marketInfoModel.price = [[element objectForKey:@"market_index_value_now"] floatValue];
+                marketInfoModel.fluctuate_value = [[element objectForKey:@"market_index_fluctuate_value"] floatValue];
+                marketInfoModel.fluctuate = [[element objectForKey:@"market_index_fluctuate"] floatValue];
+                marketInfoModel.open_price = [[element objectForKey:@"market_index_value_open"] floatValue];
+                marketInfoModel.yesterday_price = [[element objectForKey:@"market_index_value_yesterday_close"] floatValue];
+                marketInfoModel.volume = [[element objectForKey:@"market_index_trade_volume"] floatValue];
+                marketInfoModel.amount = [[element objectForKey:@"market_index_trade_amount"] floatValue];
+                marketInfoModel.date = [element objectForKey:@"market_index_date"];
+                marketInfoModel.time = [element objectForKey:@"market_index_time"];
+                
+                
+                _stockInfoModel = marketInfoModel;
+                [navTitle setText:_stockInfoModel.stock_name];
+                navTitle.alpha = 0;
+
                 [self.refreshControl endRefreshing];
                 self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
                 [self.tableView reloadData];

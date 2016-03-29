@@ -61,3 +61,10 @@ exports.stockServerInfo = {
     url: '112.74.102.178',
     port: 18000
 };
+
+exports.hash = {
+    unreadFollowCountHash: 'unreadFollowCountHash',
+    stockCurPriceHash: 'stockCurPriceHash',
+    marketCurPriceHash: 'marketCurPriceHash',
+    stockUnreadCommentCountHash: 'stockUnreadCommentCountHash' //key-user_srno, value-unread comment count
+};

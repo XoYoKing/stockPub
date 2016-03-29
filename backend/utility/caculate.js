@@ -6,13 +6,13 @@ var moment = require('moment');
 exports.caculateAllUserYield = function(){
     userOperation.updateAllUserTotalYield(function(flag, result){
         if(flag){
-            if(logger == null){
+            if(logger === null){
                 console.log('success updateAllUserTotalYield');
             }else{
                 logger.info('success updateAllUserTotalYield', logger.getFileNameAndLineNum(__filename));
             }
         }else{
-            if(logger == null){
+            if(logger === null){
                 console.log(result);
             }else{
                 logger.error(result, logger.getFileNameAndLineNum(__filename));
@@ -26,7 +26,7 @@ function caculateDurationYieldForSingle(element, durationDay){
     var look_timestamp = element.look_timestamp;
     var durationTimestamp = durationDay*24*3600*1000;
 
-    if(element.look_status == 2){
+    if(element.look_status === 2){
         //如果取消，需要判断取消的时间是否在durationDay里面
         if(now_timestamp - durationTimestamp > element.look_finish_timestamp){
             //取消的时间比duration还早

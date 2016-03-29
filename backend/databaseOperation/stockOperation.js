@@ -17,7 +17,7 @@ exports.addlookStock = function(reqbody, callback){
 exports.dellookStock = function(reqbody, callback){
     var look_finish_timestamp = Date.now();
 
-    sql = 'update stock_look_info set look_finish_timestamp = ?, look_update_timestamp = ?,  look_finish_time = NOW(), look_status = 2  ' +
+    var sql = 'update stock_look_info set look_finish_timestamp = ?, look_update_timestamp = ?,  look_finish_time = NOW(), look_status = 2  ' +
     ' where user_id = ? and stock_code = ? and look_status = 1';
 
     conn.executeSql(sql, [look_finish_timestamp, look_finish_timestamp, reqbody.user_id, reqbody.stock_code], callback);
@@ -114,9 +114,10 @@ exports.insertMarketIndexNow = function(element, callback){
             ' `timestamp`, ' +
             ' `market_index_date`,' +
             ' market_index_trade_amount, '+
-            ' timestamp_ms ' +
+            ' timestamp_ms, ' +
+            ' market_index_time ' +
             ')' +
-            ' values(?,?,?,?,?,?,?,?,?,?,?,?,?)';
+            ' values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 
     var parm = [
         element.market_code,
@@ -131,7 +132,8 @@ exports.insertMarketIndexNow = function(element, callback){
         timestamp,
         element.market_index_date,
         element.market_index_trade_amount,
-        timestamp
+        timestamp,
+        element.market_index_time
     ];
     conn.executeSql(sql, parm, callback);
 }
@@ -319,6 +321,12 @@ exports.updateStockAlpha = function(stock_code, stock_alpha_info, callback){
     var sql = 'update stock_base_info set stock_alpha_info = ? where stock_code = ?';
     conn.executeSql(sql, [stock_alpha_info, stock_code], callback);
 }
+
+exports.updateStockName = function(stock_code, stock_name, stock_alpha_info, callback){
+    var sql = 'update stock_base_info set stock_alpha_info = ?, stock_name = ? where stock_code = ?';
+    conn.executeSql(sql, [stock_alpha_info, stock_name, stock_code], callback);
+}
+
 
 exports.getStockBaseInfoByAlpha = function(stock_alpha_info, callback){
     var sql = 'select *from stock_base_info where stock_alpha_info like \'%'+stock_alpha_info+'%\' limit 8';

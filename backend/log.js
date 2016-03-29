@@ -1,7 +1,7 @@
 var path = require('path');
 var log4js = require('log4js');
 var logger;
-
+var config = require('./config');
 exports.SetLogFileName = function(fileName) {
     log4js.configure({
         appenders: [{
@@ -47,11 +47,11 @@ exports.getFileNameAndLineNum = function(fullfilename) {
 
 exports.info = function(info, fileNameLineNum, sq) {
 
-    if(fileNameLineNum == null){
+    if(fileNameLineNum === null){
         fileNameLineNum = '';
     }
 
-    if (sq != null) {
+    if (sq !== null) {
         logger.info('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
         logger.info(fileNameLineNum + ' ' + info);
@@ -59,11 +59,11 @@ exports.info = function(info, fileNameLineNum, sq) {
 };
 
 exports.debug = function(info, fileNameLineNum, sq) {
-    if(fileNameLineNum == null){
+    if(fileNameLineNum === null){
         fileNameLineNum = '';
     }
 
-    if (sq != null) {
+    if (sq !== null) {
         logger.debug('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
         logger.debug(fileNameLineNum + ' ' + info);
@@ -71,11 +71,11 @@ exports.debug = function(info, fileNameLineNum, sq) {
 };
 
 exports.error = function(info, fileNameLineNum, sq) {
-    if(fileNameLineNum == null){
+    if(fileNameLineNum === null){
         fileNameLineNum = '';
     }
 
-    if (sq != null) {
+    if (sq !== null) {
         logger.error('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
         logger.error(fileNameLineNum + ' ' + info);
@@ -83,10 +83,10 @@ exports.error = function(info, fileNameLineNum, sq) {
 };
 
 exports.warn = function(info, fileNameLineNum, sq) {
-    if(fileNameLineNum == null){
+    if(fileNameLineNum === null){
         fileNameLineNum = '';
     }
-    if (sq != null) {
+    if (sq !== null) {
         logger.warn('[' + sq + '] - ' + fileNameLineNum + ' ' + info);
     } else {
         logger.warn(fileNameLineNum + ' ' + info);

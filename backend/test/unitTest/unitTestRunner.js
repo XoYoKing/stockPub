@@ -5,6 +5,7 @@ var http = require('http');
 var hostname = '112.74.102.178';
 
 exports.runTest = function(jsonObject, childpath, callback){
+    var buf = new Buffer(JSON.stringify(jsonObject));
     var options = {
         port: 18000,
         hostname: hostname,
@@ -14,7 +15,7 @@ exports.runTest = function(jsonObject, childpath, callback){
         headers: {
             'Content-Type': 'application/json; encoding=utf-8',
             'Accept': 'application/json',
-            'Content-Length': JSON.stringify(jsonObject).length
+            'Content-Length': buf.length
         }
     };
 
@@ -22,7 +23,7 @@ exports.runTest = function(jsonObject, childpath, callback){
 
     var req = http.request(options, function(res) {
         console.log("Got response: " + res.statusCode);
-        if(res.statusCode!=200){
+        if(res.statusCode!==200){
             callback(res.statusCode, 'error code: '+res.statusCode);
         }
         res.on('data', function(d) {

@@ -12,7 +12,7 @@ var email = require('./utility/emailTool');
 
 
 process.on('uncaughtException', function(err) {
-	logger.error('worker exception: ' + err.stack);
+	log.error('worker exception: ' + err.stack);
 	email.sendMail('Caught exception: ' + err.stack,
 		'stockWechatServer process failed');
 });
@@ -36,4 +36,4 @@ global.app.use(express.static(__dirname + '/images'));
 
 global.app.use('/', wechatHandle);
 global.app.listen(port); //设置监听http请求的端口号
-logger.info("stockWechatServer started on port " + port);
+log.info("stockWechatServer started on port " + port);

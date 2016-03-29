@@ -141,10 +141,12 @@
     }];
     
     
+    CGSize size = [Tools getTextArrange:myStockInfo.stock_code maxRect:CGSizeMake(ScreenWidth, 2*minSpace) fontSize:minFont];
+    
     [stockCodelabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(stockNameLabel.mas_left);
         make.top.mas_equalTo(stockNameLabel.mas_bottom);
-        make.size.mas_equalTo([Tools getTextArrange:myStockInfo.stock_code maxRect:CGSizeMake(ScreenWidth, 2*minSpace) fontSize:minFont]);
+        make.size.mas_equalTo(CGSizeMake(size.width+minSpace, size.height));
     }];
     
     [lookLabel mas_makeConstraints:^(MASConstraintMaker *make) {

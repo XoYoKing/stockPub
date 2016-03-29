@@ -3,7 +3,7 @@ var constant = require('../../utility/constant.js');
 var runner = require('./unitTestRunner.js');
 
 var Json = {
-    childpath: '/user/addCommentToLook',
+    childpath: 'user/addCommentToLook',
     look_id: '123',
     comment_user_id: '22233',
     comment_to_user_id: 'cbd41c6103064d3f0af848208c20ece2',
@@ -12,12 +12,19 @@ var Json = {
     comment_user_name:'111233'
 };
 
-describe('addCommentToLook', function(){
-    it('addCommentToLook', function(done){
-        runner.runTest(Json, Json.childpath, function(err, body){
-            should.not.exist(err);
-            body.code.should.be.equal(constant.returnCode.SUCCESS);
-            done();
-        });
-    });
+runner.runTest(Json, Json.childpath, function(err, body){
+    //should.not.exist(err);
+    //body.code.should.be.equal(constant.returnCode.SUCCESS);
+    //done();
+    console.log(body);
 });
+
+// describe('addCommentToLook', function(){
+//     it('addCommentToLook', function(done){
+//         runner.runTest(Json, Json.childpath, function(err, body){
+//             should.not.exist(err);
+//             body.code.should.be.equal(constant.returnCode.SUCCESS);
+//             done();
+//         });
+//     });
+// });

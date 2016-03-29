@@ -1,3 +1,2 @@
-forever stop $HOME/stockPub/backend/stockServer.js
 
-forever start $HOME/stockPub/backend/stockServer.js
+pm2 restart $HOME/stockPub/backend/stockServer.js

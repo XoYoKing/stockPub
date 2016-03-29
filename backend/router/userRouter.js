@@ -10,6 +10,16 @@ var config = require('../config');
 var formidable = require('formidable');
 var path = require('path');
 var apn = require('../utility/apnPush.js');
+var md5 = require('MD5');
+var redis = require("redis");
+var redisClient = redis.createClient({auth_pass:'here_dev'});
+var encrypt = require('../utility/encrypt.js');
+
+redisClient.on("error", function (err) {
+	log.error(err, log.getFileNameAndLineNum(__filename));
+});
+
+var asyncClient = require('async');
 
 
 module.exports = router;
@@ -55,6 +65,12 @@ router.post('/getFansUser', function(req, res){
 	userMgmt.getFansUser(req.body, function(flag, result){
 		if(flag){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+
+			redisClient.hset(config.hash.unreadFollowCountHash, req.body.followed_user_id, 0, function(err, reply){
+				if(err){
+					log.error(result, log.getFileNameAndLineNum(__filename));
+				}
+			});
 
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
@@ -108,6 +124,22 @@ router.post('/followUser', function(req, res){
 				}
 			});
 
+			//更新unreadFollowCountHash
+			redisClient.hget(config.hash.unreadFollowCountHash, req.body.followed_user_id, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+				}else{
+					if(reply === null){
+						reply = 0;
+					}
+					reply = parseInt(reply)+1;
+					redisClient.hset(config.hash.unreadFollowCountHash, req.body.followed_user_id, reply, function(err, reply){
+						if(err){
+							log.error(err, log.getFileNameAndLineNum(__filename));
+						}
+					});
+				}
+			});
 		}
 		res.send(returnData);
 	});
@@ -131,7 +163,6 @@ router.post('/register', function(req, res) {
 
 			if (certificateInfo.certificate_code === fields.user_certificate_code) {
 				var user_info = {};
-				var md5 = require('MD5');
 				user_info.user_id = md5(fields.user_phone);
 				user_info.user_phone = fields.user_phone;
 				user_info.user_name = fields.user_name;
@@ -394,6 +425,7 @@ router.get('/eula', function(req, res){
 //comment
 // add by wanghan 20160202 for add active comment
 router.post('/addCommentToLook', function(req, res) {
+	req.body.comment_content = encrypt.encodeBase64(req.body.comment_content);
 	userMgmt.addCommentToLook(req.body, function(flag, result) {
 		if (flag) {
 			// apn
@@ -417,6 +449,11 @@ router.post('/addCommentToLook', function(req, res) {
 router.post('/getComments', function(req, res){
 	userMgmt.getComments(req.body.look_id, req.body.comment_timestamp, function(flag, result){
 		if(flag){
+
+			result.forEach(function(e){
+				e.comment_content = encrypt.decodeBase64(e.comment_content);
+			});
+
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
@@ -431,7 +468,7 @@ router.post('/getRankUser', function(req, res){
 		var userlist = {};
 		if(flag){
 			result.forEach(function(element){
-				if(userlist[element.user_id] == null){
+				if(userlist[element.user_id] === undefined){
 					userlist[element.user_id] =
 					{
 						user_id: element.user_id,
@@ -461,14 +498,53 @@ router.post('/getRankUser', function(req, res){
 
 
 router.post('/getUnreadCommentCount', function(req, res){
-	userMgmt.getUnreadCommentCount(req.body.user_id, function(flag, result){
-		if(flag){
-			var count = result[0].count;
-			log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
-			routerFunc.feedBack(constant.returnCode.SUCCESS, count, res);
+
+	asyncClient.parallel({
+		unreadCommentCount: function(callback){
+			userMgmt.getUnreadCommentCount(req.body.user_id, function(flag, result){
+				if(flag){
+					var count = result[0].count;
+					log.debug(req.body.user_id+' unread count: '+count, log.getFileNameAndLineNum(__filename));
+					callback(null, count);
+				}else{
+					log.error(result, log.getFileNameAndLineNum(__filename));
+					callback(result);
+				}
+			});
+		},
+		unreadCommentToStockCount: function(callback){
+			redisClient.hget(config.hash.stockUnreadCommentCountHash, req.body.user_id, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+					callback(err);
+				}else{
+					if(reply === null){
+						reply = 0;
+					}
+					callback(null, reply);
+				}
+			});
+		},
+		unreadFollowCount: function(callback){
+			redisClient.hget(config.hash.unreadFollowCountHash, req.body.user_id, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+					callback(err);
+				}else{
+					if(reply === null){
+						reply = 0;
+					}
+					callback(null, reply);
+				}
+			});
+		}
+	},function(err, results){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
 		}else{
-			log.error(result, log.getFileNameAndLineNum(__filename));
-			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+			log.debug(JSON.stringify(results), log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.SUCCESS, results, res);
 		}
 	});
 });
@@ -477,6 +553,10 @@ router.post('/getUnreadCommentCount', function(req, res){
 router.post('/getUnreadComment', function(req, res){
 	userMgmt.getUnreadComment(req.body.user_id, req.body.comment_timestamp, function(flag, result){
 		if(flag){
+			result.forEach(function(e){
+				e.comment_content = encrypt.decodeBase64(e.comment_content);
+			});
+
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 			userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
 				if(!flag){
@@ -512,3 +592,125 @@ router.post('/updateDeviceToken', function(req, res){
 		}
 	});
 });
+
+
+router.post('/getCommentToStockByUser', function(req, res){
+	userMgmt.getCommentToStockByUser(req.body.user_id, req.body.talk_timestamp_ms, function(flag, result){
+		if(flag){
+
+			result.forEach(function(e){
+				e.talk_content = encrypt.decodeBase64(e.talk_content);
+			});
+
+			//获取当前股票股价
+			asyncClient.each(result, function(item, callback){
+				var hash = null;
+				if(item.talk_stock_code.indexOf('sz')!==-1||
+				item.talk_stock_code.indexOf('sh')!==-1){
+					hash = config.hash.marketCurPriceHash;
+					item.is_market = 1;
+				}else{
+					hash = config.hash.stockCurPriceHash;
+					item.is_market = 0;
+				}
+
+				redisClient.hget(hash, item.talk_stock_code, function(err, reply){
+					if(err){
+						log.error(result, log.getFileNameAndLineNum(__filename));
+						callback(err);
+					}else{
+						item.stockInfo = JSON.parse(reply);
+						callback(null);
+					}
+				});
+
+			}, function done(err){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+					routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+				}else{
+					//log.debug(JSON.stringify(result), log.getFileNameAndLineNum(__filename));
+					routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+				}
+			});
+
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+
+	//remove redis count
+	clearUnreadStockCommentCount(req.body.user_id);
+});
+
+
+router.post('/getCommentToStock', function(req, res){
+	userMgmt.getCommentToStock(req.body.talk_stock_code, req.body.talk_timestamp_ms, function(flag, result){
+		if(flag){
+			log.debug(JSON.stringify(result), log.getFileNameAndLineNum(__filename));
+			result.forEach(function(e){
+				e.talk_content = encrypt.decodeBase64(e.talk_content);
+			});
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+});
+
+router.post('/addCommentToStock', function(req, res){
+	//插入数据库
+	//兼容emoji内容
+	req.body.talk_content = encrypt.encodeBase64(req.body.talk_content);
+	userMgmt.addCommentToStock(req.body, function(flag, result){
+		if (flag) {
+			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
+
+			//更新未读评论数
+			if(parseInt(req.body.to_stock) === 0){
+				increaseUnreadStockCommentCount(req.body.talk_to_user_id);
+			}
+
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, result, res);
+		}
+	});
+
+	//推送
+	if(parseInt(req.body.to_stock) === 0){
+		var msg = req.body.user_name + '评论了你';
+		apn.pushMsg(req.body.talk_to_user_id, msg);
+	}
+});
+
+
+function clearUnreadStockCommentCount(user_id){
+	redisClient.hset(config.hash.stockUnreadCommentCountHash, user_id, 0, function(err, reply){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+		}
+	});
+}
+
+function increaseUnreadStockCommentCount(user_id){
+	log.debug('increaseUnreadStockCommentCount', log.getFileNameAndLineNum(__filename));
+	redisClient.hget(config.hash.stockUnreadCommentCountHash, user_id, function(err, reply){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+		}else{
+			if(reply === null){
+				reply = 1;
+			}else{
+				reply=parseInt(reply)+1;
+			}
+			redisClient.hset(config.hash.stockUnreadCommentCountHash, user_id, reply, function(err, reply){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+				}
+			});
+		}
+	});
+}

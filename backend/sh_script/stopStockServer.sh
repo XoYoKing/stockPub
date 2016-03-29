@@ -1,1 +1,1 @@
-forever stop $HOME/stockPub/backend/stockServer.js
+pm2 stop $HOME/stockPub/backend/stockServer.js

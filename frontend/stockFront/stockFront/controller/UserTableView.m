@@ -77,6 +77,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [comtable.tableView deselectRowAtIndexPath:[comtable.tableView indexPathForSelectedRow] animated:YES];
     UserInfoModel* userInfo = [list objectAtIndex:indexPath.row];
     SettingCtrl* settingViewController = [[SettingCtrl alloc] init:userInfo];
     settingViewController.hidesBottomBarWhenPushed = YES;

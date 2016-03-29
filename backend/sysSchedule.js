@@ -16,7 +16,7 @@ log.info("run sys cron job", log.getFileNameAndLineNum(__filename));
 new cronJob('00 59 23 * * *', function(){
     log.info('zip everyday log', log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/zipLog.sh', null, {}, function(err, stdout, stderr){
-        if(err!=null){
+        if(err !== null){
             log.error(err, log.getFileNameAndLineNum(__filename));
         }else{
             log.info("zipLog finish", log.getFileNameAndLineNum(__filename));
@@ -29,7 +29,7 @@ new cronJob('00 59 23 * * *', function(){
 new cronJob('00 00 4 * * *', function(){
     log.info('restart all app', log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/startAll.sh', null, {}, function(err, stdout, stderr){
-        if(err!=null){
+        if(err !== null){
             log.error(err, log.getFileNameAndLineNum(__filename));
         }else{
             log.info("restart all finish", log.getFileNameAndLineNum(__filename));
@@ -41,8 +41,8 @@ new cronJob('00 00 4 * * *', function(){
 //日志错误统计
 new cronJob('59 23 * * *', function(){
     log.info("errorLogReport start", log.getFileNameAndLineNum(__filename));
-    child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err, stdout, stderr){
-        if(err!=null){
+    child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err){
+        if(err !== null){
             log.error(err, log.getFileNameAndLineNum(__filename));
         }else{
             log.info("errorLogReport finish", log.getFileNameAndLineNum(__filename));

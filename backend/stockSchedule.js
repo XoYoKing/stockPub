@@ -10,6 +10,13 @@ var caculate = require('./utility/caculate');
 var cronJob = require('cron').CronJob;
 var moment = require('moment');
 
+var redis = require("redis");
+var redisClient = redis.createClient({auth_pass:'here_dev'});
+redisClient.on("error", function (err) {
+	log.error(err, log.getFileNameAndLineNum(__filename));
+});
+var stockOperation = require('./databaseOperation/stockOperation');
+var config = require('./config');
 
 log.info("run CronJob", log.getFileNameAndLineNum(__filename));
 
@@ -95,6 +102,12 @@ new cronJob('00 20 15 * * 1-5', function(){
 //     caculate.caculateUserRank();
 // }, null, true);
 
+
+//每晚股票名字取市场最新
+new cronJob('00 00 23 * * *', function(){
+    log.info('update stock name everyday', log.getFileNameAndLineNum(__filename));
+    crawl.updateStockName();
+}, null, true);
 
 process.on('uncaughtException', function(err) {
     log.error('schedule process Caught exception: ' +

@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var conn = require('../utility.js');
 
 var logger = global.logger;
+var md5 = require('MD5');
 
 exports.followUser = function(reqbody, callback){
 	var follow_timestamp = Date.now();
@@ -192,7 +193,7 @@ exports.getComments = function (look_id, comment_timestamp, callback) {
 	conn.executeSql(sql, [look_id, comment_timestamp], callback);
 };
 
-exports.clearUserYieldRank = function(){
+exports.clearUserYieldRank = function(callback){
 	var sql = 'TRUNCATE `user_yield_rank`';
     conn.executeSql(sql, [], callback);
 }
@@ -252,4 +253,34 @@ exports.updateDeviceToken = function(user_phone, device_token, callback){
 exports.updateLoginStatus = function(user_id, user_login_status, callback){
 	var sql = 'update user_base_info set user_login_status = ? where user_id = ?';
 	conn.executeSql(sql, [user_login_status, user_id], callback);
+}
+
+
+exports.addCommentToStock = function(reqBody, callback){
+
+	var talk_timestamp_ms = Date.now();
+	var talk_id = md5(reqBody.talk_user_id+reqBody.talk_stock_code+talk_timestamp_ms);
+
+
+	var sql = 'insert into stock_talk_base_info(talk_id, talk_stock_code, ' +
+		' talk_user_id, talk_to_user_id, talk_content, talk_date_time, talk_timestamp_ms, talk_to_user_name, to_stock) ' +
+		' values(?,?,?,?,?,NOW(),?,?,?)';
+	conn.executeSql(sql, [talk_id, reqBody.talk_stock_code,
+		reqBody.talk_user_id, reqBody.talk_to_user_id, reqBody.talk_content,
+		talk_timestamp_ms,reqBody.talk_to_user_name, reqBody.to_stock], callback);
+}
+
+
+exports.getCommentToStock = function(talk_stock_code, talk_timestamp_ms, callback){
+	var sql = 'select a.*, b.user_name, b.user_facethumbnail from stock_talk_base_info a, user_base_info b' +
+	' where a.talk_stock_code = ? and a.talk_timestamp_ms<? ' +
+	' and a.talk_user_id = b.user_id order by talk_timestamp_ms desc limit 18';
+	conn.executeSql(sql, [talk_stock_code, talk_timestamp_ms], callback);
+}
+
+exports.getCommentToStockByUser = function(user_id, talk_timestamp_ms, callback){
+	var sql = 'select a.*, b.user_name, b.user_facethumbnail from stock_talk_base_info a, user_base_info b' +
+	' where a.talk_to_user_id = ? and a.talk_timestamp_ms<?  ' +
+	' and a.talk_user_id = b.user_id  and a.to_stock = 0 order by talk_timestamp_ms desc limit 8';
+	conn.executeSql(sql, [user_id, talk_timestamp_ms], callback);
 }

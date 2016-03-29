@@ -1,1 +1,1 @@
-forever stop $HOME/stockPub/backend/sysSchedule.js
+pm2 stop $HOME/stockPub/backend/sysSchedule.js
