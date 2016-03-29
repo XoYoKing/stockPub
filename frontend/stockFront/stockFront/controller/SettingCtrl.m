@@ -26,6 +26,7 @@
 #import "getFollowUserAction.h"
 #import "GetFansAction.h"
 #import "UnreadCommentTableView.h"
+#import "UnreadCommentStockTableView.h"
 
 @implementation SettingCtrl
 {
@@ -37,6 +38,7 @@
     BOOL isFollow;
     NSInteger unreadCommentCount;
     NSInteger unreadCommentToStockCount;
+    NSInteger unreadFollowCount;
     UILabel *navTitle;
 }
 
@@ -160,6 +162,7 @@ typedef enum {
         
         if(indexPath.row == 1){
             //关注我的人
+            unreadFollowCount = 0;
             GetFansAction* getFansAction = [[GetFansAction alloc] init:myInfo.user_id];
             UserTableView* userTable = [[UserTableView alloc] init:@"被关注"];
             userTable.pullAction = getFansAction;
@@ -172,15 +175,23 @@ typedef enum {
     
     if(indexPath.section == msgSection){
         if (indexPath.row == 0) {
-            //未读评论
+            //未读看多评论
             UnreadCommentTableView* unreadCommentTableView = [[UnreadCommentTableView alloc] initWithStyle:UITableViewStyleGrouped];
             unreadCommentTableView.hidesBottomBarWhenPushed = YES;
-            unreadCommentTableView.userInfo = myInfo;
             
             [self.navigationController pushViewController:unreadCommentTableView animated:YES];
             
             
         }
+        
+        if (indexPath.row == 1) {
+            //未读个股评论
+            UnreadCommentStockTableView* unreadTableview = [[UnreadCommentStockTableView alloc] initWithStyle:UITableViewStyleGrouped];
+            unreadTableview.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:unreadTableview animated:YES];
+
+        }
+        
     }
 }
 
@@ -482,9 +493,11 @@ typedef enum {
             
             unreadCommentCount = [[data objectForKey:@"unreadCommentCount"] integerValue];
             unreadCommentToStockCount = [[data objectForKey:@"unreadCommentToStockCount"] integerValue];
+            unreadFollowCount = [[data objectForKey:@"unreadFollowCount"] integerValue];
             
-            if (unreadCommentToStockCount+unreadCommentCount>0) {
-                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount+unreadCommentCount]];
+            
+            if (unreadCommentToStockCount+unreadCommentCount+unreadFollowCount>0) {
+                [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:[[NSString alloc] initWithFormat:@"%ld", unreadCommentToStockCount+unreadCommentCount+unreadFollowCount]];
                 
             }else{
                 [[[[[self tabBarController] viewControllers] objectAtIndex:3] tabBarItem] setBadgeValue:nil];
@@ -622,7 +635,26 @@ typedef enum {
 
             }
 
-            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_fans_count];
+            
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@""];
+
+            if(unreadFollowCount != 0){
+                
+                UILabel* numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 3*minSpace, 3*minSpace)];
+                numberLabel.backgroundColor = [UIColor redColor];
+                numberLabel.text = [[NSString alloc] initWithFormat:@"%ld", unreadFollowCount];
+                numberLabel.textColor = [UIColor whiteColor];
+                numberLabel.layer.cornerRadius = 3*minSpace/2;
+                numberLabel.font = [UIFont fontWithName:fontName size:minFont];
+                numberLabel.textAlignment = NSTextAlignmentCenter;
+                numberLabel.layer.masksToBounds = YES;
+                cell.accessoryView = numberLabel;
+                
+            }else{
+                cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%ld", myInfo.user_fans_count];
+                cell.accessoryView = nil;
+            }
+            
         }
         
         if(indexPath.row == 2){

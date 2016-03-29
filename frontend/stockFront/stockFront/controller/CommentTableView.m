@@ -123,6 +123,7 @@
         comment_to_user_id = toUserInfo.user_id;
         comment_to_user_name = toUserInfo.user_name;
     }
+
     
     NSDictionary* message = [[NSDictionary alloc]
                              initWithObjects:@[_stockLookInfo.look_id, phoneUser.user_id, phoneUser.user_name, comment_to_user_id, msg, [[NSNumber alloc] initWithInteger:to_look]]

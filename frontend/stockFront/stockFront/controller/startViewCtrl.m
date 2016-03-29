@@ -37,7 +37,7 @@
     detailLabel.font = [UIFont fontWithName:fontName size:minFont];
     detailLabel.textColor = [UIColor grayColor];
     detailLabel.textAlignment = NSTextAlignmentCenter;
-    detailLabel.text = @"跟着牛人学炒股";
+    detailLabel.text = @"不用思考的投资";
     [self.view addSubview:detailLabel];
     
     

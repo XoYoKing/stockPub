@@ -12,6 +12,5 @@
 
 @interface UnreadCommentTableView : UITableViewController<InputToolbarDelegate>
 
-@property UserInfoModel* userInfo;
 
 @end
