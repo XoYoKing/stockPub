@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		35E49CC09B1106411DD25DE5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681CAA04F6CE391EBE1BB08 /* libPods.a */; };
+		B222A70D1CA8FFE1006586E2 /* UnreadCommentStockTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */; };
 		B227E80B1C745C5A005BA113 /* KLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B227E80A1C745C5A005BA113 /* KLineCell.m */; };
 		B227F3A01C64A0C200235B64 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B227F39F1C64A0C200235B64 /* main.m */; };
 		B227F3A31C64A0C200235B64 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B227F3A21C64A0C200235B64 /* AppDelegate.m */; };
@@ -136,6 +137,8 @@
 		4DB2923420FC4BE03A26B9AF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		6681CAA04F6CE391EBE1BB08 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		67492CFD7A2989C33C5B372D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B222A70B1CA8FFE0006586E2 /* UnreadCommentStockTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnreadCommentStockTableView.h; sourceTree = "<group>"; };
+		B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnreadCommentStockTableView.m; sourceTree = "<group>"; };
 		B227E8091C745C5A005BA113 /* KLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineCell.h; sourceTree = "<group>"; };
 		B227E80A1C745C5A005BA113 /* KLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineCell.m; sourceTree = "<group>"; };
 		B227F39B1C64A0C200235B64 /* stockFront.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stockFront.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -444,6 +447,8 @@
 				B265742E1C8E75AB00A6B75C /* webViewCtrl.m */,
 				B227F4C31C6723D200235B64 /* StockInfoDetailTableView.h */,
 				B227F4C41C6723D200235B64 /* StockInfoDetailTableView.m */,
+				B222A70B1CA8FFE0006586E2 /* UnreadCommentStockTableView.h */,
+				B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */,
 				B227F4BD1C66151500235B64 /* UnreadCommentTableView.h */,
 				B227F4BE1C66151500235B64 /* UnreadCommentTableView.m */,
 				B2E708C41C99046000779B38 /* StockCommentTableView.h */,
@@ -898,6 +903,7 @@
 				B227F46F1C64A1E200235B64 /* CommentTableView.m in Sources */,
 				B227F4A41C64A1E200235B64 /* MKAnnotationView+YYWebImage.m in Sources */,
 				B227F49D1C64A1E200235B64 /* Tools.m in Sources */,
+				B222A70D1CA8FFE1006586E2 /* UnreadCommentStockTableView.m in Sources */,
 				B227F4AA1C64A1E200235B64 /* YYImage.m in Sources */,
 				B227F47A1C64A1E200235B64 /* startViewCtrl.m in Sources */,
 				B265742F1C8E75AB00A6B75C /* webViewCtrl.m in Sources */,

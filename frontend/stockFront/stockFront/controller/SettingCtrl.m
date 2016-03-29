@@ -26,6 +26,7 @@
 #import "getFollowUserAction.h"
 #import "GetFansAction.h"
 #import "UnreadCommentTableView.h"
+#import "UnreadCommentStockTableView.h"
 
 @implementation SettingCtrl
 {
@@ -172,15 +173,23 @@ typedef enum {
     
     if(indexPath.section == msgSection){
         if (indexPath.row == 0) {
-            //未读评论
+            //未读看多评论
             UnreadCommentTableView* unreadCommentTableView = [[UnreadCommentTableView alloc] initWithStyle:UITableViewStyleGrouped];
             unreadCommentTableView.hidesBottomBarWhenPushed = YES;
-            unreadCommentTableView.userInfo = myInfo;
             
             [self.navigationController pushViewController:unreadCommentTableView animated:YES];
             
             
         }
+        
+        if (indexPath.row == 1) {
+            //未读个股评论
+            UnreadCommentStockTableView* unreadTableview = [[UnreadCommentStockTableView alloc] initWithStyle:UITableViewStyleGrouped];
+            unreadTableview.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:unreadTableview animated:YES];
+
+        }
+        
     }
 }
 

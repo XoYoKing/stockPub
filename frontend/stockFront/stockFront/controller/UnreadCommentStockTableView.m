@@ -1,41 +1,36 @@
 //
-//  UnreadCommentTableView.m
+//  UnreadCommentStockTableView.m
 //  stockFront
 //
-//  Created by wang jam on 2/6/16.
+//  Created by wang jam on 3/28/16.
 //  Copyright © 2016 jam wang. All rights reserved.
 //
 
-#import "UnreadCommentTableView.h"
+#import "UnreadCommentStockTableView.h"
 #import "macro.h"
-#import "NetworkAPI.h"
 #import "returnCode.h"
-#import "Tools.h"
-#import "StockLookInfoModel.h"
-#import "CommentModel.h"
-#import <YYModel.h>
-#import "CommentTableViewCell.h"
-#import "StockLookTableViewCell.h"
-#import "StockLookDetailTableViewController.h"
 #import "AppDelegate.h"
-#import "InputToolbar.h"
+#import "NetworkAPI.h"
+#import "StockInfoModel.h"
+#import <YYModel.h>
+#import "CommentModel.h"
+#import "CommentTableViewCell.h"
+#import "StockActionTableViewCell.h"
+#import "StockInfoDetailTableView.h"
 
-@interface UnreadCommentTableView ()
+
+@implementation UnreadCommentStockTableView
 {
     NSMutableArray* commentlist;
-    NSMutableArray* looklist;
-    UserInfoModel* toUserInfo;
-    StockLookInfoModel* toStockLook;
-    InputToolbar* inputToolbar;
-    UIActivityIndicatorView* bottomActive;
+    NSMutableArray* stocklist;
     BOOL allowPullUp;
+    UIActivityIndicatorView* bottomActive;
+    InputToolbar* inputToolbar;
+    UserInfoModel* toUserInfo;
+    StockInfoModel* toStock;
 
 }
-@end
-
-@implementation UnreadCommentTableView
 static int bottomActiveHeight = 30;
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -47,7 +42,7 @@ static int bottomActiveHeight = 30;
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     UILabel *navTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-    [navTitle setText:@"看多评论"];
+    [navTitle setText:@"个股评论"];
     [navTitle setFont:[UIFont fontWithName:fontName size:middleFont]];
     navTitle.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = navTitle;
@@ -59,13 +54,158 @@ static int bottomActiveHeight = 30;
     
     
     commentlist = [[NSMutableArray alloc] init];
-    looklist = [[NSMutableArray alloc] init];
+    stocklist = [[NSMutableArray alloc] init];
     
     [self pullDownAction];
     
     [self setBottomActive];
     allowPullUp = true;
 }
+
+
+- (void)setBottomActive
+{
+    UIView* bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, bottomActiveHeight*2)];
+    [self.tableView setTableFooterView:bottomView];
+    
+    bottomActive = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    bottomActive.frame = CGRectMake((ScreenWidth - bottomActiveHeight)/2, (self.tableView.tableFooterView.frame.size.height - bottomActiveHeight)/2, bottomActiveHeight, bottomActiveHeight);
+    [bottomActive setColor:[UIColor grayColor]];
+    [bottomActive hidesWhenStopped];
+    
+    for (UIView* view in self.tableView.tableFooterView.subviews) {
+        [view removeFromSuperview];
+    }
+    [self.tableView.tableFooterView addSubview:bottomActive];
+}
+
+- (void)pullDownAction
+{
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:[[NSDate date] timeIntervalSince1970]*1000]]
+                             forKeys:@[@"user_id", @"talk_timestamp_ms"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getCommentToStockByUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            [stocklist removeAllObjects];
+            [commentlist removeAllObjects];
+            
+            NSArray* unreadCommentArray = (NSArray*)[response objectForKey:@"data"];
+            
+            if(unreadCommentArray!=nil){
+                for (NSDictionary* element in unreadCommentArray) {
+                    
+                    StockInfoModel* stockInfo = nil;
+                    if([[element objectForKey:@"is_market"] integerValue] == 1){
+                        stockInfo = [[StockInfoModel alloc] init];
+                        NSDictionary* marketObject = [element objectForKey:@"stockInfo"];
+                        stockInfo.stock_code = [marketObject objectForKey:@"market_code"];
+                        stockInfo.stock_name = [marketObject objectForKey:@"market_name"];
+                        stockInfo.price = [[marketObject objectForKey:@"market_index_value_now"] floatValue];
+                        stockInfo.fluctuate = [[marketObject objectForKey:@"market_index_fluctuate"] floatValue];
+                        stockInfo.fluctuate_value = [[marketObject objectForKey:@"market_index_fluctuate_value"] floatValue];
+                        stockInfo.is_market = 1;
+                        
+                    }else{
+                        stockInfo = [StockInfoModel yy_modelWithDictionary:[element objectForKey:@"stockInfo"]];
+                    }
+              
+                    
+                    CommentModel* commentModel = [[CommentModel alloc] init];
+                    commentModel.talk_id = [element objectForKey:@"talk_id"];
+                    
+                    commentModel.comment_user_id = [element objectForKey:@"talk_user_id"];
+                    commentModel.comment_user_name = [element objectForKey:@"user_name"];
+                    commentModel.comment_user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
+                    commentModel.comment_content = [element objectForKey:@"talk_content"];
+                    commentModel.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue];
+                    
+                    [stocklist addObject:stockInfo];
+                    [commentlist addObject:commentModel];
+                }
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        [self.refreshControl endRefreshing];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
+        [self.tableView reloadData];
+        
+    }];
+}
+
+
+- (void)pullUpAction
+{
+    CommentModel* commentModel = [commentlist lastObject];
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:commentModel.comment_timestamp]]
+                             forKeys:@[@"user_id", @"talk_timestamp_ms"]];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/user/getCommentToStockByUser" successed:^(NSDictionary *response) {
+        
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        
+        if(code == SUCCESS){
+            
+            
+            NSArray* unreadCommentArray = (NSArray*)[response objectForKey:@"data"];
+            
+            if(unreadCommentArray!=nil){
+                for (NSDictionary* element in unreadCommentArray) {
+                    StockInfoModel* stockInfo = [StockInfoModel yy_modelWithDictionary:[element objectForKey:@"stockInfo"]];
+                    CommentModel* commentModel = [[CommentModel alloc] init];
+                    commentModel.talk_id = [element objectForKey:@"talk_id"];
+
+                    commentModel.comment_user_id = [element objectForKey:@"talk_user_id"];
+                    commentModel.comment_user_name = [element objectForKey:@"user_name"];
+                    commentModel.comment_user_facethumbnail = [element objectForKey:@"user_facethumbnail"];
+                    commentModel.comment_content = [element objectForKey:@"talk_content"];
+                    commentModel.comment_timestamp = [[element objectForKey:@"talk_timestamp_ms"] integerValue];
+                    
+                    
+                    [stocklist addObject:stockInfo];
+                    [commentlist addObject:commentModel];
+                }
+            }
+            
+            if([unreadCommentArray count] == 0){
+                allowPullUp = NO;
+            }
+            
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        [bottomActive stopAnimating];
+        [self.tableView reloadData];
+        
+    } failed:^(NSError *error) {
+        alertMsg(@"网络问题");
+        
+        [bottomActive stopAnimating];
+        [self.tableView reloadData];
+        
+    }];
+    
+}
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -100,153 +240,43 @@ static int bottomActiveHeight = 30;
     }
 }
 
-- (void)setBottomActive
-{
-    UIView* bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, bottomActiveHeight*2)];
-    [self.tableView setTableFooterView:bottomView];
-    
-    bottomActive = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    bottomActive.frame = CGRectMake((ScreenWidth - bottomActiveHeight)/2, (self.tableView.tableFooterView.frame.size.height - bottomActiveHeight)/2, bottomActiveHeight, bottomActiveHeight);
-    [bottomActive setColor:[UIColor grayColor]];
-    [bottomActive hidesWhenStopped];
-    
-    for (UIView* view in self.tableView.tableFooterView.subviews) {
-        [view removeFromSuperview];
-    }
-    [self.tableView.tableFooterView addSubview:bottomActive];
-}
-
-
-- (void)pullUpAction
-{
-    CommentModel* commentModel = [commentlist lastObject];
-    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
-    
-    NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:commentModel.comment_timestamp]]
-                             forKeys:@[@"user_id", @"comment_timestamp"]];
-    
-    [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadComment" successed:^(NSDictionary *response) {
-        
-        NSInteger code = [[response objectForKey:@"code"] integerValue];
-        
-        if(code == SUCCESS){
-            
-            
-            NSArray* unreadCommentArray = (NSArray*)[response objectForKey:@"data"];
-            
-            if(unreadCommentArray!=nil){
-                for (NSDictionary* element in unreadCommentArray) {
-                    StockLookInfoModel* stockLookInfo = [StockLookInfoModel yy_modelWithDictionary:element];
-                    CommentModel* commentModel = [CommentModel yy_modelWithDictionary:element];
-                    
-                    [looklist addObject:stockLookInfo];
-                    [commentlist addObject:commentModel];
-                }
-            }
-            
-            if([unreadCommentArray count] == 0){
-                allowPullUp = NO;
-            }
-            
-        }else{
-            alertMsg(@"未知错误");
-        }
-        
-        [bottomActive stopAnimating];
-        [self.tableView reloadData];
-        
-    } failed:^(NSError *error) {
-        alertMsg(@"网络问题");
-        
-        [bottomActive stopAnimating];
-        [self.tableView reloadData];
-        
-    }];
-
-}
-
-- (void)pullDownAction
-{
-    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
-
-    NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[userInfo.user_id, [[NSNumber alloc] initWithInteger:[[NSDate date] timeIntervalSince1970]*1000]]
-                             forKeys:@[@"user_id", @"comment_timestamp"]];
-    
-    [NetworkAPI callApiWithParam:message childpath:@"/user/getUnreadComment" successed:^(NSDictionary *response) {
-        
-        NSInteger code = [[response objectForKey:@"code"] integerValue];
-        
-        if(code == SUCCESS){
-            
-            [looklist removeAllObjects];
-            [commentlist removeAllObjects];
-            
-            NSArray* unreadCommentArray = (NSArray*)[response objectForKey:@"data"];
-            
-            if(unreadCommentArray!=nil){
-                for (NSDictionary* element in unreadCommentArray) {
-                    StockLookInfoModel* stockLookInfo = [StockLookInfoModel yy_modelWithDictionary:element];
-                    CommentModel* commentModel = [CommentModel yy_modelWithDictionary:element];
-                    
-                    [looklist addObject:stockLookInfo];
-                    [commentlist addObject:commentModel];
-                }
-            }
-            
-        }else{
-            alertMsg(@"未知错误");
-        }
-        
-        [self.refreshControl endRefreshing];
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-        [self.tableView reloadData];
-        
-    } failed:^(NSError *error) {
-        alertMsg(@"网络问题");
-        [self.refreshControl endRefreshing];
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@""];
-        [self.tableView reloadData];
-        
-    }];
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        return [StockLookTableViewCell cellHeight];
+        return [StockActionTableViewCell cellHeight];
     }
     
     if (indexPath.row == 1) {
         CommentModel* commentmodel = [commentlist objectAtIndex:indexPath.section];
         
-         return [CommentTableViewCell cellHeight:commentmodel.comment_content];
+        return [CommentTableViewCell cellHeight:commentmodel.comment_content];
     }
     
     return 0;
 }
 
+
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
         
-        static NSString* cellIdentifier = @"lookcell";
-        StockLookTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        static NSString* cellIdentifier = @"stockcell";
+        StockActionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         
         // Configure the cell...
         // Configure the cell...
         if (cell==nil) {
-            cell = [[StockLookTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell = [[StockActionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
             NSLog(@"new cell");
         }
         
         
-        [cell configureCell:[looklist objectAtIndex:indexPath.section]];
+        [cell configureCell:[stocklist objectAtIndex:indexPath.section]];
         
         return cell;
     }
-
+    
     
     if (indexPath.row == 1) {
         static NSString* cellIdentifier = @"commentcell";
@@ -268,14 +298,6 @@ static int bottomActiveHeight = 30;
     return nil;
 }
 
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [commentlist count];
@@ -299,18 +321,13 @@ static int bottomActiveHeight = 30;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
-
+    
     if (indexPath.row == 0) {
-        StockLookInfoModel* model = [looklist objectAtIndex:indexPath.section];
+        StockInfoModel* model = [stocklist objectAtIndex:indexPath.section];
+        StockInfoDetailTableView* tableviewCtrl = [[StockInfoDetailTableView alloc] init];
+        tableviewCtrl.stockInfoModel = model;
+        tableviewCtrl.ismarket = model.is_market;
         
-        model.user_id = phoneUser.user_id;
-        model.user_facethumbnail = phoneUser.user_facethumbnail;
-        model.user_name = phoneUser.user_name;
-        model.user_look_yield = phoneUser.user_look_yield;
-        
-        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
-        tableviewCtrl.stockLookInfoModel = model;
-        tableviewCtrl.stocklist = looklist;
         tableviewCtrl.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:tableviewCtrl animated:YES];
     }
@@ -324,13 +341,13 @@ static int bottomActiveHeight = 30;
             toUserInfo.user_id = commentModel.comment_user_id;
             toUserInfo.user_name = commentModel.comment_user_name;
             
-            toStockLook = [looklist objectAtIndex:indexPath.section];
+            toStock = [stocklist objectAtIndex:indexPath.section];
             
             inputToolbar = [[InputToolbar alloc] init];
             inputToolbar.inputDelegate = self;
             
             [[Tools curNavigator].view addSubview:inputToolbar];
-
+            
             
             [inputToolbar showInput];
         }
@@ -338,8 +355,6 @@ static int bottomActiveHeight = 30;
     }
     
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
-
-    
 }
 
 - (void)sendAction:(NSString*)msg
@@ -362,10 +377,10 @@ static int bottomActiveHeight = 30;
 - (void)sendDetailComment:(NSString*)msg
 {
     
-    NSInteger to_look = 0;
+    NSInteger to_stock = 0;
     NSString* comment_to_user_id = @"";
     NSString* comment_to_user_name = @"";
-    to_look = 0;
+    to_stock = 0;
     comment_to_user_id = toUserInfo.user_id;
     comment_to_user_name = toUserInfo.user_name;
     
@@ -373,11 +388,23 @@ static int bottomActiveHeight = 30;
 
     
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[toStockLook.look_id, phoneUser.user_id, phoneUser.user_name, comment_to_user_id, msg, [[NSNumber alloc] initWithInteger:to_look]]
-                             forKeys:@[@"look_id", @"comment_user_id", @"comment_user_name", @"comment_to_user_id", @"comment_content", @"to_look"]];
+                             initWithObjects:@[toStock.stock_code,
+                                               phoneUser.user_id,
+                                               phoneUser.user_name,
+                                               comment_to_user_id,
+                                               comment_to_user_name,
+                                               msg,
+                                               [[NSNumber alloc] initWithInteger:to_stock]]
+                             forKeys:@[@"talk_stock_code",
+                                       @"talk_user_id",
+                                       @"user_name",
+                                       @"talk_to_user_id",
+                                       @"talk_to_user_name",
+                                       @"talk_content",
+                                       @"to_stock"]];
     
     
-    [NetworkAPI callApiWithParam:message childpath:@"/user/addCommentToLook" successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParam:message childpath:@"/user/addCommentToStock" successed:^(NSDictionary *response) {
         
         
         NSInteger code = [[response objectForKey:@"code"] integerValue];
@@ -397,9 +424,6 @@ static int bottomActiveHeight = 30;
     
 }
 
-
-
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     if (inputToolbar!=nil) {
@@ -408,61 +432,5 @@ static int bottomActiveHeight = 30;
         inputToolbar = nil;
     }
 }
-
-
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

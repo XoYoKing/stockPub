@@ -57,16 +57,7 @@
                     temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
                     temp.to_stock = [[element objectForKey:@"to_stock"] integerValue];
                     
-                    // NSData from the Base64 encoded str
-                    NSData *nsdataFromBase64String = [[NSData alloc]
-                                                      initWithBase64EncodedString:temp.comment_content options:0];
-                    
-                    // Decoded NSString from the NSData
-                    NSString *base64Decoded = [[NSString alloc]
-                                               initWithData:nsdataFromBase64String encoding:NSUTF8StringEncoding];
-                    
-                    temp.comment_content = base64Decoded;
-                    
+                   
                     if(temp.to_stock == 0){
                         temp.comment_content = [[NSString alloc] initWithFormat:@"回复%@:%@", temp.comment_to_user_name, temp.comment_content];
                     }
@@ -130,15 +121,6 @@
                     temp.comment_to_user_name = [element objectForKey:@"talk_to_user_name"];
                     temp.to_stock = [[element objectForKey:@"to_stock"] integerValue];
                     
-                    // NSData from the Base64 encoded str
-                    NSData *nsdataFromBase64String = [[NSData alloc]
-                                                      initWithBase64EncodedString:temp.comment_content options:0];
-                    
-                    // Decoded NSString from the NSData
-                    NSString *base64Decoded = [[NSString alloc]
-                                               initWithData:nsdataFromBase64String encoding:NSUTF8StringEncoding];
-                    
-                    temp.comment_content = base64Decoded;
                     
                     
                     if(temp.to_stock == 0){

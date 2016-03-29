@@ -13,6 +13,7 @@ var apn = require('../utility/apnPush.js');
 var md5 = require('MD5');
 var redis = require("redis");
 var redisClient = redis.createClient({auth_pass:'here_dev'});
+var encrypt = require('../utility/encrypt.js');
 
 redisClient.on("error", function (err) {
 	log.error(err, log.getFileNameAndLineNum(__filename));
@@ -402,6 +403,7 @@ router.get('/eula', function(req, res){
 //comment
 // add by wanghan 20160202 for add active comment
 router.post('/addCommentToLook', function(req, res) {
+	req.body.comment_content = encrypt.encodeBase64(req.body.comment_content);
 	userMgmt.addCommentToLook(req.body, function(flag, result) {
 		if (flag) {
 			// apn
@@ -425,6 +427,11 @@ router.post('/addCommentToLook', function(req, res) {
 router.post('/getComments', function(req, res){
 	userMgmt.getComments(req.body.look_id, req.body.comment_timestamp, function(flag, result){
 		if(flag){
+
+			result.forEach(function(e){
+				e.comment_content = encrypt.decodeBase64(e.comment_content);
+			});
+
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
@@ -511,6 +518,10 @@ router.post('/getUnreadCommentCount', function(req, res){
 router.post('/getUnreadComment', function(req, res){
 	userMgmt.getUnreadComment(req.body.user_id, req.body.comment_timestamp, function(flag, result){
 		if(flag){
+			result.forEach(function(e){
+				e.comment_content = encrypt.decodeBase64(e.comment_content);
+			});
+
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 			userMgmt.updateUnreadComment(req.body.user_id, function(flag, result){
 				if(!flag){
@@ -552,14 +563,20 @@ router.post('/getCommentToStockByUser', function(req, res){
 	userMgmt.getCommentToStockByUser(req.body.user_id, req.body.talk_timestamp_ms, function(flag, result){
 		if(flag){
 
+			result.forEach(function(e){
+				e.talk_content = encrypt.decodeBase64(e.talk_content);
+			});
+
 			//获取当前股票股价
 			asyncClient.each(result, function(item, callback){
 				var hash = null;
 				if(item.talk_stock_code.indexOf('sz')!==-1||
 				item.talk_stock_code.indexOf('sh')!==-1){
 					hash = config.hash.marketCurPriceHash;
+					item.is_market = 1;
 				}else{
 					hash = config.hash.stockCurPriceHash;
+					item.is_market = 0;
 				}
 
 				redisClient.hget(hash, item.talk_stock_code, function(err, reply){
@@ -567,7 +584,7 @@ router.post('/getCommentToStockByUser', function(req, res){
 						log.error(result, log.getFileNameAndLineNum(__filename));
 						callback(err);
 					}else{
-						item.stockInfo = reply;
+						item.stockInfo = JSON.parse(reply);
 						callback(null);
 					}
 				});
@@ -597,6 +614,9 @@ router.post('/getCommentToStock', function(req, res){
 	userMgmt.getCommentToStock(req.body.talk_stock_code, req.body.talk_timestamp_ms, function(flag, result){
 		if(flag){
 			log.debug(JSON.stringify(result), log.getFileNameAndLineNum(__filename));
+			result.forEach(function(e){
+				e.talk_content = encrypt.decodeBase64(e.talk_content);
+			});
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 		}else{
 			log.error(result, log.getFileNameAndLineNum(__filename));
@@ -607,12 +627,14 @@ router.post('/getCommentToStock', function(req, res){
 
 router.post('/addCommentToStock', function(req, res){
 	//插入数据库
+	//兼容emoji内容
+	req.body.talk_content = encrypt.encodeBase64(req.body.talk_content);
 	userMgmt.addCommentToStock(req.body, function(flag, result){
 		if (flag) {
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 
 			//更新未读评论数
-			if(req.body.to_stock === 0){
+			if(parseInt(req.body.to_stock) === 0){
 				increaseUnreadStockCommentCount(req.body.talk_to_user_id);
 			}
 
@@ -623,7 +645,7 @@ router.post('/addCommentToStock', function(req, res){
 	});
 
 	//推送
-	if(req.body.to_stock === 0){
+	if(parseInt(req.body.to_stock) === 0){
 		var msg = req.body.user_name + '评论了你';
 		apn.pushMsg(req.body.talk_to_user_id, msg);
 	}
@@ -639,6 +661,7 @@ function clearUnreadStockCommentCount(user_id){
 }
 
 function increaseUnreadStockCommentCount(user_id){
+	log.debug('increaseUnreadStockCommentCount', log.getFileNameAndLineNum(__filename));
 	redisClient.hget(config.hash.stockUnreadCommentCountHash, user_id, function(err, reply){
 		if(err){
 			log.error(err, log.getFileNameAndLineNum(__filename));
