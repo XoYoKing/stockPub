@@ -634,7 +634,7 @@ router.post('/addCommentToStock', function(req, res){
 			routerFunc.feedBack(constant.returnCode.SUCCESS, result, res);
 
 			//更新未读评论数
-			if(req.body.to_stock === 0){
+			if(parseInt(req.body.to_stock) === 0){
 				increaseUnreadStockCommentCount(req.body.talk_to_user_id);
 			}
 
@@ -645,7 +645,7 @@ router.post('/addCommentToStock', function(req, res){
 	});
 
 	//推送
-	if(req.body.to_stock === 0){
+	if(parseInt(req.body.to_stock) === 0){
 		var msg = req.body.user_name + '评论了你';
 		apn.pushMsg(req.body.talk_to_user_id, msg);
 	}
