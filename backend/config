@@ -63,6 +63,7 @@ exports.stockServerInfo = {
 };
 
 exports.hash = {
+    stockChooseHash: 'stockChooseHash', //key-user_srno, value-stock map
     unreadFollowCountHash: 'unreadFollowCountHash',
     stockCurPriceHash: 'stockCurPriceHash',
     marketCurPriceHash: 'marketCurPriceHash',

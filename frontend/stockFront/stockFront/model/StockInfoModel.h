@@ -29,6 +29,6 @@
 @property CGFloat high_price;
 @property NSInteger is_market;
 @property NSInteger is_stop;
-
+@property NSInteger add_timestamp_ms;
 
 @end

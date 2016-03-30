@@ -171,17 +171,6 @@ typedef enum {
     if(_ismarket == true){
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"评论" style:UIBarButtonItemStylePlain target:self action:@selector(commentAction:)];
     }
-    
-//    if (_ismarket == false) {
-//        LocDatabase* loc = [AppDelegate getLocDatabase];
-//        
-//        
-//        if ([loc isLookStock:_stockInfoModel]) {
-//            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消看多" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLook:)];
-//        }else{
-//            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"看多" style:UIBarButtonItemStylePlain target:self action:@selector(addlook:)];
-//        }
-//    }
 
 }
 
@@ -209,16 +198,15 @@ typedef enum {
     if ([loc isFollowStock:_stockInfoModel]) {
         UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"取消自选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            [loc deleteStock:_stockInfoModel];
-            [Tools AlertBigMsg:@"完成"];
+            [self delstock:_stockInfoModel];
+            
         }];
         [alertController addAction:chooseAction];
 
     }else{
         UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"添加到自选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            [loc addStock:_stockInfoModel];
-            [Tools AlertBigMsg:@"完成"];
+            [self addstock:_stockInfoModel];
             
         }];
         [alertController addAction:chooseAction];
@@ -238,6 +226,78 @@ typedef enum {
     
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+
+- (void)delstock:(StockInfoModel*)stockInfo
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[userInfo.user_id,
+                                               stockInfo.stock_code]
+                             forKeys:@[@"user_id", @"stock_code"]];
+    
+    LocDatabase* loc = [AppDelegate getLocDatabase];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/delstock" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        if(code == SUCCESS){
+            
+            if([loc deleteStock:stockInfo]){
+                alertMsg(@"完成");
+
+            }else{
+                alertMsg(@"本地数据库错误");
+            }
+            
+            [self.tableView reloadData];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
+}
+
+- (void)addstock:(StockInfoModel*)stockInfo
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[userInfo.user_id,
+                                               stockInfo.stock_code]
+                             forKeys:@[@"user_id", @"stock_code"]];
+    
+    LocDatabase* loc = [AppDelegate getLocDatabase];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/addstock" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        if(code == SUCCESS){
+            
+            if([loc addStock:stockInfo]){
+                alertMsg(@"完成");
+            }else{
+                alertMsg(@"本地数据库错误");
+            }
+            
+            [self.tableView reloadData];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
 }
 
 
@@ -274,6 +334,7 @@ typedef enum {
                 alertMsg(@"操作失败");
             }else{
                 //alertMsg(@"已添加");
+                alertMsg(@"完成");
             }
             
             [self.tableView reloadData];
@@ -317,6 +378,7 @@ typedef enum {
                 alertMsg(@"操作失败");
             }else{
                 //alertMsg(@"已删除");
+                alertMsg(@"完成");
             }
             
             [self.tableView reloadData];

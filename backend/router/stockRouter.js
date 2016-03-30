@@ -234,7 +234,56 @@ router.post('/getFollowLookInfo', function(req, res){
 });
 
 
+//获取自选股信息
+//>=1.0.5版本以后
+router.post('/getChooseStockListInfo', function(req, res){
+	//req.body.user_id
+	redisClient.hget(config.hash.stockChooseHash, req.body.user_id, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
+		}else{
+			reply = JSON.parse(reply);
+			var stocklist = [];
+			for(var stock_code in reply){
+				stocklist.push(reply[stock_code]);
+			}
+			var stockInfo = {};
+			asyncClient.each(stocklist, function(item, callback){
+				redisClient.hget(config.hash.stockCurPriceHash, item.stock_code, function(err, reply){
+					if(err){
+						logger.error(err, logger.getFileNameAndLineNum(__filename));
+						callback(err);
+					}else{
+						if(reply!==null){
+							reply = JSON.parse(reply);
+							reply.add_timestamp_ms = item.add_timestamp_ms;
+							stockInfo[item.stock_code] = reply;
+						}
+						callback(null);
+					}
+				});
+			}, function done (err){
+				if(err){
+					logger.error(err, logger.getFileNameAndLineNum(__filename));
+					var returnData = {};
+					returnData.code = constant.returnCode.ERROR;
+					res.send(returnData);
+				}else{
+					var returnData = {};
+					returnData.code = constant.returnCode.SUCCESS;
+					returnData.data = stockInfo;
+					logger.debug(JSON.stringify(returnData.data));
+					res.send(returnData);
+				}
+			});
+		}
+	});
+});
+
+
 //获取股票列表信息
+//<=1.0.4
 router.post('/getStockListInfo', function(req, res){
 	var stockInfo = {};
 	var stocklist = [];
@@ -256,48 +305,6 @@ router.post('/getStockListInfo', function(req, res){
 				callback();
 			}
 		});
-
-
-		// stockOperation.getStockInfo(reqbody, function(flag, result){
-		// 	logger.debug(item+' '+result, logger.getFileNameAndLineNum(__filename));
-		// 	if(flag){
-		// 		if(result.length>=1){
-		// 			stockInfo[item] = result[0];
-		// 			callback();
-		// 		}else{
-		// 			common.getStockInfoFromAPI(reqbody.stock_code, function(flag, htmlData){
-		// 				if(flag){
-		// 					var stockInfoArr = common.analyzeMessage(htmlData);
-		// 					if(stockInfoArr == false||stockInfoArr.length == 0){
-		// 						//停牌
-		// 						stockOperation.getStockDayInfo(reqbody.stock_code, 1, function(flag, result){
-		// 							if(flag){
-		// 								if(result.length>0){
-		// 									stockInfo[item] = result[0];
-		// 									stockInfo[item].is_stop = 1;
-		// 								}
-		// 							}else{
-		// 								logger.error(result, logger.getFileNameAndLineNum(__filename));
-		// 							}
-		// 							callback();
-		// 						});
-		//
-		// 					}else{
-		// 						stockInfo[item] = stockInfoArr[0];
-		// 						callback();
-		// 					}
-		// 				}else{
-		// 					logger.error(result, logger.getFileNameAndLineNum(__filename));
-		// 					callback();
-		// 				}
-		// 			});
-		// 		}
-		// 	}else{
-		// 		logger.error(result, logger.getFileNameAndLineNum(__filename));
-		// 		callback();
-		// 	}
-		// });
-
 	}, function done (){
 		var returnData = {};
 		returnData.code = constant.returnCode.SUCCESS;
@@ -408,6 +415,60 @@ router.post('/now', function(req, res){
             routerFunc.feedBack(constant.returnCode.ERROR, result, res);
         }
     });
+});
+
+//股票自选
+router.post('/addstock', function(req, res){
+	redisClient.hget(config.hash.stockChooseHash, req.body.user_id, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
+		}else{
+			reply = JSON.parse(reply);
+			if(reply === null){
+				reply = {};
+			}
+
+			reply[req.body.stock_code] = {
+				'stock_code': req.body.stock_code,
+				'add_timestamp_ms': Date.now()
+			};
+
+			reply = JSON.stringify(reply);
+			redisClient.hset(config.hash.stockChooseHash, req.body.user_id, reply, function(err, reply){
+				if(err){
+					logger.error(err, logger.getFileNameAndLineNum(__filename));
+					routerFunc.feedBack(constant.returnCode.ERROR, err, res);
+				}else{
+					routerFunc.feedBack(constant.returnCode.SUCCESS, null, res);
+				}
+			});
+		}
+	});
+});
+
+router.post('/delstock', function(req, res){
+	redisClient.hget(config.hash.stockChooseHash, req.body.user_id, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			routerFunc.feedBack(constant.returnCode.ERROR, err, res);
+		}else{
+			reply = JSON.parse(reply);
+			if(reply === null){
+				reply = {};
+			}
+			delete reply[req.body.stock_code];
+			reply = JSON.stringify(reply);
+			redisClient.hset(config.hash.stockChooseHash, req.body.user_id, reply, function(err, reply){
+				if(err){
+					logger.error(err, logger.getFileNameAndLineNum(__filename));
+					routerFunc.feedBack(constant.returnCode.ERROR, err, res);
+				}else{
+					routerFunc.feedBack(constant.returnCode.SUCCESS, null, res);
+				}
+			});
+		}
+	});
 });
 
 
