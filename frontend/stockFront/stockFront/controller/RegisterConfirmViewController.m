@@ -274,7 +274,11 @@
 {
     UserInfoModel* myInfo = [AppDelegate getMyUserInfo];
 
-    myInfo = [UserInfoModel yy_modelWithDictionary:data];
+    myInfo.user_id = [data objectForKey:@"user_id"];
+    myInfo.user_name = [data objectForKey:@"user_name"];
+    myInfo.user_phone = [data objectForKey:@"user_phone"];
+    myInfo.user_password = [data objectForKey:@"user_password"];
+    
     //用户登录信息持久化
     NSUserDefaults *mySettingData = [NSUserDefaults standardUserDefaults];
     [mySettingData setObject:myInfo.user_phone forKey:@"phone"];

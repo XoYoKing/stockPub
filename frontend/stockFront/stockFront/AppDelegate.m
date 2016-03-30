@@ -102,6 +102,9 @@
 + (UserInfoModel*)getMyUserInfo
 {
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    if(app.myInfo == nil){
+        app.myInfo = [[UserInfoModel alloc] init];
+    }
     return app.myInfo;
 }
 
