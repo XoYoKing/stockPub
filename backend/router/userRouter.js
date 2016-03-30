@@ -171,12 +171,14 @@ router.post('/register', function(req, res) {
 				userMgmt.register(user_info, function(flag, result) {
 					if (flag) {
 						log.debug('REGISTER_SUCCESS', log.getFileNameAndLineNum(__filename));
-						returnData = {
+						returnData.data = {
 							'user_phone': user_info.user_phone,
+							'user_password': user_info.user_password,
 							'user_id': user_info.user_id,
-							'user_name': user_info.user_name,
-							'code': constant.returnCode.REGISTER_SUCCESS
+							'user_name': user_info.user_name
 						};
+						returnData.code = constant.returnCode.REGISTER_SUCCESS;
+
 					} else {
 						if(result.code === 'ER_DUP_ENTRY'){
 							returnData.code = constant.returnCode.PHONE_EXIST;
