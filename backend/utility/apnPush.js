@@ -19,7 +19,7 @@ exports.pushMsg = function(user_id, msg){
 					badge: 1
 				};
 				// apn to user
-				console.log(user_id);
+				console.log(user_id+':'+msg);
 				pushMsgToUsers(result[0].device_token, pushMsg);
 			} else {
 				if(log !==undefined){
@@ -60,7 +60,7 @@ function pushMsgToUsers(userToken, msg) {
 		gateway = 'gateway.push.apple.com';
 	}
 
-	console.log(userToken+':'+msg);
+	//console.log(userToken+':'+msg);
 	//log.debug(path.join(__dirname, pemName), log.getFileNameAndLineNum(__filename));
 	//log.debug(path.join(__dirname, pemkeyName), log.getFileNameAndLineNum(__filename));
 	//log.debug(msg, log.getFileNameAndLineNum(__filename));
