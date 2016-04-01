@@ -29,8 +29,31 @@ router.get('/test', function(req, res) {
 
 
 //取消看多股票
+//检查是否当日看多
+router.post('/dellook', function(req, res, next){
+	var returnData = {};
+	redisClient.hget(config.hash.todayStockLookHash, req.body.user_id+req.body.stock_code, function(err, reply){
+		if(err){
+			logger.error(err, logger.getFileNameAndLineNum(__filename));
+			returnData.code = constant.returnCode.ERROR;
+			res.send(returnData);
+		}else{
+			if(reply!==null){
+				//当日看多
+				logger.info(req.body.user_id+'对股票:'+req.body.stock_code+'已当日看多,需要隔日取消', logger.getFileNameAndLineNum(__filename));
+				returnData.code = constant.returnCode.LOOK_DEL_NOT_TODAY;
+				res.send(returnData);
+			}else{
+				//不是当日看多
+				next();
+			}
+		}
+	});
+});
 router.post('/dellook', function(req, res){
 	var returnData = {};
+	//判断是否当日取消看多
+
 	stockOperation.dellookStock(req.body, function(flag, result){
 		if(flag){
 			returnData.code = constant.returnCode.SUCCESS;
@@ -119,6 +142,13 @@ router.post('/addlook', function(req, res){
 											logger.error(result, logger.getFileNameAndLineNum(__filename));
 										}
 									});
+									//更新当日看多到redis
+									redisClient.hset(config.hash.todayStockLookHash,
+										req.body.user_id+req.body.stock_code, 1, function(err, reply){
+											if(err){
+												logger.error(err, logger.getFileNameAndLineNum(__filename));
+											}
+										});
 
 								}else{
 									if(result.code === 'ER_DUP_ENTRY'){

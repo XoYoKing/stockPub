@@ -63,6 +63,7 @@ exports.stockServerInfo = {
 };
 
 exports.hash = {
+    todayStockLookHash: 'todayStockLookHash', //当日的看多, key-user_id+stock_code, value = 1, 晚上清空todayStockLookHash
     stockChooseHash: 'stockChooseHash', //key-user_srno, value-stock map
     unreadFollowCountHash: 'unreadFollowCountHash',
     stockCurPriceHash: 'stockCurPriceHash',

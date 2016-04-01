@@ -384,6 +384,8 @@ typedef enum {
             [self.tableView reloadData];
             [self showRightItem];
             
+        }else if(code == LOOK_DEL_NOT_TODAY){
+            alertMsg(@"当日看多股票不可当日取消");
         }else{
             alertMsg(@"未知错误");
         }

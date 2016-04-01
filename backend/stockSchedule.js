@@ -109,6 +109,16 @@ new cronJob('00 00 23 * * *', function(){
     crawl.updateStockName();
 }, null, true);
 
+//每晚清空todayStockLookHash
+new cronJob('00 00 23 * * *', function(){
+    log.info('clear 每晚清空todayStockLookHash', log.getFileNameAndLineNum(__filename));
+    redisClient.hdel(config.hash.todayStockLookHash, function(err, reply){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+		}
+	});
+}, null, true);
+
 process.on('uncaughtException', function(err) {
     log.error('schedule process Caught exception: ' +
         err.stack);
