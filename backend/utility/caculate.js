@@ -2,6 +2,15 @@ var logger = global.logger;
 var userOperation = require('../databaseOperation/userOperation');
 var stockOperation = require('../databaseOperation/stockOperation');
 var moment = require('moment');
+var asyncClient = require('async');
+var apnPush = require('./apnPush.js');
+var config = require('../config');
+var redis = require("redis");
+var redisClient = redis.createClient({auth_pass:'here_dev'});
+redisClient.on("error", function (err) {
+	logger.error(err, logger.getFileNameAndLineNum(__filename));
+});
+
 
 exports.caculateAllUserYield = function(){
     userOperation.updateAllUserTotalYield(function(flag, result){
@@ -224,6 +233,61 @@ exports.caculateAvPrice = function(day, nowday){
         }
     });
 
+}
+
+function pushDayYieldToUser(user_id, finishCallback){
+	userOperation.getAllLookByUserId(user_id, function(flag, result){
+		if(flag){
+			var dayYield = 0;
+			asyncClient.eachSeries(result, function(item, callback){
+				redisClient.hget(config.hash.stockCurPriceHash, item.stock_code, function(err, reply){
+					if(err){
+						logger.error(err, logger.getFileNameAndLineNum(__filename));
+						callback(err);
+					}else{
+						reply = JSON.parse(reply);
+						var nowDate = moment().format('YYYY-MM-DD');
+						if(nowDate === reply.date){
+							//当日有股价
+							dayYield = dayYield+reply.fluctuate;
+						}
+						callback();
+					}
+				});
+
+			}, function done(err){
+				if(err){
+					logger.error(result, logger.getFileNameAndLineNum(__filename));
+				}else{
+					//push
+					var msg = '您今天看多的股票收益率是'+dayYield+'%';
+					apnPush.pushMsg(user_id, msg);
+				}
+				finishCallback();
+			});
+
+		}else{
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+			finishCallback();
+		}
+	});
+}
+
+exports.caculateUserDayYield = function(){
+    userOperation.getAllLookUserId(function(flag, result){
+		if(flag){
+			asyncClient.each(result, function(item, callback){
+				pushDayYieldToUser(item.user_id, callback);
+			}, function(err){
+				if(err){
+					logger.error(err, logger.getFileNameAndLineNum(__filename));
+				}
+			});
+
+		}else {
+			logger.error(result, logger.getFileNameAndLineNum(__filename));
+		}
+	});
 }
 
 //
