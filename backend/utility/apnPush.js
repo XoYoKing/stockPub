@@ -38,7 +38,9 @@ exports.pushMsgToUsers = pushMsgToUsers;
 
 function pushMsgToUsers(userToken, msg) {
 	if (userToken === undefined || userToken === ''||userToken === null) {
-		log.warn('userToken is null', log.getFileNameAndLineNum(__filename));
+		if(log!== undefined){
+			log.warn('userToken is null', log.getFileNameAndLineNum(__filename));
+		}
 		return;
 	}
 
