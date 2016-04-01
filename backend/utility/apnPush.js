@@ -122,10 +122,14 @@ function apnErrorHappened (err, notification) {
 	if (err === 8) {
 		if(log !== undefined){
 			log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		}else{
+			console.log('err code:' + err + ' ' + JSON.stringify(notification));
 		}
 	}else {
 		if(log !== undefined){
 			log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		}else{
+			console.log('err code:' + err + ' ' + JSON.stringify(notification));
 		}
 	}
 }
@@ -133,5 +137,7 @@ function apnErrorHappened (err, notification) {
 domainObj.on('error', function (err) {
 	if(log !== undefined){
 		log.error(err, log.getFileNameAndLineNum(__filename));
+	}else{
+		console.log(err);
 	}
 });
