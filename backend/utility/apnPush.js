@@ -89,7 +89,9 @@ function pushMsgToUsers(userToken, msg) {
 		note.payload = msg;
 		note.device = myDevice;
 		apnsConnection.sendNotification(note);
-		log.debug('send notification to ' + userToken, log.getFileNameAndLineNum(__filename));
+		if(log !== undefined){
+			log.debug('send notification to ' + userToken, log.getFileNameAndLineNum(__filename));
+		}
 	});
 }
 
@@ -116,12 +118,18 @@ function apnErrorHappened (err, notification) {
 // 	"connectionTerminated": 515
 // };
 	if (err === 8) {
-		log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		if(log !== undefined){
+			log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		}
 	}else {
-		log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		if(log !== undefined){
+			log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		}
 	}
 }
 
 domainObj.on('error', function (err) {
-	log.error(err, log.getFileNameAndLineNum(__filename));
+	if(log !== undefined){
+		log.error(err, log.getFileNameAndLineNum(__filename));
+	}
 });
