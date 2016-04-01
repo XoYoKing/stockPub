@@ -260,7 +260,7 @@ function pushDayYieldToUser(user_id, finishCallback){
 					logger.error(result, logger.getFileNameAndLineNum(__filename));
 				}else{
 					//push
-					var msg = '您今天看多的股票收益率是'+dayYield+'%';
+					var msg = '您今天看多的股票总收益率是'+dayYield.toFixed(2)+'%';
 					apnPush.pushMsg(user_id, msg);
 				}
 				finishCallback();
