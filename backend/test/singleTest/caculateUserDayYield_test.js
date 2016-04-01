@@ -4,5 +4,5 @@ var log = require('../../log.js');
 
 log.SetLogFileName('test');
 global.logger = log; // 设置全局
-
+global.log = log;
 caculate.caculateUserDayYield();
