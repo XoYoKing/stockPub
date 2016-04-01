@@ -17,6 +17,11 @@ redisClient.on("error", function (err) {
 });
 var stockOperation = require('./databaseOperation/stockOperation');
 var config = require('./config');
+var userOperation = require('./databaseOperation/userOperation');
+var asyncClient = require('async');
+var moment = require('moment');
+var apnPush = require('./utility/apnPush.js');
+
 
 log.info("run CronJob", log.getFileNameAndLineNum(__filename));
 
@@ -118,6 +123,65 @@ new cronJob('00 00 23 * * *', function(){
 		}
 	});
 }, null, true);
+
+
+function pushDayYieldToUser(user_id, finishCallback){
+	userOperation.getAllLookByUserId(user_id, function(flag, result){
+		if(flag){
+			var dayYield = 0;
+			asyncClient.eachSeries(result, function(item, callback){
+				redisClient.hget(config.hash.stockCurPriceHash, item.stock_code, function(err, reply){
+					if(err){
+						log.error(err, log.getFileNameAndLineNum(__filename));
+						callback(err);
+					}else{
+						reply = JSON.parse(reply);
+						var nowDate = moment().format('YYYY-MM-DD');
+						if(nowDate === reply.date){
+							//当日有股价
+							dayYield = dayYield+reply.fluctuate;
+						}
+						callback();
+					}
+				});
+
+			}, function done(err){
+				if(err){
+					log.error(result, log.getFileNameAndLineNum(__filename));
+				}else{
+					//push
+					var msg = '您今天看多的股票收益率是'+dayYield+'%';
+					apnPush.pushMsg(user_id, msg);
+				}
+				finishCallback();
+			});
+
+		}else{
+			log.error(result, log.getFileNameAndLineNum(__filename));
+			finishCallback();
+		}
+	});
+}
+
+//每日收益率推送
+new cronJob('00 10 15 * * 1-5', function(){
+    log.info('push day yield ', log.getFileNameAndLineNum(__filename));
+	userOperation.getAllLookUserId(function(flag, result){
+		if(flag){
+			asyncClient.each(result, function(item, callback){
+				pushDayYieldToUser(item.user_id, callback);
+			}, function(err){
+				if(err){
+					log.error(err, log.getFileNameAndLineNum(__filename));
+				}
+			});
+
+		}else {
+			log.error(result, log.getFileNameAndLineNum(__filename));
+		}
+	});
+}, null, true);
+
 
 process.on('uncaughtException', function(err) {
     log.error('schedule process Caught exception: ' +
