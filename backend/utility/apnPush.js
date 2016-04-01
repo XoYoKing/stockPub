@@ -59,7 +59,7 @@ function pushMsgToUsers(userToken, msg) {
 		gateway = 'gateway.push.apple.com';
 	}
 
-
+	console.log(msg);
 	//log.debug(path.join(__dirname, pemName), log.getFileNameAndLineNum(__filename));
 	//log.debug(path.join(__dirname, pemkeyName), log.getFileNameAndLineNum(__filename));
 	//log.debug(msg, log.getFileNameAndLineNum(__filename));
