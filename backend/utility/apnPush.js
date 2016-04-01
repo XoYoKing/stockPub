@@ -2,6 +2,10 @@
 var domain = require('domain');
 var domainObj = domain.create();
 var log = global.logger;
+if(log === undefined){
+	log = global.log;
+}
+
 var userMgmt = require('../databaseOperation/userOperation.js');
 var path = require('path');
 
