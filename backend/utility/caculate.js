@@ -249,7 +249,7 @@ function pushDayYieldToUser(user_id, finishCallback){
 						var nowDate = moment().format('YYYY-MM-DD');
 						if(nowDate === reply.date){
 							//当日有股价
-							dayYield = dayYield+reply.fluctuate;
+							dayYield = parseFloat(dayYield)+parseFloat(reply.fluctuate);
 						}
 						callback();
 					}
