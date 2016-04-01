@@ -91,6 +91,8 @@ function pushMsgToUsers(userToken, msg) {
 		apnsConnection.sendNotification(note);
 		if(log !== undefined){
 			log.debug('send notification to ' + userToken, log.getFileNameAndLineNum(__filename));
+		}else{
+			console.log('send notification to ' + userToken);
 		}
 	});
 }
