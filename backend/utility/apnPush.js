@@ -21,8 +21,10 @@ exports.pushMsg = function(user_id, msg){
 				// apn to user
 				pushMsgToUsers(result[0].device_token, pushMsg);
 			} else {
-				log.warn(user_id + ' has no device token', log.getFileNameAndLineNum(
-					__filename));
+				if(log !==undefined){
+					log.warn(user_id + ' has no device token', log.getFileNameAndLineNum(
+						__filename));
+				}
 			}
 		} else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
