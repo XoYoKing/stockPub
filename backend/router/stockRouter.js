@@ -576,7 +576,10 @@ router.get('/getMarketDayInfo', function(req, res){
                                 price: e.market_index_value_now,
 								amount: e.market_index_trade_volume,
 								fluctuate: e.market_index_fluctuate,
-								date: e.market_index_date
+								date: e.market_index_date,
+								fiveday_av_price: e.market_index_five_av_value,
+								tenday_av_price: e.market_index_ten_av_value,
+								twentyday_av_price: e.market_index_twenty_av_value
 							};
 							transfer.push(newData);
 						});
