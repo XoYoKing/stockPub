@@ -249,12 +249,12 @@ exports.getStockDayInfoLessNowDay = function(stock_code, num_day, nowDay, callba
     conn.executeSql(sql, [stock_code, nowDay], callback);
 }
 
-exports.getMarketDayInfoLessNowDay = function(stock_code, num_day, nowDay, callback){
+exports.getMarketDayInfoLessNowDay = function(market_code, num_day, nowDay, callback){
     var sql = 'select t.* from ('+
     ' SELECT a.*  FROM `market_index_day_info` a ' +
     ' WHERE a.`market_code` = ? and a.market_index_date <= ? ORDER BY a.`market_index_date` DESC LIMIT '+num_day+') t'+
     ' ORDER BY t.timestamp_ms asc';
-    conn.executeSql(sql, [stock_code, nowDay], callback);
+    conn.executeSql(sql, [market_code, nowDay], callback);
 }
 
 exports.getAllStockCode = function(callback){
@@ -330,5 +330,11 @@ exports.updateStockName = function(stock_code, stock_name, stock_alpha_info, cal
 
 exports.getStockBaseInfoByAlpha = function(stock_alpha_info, callback){
     var sql = 'select *from stock_base_info where stock_alpha_info like \'%'+stock_alpha_info+'%\' limit 8';
+    conn.executeSql(sql, [], callback);
+}
+
+
+exports.getAllMarketIndexDay = function(callback){
+    var sql = 'select *from market_index_day_info';
     conn.executeSql(sql, [], callback);
 }
