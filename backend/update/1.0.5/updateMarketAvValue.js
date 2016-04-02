@@ -7,6 +7,7 @@ stockOperation.getAllMarketIndexDay(function(flag, result){
     if(flag){
         result.forEach(function(e){
             if(e.market_index_five_av_value === null){
+                console.log(e.market_code+' '+e.market_index_date+ " update ");
                 stockOperation.getMarketDayInfoLessNowDay(e.market_code, 20, e.market_index_date,
                 function(flag, result){
                     if(flag){
