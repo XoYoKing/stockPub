@@ -18,8 +18,6 @@ stockOperation.getAllMarketIndexDay(function(flag, result){
                             }
                             totalTwenty/=result.length;
                         }
-
-
                         var totalTen = 0;
                         if(result.length>=10){
                             for (var i = 0; i<10; i++) {
