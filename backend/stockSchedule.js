@@ -17,6 +17,11 @@ redisClient.on("error", function (err) {
 });
 var stockOperation = require('./databaseOperation/stockOperation');
 var config = require('./config');
+var userOperation = require('./databaseOperation/userOperation');
+var asyncClient = require('async');
+var moment = require('moment');
+var apnPush = require('./utility/apnPush.js');
+
 
 log.info("run CronJob", log.getFileNameAndLineNum(__filename));
 
@@ -77,14 +82,14 @@ new cronJob('00 1 15 * * 1-5', function(){
 new cronJob('00 10 15 * * 1-5', function(){
     log.info('5 av price caculate', log.getFileNameAndLineNum(__filename));
     caculate.caculateAvPrice(5, moment().format('YYYY-MM-DD'));
-    caculate.caculateMarketAvPrice(5, moment().format('YYYYMMDD'));
+    caculate.caculateMarketAvPrice(5, moment().format('YYYY-MM-DD'));
 }, null, true);
 
 //10日平均价
 new cronJob('00 15 15 * * 1-5', function(){
     log.info('10 av price caculate', log.getFileNameAndLineNum(__filename));
     caculate.caculateAvPrice(10, moment().format('YYYY-MM-DD'));
-    caculate.caculateMarketAvPrice(10, moment().format('YYYYMMDD'));
+    caculate.caculateMarketAvPrice(10, moment().format('YYYY-MM-DD'));
 
 }, null, true);
 
@@ -92,7 +97,7 @@ new cronJob('00 15 15 * * 1-5', function(){
 new cronJob('00 20 15 * * 1-5', function(){
     log.info('20 av price caculate', log.getFileNameAndLineNum(__filename));
     caculate.caculateAvPrice(20, moment().format('YYYY-MM-DD'));
-    caculate.caculateMarketAvPrice(20, moment().format('YYYYMMDD'));
+    caculate.caculateMarketAvPrice(20, moment().format('YYYY-MM-DD'));
 }, null, true);
 
 
@@ -118,6 +123,16 @@ new cronJob('00 00 23 * * *', function(){
 		}
 	});
 }, null, true);
+
+
+
+
+//每日收益率推送
+new cronJob('00 10 15 * * 1-5', function(){
+    log.info('push day yield ', log.getFileNameAndLineNum(__filename));
+	caculate.caculateUserDayYield();
+}, null, true);
+
 
 process.on('uncaughtException', function(err) {
     log.error('schedule process Caught exception: ' +

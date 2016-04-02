@@ -51,6 +51,9 @@ new cronJob('59 23 * * *', function(){
 });
 
 
+//统计注册用户
+
+
 //统计upv，pv
 //统计pv和upv
 // schedule.scheduleJob('57 23 * * *', function(){
