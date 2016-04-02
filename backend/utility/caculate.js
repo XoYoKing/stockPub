@@ -247,10 +247,10 @@ function pushDayYieldToUser(user_id, finishCallback){
 					}else{
 						reply = JSON.parse(reply);
 						var nowDate = moment().format('YYYY-MM-DD');
-						if(nowDate === reply.date){
+						//if(nowDate === reply.date){
 							//当日有股价
 							dayYield = parseFloat(dayYield)+parseFloat(reply.fluctuate);
-						}
+						//}
 						callback();
 					}
 				});
