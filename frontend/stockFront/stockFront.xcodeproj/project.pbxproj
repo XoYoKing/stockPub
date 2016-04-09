@@ -106,6 +106,10 @@
 		B265743D1C8EA2A700A6B75C /* me@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26574351C8EA2A700A6B75C /* me@3x.png */; };
 		B265743E1C8EA2A700A6B75C /* stockChoose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26574361C8EA2A700A6B75C /* stockChoose@2x.png */; };
 		B265743F1C8EA2A700A6B75C /* stockChoose@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26574371C8EA2A700A6B75C /* stockChoose@3x.png */; };
+		B2A116051CB50FC90096A84C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A116041CB50FC90096A84C /* SystemConfiguration.framework */; };
+		B2A116071CB50FDB0096A84C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A116061CB50FDB0096A84C /* Security.framework */; };
+		B2A116091CB510020096A84C /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A116081CB510020096A84C /* libiconv.tbd */; };
+		B2A1160B1CB5100E0096A84C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A1160A1CB5100E0096A84C /* CoreGraphics.framework */; };
 		B2ABA5C91C8E624000552C27 /* 58px-1.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C41C8E624000552C27 /* 58px-1.png */; };
 		B2ABA5CA1C8E624000552C27 /* 80px-1.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C51C8E624000552C27 /* 80px-1.png */; };
 		B2ABA5CB1C8E624000552C27 /* 87-1px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C61C8E624000552C27 /* 87-1px.png */; };
@@ -314,6 +318,10 @@
 		B26574351C8EA2A700A6B75C /* me@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me@3x.png"; sourceTree = "<group>"; };
 		B26574361C8EA2A700A6B75C /* stockChoose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stockChoose@2x.png"; sourceTree = "<group>"; };
 		B26574371C8EA2A700A6B75C /* stockChoose@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stockChoose@3x.png"; sourceTree = "<group>"; };
+		B2A116041CB50FC90096A84C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		B2A116061CB50FDB0096A84C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		B2A116081CB510020096A84C /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		B2A1160A1CB5100E0096A84C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B2ABA5C41C8E624000552C27 /* 58px-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "58px-1.png"; sourceTree = "<group>"; };
 		B2ABA5C51C8E624000552C27 /* 80px-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "80px-1.png"; sourceTree = "<group>"; };
 		B2ABA5C61C8E624000552C27 /* 87-1px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "87-1px.png"; sourceTree = "<group>"; };
@@ -331,6 +339,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2A1160B1CB5100E0096A84C /* CoreGraphics.framework in Frameworks */,
+				B2A116091CB510020096A84C /* libiconv.tbd in Frameworks */,
+				B2A116071CB50FDB0096A84C /* Security.framework in Frameworks */,
+				B2A116051CB50FC90096A84C /* SystemConfiguration.framework in Frameworks */,
 				B227F4BC1C64A6EE00235B64 /* libsqlite3.0.tbd in Frameworks */,
 				35E49CC09B1106411DD25DE5 /* libPods.a in Frameworks */,
 			);
@@ -678,6 +690,10 @@
 		C951CC8F73E198CE20F6FB28 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B2A1160A1CB5100E0096A84C /* CoreGraphics.framework */,
+				B2A116081CB510020096A84C /* libiconv.tbd */,
+				B2A116061CB50FDB0096A84C /* Security.framework */,
+				B2A116041CB50FC90096A84C /* SystemConfiguration.framework */,
 				B227F4BB1C64A6EE00235B64 /* libsqlite3.0.tbd */,
 				6681CAA04F6CE391EBE1BB08 /* libPods.a */,
 			);
@@ -1032,6 +1048,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1075,6 +1092,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

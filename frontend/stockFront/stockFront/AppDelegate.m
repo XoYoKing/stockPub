@@ -12,6 +12,7 @@
 #import "NetworkAPI.h"
 #import "macro.h"
 #import "returnCode.h"
+#import <UMengSocial/UMSocialData.h>
 
 @interface AppDelegate ()
 
@@ -90,6 +91,9 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
     
+    //友盟分享
+    [UMSocialData setAppKey:@"56fe4e1067e58ea2a70001f2"];
+    [UMSocialData openLog:YES];
     return YES;
 }
 

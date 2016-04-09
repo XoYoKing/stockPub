@@ -21,6 +21,7 @@
 #import "KLineCell.h"
 #import "StockCommentTableView.h"
 #import "getCommentToStockAction.h"
+#import <UMSocial.h>
 
 @interface StockInfoDetailTableView ()
 {
@@ -221,11 +222,33 @@ typedef enum {
         
     }];
     [alertController addAction:chooseAction];
-
+    
+    
+    //分享
+    UIAlertAction* shareAction= [UIAlertAction actionWithTitle:@"分享" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:@"507fcab25270157b37000010"
+                                          shareText:@"你要分享的文字"
+                                         shareImage:[UIImage imageNamed:@"me@2x.png"]
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToSina, UMShareToWechatTimeline, nil]
+                                           delegate:self];
+    }];
+    [alertController addAction:shareAction];
     
     
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+    }
 }
 
 

@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "StockInfoModel.h"
+#import <UMSocial.h>
+#import <UMSocialData.h>
 
-@interface StockInfoDetailTableView : UITableViewController
+@interface StockInfoDetailTableView : UITableViewController<UMSocialUIDelegate, UMSocialDataDelegate>
 
 @property StockInfoModel* stockInfoModel;
 
