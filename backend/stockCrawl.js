@@ -156,7 +156,7 @@ function insertToDatabase(htmlData, isnow) {
 
 				redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
 					if(err){
-						logger.error(reply, logger.getFileNameAndLineNum(__filename));
+						logger.error(err, logger.getFileNameAndLineNum(__filename));
 					}
 				});
 
