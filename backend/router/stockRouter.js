@@ -544,8 +544,8 @@ router.get('/kline', function(req, res){
 		'height': req.query.height,
 		'num_day': req.query.num_day,
 		'width': req.query.width,
-		'look_timestamp': req.query.look_timestamp,
-		'look_finish_timestamp': req.query.look_finish_timestamp
+		'look_timestamp': req.query.look_timestamp === undefined?0:req.query.look_timestamp,
+		'look_finish_timestamp': req.query.look_finish_timestamp === undefined?0:req.query.look_finish_timestamp
 	});
 });
 
