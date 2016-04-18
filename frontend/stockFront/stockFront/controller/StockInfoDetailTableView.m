@@ -229,13 +229,6 @@ typedef enum {
     //分享
     UIAlertAction* shareAction= [UIAlertAction actionWithTitle:@"分享" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
-//        [UMSocialSnsService presentSnsIconSheetView:self
-//                                             appKey:@"507fcab25270157b37000010"
-//                                          shareText:@"你要分享的文字"
-//                                         shareImage:[UIImage imageNamed:@"me@2x.png"]
-//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession, UMShareToWechatTimeline, nil]
-//                                           delegate:self];
-        
         [self addWeixinShareView];
         
     }];
