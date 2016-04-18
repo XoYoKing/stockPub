@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		35E49CC09B1106411DD25DE5 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6681CAA04F6CE391EBE1BB08 /* libPods.a */; };
+		B216F57E1CC32A29008A4229 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B216F57A1CC32A29008A4229 /* libWeChatSDK.a */; };
+		B216F5801CC32B2F008A4229 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B216F57F1CC32B2F008A4229 /* libz.tbd */; };
+		B216F5821CC32B59008A4229 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B216F5811CC32B59008A4229 /* libc++.tbd */; };
+		B216F58A1CC3372C008A4229 /* HXEasyCustomShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = B216F5871CC3372C008A4229 /* HXEasyCustomShareView.m */; };
+		B216F58B1CC3372C008A4229 /* HXShareScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B216F5891CC3372C008A4229 /* HXShareScrollView.m */; };
 		B222A70D1CA8FFE1006586E2 /* UnreadCommentStockTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */; };
 		B227E80B1C745C5A005BA113 /* KLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B227E80A1C745C5A005BA113 /* KLineCell.m */; };
 		B227F3A01C64A0C200235B64 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B227F39F1C64A0C200235B64 /* main.m */; };
@@ -106,6 +111,10 @@
 		B265743D1C8EA2A700A6B75C /* me@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26574351C8EA2A700A6B75C /* me@3x.png */; };
 		B265743E1C8EA2A700A6B75C /* stockChoose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26574361C8EA2A700A6B75C /* stockChoose@2x.png */; };
 		B265743F1C8EA2A700A6B75C /* stockChoose@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26574371C8EA2A700A6B75C /* stockChoose@3x.png */; };
+		B2A116051CB50FC90096A84C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A116041CB50FC90096A84C /* SystemConfiguration.framework */; };
+		B2A116071CB50FDB0096A84C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A116061CB50FDB0096A84C /* Security.framework */; };
+		B2A116091CB510020096A84C /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A116081CB510020096A84C /* libiconv.tbd */; };
+		B2A1160B1CB5100E0096A84C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A1160A1CB5100E0096A84C /* CoreGraphics.framework */; };
 		B2ABA5C91C8E624000552C27 /* 58px-1.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C41C8E624000552C27 /* 58px-1.png */; };
 		B2ABA5CA1C8E624000552C27 /* 80px-1.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C51C8E624000552C27 /* 80px-1.png */; };
 		B2ABA5CB1C8E624000552C27 /* 87-1px.png in Resources */ = {isa = PBXBuildFile; fileRef = B2ABA5C61C8E624000552C27 /* 87-1px.png */; };
@@ -137,6 +146,16 @@
 		4DB2923420FC4BE03A26B9AF /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		6681CAA04F6CE391EBE1BB08 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		67492CFD7A2989C33C5B372D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B216F57A1CC32A29008A4229 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		B216F57B1CC32A29008A4229 /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
+		B216F57C1CC32A29008A4229 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		B216F57D1CC32A29008A4229 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		B216F57F1CC32B2F008A4229 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		B216F5811CC32B59008A4229 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		B216F5861CC3372C008A4229 /* HXEasyCustomShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXEasyCustomShareView.h; sourceTree = "<group>"; };
+		B216F5871CC3372C008A4229 /* HXEasyCustomShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXEasyCustomShareView.m; sourceTree = "<group>"; };
+		B216F5881CC3372C008A4229 /* HXShareScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXShareScrollView.h; sourceTree = "<group>"; };
+		B216F5891CC3372C008A4229 /* HXShareScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXShareScrollView.m; sourceTree = "<group>"; };
 		B222A70B1CA8FFE0006586E2 /* UnreadCommentStockTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnreadCommentStockTableView.h; sourceTree = "<group>"; };
 		B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnreadCommentStockTableView.m; sourceTree = "<group>"; };
 		B227E8091C745C5A005BA113 /* KLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineCell.h; sourceTree = "<group>"; };
@@ -314,6 +333,10 @@
 		B26574351C8EA2A700A6B75C /* me@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me@3x.png"; sourceTree = "<group>"; };
 		B26574361C8EA2A700A6B75C /* stockChoose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stockChoose@2x.png"; sourceTree = "<group>"; };
 		B26574371C8EA2A700A6B75C /* stockChoose@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stockChoose@3x.png"; sourceTree = "<group>"; };
+		B2A116041CB50FC90096A84C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		B2A116061CB50FDB0096A84C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		B2A116081CB510020096A84C /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		B2A1160A1CB5100E0096A84C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B2ABA5C41C8E624000552C27 /* 58px-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "58px-1.png"; sourceTree = "<group>"; };
 		B2ABA5C51C8E624000552C27 /* 80px-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "80px-1.png"; sourceTree = "<group>"; };
 		B2ABA5C61C8E624000552C27 /* 87-1px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "87-1px.png"; sourceTree = "<group>"; };
@@ -331,7 +354,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B216F5821CC32B59008A4229 /* libc++.tbd in Frameworks */,
 				B227F4BC1C64A6EE00235B64 /* libsqlite3.0.tbd in Frameworks */,
+				B216F5801CC32B2F008A4229 /* libz.tbd in Frameworks */,
+				B2A116051CB50FC90096A84C /* SystemConfiguration.framework in Frameworks */,
+				B216F57E1CC32A29008A4229 /* libWeChatSDK.a in Frameworks */,
+				B2A1160B1CB5100E0096A84C /* CoreGraphics.framework in Frameworks */,
+				B2A116091CB510020096A84C /* libiconv.tbd in Frameworks */,
+				B2A116071CB50FDB0096A84C /* Security.framework in Frameworks */,
 				35E49CC09B1106411DD25DE5 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -564,6 +594,14 @@
 		B227F4211C64A1E200235B64 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				B216F57A1CC32A29008A4229 /* libWeChatSDK.a */,
+				B216F57B1CC32A29008A4229 /* WechatAuthSDK.h */,
+				B216F5861CC3372C008A4229 /* HXEasyCustomShareView.h */,
+				B216F5871CC3372C008A4229 /* HXEasyCustomShareView.m */,
+				B216F5881CC3372C008A4229 /* HXShareScrollView.h */,
+				B216F5891CC3372C008A4229 /* HXShareScrollView.m */,
+				B216F57C1CC32A29008A4229 /* WXApi.h */,
+				B216F57D1CC32A29008A4229 /* WXApiObject.h */,
 				B227F4221C64A1E200235B64 /* config.geojson */,
 				B227F4231C64A1E200235B64 /* ConfigAccess.h */,
 				B227F4241C64A1E200235B64 /* ConfigAccess.m */,
@@ -678,6 +716,12 @@
 		C951CC8F73E198CE20F6FB28 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B216F5811CC32B59008A4229 /* libc++.tbd */,
+				B216F57F1CC32B2F008A4229 /* libz.tbd */,
+				B2A1160A1CB5100E0096A84C /* CoreGraphics.framework */,
+				B2A116081CB510020096A84C /* libiconv.tbd */,
+				B2A116061CB50FDB0096A84C /* Security.framework */,
+				B2A116041CB50FC90096A84C /* SystemConfiguration.framework */,
 				B227F4BB1C64A6EE00235B64 /* libsqlite3.0.tbd */,
 				6681CAA04F6CE391EBE1BB08 /* libPods.a */,
 			);
@@ -891,6 +935,7 @@
 				B227F4931C64A1E200235B64 /* UserInfoModel.m in Sources */,
 				B227F4B01C64A1E200235B64 /* CommentTableViewCell.m in Sources */,
 				B227F49B1C64A1E200235B64 /* LocDatabase.m in Sources */,
+				B216F58B1CC3372C008A4229 /* HXShareScrollView.m in Sources */,
 				B227F4911C64A1E200235B64 /* StockInfoModel.m in Sources */,
 				B227F4B11C64A1E200235B64 /* FaceCellViewTableViewCell.m in Sources */,
 				B227F49C1C64A1E200235B64 /* NetworkAPI.m in Sources */,
@@ -948,6 +993,7 @@
 				B227F47E1C64A1E200235B64 /* StockSearchTableViewCtrl.m in Sources */,
 				B2E708C31C98F5DD00779B38 /* getCommentToStockAction.m in Sources */,
 				B227F4901C64A1E200235B64 /* RankModel.m in Sources */,
+				B216F58A1CC3372C008A4229 /* HXEasyCustomShareView.m in Sources */,
 				B227F4A51C64A1E200235B64 /* UIButton+YYWebImage.m in Sources */,
 				B227F49E1C64A1E200235B64 /* YYCache.m in Sources */,
 				B227F4BF1C66151500235B64 /* UnreadCommentTableView.m in Sources */,
@@ -1032,6 +1078,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1075,6 +1122,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1099,6 +1147,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = stockFront/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/stockFront/utility",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wanghan.stockPub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1112,6 +1164,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = stockFront/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/stockFront/utility",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wanghan.stockPub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

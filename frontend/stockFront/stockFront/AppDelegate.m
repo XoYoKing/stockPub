@@ -12,6 +12,7 @@
 #import "NetworkAPI.h"
 #import "macro.h"
 #import "returnCode.h"
+#import <UMengSocial/UMSocialData.h>
 
 @interface AppDelegate ()
 
@@ -90,8 +91,27 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     
     
+    //微信分享
+    [WXApi registerApp:@"wxb1f02c51e4625a7a"];
+    
     return YES;
 }
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+{
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+- (void)onReq:(BaseReq *)req
+{
+    NSLog(@"onReq");
+}
+
+- (void)onResp:(BaseResp *)resp
+{
+    NSLog(@"onResp");
+}
+
 
 + (LocDatabase*)getLocDatabase
 {
