@@ -10,6 +10,9 @@
 #import <CocoaSecurity.h>
 #import <MBProgressHUD.h>
 #import "AppDelegate.h"
+#import "macro.h"
+#import "HXEasyCustomShareView.h"
+#import "WXApi.h"
 
 @implementation Tools
 
@@ -37,6 +40,8 @@
     // 返回新的改变大小后的图片
     return scaledImage;
 }
+
+
 
 
 + (NSString*)showTimeFormat:(long)timeStamp

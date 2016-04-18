@@ -19,7 +19,5 @@
 + (UIImage *)scaleToSize:(UIImage *)img size:(CGSize)newsize;
 + (NSString*)showTime:(long)timeStamp;
 + (NSString*)showTimeFormat:(long)timeStamp;
-
-
 @end
 
