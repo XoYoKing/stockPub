@@ -156,7 +156,7 @@ function insertToDatabase(htmlData, isnow) {
 
 				redisClient.hset(config.hash.stockCurPriceHash, key, value, function(err, reply){
 					if(err){
-						logger.error(reply, logger.getFileNameAndLineNum(__filename));
+						logger.error(err, logger.getFileNameAndLineNum(__filename));
 					}
 				});
 
@@ -174,27 +174,27 @@ function insertToDatabase(htmlData, isnow) {
 				}
 
 				if (isnow === true) {
-					databaseOperation.insertStockNow(stockCode, amount, date, time,
-								price,
-								yesterday_price,
-								fluctuate,
-								priceearning,
-								marketValue,
-								flowMarketValue,
-								volume,
-								pb,
-								openPrice,
-								high_price,
-								fluctuate_value,
-								low_price,
-								function(flag, result) {
-									//logger.debug(stockCode+" now insert");
-									if (!flag) {
-										logger.error("insertStockNow err code "+result.errno, logger.getFileNameAndLineNum(__filename));
-									}else{
-										//logger.info('insertStockNow ok');
-									}
-								});
+					// databaseOperation.insertStockNow(stockCode, amount, date, time,
+					// 			price,
+					// 			yesterday_price,
+					// 			fluctuate,
+					// 			priceearning,
+					// 			marketValue,
+					// 			flowMarketValue,
+					// 			volume,
+					// 			pb,
+					// 			openPrice,
+					// 			high_price,
+					// 			fluctuate_value,
+					// 			low_price,
+					// 			function(flag, result) {
+					// 				//logger.debug(stockCode+" now insert");
+					// 				if (!flag) {
+					// 					logger.error("insertStockNow err code "+result.errno, logger.getFileNameAndLineNum(__filename));
+					// 				}else{
+					// 					//logger.info('insertStockNow ok');
+					// 				}
+					// 			});
 					stockOperation.updateLookYield(stockCode, price, function(flag, result){
 						if(flag){
 
@@ -202,11 +202,6 @@ function insertToDatabase(htmlData, isnow) {
 							logger.error(result, logger.getFileNameAndLineNum(__filename));
 						}
 					});
-
-
-
-
-
 				} else {
 					databaseOperation.insertStockAmount(stockCode,
 						amount,

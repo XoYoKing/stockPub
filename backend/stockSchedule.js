@@ -17,6 +17,11 @@ redisClient.on("error", function (err) {
 });
 var stockOperation = require('./databaseOperation/stockOperation');
 var config = require('./config');
+var userOperation = require('./databaseOperation/userOperation');
+var asyncClient = require('async');
+var moment = require('moment');
+var apnPush = require('./utility/apnPush.js');
+
 
 log.info("run CronJob", log.getFileNameAndLineNum(__filename));
 
@@ -52,14 +57,14 @@ new cronJob('00 25 9 * * 1-5', function(){
 }, null, true);
 //
 
-//日终计算用户总收益率
-new cronJob('00 50 23 * * 1-5', function(){
+//收盘计算用户总收益率
+new cronJob('00 10 15 * * 1-5', function(){
     log.info('caculate yield for all user', log.getFileNameAndLineNum(__filename));
     caculate.caculateAllUserYield();
 }, null, true);
 
 //计算最近一周，最近一个月，最近一年的收益
-new cronJob('00 55 23 * * 1-5', function(){
+new cronJob('00 12 15 * * 1-5', function(){
     log.info('caculate yield for one week, one month, one year', log.getFileNameAndLineNum(__filename));
     caculate.caculateDurationYield();
 }, null, true);
@@ -77,14 +82,14 @@ new cronJob('00 1 15 * * 1-5', function(){
 new cronJob('00 10 15 * * 1-5', function(){
     log.info('5 av price caculate', log.getFileNameAndLineNum(__filename));
     caculate.caculateAvPrice(5, moment().format('YYYY-MM-DD'));
-    caculate.caculateMarketAvPrice(5, moment().format('YYYYMMDD'));
+    caculate.caculateMarketAvPrice(5, moment().format('YYYY-MM-DD'));
 }, null, true);
 
 //10日平均价
 new cronJob('00 15 15 * * 1-5', function(){
     log.info('10 av price caculate', log.getFileNameAndLineNum(__filename));
     caculate.caculateAvPrice(10, moment().format('YYYY-MM-DD'));
-    caculate.caculateMarketAvPrice(10, moment().format('YYYYMMDD'));
+    caculate.caculateMarketAvPrice(10, moment().format('YYYY-MM-DD'));
 
 }, null, true);
 
@@ -92,7 +97,7 @@ new cronJob('00 15 15 * * 1-5', function(){
 new cronJob('00 20 15 * * 1-5', function(){
     log.info('20 av price caculate', log.getFileNameAndLineNum(__filename));
     caculate.caculateAvPrice(20, moment().format('YYYY-MM-DD'));
-    caculate.caculateMarketAvPrice(20, moment().format('YYYYMMDD'));
+    caculate.caculateMarketAvPrice(20, moment().format('YYYY-MM-DD'));
 }, null, true);
 
 
@@ -108,6 +113,26 @@ new cronJob('00 00 23 * * *', function(){
     log.info('update stock name everyday', log.getFileNameAndLineNum(__filename));
     crawl.updateStockName();
 }, null, true);
+
+//每晚清空todayStockLookHash
+new cronJob('00 00 23 * * *', function(){
+    log.info('clear 每晚清空todayStockLookHash', log.getFileNameAndLineNum(__filename));
+    redisClient.hdel(config.hash.todayStockLookHash, function(err, reply){
+		if(err){
+			log.error(err, log.getFileNameAndLineNum(__filename));
+		}
+	});
+}, null, true);
+
+
+
+
+//每日收益率推送
+new cronJob('00 10 15 * * 1-5', function(){
+    log.info('push day yield ', log.getFileNameAndLineNum(__filename));
+	caculate.caculateUserDayYield();
+}, null, true);
+
 
 process.on('uncaughtException', function(err) {
     log.error('schedule process Caught exception: ' +

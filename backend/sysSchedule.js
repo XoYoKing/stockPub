@@ -25,17 +25,17 @@ new cronJob('00 59 23 * * *', function(){
 }, null, true);
 
 
-//重启所有应用
-new cronJob('00 00 4 * * *', function(){
-    log.info('restart all app', log.getFileNameAndLineNum(__filename));
-    child_process.execFile(__dirname + '/sh_script/startAll.sh', null, {}, function(err, stdout, stderr){
-        if(err !== null){
-            log.error(err, log.getFileNameAndLineNum(__filename));
-        }else{
-            log.info("restart all finish", log.getFileNameAndLineNum(__filename));
-        }
-    });
-}, null, true);
+// //重启所有应用
+// new cronJob('00 00 4 * * *', function(){
+//     log.info('restart all app', log.getFileNameAndLineNum(__filename));
+//     child_process.execFile(__dirname + '/sh_script/startAll.sh', null, {}, function(err, stdout, stderr){
+//         if(err !== null){
+//             log.error(err, log.getFileNameAndLineNum(__filename));
+//         }else{
+//             log.info("restart all finish", log.getFileNameAndLineNum(__filename));
+//         }
+//     });
+// }, null, true);
 
 //错误日志扫描发送邮件
 //日志错误统计
@@ -49,6 +49,9 @@ new cronJob('59 23 * * *', function(){
         }
     });
 });
+
+
+//统计注册用户
 
 
 //统计upv，pv

@@ -2,6 +2,10 @@
 var domain = require('domain');
 var domainObj = domain.create();
 var log = global.logger;
+if(log === undefined){
+	log = global.log;
+}
+
 var userMgmt = require('../databaseOperation/userOperation.js');
 var path = require('path');
 
@@ -15,10 +19,13 @@ exports.pushMsg = function(user_id, msg){
 					badge: 1
 				};
 				// apn to user
+				console.log(user_id+':'+msg);
 				pushMsgToUsers(result[0].device_token, pushMsg);
 			} else {
-				log.warn(user_id + ' has no device token', log.getFileNameAndLineNum(
-					__filename));
+				if(log !==undefined){
+					log.warn(user_id + ' has no device token', log.getFileNameAndLineNum(
+						__filename));
+				}
 			}
 		} else {
 			log.error(result, log.getFileNameAndLineNum(__filename));
@@ -32,7 +39,9 @@ exports.pushMsgToUsers = pushMsgToUsers;
 
 function pushMsgToUsers(userToken, msg) {
 	if (userToken === undefined || userToken === ''||userToken === null) {
-		log.warn('userToken is null', log.getFileNameAndLineNum(__filename));
+		if(log!== undefined){
+			log.warn('userToken is null', log.getFileNameAndLineNum(__filename));
+		}
 		return;
 	}
 
@@ -51,10 +60,10 @@ function pushMsgToUsers(userToken, msg) {
 		gateway = 'gateway.push.apple.com';
 	}
 
-
-	log.debug(path.join(__dirname, pemName), log.getFileNameAndLineNum(__filename));
-	log.debug(path.join(__dirname, pemkeyName), log.getFileNameAndLineNum(__filename));
-	log.debug(msg, log.getFileNameAndLineNum(__filename));
+	//console.log(userToken+':'+msg);
+	//log.debug(path.join(__dirname, pemName), log.getFileNameAndLineNum(__filename));
+	//log.debug(path.join(__dirname, pemkeyName), log.getFileNameAndLineNum(__filename));
+	//log.debug(msg, log.getFileNameAndLineNum(__filename));
 
 	var apns = require('apn');
 	var options = {
@@ -81,7 +90,11 @@ function pushMsgToUsers(userToken, msg) {
 		note.payload = msg;
 		note.device = myDevice;
 		apnsConnection.sendNotification(note);
-		log.debug('send notification to ' + userToken, log.getFileNameAndLineNum(__filename));
+		if(log !== undefined){
+			log.debug('send notification to ' + userToken, log.getFileNameAndLineNum(__filename));
+		}else{
+			console.log('send notification to ' + userToken);
+		}
 	});
 }
 
@@ -108,12 +121,24 @@ function apnErrorHappened (err, notification) {
 // 	"connectionTerminated": 515
 // };
 	if (err === 8) {
-		log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		if(log !== undefined){
+			log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		}else{
+			console.log('err code:' + err + ' ' + JSON.stringify(notification));
+		}
 	}else {
-		log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		if(log !== undefined){
+			log.warn('err code:' + err + ' ' + JSON.stringify(notification), log.getFileNameAndLineNum(__filename));
+		}else{
+			console.log('err code:' + err + ' ' + JSON.stringify(notification));
+		}
 	}
 }
 
 domainObj.on('error', function (err) {
-	log.error(err, log.getFileNameAndLineNum(__filename));
+	if(log !== undefined){
+		log.error(err, log.getFileNameAndLineNum(__filename));
+	}else{
+		console.log(err);
+	}
 });

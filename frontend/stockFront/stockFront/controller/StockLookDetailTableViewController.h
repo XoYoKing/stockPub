@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "StockLookInfoModel.h"
+#import "HXEasyCustomShareView.h"
 
-@interface StockLookDetailTableViewController : UITableViewController
+@interface StockLookDetailTableViewController : UITableViewController<HXEasyCustomShareViewDelegate>
 
 @property StockLookInfoModel* stockLookInfoModel;
 

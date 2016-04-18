@@ -42,6 +42,7 @@ PODS:
     - SDWebImage/Core
   - SDWebImage/Core (3.7.3)
   - SocketRocket (0.4.2)
+  - UMengSocial (4.4)
   - YYModel (0.9.5)
 
 DEPENDENCIES:
@@ -55,6 +56,7 @@ DEPENDENCIES:
   - NJKWebViewProgress
   - SDWebImage (~> 3.7)
   - SocketRocket
+  - UMengSocial (~> 4.3)
   - YYModel
 
 SPEC CHECKSUMS:
@@ -69,6 +71,7 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
   SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
+  UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0
   YYModel: dd2bdc9097f8a90c53512a87d55d28340ade1371
 
 COCOAPODS: 0.34.4
