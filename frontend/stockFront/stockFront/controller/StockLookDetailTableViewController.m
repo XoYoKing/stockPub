@@ -17,6 +17,7 @@
 #import "LocDatabase.h"
 #import "HXEasyCustomShareView.h"
 #import "WXApi.h"
+#import "KLineCell.h"
 
 @interface StockLookDetailTableViewController ()
 {
@@ -200,41 +201,79 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
     
-    if(_stockLookInfoModel!=nil){
+    if(section == 0){
+        if(_stockLookInfoModel!=nil){
+            return 1;
+        }
+        return 0;
+
+    }
+    
+    if(section == 1){
         return 1;
     }
+    
     return 0;
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [StockLookDetailTableViewCell cellHeight];
+    if (indexPath.section == 0) {
+        return [StockLookDetailTableViewCell cellHeight];
+    }
+    
+    if (indexPath.section == 1) {
+        return [KLineCell cellHeight];
+    }
+    
+    return 0;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* cellIdentifier = @"StockLookDetailTableViewCell";
-    StockLookDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    // Configure the cell...
-    // Configure the cell...
-    if (cell==nil) {
-        cell = [[StockLookDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        NSLog(@"new cell");
+    if (indexPath.section == 0) {
+        static NSString* cellIdentifier = @"StockLookDetailTableViewCell";
+        StockLookDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        // Configure the cell...
+        // Configure the cell...
+        if (cell==nil) {
+            cell = [[StockLookDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        
+        [cell configureCell:_stockLookInfoModel];
+        
+        return cell;
     }
     
+    if (indexPath.section == 1) {
+        
+        static NSString* cellIdentifier = @"klineCell";
+        KLineCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        // Configure the cell...
+        // Configure the cell...
+        if (cell==nil) {
+            cell = [[KLineCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        StockInfoModel* stockInfoModel = [[StockInfoModel alloc] init];
+        stockInfoModel.is_market = 0;
+        stockInfoModel.stock_code = _stockLookInfoModel.stock_code;
+        [cell configureCell:stockInfoModel lookInfo:_stockLookInfoModel];
+        return cell;
+    }
     
-    [cell configureCell:_stockLookInfoModel];
-    
-    return cell;
+    return nil;
 
 }
 
