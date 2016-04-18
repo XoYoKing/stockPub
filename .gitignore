@@ -20,3 +20,5 @@ frontend/stockFront/stockFront.xcworkspace/xcuserdata/wangjam.xcuserdatad/UserIn
 frontend/stockFront/Pods/Pods.xcodeproj/xcuserdata/wangjam.xcuserdatad/xcschemes/xcschememanagement.plist
 
 backend/npm-debug.log
+
+backend/node_modules/jshint/node_modules/.bin/shjs
