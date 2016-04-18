@@ -284,3 +284,13 @@ exports.getCommentToStockByUser = function(user_id, talk_timestamp_ms, callback)
 	' and a.talk_user_id = b.user_id  and a.to_stock = 0 order by talk_timestamp_ms desc limit 8';
 	conn.executeSql(sql, [user_id, talk_timestamp_ms], callback);
 }
+
+exports.getAllLookUserId = function(callback){
+	var sql = 'SELECT user_id FROM `stock_look_info` GROUP BY `user_id` ';
+	conn.executeSql(sql, [], callback);
+}
+
+exports.getAllLookByUserId = function(user_id, callback){
+	var sql = 'SELECT * FROM `stock_look_info` where user_id = ? and look_status = 1';
+	conn.executeSql(sql, [user_id], callback);
+}

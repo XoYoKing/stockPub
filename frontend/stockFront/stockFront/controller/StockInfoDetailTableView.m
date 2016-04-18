@@ -21,6 +21,9 @@
 #import "KLineCell.h"
 #import "StockCommentTableView.h"
 #import "getCommentToStockAction.h"
+#import <UMSocial.h>
+#import "HXEasyCustomShareView.h"
+#import "WXApi.h"
 
 @interface StockInfoDetailTableView ()
 {
@@ -171,17 +174,6 @@ typedef enum {
     if(_ismarket == true){
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"评论" style:UIBarButtonItemStylePlain target:self action:@selector(commentAction:)];
     }
-    
-//    if (_ismarket == false) {
-//        LocDatabase* loc = [AppDelegate getLocDatabase];
-//        
-//        
-//        if ([loc isLookStock:_stockInfoModel]) {
-//            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消看多" style:UIBarButtonItemStylePlain target:self action:@selector(cancelLook:)];
-//        }else{
-//            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"看多" style:UIBarButtonItemStylePlain target:self action:@selector(addlook:)];
-//        }
-//    }
 
 }
 
@@ -209,16 +201,15 @@ typedef enum {
     if ([loc isFollowStock:_stockInfoModel]) {
         UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"取消自选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            [loc deleteStock:_stockInfoModel];
-            [Tools AlertBigMsg:@"完成"];
+            [self delstock:_stockInfoModel];
+            
         }];
         [alertController addAction:chooseAction];
 
     }else{
         UIAlertAction* chooseAction= [UIAlertAction actionWithTitle:@"添加到自选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            [loc addStock:_stockInfoModel];
-            [Tools AlertBigMsg:@"完成"];
+            [self addstock:_stockInfoModel];
             
         }];
         [alertController addAction:chooseAction];
@@ -233,11 +224,136 @@ typedef enum {
         
     }];
     [alertController addAction:chooseAction];
-
+    
+    
+    //分享
+    UIAlertAction* shareAction= [UIAlertAction actionWithTitle:@"分享" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [self addWeixinShareView];
+        
+    }];
+    [alertController addAction:shareAction];
     
     
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+
+/**
+ *  仿微信分享界面
+ */
+- (void)addWeixinShareView {
+    NSArray *shareAry = @[@{@"image":@"Action_Share",
+                            @"title":@"发送给朋友"},
+                          @{@"image":@"Action_Moments",
+                            @"title":@"朋友圈"},
+                          @{@"image":@"Action_MyFavAdd",
+                            @"title":@"收藏"}];
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 30)];
+    headerView.backgroundColor = [UIColor clearColor];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 9, headerView.frame.size.width, 11)];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor colorWithRed:99/255.0 green:98/255.0 blue:98/255.0 alpha:1.0];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont systemFontOfSize:11];
+    label.text = @"网页由 mp.weixin.qq.com 提供";
+    [headerView addSubview:label];
+    
+    HXEasyCustomShareView *shareView = [[HXEasyCustomShareView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    shareView.backView.backgroundColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.9];
+    shareView.headerView = headerView;
+    float height = [shareView getBoderViewHeight:shareAry firstCount:6];
+    shareView.boderView.frame = CGRectMake(0, 0, shareView.frame.size.width, height);
+    [shareView setShareAry:shareAry delegate:self];
+    shareView.middleLineLabel.frame = CGRectMake(10, shareView.middleLineLabel.frame.origin.y, shareView.frame.size.width-20, shareView.middleLineLabel.frame.size.height);
+    shareView.showsHorizontalScrollIndicator = NO;
+    [self.navigationController.view addSubview:shareView];
+}
+
+
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+    }
+}
+
+
+- (void)delstock:(StockInfoModel*)stockInfo
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[userInfo.user_id,
+                                               stockInfo.stock_code]
+                             forKeys:@[@"user_id", @"stock_code"]];
+    
+    LocDatabase* loc = [AppDelegate getLocDatabase];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/delstock" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        if(code == SUCCESS){
+            
+            if([loc deleteStock:stockInfo]){
+                alertMsg(@"完成");
+
+            }else{
+                alertMsg(@"本地数据库错误");
+            }
+            
+            [self.tableView reloadData];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
+}
+
+- (void)addstock:(StockInfoModel*)stockInfo
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
+    
+    NSDictionary* message = [[NSDictionary alloc]
+                             initWithObjects:@[userInfo.user_id,
+                                               stockInfo.stock_code]
+                             forKeys:@[@"user_id", @"stock_code"]];
+    
+    LocDatabase* loc = [AppDelegate getLocDatabase];
+    
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/addstock" successed:^(NSDictionary *response) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSInteger code = [[response objectForKey:@"code"] integerValue];
+        if(code == SUCCESS){
+            
+            if([loc addStock:stockInfo]){
+                alertMsg(@"完成");
+            }else{
+                alertMsg(@"本地数据库错误");
+            }
+            
+            [self.tableView reloadData];
+        }else{
+            alertMsg(@"未知错误");
+        }
+        
+        
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        alertMsg(@"网络问题");
+    }];
 }
 
 
@@ -274,6 +390,7 @@ typedef enum {
                 alertMsg(@"操作失败");
             }else{
                 //alertMsg(@"已添加");
+                alertMsg(@"完成");
             }
             
             [self.tableView reloadData];
@@ -317,11 +434,14 @@ typedef enum {
                 alertMsg(@"操作失败");
             }else{
                 //alertMsg(@"已删除");
+                alertMsg(@"完成");
             }
             
             [self.tableView reloadData];
             [self showRightItem];
             
+        }else if(code == LOOK_DEL_NOT_TODAY){
+            alertMsg(@"当日看多股票不可当日取消");
         }else{
             alertMsg(@"未知错误");
         }
@@ -333,6 +453,40 @@ typedef enum {
         alertMsg(@"网络问题");
     }];
     
+}
+
+- (void)easyCustomShareViewButtonAction:(HXEasyCustomShareView *)shareView title:(NSString *)title
+{
+    NSLog(@"%@", title);
+    [shareView tappedCancel];
+    
+//    UserInfoModel* user = [AppDelegate getMyUserInfo];
+    
+    if([title isEqualToString:@"朋友圈"]){
+        NSString* title = [[NSString alloc] initWithFormat:@"%@%@(%@),%.2f(%.2f%%)",  @"分享了", _stockInfoModel.stock_name, _stockInfoModel.stock_code, _stockInfoModel.price, _stockInfoModel.fluctuate];
+        [self sendLinkContent:title scene:WXSceneTimeline];
+    }
+    
+    
+    if([title isEqualToString:@"发送给朋友"]){
+        NSString* title = [[NSString alloc] initWithFormat:@"%@%@(%@),%.2f(%.2f%%)", @"分享了", _stockInfoModel.stock_name, _stockInfoModel.stock_code, _stockInfoModel.price, _stockInfoModel.fluctuate];
+        [self sendLinkContent:title scene:WXSceneSession];
+    }
+}
+
+- (void)sendLinkContent:(NSString*)title  scene:(int)scene {
+    UIImage *thumbImage = [UIImage imageNamed:@"180-1px.png"];
+    WXMediaMessage* message = [WXMediaMessage message];
+    message.title = title;
+    [message setThumbImage:thumbImage];
+    WXWebpageObject* webpageObject = [WXWebpageObject object];
+    webpageObject.webpageUrl = @"https://itunes.apple.com/cn/app/lan-ren-gu-piao/id1071644462?l=en&mt=8";
+    message.mediaObject = webpageObject;
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = scene;
+    [WXApi sendReq:req];
 }
 
 
@@ -612,7 +766,7 @@ typedef enum {
             _stockInfoModel.is_market = 0;
         }
         
-        [cell configureCell:_stockInfoModel];
+        [cell configureCell:_stockInfoModel lookInfo:nil];
         return cell;
 
     }

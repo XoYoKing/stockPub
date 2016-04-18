@@ -372,36 +372,22 @@
 
 - (void)refreshStockInfo
 {
-    stockList = [locDatabase getStocklist];
     
     
     //[self getFollowList:[[NSDate date] timeIntervalSince1970] handleAction:@selector(getFollowListSuccess:)];
     
     //获取股票详情
     
-    NSMutableArray* stockCodeArray = [[NSMutableArray alloc] init];
-    for (StockInfoModel* element in stockList) {
-        [stockCodeArray addObject:element.stock_code];
-    }
-    
-    if([stockCodeArray count] == 0){
-        completed();
-        return;
-    }
-    
-    if([stockCodeArray  count] == 1){
-        [stockCodeArray addObject:@"0"];
-        //单条后台asyn each 不支持
-    }
+    UserInfoModel* phoneUser = [AppDelegate getMyUserInfo];
     
     NSDictionary* message = [[NSDictionary alloc]
-                             initWithObjects:@[stockCodeArray]
-                             forKeys:@[@"stocklist"]];
+                             initWithObjects:@[phoneUser.user_id]
+                             forKeys:@[@"user_id"]];
     
     
 
     
-    [NetworkAPI callApiWithParam:message childpath:@"/stock/getStockListInfo" successed:^(NSDictionary *response) {
+    [NetworkAPI callApiWithParam:message childpath:@"/stock/getChooseStockListInfo" successed:^(NSDictionary *response) {
         
         completed();
         
@@ -411,30 +397,28 @@
             
             NSDictionary* stockData = (NSDictionary*)[response objectForKey:@"data"];
             
-            
-            
             if(stockData!=nil){
-                for (StockInfoModel* element in stockList) {
-                    if([stockData objectForKey:element.stock_code]){
-                        
-                        StockInfoModel* temp = [StockInfoModel yy_modelWithDictionary:[stockData objectForKey:element.stock_code]];
-                        element.fluctuate_value = temp.fluctuate_value;
-                        element.price = temp.price;
-                        element.fluctuate = temp.fluctuate;
-                        element.stock_name = temp.stock_name;
-                        element.open_price = temp.open_price;
-                        element.yesterday_price = temp.yesterday_price;
-                        element.volume = temp.volume;
-                        element.amount = temp.amount;
-                        element.marketValue = temp.marketValue;
-                        element.flowMarketValue = temp.flowMarketValue;
-                        element.priceearning = temp.priceearning;
-                        element.pb = temp.pb;
-                        element.is_stop = temp.is_stop;
-                        element.time = temp.time;
-                        element.date = temp.date;
+                
+                [stockList removeAllObjects];
+                NSArray* stockValues = [stockData allValues];
+                for (NSDictionary* element in stockValues) {
+                    StockInfoModel* temp = [StockInfoModel yy_modelWithDictionary:element];
+                    [stockList addObject:temp];
+                    
+                    if(![locDatabase addStock:temp]){
+                        alertMsg(@"本地库错误 ");
+                        break;
                     }
                 }
+                
+                [stockList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                    
+                    StockInfoModel* comp1 = obj1;
+                    StockInfoModel* comp2 = obj2;
+                    return comp1.add_timestamp_ms<comp2.add_timestamp_ms;
+                }];
+                
+
                 
                 [comTable.tableView reloadData];
             }

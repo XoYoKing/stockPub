@@ -12,6 +12,7 @@
 #import <Masonry.h>
 #import "ConfigAccess.h"
 #import "Tools.h"
+#import "StockLookInfoModel.h"
 
 
 @implementation KLineCell
@@ -79,11 +80,19 @@
 }
 
 
-- (void)configureCell:(StockInfoModel*)model
+- (void)configureCell:(StockInfoModel*)model lookInfo:(StockLookInfoModel*)lookInfo
 {
     if (isLoad == false) {
-        NSString* urlStr = [[NSString alloc] initWithFormat:@"%@%@", [ConfigAccess serverDomain], [[NSString alloc] initWithFormat:@"/stock/kline?stock_code=%@&height=%ld&num_day=%d&width=%f&is_market=%ld", model.stock_code, [KLineCell cellHeight]*3, 66, ScreenWidth*3, model.is_market]];
-        NSLog(@"%@", urlStr);
+        
+        NSString* urlStr = nil;
+        if(lookInfo == nil){
+            urlStr = [[NSString alloc] initWithFormat:@"%@%@", [ConfigAccess serverDomain], [[NSString alloc] initWithFormat:@"/stock/kline?stock_code=%@&height=%ld&num_day=%d&width=%f&is_market=%ld", model.stock_code, [KLineCell cellHeight]*3, 66, ScreenWidth*3, model.is_market]];
+            NSLog(@"%@", urlStr);
+
+        }else{
+            urlStr = [[NSString alloc] initWithFormat:@"%@%@", [ConfigAccess serverDomain], [[NSString alloc] initWithFormat:@"/stock/kline?stock_code=%@&height=%ld&num_day=%d&width=%f&is_market=%ld&look_timestamp=%ld&look_finish_timestamp=%ld", model.stock_code, [KLineCell cellHeight]*3, 66, ScreenWidth*3, model.is_market, lookInfo.look_timestamp, lookInfo.look_finish_timestamp]];
+            NSLog(@"%@", urlStr);
+        }
         
         
         NSURL* url = [NSURL URLWithString:urlStr];//创建URL

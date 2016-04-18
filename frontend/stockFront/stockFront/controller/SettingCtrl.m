@@ -119,7 +119,7 @@ typedef enum {
 {
     if(indexPath.section == lookInfoSection){
         StockLookInfoModel* model = [stockLookList objectAtIndex:indexPath.row];
-        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] init];
+        StockLookDetailTableViewController* tableviewCtrl = [[StockLookDetailTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
         tableviewCtrl.stockLookInfoModel = model;
         tableviewCtrl.stocklist = stockLookList;
         tableviewCtrl.hidesBottomBarWhenPushed = YES;
