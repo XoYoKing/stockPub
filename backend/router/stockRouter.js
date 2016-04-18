@@ -543,7 +543,9 @@ router.get('/kline', function(req, res){
 		'stock_code': req.query.stock_code,
 		'height': req.query.height,
 		'num_day': req.query.num_day,
-		'width': req.query.width
+		'width': req.query.width,
+		'look_timestamp': req.query.look_timestamp,
+		'look_finish_timestamp': req.query.look_finish_timestamp
 	});
 });
 

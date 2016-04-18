@@ -113,6 +113,35 @@
                             }
                         }
 
+                        var flagdata = [];
+                        if(<%=look_timestamp%> !== 0&&<%=look_timestamp%>!== null
+                        &&<%=look_timestamp%> !== undefined){
+                            var myDate = new Date();
+                            myDate.setTime(<%=look_timestamp%>);
+                            var year = myDate.getUTCFullYear();
+                            var month = myDate.getUTCMonth();
+                            var date = myDate.getUTCDate();
+                            flagdata.push({
+                                x : Date.UTC(year, month, date),
+                                title : '看多',
+                                text : 'Euro Contained by Channel Resistance'
+                            });
+                        }
+
+                        if (<%=look_finish_timestamp%> !== 0 && <%=look_finish_timestamp%> !== null
+                        &&<%=look_finish_timestamp%> !== undefined) {
+                            var myDate = new Date();
+                            myDate.setTime(<%=look_finish_timestamp%>);
+                            var year = myDate.getUTCFullYear();
+                            var month = myDate.getUTCMonth();
+                            var date = myDate.getUTCDate();
+                            flagdata.push({
+                                x : Date.UTC(year, month, date),
+                                title : '取消看多',
+                                text : 'Euro Contained by Channel Resistance'
+                            });
+                        }
+
                         $('#container').highcharts('StockChart', {
 
                             yAxis: [
@@ -227,32 +256,20 @@
                                     tooltip: {
                                         valueDecimals: 2
                                     }
+                                },
+                                {
+                                        //看多节点
+                                        type: 'flags',
+                                        data: flagdata,
+                                        onSeries : 'dataseries',
+                                        shape : 'squarepin',
+                                        width : 36
                                 }
                             ]
                         });
                     }else{
                         $("#container").html("<h1>ERROR:"+data.code+"</h1>");
                     }
-                    var chart = $('#container').highcharts();
-                    // chart.addSeries({
-                    //         //看多节点
-                    //         type: 'flags',
-                    //         data: [
-                    //             {
-                    //                 x : Date.UTC(2016, 2, 25),
-                    //                 title : '看多',
-                    //                 text : 'Euro Contained by Channel Resistance'
-                    //             },
-                    //             {
-                    //                 x : Date.UTC(2016, 2, 30),
-                    //                 title : '取消看多',
-                    //                 text : 'Euro Contained by Channel Resistance'
-                    //             }
-                    //         ],
-                    //         onSeries : 'dataseries',
-                    //         shape : 'squarepin',
-                    //         width : 36
-                    // });
                 },
                 error: function(){
                     $("#container").html("<h1>ERROR:"+status+"</h1>");

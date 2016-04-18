@@ -766,7 +766,7 @@ typedef enum {
             _stockInfoModel.is_market = 0;
         }
         
-        [cell configureCell:_stockInfoModel];
+        [cell configureCell:_stockInfoModel lookInfo:nil];
         return cell;
 
     }

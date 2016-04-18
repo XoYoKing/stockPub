@@ -269,7 +269,7 @@
         StockInfoModel* stockInfoModel = [[StockInfoModel alloc] init];
         stockInfoModel.is_market = 0;
         stockInfoModel.stock_code = _stockLookInfoModel.stock_code;
-        [cell configureCell:stockInfoModel];
+        [cell configureCell:stockInfoModel lookInfo:_stockLookInfoModel];
         return cell;
     }
     

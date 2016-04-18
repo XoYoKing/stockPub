@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "StockInfoModel.h"
+#import "StockLookInfoModel.h"
 
 @interface KLineCell : UITableViewCell<UIWebViewDelegate>
 
-- (void)configureCell:(StockInfoModel*)model;
+- (void)configureCell:(StockInfoModel*)model lookInfo:(StockLookInfoModel*)lookInfo;
 
 + (NSInteger)cellHeight;
 
