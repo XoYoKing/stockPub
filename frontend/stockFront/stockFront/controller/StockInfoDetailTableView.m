@@ -22,6 +22,8 @@
 #import "StockCommentTableView.h"
 #import "getCommentToStockAction.h"
 #import <UMSocial.h>
+#import "HXEasyCustomShareView.h"
+#import "WXApi.h"
 
 @interface StockInfoDetailTableView ()
 {
@@ -227,12 +229,15 @@ typedef enum {
     //分享
     UIAlertAction* shareAction= [UIAlertAction actionWithTitle:@"分享" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
-        [UMSocialSnsService presentSnsIconSheetView:self
-                                             appKey:@"507fcab25270157b37000010"
-                                          shareText:@"你要分享的文字"
-                                         shareImage:[UIImage imageNamed:@"me@2x.png"]
-                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToSina, UMShareToWechatTimeline, nil]
-                                           delegate:self];
+//        [UMSocialSnsService presentSnsIconSheetView:self
+//                                             appKey:@"507fcab25270157b37000010"
+//                                          shareText:@"你要分享的文字"
+//                                         shareImage:[UIImage imageNamed:@"me@2x.png"]
+//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession, UMShareToWechatTimeline, nil]
+//                                           delegate:self];
+        
+        [self addWeixinShareView];
+        
     }];
     [alertController addAction:shareAction];
     
@@ -240,6 +245,41 @@ typedef enum {
     [alertController addAction:cancelAction];
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
+
+/**
+ *  仿微信分享界面
+ */
+- (void)addWeixinShareView {
+    NSArray *shareAry = @[@{@"image":@"Action_Share",
+                            @"title":@"发送给朋友"},
+                          @{@"image":@"Action_Moments",
+                            @"title":@"朋友圈"},
+                          @{@"image":@"Action_MyFavAdd",
+                            @"title":@"收藏"}];
+    
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 30)];
+    headerView.backgroundColor = [UIColor clearColor];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 9, headerView.frame.size.width, 11)];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor colorWithRed:99/255.0 green:98/255.0 blue:98/255.0 alpha:1.0];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont systemFontOfSize:11];
+    label.text = @"网页由 mp.weixin.qq.com 提供";
+    [headerView addSubview:label];
+    
+    HXEasyCustomShareView *shareView = [[HXEasyCustomShareView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    shareView.backView.backgroundColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.9];
+    shareView.headerView = headerView;
+    float height = [shareView getBoderViewHeight:shareAry firstCount:6];
+    shareView.boderView.frame = CGRectMake(0, 0, shareView.frame.size.width, height);
+    [shareView setShareAry:shareAry delegate:self];
+    shareView.middleLineLabel.frame = CGRectMake(10, shareView.middleLineLabel.frame.origin.y, shareView.frame.size.width-20, shareView.middleLineLabel.frame.size.height);
+    shareView.showsHorizontalScrollIndicator = NO;
+    [self.navigationController.view addSubview:shareView];
+}
+
 
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
@@ -420,6 +460,40 @@ typedef enum {
         alertMsg(@"网络问题");
     }];
     
+}
+
+- (void)easyCustomShareViewButtonAction:(HXEasyCustomShareView *)shareView title:(NSString *)title
+{
+    NSLog(@"%@", title);
+    [shareView tappedCancel];
+    
+//    UserInfoModel* user = [AppDelegate getMyUserInfo];
+    
+    if([title isEqualToString:@"朋友圈"]){
+        NSString* title = [[NSString alloc] initWithFormat:@"%@%@(%@),%.2f(%.2f%%)",  @"分享了", _stockInfoModel.stock_name, _stockInfoModel.stock_code, _stockInfoModel.price, _stockInfoModel.fluctuate];
+        [self sendLinkContent:title scene:WXSceneTimeline];
+    }
+    
+    
+    if([title isEqualToString:@"发送给朋友"]){
+        NSString* title = [[NSString alloc] initWithFormat:@"%@%@(%@),%.2f(%.2f%%)", @"分享了", _stockInfoModel.stock_name, _stockInfoModel.stock_code, _stockInfoModel.price, _stockInfoModel.fluctuate];
+        [self sendLinkContent:title scene:WXSceneSession];
+    }
+}
+
+- (void)sendLinkContent:(NSString*)title  scene:(int)scene {
+    UIImage *thumbImage = [UIImage imageNamed:@"180-1px.png"];
+    WXMediaMessage* message = [WXMediaMessage message];
+    message.title = title;
+    [message setThumbImage:thumbImage];
+    WXWebpageObject* webpageObject = [WXWebpageObject object];
+    webpageObject.webpageUrl = @"https://itunes.apple.com/cn/app/lan-ren-gu-piao/id1071644462?l=en&mt=8";
+    message.mediaObject = webpageObject;
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = scene;
+    [WXApi sendReq:req];
 }
 
 

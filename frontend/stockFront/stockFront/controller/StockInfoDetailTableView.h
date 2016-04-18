@@ -10,8 +10,9 @@
 #import "StockInfoModel.h"
 #import <UMSocial.h>
 #import <UMSocialData.h>
+#import "HXEasyCustomShareView.h"
 
-@interface StockInfoDetailTableView : UITableViewController<UMSocialUIDelegate, UMSocialDataDelegate>
+@interface StockInfoDetailTableView : UITableViewController<UMSocialUIDelegate, UMSocialDataDelegate, HXEasyCustomShareViewDelegate>
 
 @property StockInfoModel* stockInfoModel;
 
