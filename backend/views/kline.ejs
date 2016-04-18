@@ -234,25 +234,25 @@
                         $("#container").html("<h1>ERROR:"+data.code+"</h1>");
                     }
                     var chart = $('#container').highcharts();
-                    chart.addSeries({
-                            //看多节点
-                            type: 'flags',
-                            data: [
-                                {
-                                    x : Date.UTC(2016, 2, 25),
-                                    title : '看多',
-                                    text : 'Euro Contained by Channel Resistance'
-                                },
-                                {
-                                    x : Date.UTC(2016, 2, 30),
-                                    title : '取消看多',
-                                    text : 'Euro Contained by Channel Resistance'
-                                }
-                            ],
-                            onSeries : 'dataseries',
-                            shape : 'squarepin',
-                            width : 36
-                    });
+                    // chart.addSeries({
+                    //         //看多节点
+                    //         type: 'flags',
+                    //         data: [
+                    //             {
+                    //                 x : Date.UTC(2016, 2, 25),
+                    //                 title : '看多',
+                    //                 text : 'Euro Contained by Channel Resistance'
+                    //             },
+                    //             {
+                    //                 x : Date.UTC(2016, 2, 30),
+                    //                 title : '取消看多',
+                    //                 text : 'Euro Contained by Channel Resistance'
+                    //             }
+                    //         ],
+                    //         onSeries : 'dataseries',
+                    //         shape : 'squarepin',
+                    //         width : 36
+                    // });
                 },
                 error: function(){
                     $("#container").html("<h1>ERROR:"+status+"</h1>");
