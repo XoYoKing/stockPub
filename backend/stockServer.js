@@ -36,9 +36,9 @@ global.app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-global.app.use(express.static(__dirname + '/css'));
-global.app.use(express.static(__dirname + '/js'));
-global.app.use(express.static(__dirname + '/images'));
+global.app.use(express.static(path.join(__dirname, '/css')));
+global.app.use(express.static(path.join(__dirname, '/js')));
+global.app.use(express.static(path.join(__dirname, '/images')));
 
 // create a rotating write stream
 var accessLogStream = fileStreamRotator.getStream({
