@@ -211,7 +211,8 @@
                                     data : fiveAvPrices,
                                     tooltip: {
                                         valueDecimals: 2
-                                    }
+                                    },
+                                    id : 'dataseries'
                                 },
                                 {
                                     name : 'MA10',
@@ -236,7 +237,10 @@
                                             title : 'H',
                                             text : 'Euro Contained by Channel Resistance'
                                         }
-                                    ]
+                                    ],
+                                    onSeries : 'dataseries',
+                                    shape : 'circlepin',
+                                    width : 16
                                 }
                             ]
                         });
