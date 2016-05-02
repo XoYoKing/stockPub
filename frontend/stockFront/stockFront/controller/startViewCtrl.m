@@ -15,6 +15,7 @@
 @implementation startViewCtrl
 {
     UILabel* detailLabel;
+    UILabel* versionLabel;
     UILabel* appNamelabel;
     UIButton* loginButton;
     UIButton* registerButton;
@@ -40,6 +41,18 @@
     detailLabel.text = @"不用思考的投资";
     [self.view addSubview:detailLabel];
     
+    
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    // app版本
+    NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    
+    versionLabel = [[UILabel alloc] init];
+    versionLabel.font = [UIFont fontWithName:fontName size:minFont];
+    versionLabel.textColor = [UIColor grayColor];
+    versionLabel.textAlignment = NSTextAlignmentCenter;
+    versionLabel.text = [[NSString alloc] initWithFormat:@"%@%@", @"v", app_Version];
+    [self.view addSubview:versionLabel];
     
     
     registerButton = [[UIButton alloc] init];
@@ -121,6 +134,14 @@
         make.size.mas_equalTo(CGSizeMake(ScreenWidth - 8*minSpace, 2*minSpace));
     }];
     
+    
+    [versionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.view.mas_left).offset(4*minSpace);
+        make.right.mas_equalTo(self.view.mas_right).offset(-4*minSpace);
+        make.top.mas_equalTo(detailLabel.mas_bottom).offset(minSpace);
+        make.size.mas_equalTo(CGSizeMake(ScreenWidth - 8*minSpace, 2*minSpace));
+
+    }];
     
     [loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.view.mas_left).offset(5*minSpace);

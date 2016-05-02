@@ -27,6 +27,8 @@
 #import "GetFansAction.h"
 #import "UnreadCommentTableView.h"
 #import "UnreadCommentStockTableView.h"
+#import "aboutCtrl.h"
+
 
 @implementation SettingCtrl
 {
@@ -49,6 +51,7 @@ typedef enum {
     lookInfoSection,
     hisLookInfoSection,
     msgSection,
+    aboutSection,
     logout
 } section;
 
@@ -118,6 +121,8 @@ typedef enum {
     [self showFollowButton];
 
     
+    UIView *v = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.tableView setTableFooterView:v];
 }
 
 - (void)showFollowButton
@@ -153,6 +158,10 @@ typedef enum {
     
     if (indexPath.section == logout) {
         [self logout];
+    }
+    
+    if (indexPath.section == aboutSection) {
+        [self about];
     }
     
     
@@ -209,6 +218,14 @@ typedef enum {
         }
         
     }
+}
+
+
+- (void)about
+{
+    aboutCtrl* about = [[aboutCtrl alloc] initWithStyle:UITableViewStyleGrouped];
+    about.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:about animated:YES];
 }
 
 - (void)follow
@@ -723,6 +740,22 @@ typedef enum {
         return cell;
     }
     
+    if (indexPath.section == aboutSection) {
+        
+        static NSString* cellIdentifier = @"aboutcell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (cell==nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            NSLog(@"new cell");
+        }
+        
+        cell.textLabel.text = @"关于懒人股票";
+        cell.textLabel.textColor = [UIColor grayColor];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.backgroundColor = [UIColor whiteColor];
+        return cell;
+    }
+    
     if (indexPath.section == logout) {
         //登出
         static NSString* cellIdentifier = @"logoutcell";
@@ -891,6 +924,10 @@ typedef enum {
         return 2;
     }
     
+    if (section == aboutSection) {
+        return 1;
+    }
+    
     return 0;
     
 }
@@ -902,7 +939,7 @@ typedef enum {
     UserInfoModel* userInfo = [AppDelegate getMyUserInfo];
     
     if([myInfo.user_id isEqualToString:userInfo.user_id]){
-        return 6;
+        return 7;
     }else{
         return 4;
     }
