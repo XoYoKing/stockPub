@@ -550,18 +550,28 @@ router.get('/kline', function(req, res){
 });
 
 
+//获取大盘日K线图
 router.get('/getMarketDayInfo', function(req, res){
 	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
 
 	asyncClient.parallel(
 		[
 			function(callback){
-				stockOperation.getMarketIndexNow(req.query.stock_code, function(flag, result){
-					if(flag){
-						callback(null, result);
+				// stockOperation.getMarketIndexNow(req.query.stock_code, function(flag, result){
+				// 	if(flag){
+				// 		callback(null, result);
+				// 	}else{
+				// 		logger.error(result, logger.getFileNameAndLineNum(__filename));
+				// 		callback(result, result);
+				// 	}
+				// });
+
+				redisClient.hget('marketCurPriceHash', req.query.stock_code, function(err, reply){
+					if(err){
+						logger.error(err, logger.getFileNameAndLineNum(__filename));
+						callback(err, null);
 					}else{
-						logger.error(result, logger.getFileNameAndLineNum(__filename));
-						callback(result, result);
+						callback(null, reply);
 					}
 				});
 			},
@@ -600,16 +610,16 @@ router.get('/getMarketDayInfo', function(req, res){
 	            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 			}else{
 				returnData.data = result[1];
-				if(result[0].length>0){
+				if(result[0]!== null){
 					returnData.now = {
-						timestamp_ms: result[0][0].timestamp_ms,
-						open_price: result[0][0].market_index_value_open,
-						high_price: result[0][0].market_index_value_high,
-						low_price: result[0][0].market_index_value_low,
-						price: result[0][0].market_index_value_now,
-						amount: result[0][0].market_index_trade_volume,
-						fluctuate: result[0][0].market_index_fluctuate,
-						date: result[0][0].market_index_date
+						timestamp_ms: result[0].timestamp_ms,
+						open_price: result[0].market_index_value_open,
+						high_price: result[0].market_index_value_high,
+						low_price: result[0].market_index_value_low,
+						price: result[0].market_index_value_now,
+						amount: result[0].market_index_trade_volume,
+						fluctuate: result[0].market_index_fluctuate,
+						date: result[0].market_index_date
 					};
 				}
 				returnData.code = constant.returnCode.SUCCESS;
@@ -620,6 +630,7 @@ router.get('/getMarketDayInfo', function(req, res){
 	);
 });
 
+//获得股票日K曲线
 router.get('/getStockDayInfo', function(req, res){
 
 	logger.debug(JSON.stringify(req.query), logger.getFileNameAndLineNum(__filename));
@@ -627,14 +638,24 @@ router.get('/getStockDayInfo', function(req, res){
 	asyncClient.parallel(
 		[
 			function(callback){
-				stockOperation.getStockInfo(req.query, function(flag, result){
-					if(flag){
-						callback(null, result);
+
+				redisClient.hget('stockCurPriceHash', req.query.stock_code, function(err, reply){
+					if(err){
+						logger.error(err, logger.getFileNameAndLineNum(__filename));
+						callback(err, null);
 					}else{
-						logger.error(result, logger.getFileNameAndLineNum(__filename));
-						callback(result, result);
+						callback(null, reply);
 					}
 				});
+
+				// stockOperation.getStockInfo(req.query, function(flag, result){
+				// 	if(flag){
+				// 		callback(null, result);
+				// 	}else{
+				// 		logger.error(result, logger.getFileNameAndLineNum(__filename));
+				// 		callback(result, result);
+				// 	}
+				// });
 			},
 			function(callback){
 				stockOperation.getStockDayInfo(req.query.stock_code, req.query.num_day, function(flag, result){
@@ -654,8 +675,8 @@ router.get('/getStockDayInfo', function(req, res){
 	            routerFunc.feedBack(constant.returnCode.ERROR, result, res);
 			}else{
 				returnData.data = result[1];
-				if(result[0].length>0){
-					returnData.now = result[0][0];
+				if(result[0]!== null){
+					returnData.now = result[0];
 				}
 				returnData.code = constant.returnCode.SUCCESS;
 				console.log(JSON.stringify(returnData));
