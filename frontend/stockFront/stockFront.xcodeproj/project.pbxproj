@@ -14,6 +14,7 @@
 		B216F58A1CC3372C008A4229 /* HXEasyCustomShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = B216F5871CC3372C008A4229 /* HXEasyCustomShareView.m */; };
 		B216F58B1CC3372C008A4229 /* HXShareScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B216F5891CC3372C008A4229 /* HXShareScrollView.m */; };
 		B222A70D1CA8FFE1006586E2 /* UnreadCommentStockTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */; };
+		B227D4591CD71C5800C15F8B /* aboutCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = B227D4581CD71C5800C15F8B /* aboutCtrl.m */; };
 		B227E80B1C745C5A005BA113 /* KLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B227E80A1C745C5A005BA113 /* KLineCell.m */; };
 		B227F3A01C64A0C200235B64 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B227F39F1C64A0C200235B64 /* main.m */; };
 		B227F3A31C64A0C200235B64 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B227F3A21C64A0C200235B64 /* AppDelegate.m */; };
@@ -158,6 +159,8 @@
 		B216F5891CC3372C008A4229 /* HXShareScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXShareScrollView.m; sourceTree = "<group>"; };
 		B222A70B1CA8FFE0006586E2 /* UnreadCommentStockTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnreadCommentStockTableView.h; sourceTree = "<group>"; };
 		B222A70C1CA8FFE1006586E2 /* UnreadCommentStockTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnreadCommentStockTableView.m; sourceTree = "<group>"; };
+		B227D4571CD71C5800C15F8B /* aboutCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aboutCtrl.h; sourceTree = "<group>"; };
+		B227D4581CD71C5800C15F8B /* aboutCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = aboutCtrl.m; sourceTree = "<group>"; };
 		B227E8091C745C5A005BA113 /* KLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLineCell.h; sourceTree = "<group>"; };
 		B227E80A1C745C5A005BA113 /* KLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLineCell.m; sourceTree = "<group>"; };
 		B227F39B1C64A0C200235B64 /* stockFront.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stockFront.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -473,6 +476,8 @@
 		B227F3D91C64A1E200235B64 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				B227D4571CD71C5800C15F8B /* aboutCtrl.h */,
+				B227D4581CD71C5800C15F8B /* aboutCtrl.m */,
 				B265742D1C8E75AB00A6B75C /* webViewCtrl.h */,
 				B265742E1C8E75AB00A6B75C /* webViewCtrl.m */,
 				B227F4C31C6723D200235B64 /* StockInfoDetailTableView.h */,
@@ -1001,6 +1006,7 @@
 				B227F4801C64A1E200235B64 /* UserSearchTableViewController.m in Sources */,
 				B227F4B31C64A1E200235B64 /* RankCell.m in Sources */,
 				B227F48F1C64A1E200235B64 /* FollowInfoModel.m in Sources */,
+				B227D4591CD71C5800C15F8B /* aboutCtrl.m in Sources */,
 				B227F4721C64A1E200235B64 /* FollowAction.m in Sources */,
 				B227F4781C64A1E200235B64 /* RegisterPhoneNumViewController.m in Sources */,
 				B227F48E1C64A1E200235B64 /* CommentModel.m in Sources */,
