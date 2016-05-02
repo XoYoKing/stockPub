@@ -9,11 +9,13 @@ global.logger = log; // 设置全局
 var email = require('./utility/emailTool');
 var cronJob = require('cron').CronJob;
 var child_process = require('child_process');
+var userOperation = require('./databaseOperation/userOperation');
+var moment = require('moment');
 
 log.info("run sys cron job", log.getFileNameAndLineNum(__filename));
 
 //当日日志打包
-new cronJob('00 59 23 * * *', function(){
+new cronJob('00 31 22 * * *', function(){
     log.info('zip everyday log', log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/zipLog.sh', null, {}, function(err, stdout, stderr){
         if(err !== null){
@@ -39,7 +41,7 @@ new cronJob('00 59 23 * * *', function(){
 
 //错误日志扫描发送邮件
 //日志错误统计
-new cronJob('59 23 * * *', function(){
+new cronJob('00 30 22 * * *', function(){
     log.info("errorLogReport start", log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err){
         if(err !== null){
@@ -52,6 +54,19 @@ new cronJob('59 23 * * *', function(){
 
 
 //统计注册用户
+new cronJob('00 31 22 * * *', function(){
+    log.info("get user all register count start", log.getFileNameAndLineNum(__filename));
+    userOperation.getUserCount(function(flag, result){
+        if (flag) {
+            console.log('user total count:'+result.count);
+            var nowDate = moment().format('YYYYMMDD')
+            email.sendMail('user total count:'+result.count,
+            nowDate+"-懒人股票-注册数统计_"+process.env.HOME.env;)
+        }else{
+            log.error(result, log.getFileNameAndLineNum(__filename));
+        }
+    });
+});
 
 
 //统计upv，pv
