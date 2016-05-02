@@ -9,6 +9,8 @@ global.logger = log; // 设置全局
 var email = require('./utility/emailTool');
 var cronJob = require('cron').CronJob;
 var child_process = require('child_process');
+var userOperation = require('./databaseOperation/userOperation');
+var moment = require('moment');
 
 log.info("run sys cron job", log.getFileNameAndLineNum(__filename));
 
@@ -52,6 +54,19 @@ new cronJob('00 30 22 * * *', function(){
 
 
 //统计注册用户
+new cronJob('00 31 22 * * *', function(){
+    log.info("get user all register count start", log.getFileNameAndLineNum(__filename));
+    userOperation.getUserCount(function(flag, result){
+        if (flag) {
+            console.log('user total count:'+result.count);
+            var nowDate = moment().format('YYYYMMDD')
+            email.sendMail('user total count:'+result.count,
+            nowDate+"-懒人股票-注册数统计_"+process.env.HOME.env;)
+        }else{
+            log.error(result, log.getFileNameAndLineNum(__filename));
+        }
+    });
+});
 
 
 //统计upv，pv

@@ -4,6 +4,12 @@ var conn = require('../utility.js');
 var logger = global.logger;
 var md5 = require('MD5');
 
+//注册总数统计
+exports.getUserCount = function(callback){
+	var sql = 'select count(*) as count from user_base_info';
+	conn.executeSql(sql, [], callback);
+}
+
 exports.followUser = function(reqbody, callback){
 	var follow_timestamp = Date.now();
 	var sql = "insert into user_follow_base_info(user_id, followed_user_id, follow_timestamp) " +
