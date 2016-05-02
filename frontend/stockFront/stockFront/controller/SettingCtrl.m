@@ -113,6 +113,22 @@ typedef enum {
     
     [self pullDownAction];
     
+    
+    //右上方关注按键
+    [self showFollowButton];
+
+    
+}
+
+- (void)showFollowButton
+{
+    if (![phoneUserInfo.user_id isEqualToString:myInfo.user_id]) {
+        if ([locDatabase isFollow:myInfo]) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消关注" style:UIBarButtonItemStylePlain target:self action:@selector(cancelFollow)];
+        }else{
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关注" style:UIBarButtonItemStylePlain target:self action:@selector(follow)];
+        }
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -217,6 +233,7 @@ typedef enum {
         
         
         [self.tableView reloadData];
+        [self showFollowButton];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         
@@ -249,8 +266,9 @@ typedef enum {
         
         
         [self.tableView reloadData];
+        [self showFollowButton];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+        
         
     } failed:^(NSError *error) {
         alertMsg(@"网络问题");
@@ -854,11 +872,7 @@ typedef enum {
     }
     
     if (section == followSection) {
-        if([phoneUserInfo.user_id isEqualToString:myInfo.user_id]){
-            return 2;
-        }else{
-            return 3;
-        }
+        return 2;
     }
     
     if(section == lookInfoSection){
