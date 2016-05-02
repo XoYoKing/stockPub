@@ -13,7 +13,7 @@ var child_process = require('child_process');
 log.info("run sys cron job", log.getFileNameAndLineNum(__filename));
 
 //当日日志打包
-new cronJob('00 59 23 * * *', function(){
+new cronJob('00 31 22 * * *', function(){
     log.info('zip everyday log', log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/zipLog.sh', null, {}, function(err, stdout, stderr){
         if(err !== null){
@@ -39,7 +39,7 @@ new cronJob('00 59 23 * * *', function(){
 
 //错误日志扫描发送邮件
 //日志错误统计
-new cronJob('59 23 * * *', function(){
+new cronJob('00 30 22 * * *', function(){
     log.info("errorLogReport start", log.getFileNameAndLineNum(__filename));
     child_process.execFile(__dirname + '/sh_script/errorLogReport.pl', null, {}, function(err){
         if(err !== null){
