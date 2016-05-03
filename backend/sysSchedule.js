@@ -61,7 +61,7 @@ new cronJob('00 31 22 * * *', function(){
             console.log('user total count:'+result.count);
             var nowDate = moment().format('YYYYMMDD')
             email.sendMail('user total count:'+result.count,
-            nowDate+"-懒人股票-注册数统计_"+process.env.HOME.env;)
+            nowDate+"-懒人股票-注册数统计_"+process.env.HOME.env);
         }else{
             log.error(result, log.getFileNameAndLineNum(__filename));
         }
